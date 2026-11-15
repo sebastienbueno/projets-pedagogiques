@@ -316,7 +316,7 @@ function corr(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc(a.c,a.c
  const A=S.ans;let h=`<div class="stephead"><span class="pill">${a.label}</span><strong>${a.title}</strong></div><div class="extitle"><b>✓</b><h2>CORRECCIÓN</h2></div>${consigna('Compara tus respuestas con las respuestas correctas. Corrige en tu actividad si es necesario.')}<div class="corr">`;
  a.enigma.qs.forEach((q,j)=>h+=crRow('1. El enigma · '+q,A[k+'e'+j],'Hipótesis personal: la verdad está en la etapa 4.',''));
  h+=crRow('2. Tipo de documento',A[k+'g0'],k==='A'?'Un reportaje / un vídeo informativo de la Liga MX.':'Un reportaje de CNN.','');
- h+=crRow('2. ¿Quién habla?',A[k+'g1'],'Respuesta personal: el profesor comprueba con el vídeo.','');
+ 
  h+=crRow('2. Palabras transparentes',[0,1,2].map(j=>A[k+'g2'+j]||'—').join(', '),k==='A'?'Ejemplos: tecnología, sistema, cámaras, árbitros…':'Ejemplos: inteligencia artificial, noticias, universidad…','');
  a.info.forEach((x,j)=>h+=crRow('3. '+x.q,A[x.id],x.a?(x.show||x.a[0]):x.sol,x.a?grade(A[x.id],x.a):''));
  a.vf.forEach((v,j)=>h+=crRow('4a. ¿Verdadero o falso? · '+v[0],(A[k+'vf'+j]||'—')+' · prueba: '+(A[k+'vfp'+j]||'—'),(v[1]==='V'?'Verdadero':'Falso')+' · prueba: '+a.vfp[j],A[k+'vf'+j]===v[1]?'ok':'bad'));
