@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>El camino de cempasúchil</title>
 <style>
 :root{--ind:#120a2e;--vio:#2a1250;--nar:#ff9a1f;--nar2:#ffb648;--mag:#e0218a;--tur:#22c7c0;--oro:#f0c75e;--hue:#f3e9d2;--txt:#f8f1e4;--sua:#cdbfe6;--pan:rgba(20,11,50,.82);--lin:rgba(240,199,94,.28);--lh:1.45;--fs:1}
@@ -10,7 +13,7 @@
 html{font-size:calc(clamp(14px,.62vw + .75vh,21px)*var(--fs))}
 html.big{--fs:1.2;--lh:1.85}
 html.big body{letter-spacing:.02em;word-spacing:.08em}
-body{margin:0;height:100vh;overflow:hidden;background:#0b0620 linear-gradient(#0d0725,#2a1250 70%,#3a1550);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:var(--lh);-webkit-font-smoothing:antialiased}
+body{margin:0;height:100vh;height:100dvh;overflow:hidden;background:#0b0620 linear-gradient(#0d0725,#2a1250 70%,#3a1550);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:var(--lh);-webkit-font-smoothing:antialiased}
 h1,h2,h3,.tit{font-family:Georgia,"Palatino Linotype","Book Antiqua",Palatino,serif;font-weight:700;letter-spacing:.01em;margin:0}
 p{margin:0}
 button,input{font:inherit;color:inherit}
@@ -338,6 +341,7 @@ html.red .nt{opacity:0}
    <button class="ib" id="bCal" title="Calidad" aria-label="Calidad">Calidad: alta</button>
    <button class="ib" id="bAa" aria-pressed="false" title="Texto más grande" aria-label="Texto más grande">Aa</button>
    <button class="ib" id="bRed" aria-pressed="false" title="Menos animación" aria-label="Menos animación"></button>
+   <button class="ib" id="bPan" aria-pressed="false" title="Pantalla completa" aria-label="Pantalla completa" hidden></button>
    <button class="ib" id="bNue" title="Empezar de nuevo" aria-label="Empezar de nuevo"></button>
   </div>
  </header>
@@ -1211,6 +1215,16 @@ function aplicarCfg() {
   $('#bAa').onclick = () => { S.cfg.big = S.cfg.big ? 0 : 1; aplicarCfg(); };
   $('#bRed').onclick = () => { S.cfg.red = S.cfg.red ? 0 : 1; aplicarCfg(); };
   $('#bNue').onclick = confirmarNuevo;
+  // plein écran (tablette) : bouton affiché seulement si le navigateur l'autorise
+  { const de = document.documentElement, pide = de.requestFullscreen || de.webkitRequestFullscreen, sale = document.exitFullscreen || document.webkitExitFullscreen,
+      en = () => document.fullscreenElement || document.webkitFullscreenElement, bp = $('#bPan');
+    bp.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+    if (pide && sale && (document.fullscreenEnabled || document.webkitFullscreenEnabled)) {
+      bp.hidden = false;
+      bp.onclick = () => { try { const r = en() ? sale.call(document) : pide.call(de); if (r && r.catch) r.catch(() => aviso('Pantalla completa no disponible.')); } catch (e) { aviso('Pantalla completa no disponible.'); } };
+      const cambio = () => { bp.setAttribute('aria-pressed', !!en()); setTimeout(() => { tamano(); pintarCamino(); }, 200); };
+      document.addEventListener('fullscreenchange', cambio); document.addEventListener('webkitfullscreenchange', cambio);
+    } }
   document.addEventListener('keydown', e => {
     if (e.ctrlKey && e.shiftKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a')) { e.preventDefault(); pedirCodigo(); return; }
     const t = e.target;
