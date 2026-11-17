@@ -279,7 +279,7 @@ const LAST=STEPS.length-1;
 function setAcc(c,ca){document.documentElement.style.setProperty('--acc',c);document.documentElement.style.setProperty('--acca',ca)}
 function go(screen,step=0){if(screen!=='portada'){S.last=screen;S.lastStep=step}S.screen=screen;S.step=step;save();render();window.scrollTo({top:0})}
 function aidBank(){document.body.classList.toggle('aid',!!S.aid)}
-function nav(){const done=S.act&&actDone(S.act),mdone=done&&medDone();const items=[['portada','Inicio']];if(S.act||ADMIN)items.push(['act','Mi actividad']);if(done||ADMIN)items.push(['med','Mediación']);if(mdone||ADMIN)items.push(['bonus','Bonus']);if(S.act||ADMIN)items.push(['fin','Mis respuestas']);
+function nav(){if(!ADMIN){$('#nav').innerHTML='';return}const done=S.act&&actDone(S.act),mdone=done&&medDone();const items=[['portada','Inicio']];if(S.act||ADMIN)items.push(['act','Mi actividad']);if(done||ADMIN)items.push(['med','Mediación']);if(mdone||ADMIN)items.push(['bonus','Bonus']);if(S.act||ADMIN)items.push(['fin','Mis respuestas']);
  $('#nav').innerHTML=items.map(([k,t])=>`<button data-go="${k}" aria-current="${S.screen.startsWith(k)||(k==='bonus'&&(S.screen.startsWith('bn')||S.screen==='bravo'))||(k==='act'&&(S.screen==='corr'||S.screen==='rep'))||(k==='med'&&(S.screen==='ser'||S.screen==='yo'))}">${t}</button>`).join('');
  $('#nav').querySelectorAll('button[data-go]').forEach(b=>b.onclick=()=>{const k=b.dataset.go;if(k==='act'&&!S.act)return go('portada');go(k==='med'?'ser':k,k==='act'?S.step:0)})}
 function bottom(prev,next,nextLabel='Siguiente'){const n=$('#navbtns');n.hidden=false;n.innerHTML=`<button class="btn ghost" id="bp">Anterior</button><button class="btn" id="bn">${nextLabel}</button>`;
@@ -339,7 +339,7 @@ function crRow(title,me,sol,g){return `<div class="cr"><h4>${title}</h4>${me!=nu
 function corr(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc(a.c,a.ca);
  if(!ADMIN&&!actDone(k)){const items=STEPS.map((s,i)=>[stepDone(k,i),'Etapa '+s[2]+' · '+s[1].toLowerCase(),()=>go('act',i)]);
   $('#app').innerHTML=`<div class="stephead"><span class="pill">${a.label}</span><strong>Corrección</strong></div>`+lockBox('Completa todas las etapas para ver las respuestas',items);bindFix(items);
-  bottom(()=>go('act',LAST),()=>go('ser'),PB?'Siguiente: ser y estar':'Siguiente: el pasado');return}
+  bottom(()=>go('act',LAST),()=>go('ser'),'Siguiente');return}
  const A=S.ans;let h=`<div class="stephead"><span class="pill">${a.label}</span><strong>${a.title}</strong></div><div class="extitle"><b>✓</b><h2>CORRECCIÓN</h2></div>${consigna('Compara tus respuestas con la corrección. Si hay un error, corrige.')}<div class="corr">`;
  a.enigma.qs.forEach((q,j)=>h+=crRow('1. El enigma · '+q,A[k+'e'+j],'Hipótesis personal: la verdad está en la etapa 4.',''));
  h+=crRow('2. Tipo de documento',A[k+'g0'],k==='A'?'Un reportaje / un vídeo informativo de la Liga MX.':'Un reportaje de CNN.','');
@@ -349,7 +349,7 @@ function corr(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc(a.c,a.c
  a.vf.forEach((v,j)=>h+=crRow('4a. ¿Verdadero o falso? · '+v[0],(A[k+'vf'+j]||'—')+' · prueba: '+(A[k+'vfp'+j]||'—'),(v[1]==='V'?'Verdadero':'Falso')+' · prueba: '+a.vfp[j],A[k+'vf'+j]===v[1]?'ok':'bad'));
  h+=crRow('4b. El enigma, resuelto · '+a.enigmaRes,A[k+'er'],a.enigmaSol,'');
  h+=crRow('4c. Tu opinión',(A[k+'op']||'')+' porque '+(A[k+'porque']||''),'Respuesta personal: comprueba que usas «porque» y un ejemplo del vídeo.','');
- $('#app').innerHTML=`<div class="pop">${h}</div></div>${pdfBlock()}`;bindPDF();bottom(()=>go('act',LAST),()=>go('ser'),PB?'Siguiente: ser y estar':'Siguiente: el pasado')}
+ $('#app').innerHTML=`<div class="pop">${h}</div></div>${pdfBlock()}`;bindPDF();bottom(()=>go('act',LAST),()=>go('ser'),'Siguiente')}
 
 /* ---------- PDF ---------- */
 const GL={ok:['Correcto',[22,163,74]],warn:['Casi: revisa el acento',[180,83,9]],bad:['A corregir',[220,38,38]]};
@@ -430,7 +430,7 @@ function repScreen(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc(a.
 const YOX=[['Él vio un vídeo. → Yo',{id:'y1',a:['vi'],h:'ver'},'un vídeo sobre la IA.'],['Ella aprendió mucho. → Yo',{id:'y2',a:['aprendí'],h:'aprender',st:'aprend'},'que la IA ayuda a los árbitros.'],['Él leyó la noticia. → Yo',{id:'y3',a:['leí'],h:'leer',st:'le'},'la noticia ayer.'],['Él fue a Perú. → Yo',{id:'y4',a:['fui'],h:'ir'},'a Perú con Illariy… ¡virtualmente!']];
 const SERX=[['Ayer, el vídeo',{id:'s1',a:['fue'],h:'ser'},'muy interesante.'],['El árbitro',{id:'s2',a:['miró'],h:'mirar',st:'mir'},'la pantalla.'],['La presentadora',{id:'s3',a:['aprendió'],h:'aprender',st:'aprend'},'quechua.'],['La universidad',{id:'s4',a:['decidió'],h:'decidir',st:'decid'},'crear a Illariy.'],['El sistema',{id:'s5',a:['tuvo'],h:'tener'},'un error.'],['La Liga MX',{id:'s6',a:['dijo'],h:'decir'},'que el VAR sigue.'],['La IA',{id:'s7',a:['pudo'],h:'poder'},'ayudar al árbitro.']];
 function serScreen(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M)','var(--Ma)');
- $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Antes de la mediación</span><strong>El pretérito indefinido · él / ella</strong></div>
+ $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">La lengua</span><strong>El pretérito indefinido · él / ella</strong></div>
  <div class="extitle"><b>!</b><h2>¿QUÉ PASÓ?</h2></div>
  ${consigna('Escribe el verbo en pretérito indefinido (él / ella). Mira la regla.')}
  <div class="wrapx"><table class="cmp rule"><thead><tr><th style="background:#C2410C">-AR → -ó</th><th style="background:#C2410C">-ER / -IR → -ió</th><th style="background:#1E1B4B">Verbos diferentes</th></tr></thead><tbody><tr><td>mirar → <b>miró</b><br>usar → <b>usó</b><br>presentar → <b>presentó</b></td><td>aprender → <b>aprendió</b><br>decidir → <b>decidió</b><br>descubrir → <b>descubrió</b></td><td>ser / ir → <b>fue</b> · hacer → <b>hizo</b><br>decir → <b>dijo</b> · ver → <b>vio</b><br>tener → <b>tuvo</b> · poder → <b>pudo</b></td></tr></tbody></table></div>
@@ -438,9 +438,9 @@ function serScreen(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('v
  <div class="news" style="--bn:#BE185D"><div class="bar"><b>Él / ella</b><span>Conjuga</span></div><div class="body">${SERX.map((p,j)=>`<p style="margin:0">${j+1}. ${seg(p)}</p>`).join('')}</div></div>
  <p class="aidnote">${AIDTXT.stem}</p>${checkBtn('cser')}</div>`;
  bindInputs();$('#cser').onclick=()=>runCheck($('#app'),'cser');
- bottom(()=>go('corr'),()=>go('med1'),'Ir a la mediación')}
+ bottom(()=>go('corr'),()=>go('med1'),'Siguiente')}
 function yoScreen(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M)','var(--Ma)');
- $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Antes de la mediación</span><strong>El pretérito indefinido · yo</strong></div>
+ $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">La lengua</span><strong>El pretérito indefinido · yo</strong></div>
  <div class="extitle"><b>!</b><h2>¿Y YO? LO QUE HICE</h2></div>
  ${consigna('En la mediación vas a hablar de TI. Pasa las frases a la 1.ª persona (yo).')}
  <div class="wrapx"><table class="cmp rule"><thead><tr><th style="background:#BE185D">Él / ella</th><th style="background:#0E7490">Yo</th><th style="background:#1E1B4B">La regla</th></tr></thead><tbody><tr><td>mir<b>ó</b> · present<b>ó</b></td><td>mir<b>é</b> · present<b>é</b></td><td>-AR: <b>-ó → -é</b></td></tr><tr><td>aprend<b>ió</b> · descubr<b>ió</b></td><td>aprend<b>í</b> · descubr<b>í</b></td><td>-ER / -IR: <b>-ió → -í</b></td></tr><tr><td>vio · fue · hizo</td><td><b>vi</b> · <b>fui</b> · <b>hice</b></td><td>verbos diferentes: ¡de memoria!</td></tr></tbody></table></div>
@@ -448,14 +448,14 @@ function yoScreen(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('va
  <div class="news" style="--bn:#0E7490"><div class="bar"><b>Yo</b><span>Pasa a la 1.ª persona</span></div><div class="body">${YOX.map((p,j)=>`<p style="margin:0">${j+1}. ${seg(p)}</p>`).join('')}</div></div>
  <p class="aidnote">${AIDTXT.stem}</p>${checkBtn('cyo')}</div>`;
  bindInputs();$('#cyo').onclick=()=>runCheck($('#app'),'cyo');
- bottom(()=>go('ser'),()=>go('med1'),'Ir a la mediación')}
+ bottom(()=>go('ser'),()=>go('med1'),'Siguiente')}
 
 const CONJ=[['yo','soy','estoy'],['tú','eres','estás'],['él / ella','es','está'],['nosotros / as','somos','estamos'],['vosotros / as','sois','estáis'],['ellos / ellas','son','están']];
 const conjTable=()=>`<div class="wrapx"><table class="cmp rule"><thead><tr><th style="background:#1E1B4B">Persona</th><th style="background:#6D28D9">SER</th><th style="background:#0E7490">ESTAR</th></tr></thead><tbody>${CONJ.map(r=>`<tr><td>${r[0]}</td><td><b>${r[1]}</b></td><td><b>${r[2]}</b></td></tr>`).join('')}</tbody></table></div>`;
 const SBX1=[['Yo',{id:'s1',a:['estoy'],h:'estar',st:'est'},'en clase de español.'],['Tú',{id:'s2',a:['eres'],h:'ser'},'fan del fútbol.'],['Illariy',{id:'s3',a:['es'],h:'ser'},'una presentadora virtual.'],['Nosotros',{id:'s4',a:['estamos'],h:'estar',st:'est'},'en un estadio de México.'],['Vosotros',{id:'s5',a:['sois'],h:'ser'},'árbitros.'],['Las cámaras',{id:'s6',a:['están'],h:'estar',st:'est'},'en el estadio.'],['Los estudiantes',{id:'s7',a:['son'],h:'ser'},'de Perú.']];
 const SBX2=[['Illariy',{id:'t1',a:['es'],h:'¿ser o estar?',ha:'es / está'},'de Perú.'],['Perú',{id:'t2',a:['está'],h:'¿ser o estar?',ha:'es / está'},'en América del Sur.'],['Hoy, los árbitros',{id:'t3',a:['están'],h:'¿ser o estar?',ha:'son / están'},'nerviosos.'],['El sistema de cámaras',{id:'t4',a:['es'],h:'¿ser o estar?',ha:'es / está'},'muy preciso.'],['Yo',{id:'t5',a:['estoy'],h:'¿ser o estar?',ha:'soy / estoy'},'en clase con mi tableta.'],['Nosotros',{id:'t6',a:['somos'],h:'¿ser o estar?',ha:'somos / estamos'},'alumnos de español.'],['¿Tú',{id:'t7',a:['estás'],h:'¿ser o estar?',ha:'eres / estás'},'en el estadio Azteca?']];
 function sb1(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M)','var(--Ma)');
- $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Antes de la mediación</span><strong>SER y ESTAR · presente</strong></div>
+ $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">La lengua</span><strong>SER y ESTAR · presente</strong></div>
  <div class="extitle"><b>!</b><h2>CONJUGO SER Y ESTAR</h2></div>
  ${consigna('Escribe el verbo en presente. Mira la tabla.')}
  ${conjTable()}
@@ -464,7 +464,7 @@ function sb1(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M
  bindInputs();$('#cser').onclick=()=>runCheck($('#app'),'cser');
  bottom(()=>go('corr'),()=>go('yo'),'Siguiente: ¿ser o estar?')}
 function sb2(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M)','var(--Ma)');
- $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Antes de la mediación</span><strong>SER y ESTAR · presente</strong></div>
+ $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">La lengua</span><strong>SER y ESTAR · presente</strong></div>
  <div class="extitle"><b>!</b><h2>¿SER O ESTAR?</h2></div>
  ${consigna('Elige SER o ESTAR y escribe el verbo en presente. Mira la regla.')}
  <div class="wrapx"><table class="cmp rule" style="table-layout:fixed;width:100%"><thead><tr><th style="background:#6D28D9">SER = identidad</th><th style="background:#0E7490">ESTAR = situación</th></tr></thead><tbody><tr><td>¿quién? → Illariy <b>es</b> una presentadora.<br>¿cómo es? → <b>es</b> virtual.<br>¿de dónde? → <b>es</b> de Perú.</td><td>¿dónde? → <b>está</b> en la tele.<br>¿cómo está hoy? → <b>está</b> contenta.</td></tr></tbody></table></div>
@@ -472,16 +472,16 @@ function sb2(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M
  <div class="news" style="--bn:#0E7490"><div class="bar"><b>¿Ser o estar?</b><span>Presente</span></div><div class="body">${SBX2.map((p,j)=>`<p style="margin:0">${j+1}. ${seg(p)}</p>`).join('')}</div></div>
  <p class="aidnote">★ Elige entre las dos formas y escríbela.</p>${checkBtn('cyo')}</div>`;
  bindInputs();$('#cyo').onclick=()=>runCheck($('#app'),'cyo');
- bottom(()=>go('ser'),()=>go('med1'),'Ir a la mediación')}
+ bottom(()=>go('ser'),()=>go('med1'),'Siguiente')}
 /* ---------- screens ---------- */
 function portada(){setAcc('var(--violet)','#EDE9FE');$('#navbtns').hidden=true;
  const card=k=>{const a=ACT[k];return `<article class="choice" style="--c:${a.c};--ca:${a.ca}"><h3><span class="letter">${k}</span>${a.label}<br>${a.title}</h3><div class="pics">${a.pics.map(p=>img(p)).join('')}</div><p style="margin:0;font-weight:700">${a.desc}</p><div class="meta">${a.meta}</div><button class="btn big" style="background:${a.c};margin-top:auto" data-pick="${k}">${S.act===k?'Continuar mi actividad '+k:'Elijo la actividad '+k}</button></article>`};
  $('#app').innerHTML=`<section class="hero"><div><h1>Plan de trabajo</h1><p>La IA en acción ★</p></div>${img('robot')}</section>
- <section class="auto"><h2>¡Hoy trabajas solo / sola!</h2><p>Un vídeo, a tu ritmo. Después, cuentas tu vídeo a un amigo. Las respuestas se guardan automáticamente. Ponte los auriculares (= mets tes écouteurs).</p>
+ <section class="auto"><h2>¡Hoy trabajas solo / sola!</h2><p>Un vídeo, a tu ritmo. Las respuestas se guardan automáticamente. Ponte los auriculares (= mets tes écouteurs).</p>
  <div class="namefield"><label for="nm"><b>Mi nombre:</b></label><input id="nm" data-k="name" placeholder="Escribe tu nombre"></div></section>
  ${S.act&&!ADMIN?`<h2 class="choose-title">Tu actividad: ${S.act}</h2><p class="choose-sub">Ya elegiste (= tu as déjà choisi). Continúa tu actividad.</p><div class="choices">${card(S.act)}</div>`:`<h2 class="choose-title">Elige (= choisis) una sola actividad</h2><p class="choose-sub">Lee (= lis) las dos descripciones. Después, elige A o B. ¡Atención! No puedes cambiar después.</p>
  <div class="choices">${card('A')}<div class="or">O</div>${card('B')}</div>`}
- <div class="path">${[['#BE185D','Elijo A o B'],['#15803D','Hago las 4 etapas'],['#C2410C','Cuento mi vídeo a un amigo'],['#9333EA','Si termino: los bonus']].map((x,i)=>`<div><span style="background:${x[0]}">${i+1}</span>${x[1]}</div>`).join('')}</div>`;
+`;
  const nm=$('#nm');nm.value=S.name||'';nm.oninput=()=>{S.name=nm.value;save()};
  document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const k=b.dataset.pick;if(S.act===k)return go(S.screen==='portada'?(S.last||'rep'):'rep',S.lastStep||0);const start=()=>{S.act=k;go('rep')};if(S.act&&S.act!==k&&!ADMIN)return;if(!S.act&&!ADMIN)ask('¿Eliges la actividad '+k+'? No puedes cambiar después.',start,'Sí, elijo '+k);else start()})}
 function actScreen(){if(S.step>LAST)S.step=LAST;const k=S.act,a=ACT[k],i=S.step,[type,title]=STEPS[i];setAcc(a.c,a.ca);
