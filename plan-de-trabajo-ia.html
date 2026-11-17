@@ -157,6 +157,8 @@ table.conj input{width:100%;border:3px solid var(--line);border-radius:12px;padd
 .sent{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0;font-weight:700}
 .letter-msg{background:#fff;color:#1E1B4B;margin:14px;border-radius:20px;padding:16px 18px}
 .done{text-align:center}
+.bravo{text-align:center;background:var(--card,#fff);border:4px solid #9333EA;border-radius:24px;padding:22px 18px;margin:0 0 16px}.bravo .stars{font-size:54px;line-height:1.1}.bravo h2{font-family:'Audiowide',sans-serif;font-size:40px;margin:8px 0 4px}.bravo .big{font-size:24px;font-weight:700;margin:0 0 10px}.bravo ul.done{list-style:none;padding:0;margin:0;font-size:22px;font-weight:700;color:#15803D}
+@media (prefers-reduced-motion:no-preference){.bravo .stars{animation:brv 1.2s ease-in-out 2}}@keyframes brv{50%{transform:scale(1.25) rotate(-4deg)}}
 .prev{background:var(--paper);border:3px dashed var(--line);border-radius:16px;padding:10px 14px;margin:0 0 12px}
 .prev .lab{display:block;color:var(--muted);font-size:16px;font-weight:700}
 .prev{font-size:20px;line-height:1.6}
@@ -242,7 +244,7 @@ const ACT={
 A:{c:'var(--A)',ca:'var(--Aa)',label:'Actividad A',title:'¿Un árbitro robot?',pics:['estadio','camaras'],
  desc:'Un vídeo sobre el fútbol en México: la IA ayuda a los árbitros a ver el fuera de juego.',meta:'Vídeo de la Liga MX · corto',
  videos:[['Ver el vídeo',VURL.A]],
- enigma:{q:'Mira (= regarde) el vídeo corto: un partido entre Tijuana y América. Para (= arrête) el vídeo justo después del gol.',vid:[['Ver el vídeo corto',VURL.A2]],qs:['¿Gol o no gol? ¿Qué piensas?','Un indicio que ves en la imagen:'],help:'Ayuda: Creo que es gol / no es gol porque…'},
+ enigma:{q:'Mira (= regarde) el vídeo corto. Para (= arrête) el vídeo justo después del gol.',vid:[['Ver el vídeo corto',VURL.A2]],qs:['¿Gol o no gol? ¿Qué piensas?','Un indicio que ves en la imagen:'],help:'Ayuda: Creo que es gol / no es gol porque…'},
  enigmaRes:'¿Por qué no vale el gol entre Tijuana y América?',enigmaSol:'Porque hay fuera de juego: el sistema con IA lo detecta.',
  info:[{q:'¿Cuántas cámaras hay en cada estadio?',id:'Ai0',a:['28','veintiocho','28 (veintiocho)'],show:'28 (veintiocho)'},{q:'¿Qué crean las cámaras y la inteligencia artificial?',id:'Ai1',a:['una imagen en 3D','imagen en 3D','una imagen 3D','3D','una imagen en tres dimensiones'],show:'una imagen en 3D'},{q:'¿Para qué sirve este sistema?',id:'Ai2',sol:'Para ver el fuera de juego y ayudar a los árbitros.'},{q:'¿Cuándo empieza a funcionar en la Liga MX?',id:'Ai3',sol:'En el Clausura 2026: en enero de 2026 (dos mil veintiséis).'}],vfp:['«herramienta», «semiautomática»: la IA ayuda, los árbitros deciden','«la decisión del fuera de juego», «fuera de lugar»'],
  hypSol:'una tecnología (la IA) que ayuda a los árbitros a ver el fuera de juego',fichaSol:['La Liga MX','Usa la IA para ver el fuera de juego.','En México, en todos los estadios.','En enero de 2026 (dos mil veintiséis).'],iaSol:'La IA puede ayudar a los árbitros a ver el fuera de juego.',
@@ -275,11 +277,11 @@ const AIDF={
 const STEPS=[['enigma','EL ENIGMA','1'],['gen','COMPRENDO LO GENERAL','2'],['info','BUSCO INFORMACIÓN','3'],['vf','¿VERDADERO O FALSO?','4a'],['res','EL ENIGMA, RESUELTO','4b'],['op','OPINO','4c']];
 const LAST=STEPS.length-1;
 function setAcc(c,ca){document.documentElement.style.setProperty('--acc',c);document.documentElement.style.setProperty('--acca',ca)}
-function go(screen,step=0){S.screen=screen;S.step=step;save();render();window.scrollTo({top:0})}
+function go(screen,step=0){if(screen!=='portada'){S.last=screen;S.lastStep=step}S.screen=screen;S.step=step;save();render();window.scrollTo({top:0})}
 function aidBank(){document.body.classList.toggle('aid',!!S.aid)}
-function nav(){const items=[['portada','Inicio'],['act','Mi actividad'],['med','Mediación'],['bonus','Bonus'],['fin','Mis respuestas']];
- $('#nav').innerHTML=items.map(([k,t])=>`<button data-go="${k}" aria-current="${S.screen.startsWith(k)||(k==='bonus'&&S.screen.startsWith('bn'))||(k==='act'&&(S.screen==='corr'||S.screen==='rep'))||(k==='med'&&(S.screen==='ser'||S.screen==='yo'))}">${t}</button>`).join('');
- $('#nav').querySelectorAll('button[data-go]').forEach(b=>b.onclick=()=>{const k=b.dataset.go;if(k==='act'&&!S.act)return go('portada');go(k==='med'?'med1':k,k==='act'?S.step:0)})}
+function nav(){const done=S.act&&actDone(S.act),mdone=done&&medDone();const items=[['portada','Inicio']];if(S.act||ADMIN)items.push(['act','Mi actividad']);if(done||ADMIN)items.push(['med','Mediación']);if(mdone||ADMIN)items.push(['bonus','Bonus']);if(S.act||ADMIN)items.push(['fin','Mis respuestas']);
+ $('#nav').innerHTML=items.map(([k,t])=>`<button data-go="${k}" aria-current="${S.screen.startsWith(k)||(k==='bonus'&&(S.screen.startsWith('bn')||S.screen==='bravo'))||(k==='act'&&(S.screen==='corr'||S.screen==='rep'))||(k==='med'&&(S.screen==='ser'||S.screen==='yo'))}">${t}</button>`).join('');
+ $('#nav').querySelectorAll('button[data-go]').forEach(b=>b.onclick=()=>{const k=b.dataset.go;if(k==='act'&&!S.act)return go('portada');go(k==='med'?'ser':k,k==='act'?S.step:0)})}
 function bottom(prev,next,nextLabel='Siguiente'){const n=$('#navbtns');n.hidden=false;n.innerHTML=`<button class="btn ghost" id="bp">Anterior</button><button class="btn" id="bn">${nextLabel}</button>`;
  $('#bp').onclick=prev;$('#bn').onclick=next;if(!prev)$('#bp').style.visibility='hidden'}
 const SUBS={'videos/saot.mp4':'videos/saot.es.vtt','videos/gol.mp4':'videos/gol.es.vtt','videos/illariy_corto.mp4':'videos/illariy_corto.es.vtt'};
@@ -338,7 +340,7 @@ function corr(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc(a.c,a.c
  if(!ADMIN&&!actDone(k)){const items=STEPS.map((s,i)=>[stepDone(k,i),'Etapa '+s[2]+' · '+s[1].toLowerCase(),()=>go('act',i)]);
   $('#app').innerHTML=`<div class="stephead"><span class="pill">${a.label}</span><strong>Corrección</strong></div>`+lockBox('Completa todas las etapas para ver las respuestas',items);bindFix(items);
   bottom(()=>go('act',LAST),()=>go('ser'),PB?'Siguiente: ser y estar':'Siguiente: el pasado');return}
- const A=S.ans;let h=`<div class="stephead"><span class="pill">${a.label}</span><strong>${a.title}</strong></div><div class="extitle"><b>✓</b><h2>CORRECCIÓN</h2></div>${consigna('Compara tus respuestas con las respuestas correctas. Si hay un error, vuelve a la etapa y corrige.')}<div class="corr">`;
+ const A=S.ans;let h=`<div class="stephead"><span class="pill">${a.label}</span><strong>${a.title}</strong></div><div class="extitle"><b>✓</b><h2>CORRECCIÓN</h2></div>${consigna('Compara tus respuestas con la corrección. Si hay un error, corrige.')}<div class="corr">`;
  a.enigma.qs.forEach((q,j)=>h+=crRow('1. El enigma · '+q,A[k+'e'+j],'Hipótesis personal: la verdad está en la etapa 4.',''));
  h+=crRow('2. Tipo de documento',A[k+'g0'],k==='A'?'Un reportaje / un vídeo informativo de la Liga MX.':'Un reportaje de CNN.','');
  
@@ -430,7 +432,7 @@ const SERX=[['Ayer, el vídeo',{id:'s1',a:['fue'],h:'ser'},'muy interesante.'],[
 function serScreen(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M)','var(--Ma)');
  $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Antes de la mediación</span><strong>El pretérito indefinido · él / ella</strong></div>
  <div class="extitle"><b>!</b><h2>¿QUÉ PASÓ?</h2></div>
- ${consigna('Para contar tu vídeo a un amigo, conjuga los verbos en pretérito indefinido (él / ella). La regla está aquí.')}
+ ${consigna('Escribe el verbo en pretérito indefinido (él / ella). Mira la regla.')}
  <div class="wrapx"><table class="cmp rule"><thead><tr><th style="background:#C2410C">-AR → -ó</th><th style="background:#C2410C">-ER / -IR → -ió</th><th style="background:#1E1B4B">Verbos diferentes</th></tr></thead><tbody><tr><td>mirar → <b>miró</b><br>usar → <b>usó</b><br>presentar → <b>presentó</b></td><td>aprender → <b>aprendió</b><br>decidir → <b>decidió</b><br>descubrir → <b>descubrió</b></td><td>ser / ir → <b>fue</b> · hacer → <b>hizo</b><br>decir → <b>dijo</b> · ver → <b>vio</b><br>tener → <b>tuvo</b> · poder → <b>pudo</b></td></tr></tbody></table></div>
  <p><b>¡Ojo!</b> Hoy: él mir<b>a</b> · En el pasado: él mir<b>ó</b>. Los verbos diferentes no llevan acento.</p>
  <div class="news" style="--bn:#BE185D"><div class="bar"><b>Él / ella</b><span>Conjuga</span></div><div class="body">${SERX.map((p,j)=>`<p style="margin:0">${j+1}. ${seg(p)}</p>`).join('')}</div></div>
@@ -455,7 +457,7 @@ const SBX2=[['Illariy',{id:'t1',a:['es'],h:'¿ser o estar?',ha:'es / está'},'de
 function sb1(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M)','var(--Ma)');
  $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Antes de la mediación</span><strong>SER y ESTAR · presente</strong></div>
  <div class="extitle"><b>!</b><h2>CONJUGO SER Y ESTAR</h2></div>
- ${consigna('Conjuga el verbo en presente. La conjugación está aquí.')}
+ ${consigna('Escribe el verbo en presente. Mira la tabla.')}
  ${conjTable()}
  <div class="news" style="--bn:#6D28D9"><div class="bar"><b>Conjuga</b><span>Presente</span></div><div class="body">${SBX1.map((p,j)=>`<p style="margin:0">${j+1}. ${seg(p)}</p>`).join('')}</div></div>
  <p class="aidnote">★ Busca la persona en la tabla. ESTAR: escribe solo la terminación.</p>${checkBtn('cser')}</div>`;
@@ -464,7 +466,7 @@ function sb1(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M
 function sb2(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M)','var(--Ma)');
  $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Antes de la mediación</span><strong>SER y ESTAR · presente</strong></div>
  <div class="extitle"><b>!</b><h2>¿SER O ESTAR?</h2></div>
- ${consigna('Elige SER o ESTAR y conjúgalo en presente. La regla está aquí.')}
+ ${consigna('Elige SER o ESTAR y escribe el verbo en presente. Mira la regla.')}
  <div class="wrapx"><table class="cmp rule" style="table-layout:fixed;width:100%"><thead><tr><th style="background:#6D28D9">SER = identidad</th><th style="background:#0E7490">ESTAR = situación</th></tr></thead><tbody><tr><td>¿quién? → Illariy <b>es</b> una presentadora.<br>¿cómo es? → <b>es</b> virtual.<br>¿de dónde? → <b>es</b> de Perú.</td><td>¿dónde? → <b>está</b> en la tele.<br>¿cómo está hoy? → <b>está</b> contenta.</td></tr></tbody></table></div>
  ${conjTable()}
  <div class="news" style="--bn:#0E7490"><div class="bar"><b>¿Ser o estar?</b><span>Presente</span></div><div class="body">${SBX2.map((p,j)=>`<p style="margin:0">${j+1}. ${seg(p)}</p>`).join('')}</div></div>
@@ -473,50 +475,56 @@ function sb2(){const k=S.act,a=ACT[k];if(!a)return go('portada');setAcc('var(--M
  bottom(()=>go('ser'),()=>go('med1'),'Ir a la mediación')}
 /* ---------- screens ---------- */
 function portada(){setAcc('var(--violet)','#EDE9FE');$('#navbtns').hidden=true;
- const card=k=>{const a=ACT[k];return `<article class="choice" style="--c:${a.c};--ca:${a.ca}"><h3><span class="letter">${k}</span>${a.label}<br>${a.title}</h3><div class="pics">${a.pics.map(p=>img(p)).join('')}</div><p style="margin:0;font-weight:700">${a.desc}</p><div class="meta">${a.meta}</div><button class="btn big" style="background:${a.c};margin-top:auto" data-pick="${k}">Elijo la actividad ${k}</button></article>`};
+ const card=k=>{const a=ACT[k];return `<article class="choice" style="--c:${a.c};--ca:${a.ca}"><h3><span class="letter">${k}</span>${a.label}<br>${a.title}</h3><div class="pics">${a.pics.map(p=>img(p)).join('')}</div><p style="margin:0;font-weight:700">${a.desc}</p><div class="meta">${a.meta}</div><button class="btn big" style="background:${a.c};margin-top:auto" data-pick="${k}">${S.act===k?'Continuar mi actividad '+k:'Elijo la actividad '+k}</button></article>`};
  $('#app').innerHTML=`<section class="hero"><div><h1>Plan de trabajo</h1><p>La IA en acción</p></div>${img('robot')}</section>
  <section class="auto"><h2>¡Hoy trabajas solo / sola!</h2><p>Un vídeo, a tu ritmo. Después, cuentas tu vídeo a un amigo. Las respuestas se guardan automáticamente. Ponte los auriculares (= mets tes écouteurs).</p>
  <div class="namefield"><label for="nm"><b>Mi nombre:</b></label><input id="nm" data-k="name" placeholder="Escribe tu nombre"></div></section>
- <h2 class="choose-title">Elige (= choisis) una sola actividad</h2><p class="choose-sub">Lee (= lis) las dos descripciones. Después, elige A o B.</p>
- <div class="choices">${card('A')}<div class="or">O</div>${card('B')}</div>
- <div class="path">${[['#BE185D','Elijo A o B'],['#15803D','Hago las 4 etapas'],['#C2410C','Cuento mi vídeo a un amigo'],['#9333EA','Bonus si termino']].map((x,i)=>`<div><span style="background:${x[0]}">${i+1}</span>${x[1]}</div>`).join('')}</div>`;
+ ${S.act&&!ADMIN?`<h2 class="choose-title">Tu actividad: ${S.act}</h2><p class="choose-sub">Ya elegiste (= tu as déjà choisi). Continúa tu actividad.</p><div class="choices">${card(S.act)}</div>`:`<h2 class="choose-title">Elige (= choisis) una sola actividad</h2><p class="choose-sub">Lee (= lis) las dos descripciones. Después, elige A o B. ¡Atención! No puedes cambiar después.</p>
+ <div class="choices">${card('A')}<div class="or">O</div>${card('B')}</div>`}
+ <div class="path">${[['#BE185D','Elijo A o B'],['#15803D','Hago las 4 etapas'],['#C2410C','Cuento mi vídeo a un amigo'],['#9333EA','Si termino: los bonus']].map((x,i)=>`<div><span style="background:${x[0]}">${i+1}</span>${x[1]}</div>`).join('')}</div>`;
  const nm=$('#nm');nm.value=S.name||'';nm.oninput=()=>{S.name=nm.value;save()};
- document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const k=b.dataset.pick;const start=()=>{S.act=k;go('rep')};if(S.act&&S.act!==k)ask('¿Cambiar a la actividad '+k+'? Solo haces UNA actividad.',start,'Sí, cambiar');else start()})}
+ document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const k=b.dataset.pick;if(S.act===k)return go(S.screen==='portada'?(S.last||'rep'):'rep',S.lastStep||0);const start=()=>{S.act=k;go('rep')};if(S.act&&S.act!==k&&!ADMIN)return;if(!S.act&&!ADMIN)ask('¿Eliges la actividad '+k+'? No puedes cambiar después.',start,'Sí, elijo '+k);else start()})}
 function actScreen(){if(S.step>LAST)S.step=LAST;const k=S.act,a=ACT[k],i=S.step,[type,title]=STEPS[i];setAcc(a.c,a.ca);
  let h=`<div class="stephead"><span class="pill">${a.label}</span><strong>${a.title}</strong><div class="dots">Etapa ${STEPS[i][2]} ${STEPS.map((_,j)=>`<i class="${j<=i?'on':''}"></i>`).join('')}</div></div>
  <div class="extitle"><b>${STEPS[i][2]}</b><h2>${title}</h2></div>`;
  const vidsH=vids(a.videos);
  if(type==='enigma'){h+=consigna(a.enigma.q)+vids(a.enigma.vid)+a.enigma.qs.map((q,j)=>`<h3 class="sub">${j+1}. ${q}</h3>`+(S.aid?fr(k+'e'+j,AIDF[k].e[j]):`<textarea data-k="${k}e${j}" style="min-height:70px" aria-label="${esc(q)}"></textarea>`)).join('')+(a.enigma.help&&!S.aid?`<p style="color:#854d0e"><i>${a.enigma.help}</i></p>`:'')+`<div class="news" style="--bn:#B45309"><div class="bar"><b>¡Guarda tu respuesta!</b><span>Etapa 4</span></div><div class="body"><p style="margin:0">Vas a descubrir la verdad en la etapa 4.</p></div></div>`}
- if(type==='gen'){h+=consigna('Mira (= regarde) todo el vídeo una vez, CON sonido, sin parar. Solo busca la idea general.')+vidsH+`<h3 class="sub">1. ¿Qué tipo de documento es?</h3>${S.aid?fr(k+'g0',['Es',{ph:'tipo de documento'},'.']):`<p><input class="gap" style="width:30ch" data-k="${k}g0" autocomplete="off" aria-label="Tipo de documento"></p>`}<p style="color:#854d0e"><i>Ayuda: un reportaje · un anuncio · un telediario · un tutorial</i></p><h3 class="sub">2. Escribe (= écris) 3 palabras «transparentes» que oyes (parecidas al francés).</h3><p>${[0,1,2].map(j=>`<input class="gap" style="width:16ch;margin:4px" data-k="${k}g2${j}" autocomplete="off" aria-label="Palabra transparente ${j+1}">`).join('')}</p><p style="color:#854d0e"><i>Ejemplo: tecnología → technologie</i></p>`}
- if(type==='info'){h+=consigna('Navega (= navigue) por el vídeo: para (= arrête), vuelve atrás (= reviens en arrière), escucha (= écoute) otra vez. Busca (= cherche) cada información.')+vidsH+a.info.map((x,j)=>`<h3 class="sub">${j+1}. ${x.q}</h3>${S.aid&&AIDF[k].info[x.id]?fr(x.id,AIDF[k].info[x.id]):`<p>${x.a?gapHTML({id:x.id,a:x.a,h:''}):`<input class="gap" style="width:40ch" data-k="${x.id}" autocomplete="off" aria-label="${esc(x.q)}">`}</p>`}`).join('')+checkBtn('c3')}
- if(type==='vf'){h+=consigna('Mira el vídeo otra vez. ¿Verdadero (V) o falso (F)? Copia la prueba (= la preuve): las palabras del vídeo.')+vidsH+`${a.vf.map((v,j)=>`<div class="vf" data-sol="${k}vf${j}" data-v="${v[1]}"><span>${v[0]}</span><button class="v" data-t="${k}vf${j}" data-v="V" aria-label="Verdadero">V</button><button class="f" data-t="${k}vf${j}" data-v="F" aria-label="Falso">F</button></div><p style="margin:0 0 12px">La prueba: <input class="gap" style="width:30ch" data-k="${k}vfp${j}" autocomplete="off" aria-label="La prueba ${j+1}"></p>`).join('')}<p class="aidnote">★ La prueba: una o dos palabras del vídeo.</p>${checkBtn('c4')}`}
- if(type==='res'){h+=consigna('Vuelve a la etapa 1. Ahora sabes la verdad: contesta.')+`<div class="prev"><span class="lab">Tu hipótesis de la etapa 1</span>${a.enigma.qs.map((q,j)=>esc(S.ans[k+'e'+j]||'—')).join(' · ')}</div><div class="news" style="--bn:#B45309"><div class="bar"><b>El enigma, resuelto</b><span>Etapa 1</span></div><div class="body"><p style="margin:0 0 6px">${a.enigmaRes}</p>${S.aid?fr(k+'er',AIDF[k].er):`<textarea data-k="${k}er" style="min-height:60px" aria-label="${esc(a.enigmaRes)}"></textarea>`}<p style="margin:8px 0 6px">¿Tu hipótesis es correcta? <span style="font-weight:400">(sí / no / un poco)</span></p><input class="gap" style="width:30ch" data-k="${k}er2" autocomplete="off" aria-label="¿Tu hipótesis es correcta?"></div></div>`}
- if(type==='op'){h+=consigna('Opina (= donne ton avis): en tu vídeo, ¿la IA nos ayuda, nos engaña… o las dos cosas?')+`<div class="opin"><button class="opt" data-t="${k}op" data-v="nos ayuda">${img('corazon')}<span>nos ayuda</span></button><button class="opt" data-t="${k}op" data-v="nos engaña">${img('mascara')}<span>nos engaña</span></button><button class="opt" data-t="${k}op" data-v="las dos cosas"><span>las dos cosas</span></button><button class="opt" data-t="${k}op" data-v="depende"><span>depende</span></button></div>${S.aid?fr(k+'porque',['porque en el vídeo',{ph:'un ejemplo del vídeo'},'.']):`<label for="porq"><b>porque…</b> (un ejemplo del vídeo)</label><textarea id="porq" data-k="${k}porque"></textarea>`}`}
+ if(type==='gen'){h+=consigna('Mira (= regarde) el vídeo UNA vez, con sonido, sin parar.')+vidsH+`<h3 class="sub">1. ¿Qué tipo de documento es?</h3>${S.aid?fr(k+'g0',['Es',{ph:'tipo de documento'},'.']):`<p><input class="gap" style="width:30ch" data-k="${k}g0" autocomplete="off" aria-label="Tipo de documento"></p>`}<p style="color:#854d0e"><i>Ayuda: un reportaje · un anuncio · un telediario · un tutorial</i></p><h3 class="sub">2. Escribe (= écris) 3 palabras «transparentes» que oyes (parecidas al francés).</h3><p>${[0,1,2].map(j=>`<input class="gap" style="width:16ch;margin:4px" data-k="${k}g2${j}" autocomplete="off" aria-label="Palabra transparente ${j+1}">`).join('')}</p><p style="color:#854d0e"><i>Ejemplo: tecnología → technologie</i></p>`}
+ if(type==='info'){h+=consigna('Busca (= cherche) las respuestas en el vídeo. Puedes parar (= arrêter) y volver atrás (= revenir en arrière).')+vidsH+a.info.map((x,j)=>`<h3 class="sub">${j+1}. ${x.q}</h3>${S.aid&&AIDF[k].info[x.id]?fr(x.id,AIDF[k].info[x.id]):`<p>${x.a?gapHTML({id:x.id,a:x.a,h:''}):`<input class="gap" style="width:40ch" data-k="${x.id}" autocomplete="off" aria-label="${esc(x.q)}">`}</p>`}`).join('')+checkBtn('c3')}
+ if(type==='vf'){h+=consigna('¿Verdadero (V) o falso (F)? Escribe la prueba (= la preuve): palabras del vídeo.')+vidsH+`${a.vf.map((v,j)=>`<div class="vf" data-sol="${k}vf${j}" data-v="${v[1]}"><span>${v[0]}</span><button class="v" data-t="${k}vf${j}" data-v="V" aria-label="Verdadero">V</button><button class="f" data-t="${k}vf${j}" data-v="F" aria-label="Falso">F</button></div><p style="margin:0 0 12px">La prueba: <input class="gap" style="width:30ch" data-k="${k}vfp${j}" autocomplete="off" aria-label="La prueba ${j+1}"></p>`).join('')}<p class="aidnote">★ La prueba: una o dos palabras del vídeo.</p>${checkBtn('c4')}`}
+ if(type==='res'){h+=consigna('Mira tu respuesta de la etapa 1. Ahora, escribe la respuesta correcta.')+`<div class="prev"><span class="lab">Tu hipótesis de la etapa 1</span>${a.enigma.qs.map((q,j)=>esc(S.ans[k+'e'+j]||'—')).join(' · ')}</div><div class="news" style="--bn:#B45309"><div class="bar"><b>El enigma, resuelto</b><span>Etapa 1</span></div><div class="body"><p style="margin:0 0 6px">${a.enigmaRes}</p>${S.aid?fr(k+'er',AIDF[k].er):`<textarea data-k="${k}er" style="min-height:60px" aria-label="${esc(a.enigmaRes)}"></textarea>`}<p style="margin:8px 0 6px">¿Tu hipótesis es correcta? <span style="font-weight:400">(sí / no / un poco)</span></p><input class="gap" style="width:30ch" data-k="${k}er2" autocomplete="off" aria-label="¿Tu hipótesis es correcta?"></div></div>`}
+ if(type==='op'){h+=consigna('Da tu opinión (= donne ton avis): ¿la IA nos ayuda o nos engaña?')+`<div class="opin"><button class="opt" data-t="${k}op" data-v="nos ayuda">${img('corazon')}<span>nos ayuda</span></button><button class="opt" data-t="${k}op" data-v="nos engaña">${img('mascara')}<span>nos engaña</span></button><button class="opt" data-t="${k}op" data-v="las dos cosas"><span>las dos cosas</span></button><button class="opt" data-t="${k}op" data-v="depende"><span>depende</span></button></div>${S.aid?fr(k+'porque',['porque en el vídeo',{ph:'un ejemplo del vídeo'},'.']):`<label for="porq"><b>porque…</b> (un ejemplo del vídeo)</label><textarea id="porq" data-k="${k}porque"></textarea>`}`}
  $('#app').innerHTML=`<div class="pop">${h}</div>`;bindInputs();toggles();
  ['c3','c4','c5'].forEach(id=>{const b=$('#'+id);if(b)b.onclick=()=>runCheck(b.closest('.bonusbox')||$('#app'),id)});
  bottom(()=>i?go('act',i-1):go('rep'),()=>i<LAST?go('act',i+1):go('corr'),i<LAST?'Siguiente':'Ver la corrección')}
 const MEDF=PB?{
  lab:['Hola, Pablo: es un vídeo sobre…','¿Quién es? ¿Dónde está? (ser / estar)','Para mí, la IA nos ayuda / nos engaña / las dos cosas porque…'],
  fr:[['Hola, Pablo: mira este vídeo. Es un vídeo sobre',{ph:'el tema'},'.'],[{ph:'¿quién?'},'es',{ph:'¿quién es? / ¿cómo es?'},'y está en',{ph:'¿dónde?'},'.'],['Para mí, la IA',{ph:'nos ayuda / nos engaña / las dos cosas'},'porque',{ph:'un ejemplo del vídeo'},'.']],
- cons:'Tu amigo Pablo, de Madrid, no conoce el vídeo. Escríbele (= écris-lui) un mensaje de 3 frases para contarle el vídeo (en presente, con SER y ESTAR).',
+ cons:'Tu amigo Pablo no conoce el vídeo. Escríbele (= écris-lui) 3 frases para contarle el vídeo, con SER y ESTAR.',
  deb:'1 · Tu mensaje para Pablo, de memoria.<br>2 · SER y ESTAR en presente: todas las personas.',debAid:'★ Las frases 1 y 2 del mensaje.'}:{
  lab:['Hola, Pablo: es un vídeo sobre…','En (lugar o fecha), … (él / ella + verbo en pasado)','Para mí, la IA nos ayuda / nos engaña / las dos cosas porque…'],
  fr:[['Hola, Pablo: mira este vídeo. Es un vídeo sobre',{ph:'el tema'},'.'],['En',{ph:'¿dónde? / ¿cuándo?'},',',{ph:'¿quién?'},{ph:'verbo en pasado (él / ella)'},{ph:'¿qué?'},'.'],['Para mí, la IA',{ph:'nos ayuda / nos engaña / las dos cosas'},'porque',{ph:'un ejemplo del vídeo'},'.']],
- cons:'Tu amigo Pablo, de Madrid, no conoce el vídeo. Escríbele (= écris-lui) un mensaje de 3 frases para contarle lo que pasó (pretérito indefinido: él / ella).',
+ cons:'Tu amigo Pablo no conoce el vídeo. Escríbele (= écris-lui) 3 frases para contarle el vídeo, en pasado (él / ella).',
  deb:'1 · Tu mensaje para Pablo, de memoria.<br>2 · Los verbos diferentes: fue, hizo, dijo, vio.',debAid:'★ Las frases 1 y 2 del mensaje.'};
 function med1(){setAcc('var(--M)','var(--Ma)');
  $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Mediación</span><strong>Le cuento el vídeo a un amigo</strong></div><div class="extitle"><b>✉</b><h2>LE CUENTO EL VÍDEO A UN AMIGO</h2></div>${consigna(MEDF.cons)}
  <div class="phone"><div class="in"><div class="hd">${img('robot')}Mensaje para Pablo</div>${S.aid?MEDF.fr.map((f,j)=>`<div class="bubble">${fr('m'+j,f)}</div>`).join(''):MEDF.lab.map((t,j)=>`<div class="bubble"><label for="m${j}">${t}</label><textarea id="m${j}" data-k="m${j}"></textarea></div>`).join('')}</div></div>
  <h3 class="sub">Palabras útiles</h3><div class="row">${['Mira…','El vídeo habla de…','Por ejemplo,…','Sin embargo (= pourtant),…'].map(t=>`<span class="chip" style="cursor:default">${t}</span>`).join('')}</div>
+ <p class="fb" id="medmsg" role="alert"></p></div>`;
+ bindInputs();bottom(()=>S.act?go(PB?'yo':'ser'):go('portada'),()=>{if(medDone()||ADMIN)return go('bravo');const m=$('#medmsg');m.className='fb show bad';m.textContent='Escribe las 3 frases para terminar (= écris les 3 phrases pour terminer).'},'He terminado')}
+function bravo(){setAcc('var(--X)','var(--Xa)');if(!ADMIN&&!(actDone(S.act)&&medDone()))return go('med1');
+ $('#app').innerHTML=`<div class="pop"><section class="bravo" role="status"><div class="stars" aria-hidden="true">🎉 ⭐ 🎉</div><h2>¡Bravo${S.name?', '+esc(S.name):''}!</h2><p class="big">Has terminado tu plan de trabajo.</p>
+ <ul class="done"><li>✓ Mi actividad ${S.act||''}</li><li>✓ Mi mensaje para Pablo</li></ul></section>
+ <div class="news" style="--bn:#9333EA"><div class="bar"><b>Ahora: los BONUS</b><span>Abiertos</span></div><div class="body"><p style="margin:0 0 10px;font-weight:700">Los bonus están abiertos (= tu as maintenant accès aux bonus). Elige el bonus que quieres.</p><button class="btn big" id="tobonus" style="background:#9333EA">Ver los bonus</button></div></div>
  <div class="news" style="--bn:#0E7490"><div class="bar"><b>Para la próxima clase</b><span>De memoria</span></div><div class="body"><p style="margin:0">${MEDF.deb}</p><p class="aidonly" style="margin:6px 0 0">${MEDF.debAid}</p></div></div></div>`;
- bindInputs();bottom(()=>S.act?go(PB?'yo':'ser'):go('portada'),()=>go('bonus'),'Ir a los bonus')}
+ $('#tobonus').onclick=()=>go('bonus');bottom(()=>go('med1'),()=>go('bonus'),'Ver los bonus')}
 function bonusLocked(){if(ADMIN)return false;if(actDone(S.act)&&medDone())return false;
  const items=[[actDone(S.act),S.act?'Mi actividad '+S.act+': las 4 etapas':'Elegir mi actividad (A o B)',()=>S.act?go('corr'):go('portada')],[medDone(),'La mediación: mi mensaje para Pablo',()=>go('med1')]];
  $('#app').innerHTML=`<div class="stephead"><span class="pill">Bonus</span><strong>¿Has terminado?</strong></div>`+lockBox('Los bonus se abren cuando terminas todo',items);bindFix(items);bottom(()=>go('med1'),()=>go('fin'),'Ver mis respuestas');return true}
 function bonus(){setAcc('var(--X)','var(--Xa)');if(bonusLocked())return;
  const items=[['bn1','movil','Bad Bunny y el robot'],['bn2','dali','Preguntas para Dalí'],['bn3','llama','Palabras quechuas'],['bn4','cubo3d','La máquina de verbos']];
  $('#app').innerHTML=`<div class="pop"><div class="stephead"><span class="pill">Bonus</span><strong>¿Has terminado?</strong></div>${consigna('Elige uno o varios bonus. ¡No hay orden!')}<div class="hub">${items.map(x=>`<button data-b="${x[0]}">${img(x[1])}<span>${x[2]}</span></button>`).join('')}</div></div>`;
- document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>go(b.dataset.b));bottom(()=>go('med1'),()=>go('fin'),'Ver mis respuestas')}
+ document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>go(b.dataset.b));bottom(()=>go('bravo'),()=>go('fin'),'Ver mis respuestas')}
 const BNSOL={bn1:[['1. ¿Quién escribe? ¿A quién?','FlowGPT (el «robot») escribe a Bad Bunny (Benito).'],['2. ¿Qué regala el robot?','Su canción, gratis.'],['3. ¿Estás de acuerdo?','Respuesta personal: comprueba que usas «porque».'],['4. Desafío','Respuesta personal. Ejemplo: «Hola, FlowGPT: no quiero tu canción…»']],
  bn2:[['Tus 3 preguntas','Ejemplos: ¿Dónde está tu museo? · ¿Por qué tienes un bigote tan largo? · ¿Cómo pintas tus cuadros?'],['Comprueba','Cada pregunta empieza con ¿ y termina con ?']],
  bn3:[['1','la llama'],['2','la cancha'],['3','la papa'],['4','el cóndor'],['5','el puma'],[PB?'¿Qué animal vuela?':'¿Qué animal es una figura de Nazca?','el cóndor']],
@@ -565,13 +573,13 @@ function fin(){setAcc('var(--violet)','#EDE9FE');const a=S.ans,k=S.act,A=ACT[k]|
  const bl=[];if(a.bn1q0)bl.push('Bonus 1: '+[0,1,2,3].map(j=>t(a['bn1q'+j])).join(' / '));if(a.bn2q0)bl.push('Bonus 2: '+[0,1,2].map(j=>t(a['bn2q'+j])).join(' / '));if(a.bn3s0)bl.push('Bonus 3: '+[0,1,2,3,4].map(j=>t(a['bn3s'+j])).join(', '));if(a.bn4a0)bl.push('Bonus 4: '+[0,1,2,3,4,5].map(j=>t(a['bn4a'+j])+(PB?'/'+t(a['bn4b'+j]):'')).join(', '));
  if(bl.length)L.push('','BONUS',...bl);const txt=L.join('\n');
  $('#app').innerHTML=`<div class="pop done">${img('robot')}<h2 style="margin:10px 0">¡Buen trabajo${S.name?', '+esc(S.name):''}!</h2><p>Aquí están todas tus respuestas.</p></div>${pdfBlock()}<pre class="sum">${esc(txt)}</pre>
- <div class="row"><button class="btn" id="cp">Copiar mis respuestas</button><button class="btn ghost" id="rs">Empezar de nuevo</button></div><p id="cpmsg" role="status" style="font-weight:700;color:var(--ok)"></p>`;
+ <div class="row"><button class="btn" id="cp">Copiar mis respuestas</button><button class="btn ghost" id="rs" ${ADMIN?'':'hidden'}>Empezar de nuevo</button></div><p id="cpmsg" role="status" style="font-weight:700;color:var(--ok)"></p>`;
  $('#cp').onclick=async()=>{try{await navigator.clipboard.writeText(txt);$('#cpmsg').textContent='Respuestas copiadas.'}catch(e){$('#cpmsg').textContent='Selecciona el texto y cópialo.'}};
  $('#rs').onclick=()=>ask('¿Borrar todas tus respuestas y empezar de nuevo?',()=>{S={name:'',act:null,screen:'portada',step:0,ans:{},aid:CFG.aid};save();render()},'Sí, borrar');
  bindPDF();bottom(()=>go('bonus'),()=>go('portada'),'Volver al inicio')}
 function render(){nav();const s=S.screen;
  if(s==='act'&&!S.act)S.screen='portada';
- ({portada,rep:repScreen,ser:PB?sb1:serScreen,yo:PB?sb2:serScreen,act:actScreen,corr,med1,bonus,bn1,bn2,bn3,bn4,fin}[S.screen]||portada)();
+ ({portada,rep:repScreen,ser:PB?sb1:serScreen,yo:PB?sb2:serScreen,act:actScreen,corr,med1,bravo,bonus,bn1,bn2,bn3,bn4,fin}[S.screen]||portada)();
  bindVideos();aidBank();
  if(S.screen==='portada')bindInputs()}
 $('#logo').src=IC.robot;render();
