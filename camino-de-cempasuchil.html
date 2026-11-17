@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>El camino de cempasúchil</title>
+<style>
+:root{--ind:#120a2e;--vio:#2a1250;--nar:#ff9a1f;--nar2:#ffb648;--mag:#e0218a;--tur:#22c7c0;--oro:#f0c75e;--hue:#f3e9d2;--txt:#f8f1e4;--sua:#cdbfe6;--pan:rgba(20,11,50,.82);--lin:rgba(240,199,94,.28);--lh:1.45;--fs:1}
+*{box-sizing:border-box}
+html{font-size:calc(clamp(14px,.62vw + .75vh,21px)*var(--fs))}
+html.big{--fs:1.2;--lh:1.85}
+html.big body{letter-spacing:.02em;word-spacing:.08em}
+body{margin:0;height:100vh;height:100dvh;overflow:hidden;background:#0b0620 linear-gradient(#0d0725,#2a1250 70%,#3a1550);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:var(--lh);-webkit-font-smoothing:antialiased}
+h1,h2,h3,.tit{font-family:Georgia,"Palatino Linotype","Book Antiqua",Palatino,serif;font-weight:700;letter-spacing:.01em;margin:0}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+#gl,#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#gl{z-index:0}#fx{z-index:2}
+#fg{position:fixed;left:-4%;right:-4%;bottom:0;height:17vh;z-index:1;pointer-events:none;opacity:.9;transition:opacity 1s}
+#fg svg{width:100%;height:100%;display:block}
+#luz{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(circle 26vmax at var(--mx,50%) var(--my,60%),rgba(255,170,70,.13),rgba(255,120,40,.05) 45%,transparent 70%);mix-blend-mode:screen}
+html.q-baja #luz,html.red #luz{display:none}
+#app{position:fixed;inset:0;z-index:4;display:flex;flex-direction:column}
+
+/* ---------- barra superior : camino + controles ---------- */
+#top{display:flex;align-items:center;gap:1rem;padding:.45rem .9rem;background:linear-gradient(rgba(10,5,30,.85),rgba(10,5,30,.35) 80%,transparent);flex:none}
+#camino{position:relative;flex:1;display:flex;align-items:center;min-width:0;max-width:52rem}
+.nodo{position:relative;flex:none;display:flex;align-items:center;gap:.4rem;background:none;border:0;padding:.2rem .3rem;border-radius:2rem;cursor:default;color:var(--sua);font-size:.82rem;white-space:nowrap}
+.nodo .fl{width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;border:2px solid rgba(255,154,31,.45);color:var(--nar2);font-weight:700;font-size:.85rem;background:rgba(18,10,46,.8);transition:all .5s}
+.nodo.hecha .fl{background:radial-gradient(circle,#ffcf6b,#ff9a1f 55%,#d96500);border-color:#ffcf6b;color:#3a1500;box-shadow:0 0 14px rgba(255,154,31,.8)}
+.nodo.act{color:#fff}.nodo.act .fl{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.15),0 0 18px rgba(255,200,120,.7)}
+html.admin .nodo{cursor:pointer}
+.pet{flex:1;height:.5rem;min-width:.6rem;background:radial-gradient(circle,rgba(255,154,31,.75) 38%,transparent 42%) 0 50%/.8rem .5rem repeat-x;opacity:.35;transition:opacity .8s}
+.pet.hecha{opacity:1;filter:drop-shadow(0 0 4px #ff9a1f)}
+#almaP{position:absolute;top:50%;left:0;width:1.5rem;height:1.5rem;margin:-.75rem 0 0 -.75rem;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fff 0,#bff 25%,rgba(34,199,192,.55) 45%,transparent 70%);transform:translate(.75rem,-.6rem);transition:left 1.6s cubic-bezier(.5,0,.2,1);animation:alma 2.4s ease-in-out infinite alternate;z-index:2}
+@keyframes alma{from{transform:translate(.75rem,-.45rem) scale(.85);opacity:.8}to{transform:translate(.75rem,-.75rem) scale(1.1);opacity:1}}
+#ctl{display:flex;align-items:center;gap:.35rem;flex:none}
+.ib{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;min-width:2.5rem;height:2.5rem;padding:0 .6rem;border-radius:.7rem;border:1px solid var(--lin);background:rgba(30,16,70,.7);cursor:pointer;font-size:.85rem;font-weight:600;transition:transform .15s,background .2s,box-shadow .2s}
+.ib:hover{background:rgba(70,35,130,.85);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.ib:active{transform:translateY(1px) scale(.96)}
+.ib[aria-pressed=true]{background:rgba(255,154,31,.22);border-color:var(--nar)}
+.ib svg{width:1.25rem;height:1.25rem}
+#vol{width:5rem;accent-color:var(--nar);cursor:pointer}
+:focus-visible{outline:3px solid var(--tur);outline-offset:2px}
+
+/* ---------- cuerpo ---------- */
+#cuerpo{flex:1;display:flex;min-height:0;gap:.8rem;padding:0 .9rem .7rem}
+#lado{flex:none;width:13.5rem;display:flex;flex-direction:column;justify-content:space-between;gap:.6rem;transition:width .6s,opacity .6s}
+body.sinlado #lado{width:0;opacity:0;overflow:hidden;pointer-events:none}
+#info .num{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--nar2)}
+#info h2{font-size:1.55rem;line-height:1.15;margin:.15rem 0 .4rem;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+#info .hab{font-size:.85rem;color:var(--sua)}
+#mini{border:1px solid var(--lin);border-radius:.9rem;background:radial-gradient(ellipse at 50% 100%,rgba(255,154,31,.16),rgba(18,10,46,.75) 70%);padding:.3rem;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#mini .lab{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--nar2);text-align:center}
+#main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:auto;transition:opacity .35s,transform .35s}
+#main.out{opacity:0;transform:translateY(12px) scale(.99)}
+.panel{background:var(--pan);border:1px solid var(--lin);border-radius:1.1rem;padding:1rem 1.2rem;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+html.q-baja .panel{backdrop-filter:none}
+.consigna{display:flex;align-items:center;gap:.6rem;font-size:1.12rem;font-weight:600;margin-bottom:.7rem}
+.consigna>svg{flex:none;width:1.7rem;height:1.7rem;color:var(--nar2)}
+.nota{font-size:.9rem;color:var(--sua)}
+.fila{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+.centro{margin:auto;max-width:46rem;width:100%;text-align:center}
+.centro .consigna{justify-content:center}
+
+/* ---------- botones ---------- */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.9rem;padding:.55rem 1.3rem;border-radius:2rem;border:0;cursor:pointer;font-weight:700;font-size:1.02rem;text-decoration:none;color:#2b1000;background:linear-gradient(#ffc45e,#ff9a1f 60%,#e87a00);box-shadow:0 6px 0 #a34d00,0 12px 26px rgba(255,140,20,.35);transition:transform .14s,box-shadow .14s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 8px 0 #a34d00,0 16px 34px rgba(255,140,20,.5)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #a34d00,0 4px 10px rgba(255,140,20,.3)}
+.btn.grande{font-size:1.3rem;padding:.8rem 2.2rem;min-height:3.6rem}
+.btn.sec{color:var(--txt);background:rgba(60,30,120,.75);border:1px solid var(--lin);box-shadow:0 5px 0 rgba(8,4,26,.9)}
+.btn.sec:hover{box-shadow:0 7px 0 rgba(8,4,26,.9),0 10px 24px rgba(120,60,220,.35)}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.4;pointer-events:none;filter:grayscale(.6)}
+.btn svg{width:1.3rem;height:1.3rem}
+.aud{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid var(--tur);background:rgba(34,199,192,.14);color:var(--tur);cursor:pointer;display:inline-grid;place-items:center;transition:transform .15s,background .2s}
+.aud:hover{background:rgba(34,199,192,.3);transform:scale(1.08)}
+.aud svg{width:1.3rem;height:1.3rem}
+.habla{animation:habla .7s ease-in-out infinite alternate}
+@keyframes habla{to{box-shadow:0 0 0 .5rem rgba(34,199,192,.18),0 0 22px rgba(34,199,192,.6)}}
+.mal{animation:mal .45s}
+@keyframes mal{20%{transform:translateX(-7px)}45%{transform:translateX(6px)}70%{transform:translateX(-4px)}100%{transform:none}}
+.bienp{animation:bienp .6s}
+@keyframes bienp{40%{transform:scale(1.07)}100%{transform:none}}
+[hidden]{display:none!important}
+.altar:not(.t-humo) .humoP{display:none}
+.f5:not(.ok) .est svg{opacity:0}.est svg{width:1.1rem;height:1.1rem}
+html.resp .f5 .mod[hidden]{display:block!important}
+
+/* ---------- inicio ---------- */
+#inicio{flex:1;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:2rem;padding:0 3vw}
+#inicio .sup{letter-spacing:.3em;text-transform:uppercase;color:var(--nar2);font-size:.9rem}
+#inicio h1{font-size:4.3rem;line-height:1.02;margin:.6rem 0 1rem;text-shadow:0 4px 30px rgba(255,120,20,.45),0 2px 0 #3a1200}
+#inicio h1 em{font-style:italic;color:var(--nar);display:block}
+#inicio .lema{font-size:1.3rem;margin-bottom:.8rem;max-width:30rem}
+#inicio .cas{display:flex;align-items:center;gap:.6rem;color:var(--sua);margin-bottom:1.6rem}
+#inicio .cas svg{width:1.6rem;height:1.6rem;color:var(--tur)}
+#inicio .altarG{filter:drop-shadow(0 30px 40px rgba(0,0,0,.6));animation:flota 6s ease-in-out infinite alternate}
+@keyframes flota{to{transform:translateY(-10px)}}
+
+/* ---------- altar ---------- */
+.altar{display:block;width:100%;height:auto;overflow:visible}
+.altar .it{opacity:0;transform:translateY(-16px);transition:opacity .9s,transform .9s cubic-bezier(.3,1.5,.5,1)}
+.altar.t-foto .it-foto,.altar.t-flores .it-flores,.altar.t-velas .it-velas,.altar.t-pan .it-pan,.altar.t-agua .it-agua,.altar.t-sal .it-sal,.altar.t-copal .it-copal,.altar.t-papel .it-papel,.altar.t-calav .it-calav,.altar.t-cruz .it-cruz,.altar.t-guit .it-guit{opacity:1;transform:none}
+.altar .gloria{opacity:0;transition:opacity 3s}.altar.t-luz .gloria{opacity:1}
+.llama{transform-box:fill-box;transform-origin:50% 100%;animation:llama .28s ease-in-out infinite alternate}
+.llama.b{animation-duration:.37s}.llama.c{animation-duration:.22s}
+@keyframes llama{from{transform:scale(.92,1.06) skewX(-4deg)}to{transform:scale(1.06,.9) skewX(5deg)}}
+.halo{animation:halo 1.3s ease-in-out infinite alternate}
+@keyframes halo{from{opacity:.55}to{opacity:1}}
+.humo{stroke-dasharray:7 9;animation:humo 2.6s linear infinite}
+@keyframes humo{from{stroke-dashoffset:0;opacity:.75}to{stroke-dashoffset:-32;opacity:.3}}
+.pp{transform-box:fill-box;transform-origin:50% 0;animation:pp 2.2s ease-in-out infinite alternate}
+.pp:nth-child(2n){animation-delay:-.7s}.pp:nth-child(3n){animation-delay:-1.3s}
+@keyframes pp{from{transform:skewX(-7deg) scaleY(.97)}to{transform:skewX(8deg) scaleY(1.03)}}
+.hueso{fill:#f3e9d2;stroke:#1a1030;stroke-width:1.4}
+.manga{stroke-width:10;stroke-linecap:round;fill:none}
+
+/* ---------- etapa 1 ---------- */
+.puntos{display:flex;gap:.4rem;justify-content:center;margin-bottom:.8rem}
+.puntos i{width:.8rem;height:.8rem;border-radius:50%;background:rgba(255,255,255,.18);transition:all .4s}
+.puntos i.ok{background:var(--nar);box-shadow:0 0 10px var(--nar)}.puntos i.ya{background:#fff}
+.preg{font-size:1.5rem;font-weight:700;margin:.4rem 0 1rem;display:flex;align-items:center;justify-content:center;gap:.8rem}
+.opcs{display:grid;gap:.7rem}
+.opc{display:flex;align-items:center;gap:.9rem;text-align:left;min-height:3.4rem;padding:.6rem 1.1rem;border-radius:.9rem;border:1px solid var(--lin);background:rgba(50,26,105,.7);cursor:pointer;font-size:1.12rem;transition:transform .15s,background .2s,border-color .2s}
+.opc b{flex:none;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:rgba(255,154,31,.2);color:var(--nar2)}
+.opc:hover{transform:translateX(6px);background:rgba(80,42,150,.85);border-color:var(--nar)}
+.opc.no{opacity:.38;pointer-events:none;text-decoration:line-through}
+.opc.si{background:rgba(34,199,192,.28);border-color:var(--tur);pointer-events:none}
+html.resp .opc[data-ok="1"]{outline:2px dashed var(--tur)}
+
+/* ---------- etapas 2 y 3 : fichas ---------- */
+.e2{flex:1;display:grid;grid-template-columns:minmax(15rem,.62fr) 1.38fr;gap:.9rem;min-height:0}
+.e2 .altarBox{display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(ellipse at 50% 95%,rgba(255,154,31,.2),transparent 65%);border-radius:1rem}
+.e2 .der{display:flex;flex-direction:column;min-height:0}
+.objs{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
+.obj{position:relative;display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.5rem .35rem .45rem;border-radius:.9rem;border:1px solid var(--lin);background:linear-gradient(160deg,rgba(70,36,140,.85),rgba(28,14,66,.9));cursor:pointer;text-align:center;transition:transform .2s,box-shadow .2s,border-color .2s;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.obj:hover{transform:translateY(-4px) rotateX(6deg);border-color:var(--nar);box-shadow:0 14px 26px rgba(0,0,0,.5),0 0 18px rgba(255,154,31,.25)}
+.obj svg.ic{width:4.2rem;height:4.2rem}
+.obj .nom{font-size:.92rem;font-weight:600;line-height:1.2;min-height:2.2em;display:flex;align-items:center}
+.obj .esc{display:flex;gap:.25rem;height:.6rem}
+.obj .esc i{width:.55rem;height:.55rem;border-radius:50%;border:1px solid var(--tur)}
+.obj .esc i.on{background:var(--tur);box-shadow:0 0 6px var(--tur)}
+.obj.oido{border-color:rgba(34,199,192,.6)}
+.leer{font-size:.8rem;padding:.15rem .7rem;border-radius:1rem;border:1px solid var(--oro);background:rgba(240,199,94,.14);color:var(--oro);cursor:pointer;font-weight:700}
+.leer:hover{background:rgba(240,199,94,.3)}
+.frase{font-size:.86rem;line-height:1.3;color:#fff;background:rgba(0,0,0,.35);border-radius:.5rem;padding:.25rem .4rem}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:.7rem}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.1rem;min-height:8.2rem;padding:.4rem .3rem;border-radius:.9rem;border:2px dashed rgba(240,199,94,.45);background:rgba(10,5,30,.5);text-align:center;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.drop svg.ic{width:2.6rem;height:2.6rem}
+.drop .sim{font-size:.9rem;font-weight:700;color:var(--oro);line-height:1.15}
+.drop.sobre,.drop:hover{background:rgba(255,154,31,.16);border-color:var(--nar)}
+.drop.lleno{border-style:solid;border-color:var(--tur);background:rgba(34,199,192,.12);cursor:default}
+.drag{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.drag.sel{outline:3px solid var(--nar);outline-offset:2px;transform:translateY(-4px) scale(1.04);box-shadow:0 0 26px rgba(255,154,31,.6)}
+.drag.fija{cursor:default;pointer-events:none;box-shadow:none;background:none;border-color:transparent;padding:.1rem}
+.drag.fija svg.ic{width:2.4rem;height:2.4rem}.drag.fija .nom{font-size:.78rem;min-height:0}
+.drag.fija .aud{display:none}
+.fant{position:fixed;z-index:60;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) rotate(-4deg) scale(1.05);box-shadow:0 20px 40px rgba(0,0,0,.6)}
+html.resp [data-sol]::after{content:attr(data-sol);display:block;font-size:.72rem;color:var(--tur);font-weight:700}
+.mini-aud{position:absolute;top:.25rem;right:.25rem;width:1.9rem;height:1.9rem}
+.mini-aud svg{width:1rem;height:1rem}
+
+.e3{flex:1;display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:.9rem;min-height:0}
+.col{display:flex;flex-direction:column;align-items:stretch;gap:.4rem;padding:.7rem;border-radius:1.1rem;border:2px dashed rgba(240,199,94,.45);background:rgba(10,5,30,.55);cursor:pointer;transition:background .2s,border-color .2s;min-height:0}
+.col.sobre,.col:hover{background:rgba(255,154,31,.13);border-color:var(--nar)}
+.col h3{font-size:1.2rem;text-align:center;line-height:1.15}
+.col .cab svg{width:4.2rem;height:4.2rem;display:block;margin:0 auto}
+.col.pre h3{color:var(--nar2)}.col.cat h3{color:var(--tur)}
+.col .lista{display:flex;flex-direction:column;gap:.35rem}
+.cartas{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;align-content:start;perspective:900px}
+.carta{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:.6rem .35rem;border-radius:.9rem;border:1px solid var(--oro);background:linear-gradient(155deg,#4a2590,#1f0f48);box-shadow:0 10px 22px rgba(0,0,0,.5);text-align:center;font-weight:600;font-size:.92rem;line-height:1.2;min-height:8.6rem;transform-style:preserve-3d;transition:transform .35s,box-shadow .3s;animation:reparte .7s backwards cubic-bezier(.3,1.3,.5,1)}
+.carta:hover{transform:rotateY(-12deg) rotateX(8deg) translateY(-5px);box-shadow:14px 18px 30px rgba(0,0,0,.55),0 0 18px rgba(240,199,94,.3)}
+.carta svg.ic{width:3.8rem;height:3.8rem}
+@keyframes reparte{from{transform:rotateY(180deg) translateY(40px) scale(.6);opacity:0}}
+.carta.fija{flex-direction:row;min-height:0;padding:.25rem .5rem;font-size:.82rem;text-align:left;animation:bienp .5s;pointer-events:none;border-color:transparent;box-shadow:none;background:rgba(255,255,255,.07)}
+.carta.fija svg.ic{width:2rem;height:2rem;flex:none}
+.bilan{grid-column:1/-1;text-align:center;font-size:1.6rem;padding:.8rem;animation:bienp .7s}
+.bilan b{color:var(--nar)}
+
+/* ---------- etapa 4 ---------- */
+.e4{flex:1;display:flex;flex-direction:column;min-height:0;gap:.5rem}
+.escBox{flex:1;min-height:0;display:flex;justify-content:center}
+#escena{height:100%;width:100%;max-width:100%;filter:drop-shadow(0 16px 30px rgba(0,0,0,.6))}
+.pj{cursor:pointer;outline:none}
+.pj .hit{fill:transparent}
+.pj:not(.vivo) [fill]:not(.k):not(.hit):not([fill=none]){fill:#514478}
+.pj:not(.vivo) .hueso{fill:#9d92bd!important}
+.pj:not(.vivo) [stroke]:not(.k){stroke:#2c2250}
+.pj:not(.vivo) .manga{stroke:#514478}
+.pj:not(.vivo) .solo-vivo{display:none}
+.pj .marca{animation:marca 1.2s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 50%}
+@keyframes marca{from{transform:scale(.8);opacity:.7}to{transform:scale(1.15);opacity:1}}
+.pj.vivo .marca{display:none}
+.pj:not(.vivo):hover [fill]:not(.k):not(.hit):not([fill=none]),.pj.elegido:not(.vivo) [fill]:not(.k):not(.hit):not([fill=none]),.pj:not(.vivo):focus-visible [fill]:not(.k):not(.hit):not([fill=none]){fill:#7868ad}
+.pj.elegido .hit,.pj:focus-visible .hit{stroke:#ffcf6b!important;stroke-width:3;stroke-dasharray:8 6;rx:14}
+.an{transform-origin:0px 0px}
+.vivo .sw{animation:sw var(--d,.6s) ease-in-out infinite alternate}
+@keyframes sw{from{transform:rotate(var(--f,0deg))}to{transform:rotate(var(--t,0deg))}}
+.vivo .bob{animation:bob var(--d,.5s) ease-in-out infinite alternate}
+@keyframes bob{from{transform:translate(0,0) rotate(calc(var(--br,0deg)*-1))}to{transform:translate(var(--bx,0px),var(--by,-4px)) rotate(var(--br,0deg))}}
+.vivo .boca{animation:boca .35s ease-in-out infinite alternate;transform-origin:0px 17px}
+@keyframes boca{from{transform:scaleY(.25)}to{transform:scaleY(1.15)}}
+.vivo .nt{animation:nt 2.2s linear infinite}
+.nt{opacity:0}.nt.b{animation-delay:-1.1s!important}
+@keyframes nt{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(14px,-70px) rotate(20deg);opacity:0}}
+.bruma{animation:bruma 26s linear infinite alternate}
+@keyframes bruma{to{transform:translateX(-140px)}}
+.velo{transition:opacity 1.2s}
+.escr{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;padding:.6rem 1rem;min-height:5.2rem}
+.inf{display:flex;flex-direction:column;align-items:center;padding:.3rem 1rem;border-radius:.8rem;background:rgba(224,33,138,.2);border:1px solid var(--mag);min-width:9rem}
+.inf b{font-size:1.25rem;color:#fff}.inf small{font-size:.8rem;color:var(--sua)}
+.oracion{display:flex;align-items:center;gap:.5rem;font-size:1.25rem;font-weight:600;flex-wrap:wrap}
+.oracion input,.f5 input{min-width:13rem;padding:.4rem .7rem;border-radius:.6rem;border:2px solid var(--oro);background:rgba(0,0,0,.4);font-size:1.15rem;font-weight:600;caret-color:var(--nar)}
+.oracion input:focus,.f5 input:focus{outline:none;border-color:var(--nar);box-shadow:0 0 0 4px rgba(255,154,31,.22)}
+.pista{font-size:1rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.regla{display:inline-flex;gap:.4rem;align-items:center;padding:.2rem .7rem;border-radius:.6rem;background:rgba(255,255,255,.08);font-weight:700;opacity:.55}
+.regla.on{opacity:1;background:rgba(34,199,192,.22);outline:1px solid var(--tur)}
+.regla i{font-style:normal;color:var(--nar)}
+.rad{font-family:Consolas,"Courier New",monospace;font-size:1.15rem;color:var(--oro);letter-spacing:.06em}
+.correcta{font-size:1.3rem;color:#fff}.correcta b{color:var(--tur)}
+.cont{margin-left:auto;font-weight:700;color:var(--nar2);white-space:nowrap}
+
+/* ---------- etapa 5 ---------- */
+.e5{margin:auto;width:100%;max-width:58rem}
+.f5{display:grid;gap:.25rem;margin-bottom:.8rem}
+.f5 label{font-size:1.15rem;font-weight:600}
+.f5 .lin{display:flex;gap:.5rem;align-items:center}
+.f5 input{flex:1}
+.f5 .est{flex:none;width:1.8rem;height:1.8rem;border-radius:50%;display:grid;place-items:center;border:2px solid rgba(255,255,255,.25)}
+.f5.ok .est{background:var(--tur);border-color:var(--tur);color:#062a2a}
+.f5 .mod{font-size:.95rem;color:var(--oro)}
+.f5 .av{font-size:.95rem;color:#ffb0c8}
+.banco{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0}
+.chip{padding:.4rem .9rem;border-radius:2rem;border:1px solid var(--tur);background:rgba(34,199,192,.12);cursor:pointer;font-weight:600;transition:transform .15s,background .2s}
+.chip:hover{background:rgba(34,199,192,.32);transform:translateY(-2px)}
+
+/* ---------- final ---------- */
+#final{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;min-height:0;padding-bottom:.6rem}
+#final .altarG{height:100%;max-height:78vh;aspect-ratio:400/360;position:relative}
+#final .altarG svg{height:100%;width:100%}
+#final .msg{font-size:1.7rem;text-align:center;text-shadow:0 2px 16px #000;margin:.3rem 0 .6rem;animation:sube 2s 3s backwards}
+#final .btn{animation:sube 1.5s 6s backwards}
+@keyframes sube{from{opacity:0;transform:translateY(20px)}}
+#almaF{position:absolute;left:8%;top:30%;width:9rem;height:9rem;margin:-4.5rem;border-radius:50%;background:radial-gradient(circle,#fff 0,#cff 18%,rgba(34,199,192,.5) 40%,rgba(255,200,120,.18) 60%,transparent 72%);animation:llega 6s cubic-bezier(.4,0,.2,1) backwards,alma2 3s 6s ease-in-out infinite alternate;pointer-events:none}
+@keyframes llega{0%{transform:translate(-48vw,30vh) scale(.3);opacity:0}20%{opacity:1}50%{transform:translate(-18vw,-12vh) scale(.7)}100%{transform:none}}
+@keyframes alma2{to{transform:translateY(-12px) scale(1.06)}}
+.res{margin:0 auto;width:100%;max-width:64rem}
+.res h1{font-size:2rem;color:var(--nar);text-align:center}
+.res h3{font-size:1.15rem;color:var(--nar2);margin:1rem 0 .4rem;border-bottom:1px solid var(--lin);padding-bottom:.2rem}
+.estr{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+.estr div{text-align:center;padding:.4rem;border-radius:.7rem;background:rgba(255,255,255,.06);font-size:.9rem}
+.estr svg{width:1.3rem;height:1.3rem;color:rgba(255,255,255,.2)}.estr svg.on{color:var(--oro);filter:drop-shadow(0 0 5px var(--oro))}
+.misf li{font-size:1.15rem;margin:.3rem 0}
+.voc{display:grid;grid-template-columns:repeat(8,1fr);gap:.5rem}
+.voc div{text-align:center;font-weight:600;font-size:.88rem;line-height:1.15;padding:.4rem .2rem;border-radius:.7rem;background:rgba(255,255,255,.06)}
+.voc svg{width:100%;max-width:4.4rem;height:auto;display:block;margin:0 auto}
+.copia{font-size:1.25rem;font-weight:700;text-align:center;margin:1rem 0;color:#fff;padding:.6rem;border:2px solid var(--nar);border-radius:.9rem;background:rgba(255,154,31,.12)}
+.bonus input[type=text]{width:100%;padding:.45rem .7rem;border-radius:.6rem;border:1px solid var(--lin);background:rgba(0,0,0,.35);margin:.2rem 0}
+.bonus .r{display:flex;align-items:center;gap:.5rem}
+.bonus input[type=radio]{width:1.3rem;height:1.3rem;accent-color:var(--tur)}
+.miquiz{padding:.7rem 1rem;border-radius:.8rem;border:1px solid var(--tur);background:rgba(34,199,192,.1);margin-top:.5rem}
+.miquiz .ok{color:var(--tur);font-weight:700}
+
+/* ---------- modal, aviso, demo, admin ---------- */
+#modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(6,3,20,.72);backdrop-filter:blur(3px)}
+#modal.on{display:grid}
+#modal .caja{max-width:34rem;width:calc(100% - 2rem);text-align:center;animation:entra .5s cubic-bezier(.3,1.4,.5,1)}
+@keyframes entra{from{transform:scale(.8) translateY(30px);opacity:0}}
+#modal h2{font-size:1.8rem;color:var(--nar);margin-bottom:.4rem}
+#modal .stars svg{width:2.6rem;height:2.6rem;color:rgba(255,255,255,.18)}
+#modal .stars svg.on{color:var(--oro);filter:drop-shadow(0 0 10px var(--oro));animation:bienp .6s backwards}
+#modal .stars svg.on:nth-child(2){animation-delay:.25s}#modal .stars svg.on:nth-child(3){animation-delay:.5s}
+#modal .prem{display:flex;align-items:center;justify-content:center;gap:.8rem;margin:.7rem 0 1rem;font-size:1.15rem}
+#modal .prem svg{width:4.5rem;height:4.5rem;flex:none}
+#modal input{padding:.5rem .8rem;border-radius:.6rem;border:1px solid var(--lin);background:rgba(0,0,0,.4);text-align:center;margin:.6rem 0}
+#toast{position:fixed;left:50%;bottom:1.2rem;transform:translate(-50%,200%);z-index:70;padding:.55rem 1.2rem;border-radius:2rem;background:rgba(10,5,30,.95);border:1px solid var(--lin);font-size:.95rem;transition:transform .4s;pointer-events:none;max-width:90vw}
+#toast.on{transform:translate(-50%,0)}
+#demo{position:fixed;z-index:65;left:0;top:0;width:2.6rem;height:2.6rem;pointer-events:none;display:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.7));transition:transform .9s cubic-bezier(.4,0,.2,1)}
+#demo.on{display:block}
+#demo.clic::after{content:"";position:absolute;left:.3rem;top:0;width:1.4rem;height:1.4rem;margin:-.4rem;border-radius:50%;border:3px solid var(--nar);animation:onda .6s}
+@keyframes onda{from{transform:scale(.3);opacity:1}to{transform:scale(2.6);opacity:0}}
+#demoVelo{position:fixed;inset:0;z-index:64;display:none}
+#demoVelo.on{display:block}
+#admin{position:fixed;right:.8rem;bottom:.8rem;z-index:80;display:none;max-width:22rem;font-size:.9rem}
+#admin.on{display:block}
+#admin .fila{gap:.35rem;margin:.35rem 0}
+#admin .ib{height:2.1rem;min-width:2.1rem}
+.petB{position:fixed;z-index:66;width:.9rem;height:.55rem;border-radius:60% 40% 60% 40%;background:linear-gradient(90deg,#ffb648,#f07c00);pointer-events:none;animation:petB .9s ease-out forwards}
+@keyframes petB{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+
+html.red *,html.red *::before,html.red *::after{animation:none!important;transition:none!important}
+html.red .nt{opacity:0}
+
+@media (max-width:1000px){
+ #lado{width:9.5rem}#info h2{font-size:1.2rem}.nodo span{display:none}
+ .e2{grid-template-columns:1fr}.e2 .altarBox{display:none}
+ #inicio{grid-template-columns:1fr}#inicio .altarG{display:none}#inicio h1{font-size:3rem}
+ .voc{grid-template-columns:repeat(4,1fr)}#vol{width:3.5rem}
+}
+@media (max-height:640px){.obj svg.ic{width:3.3rem;height:3.3rem}.drop{min-height:7rem}.carta{min-height:7.4rem}}
+@media print{
+ body{background:#fff!important;color:#000!important;height:auto;overflow:visible}
+ #gl,#fx,#fg,#luz,#top,#lado,#modal,#toast,#admin,.noimp{display:none!important}
+ #app,#cuerpo,#main{position:static;display:block;overflow:visible;padding:0}
+ .panel{background:#fff!important;border:0;box-shadow:none;color:#000;backdrop-filter:none}
+ .res h1,.res h3{color:#7a2d00}.copia{color:#000;border-color:#000;background:none}
+ .voc div,.estr div{background:none;border:1px solid #bbb;color:#000}
+ .estr svg{color:#ccc}.estr svg.on{color:#d08a00;filter:none}
+ .miquiz{border-color:#555;background:none}.miquiz .ok{color:#06605c}
+}
+</style>
+</head>
+<body>
+<!-- Degradados compartidos por todos los dibujos SVG -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<radialGradient id="gHalo"><stop offset="0" stop-color="#ffd27a" stop-opacity=".95"/><stop offset=".35" stop-color="#ff9a1f" stop-opacity=".45"/><stop offset="1" stop-color="#ff7a00" stop-opacity="0"/></radialGradient>
+<radialGradient id="gLuna"><stop offset="0" stop-color="#fff6d8" stop-opacity=".7"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></radialGradient>
+<radialGradient id="gAlma"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#bff" stop-opacity=".9"/><stop offset="1" stop-color="#22c7c0" stop-opacity="0"/></radialGradient>
+<linearGradient id="gTela" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2187a"/><stop offset="1" stop-color="#6d0f52"/></linearGradient>
+<linearGradient id="gTapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3fd0"/><stop offset="1" stop-color="#5a23a0"/></linearGradient>
+<linearGradient id="gCielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0628"/><stop offset=".6" stop-color="#2a1250"/><stop offset="1" stop-color="#7a1f6e"/></linearGradient>
+<linearGradient id="gSuelo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34165e"/><stop offset="1" stop-color="#150a34"/></linearGradient>
+<linearGradient id="gBruma" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9c8ff" stop-opacity="0"/><stop offset=".5" stop-color="#d9c8ff" stop-opacity=".2"/><stop offset="1" stop-color="#d9c8ff" stop-opacity="0"/></linearGradient>
+<linearGradient id="gCamino" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a1f" stop-opacity=".25"/><stop offset="1" stop-color="#ff9a1f" stop-opacity=".8"/></linearGradient>
+</defs></svg>
+
+<canvas id="gl"></canvas>
+<div id="fg"></div>
+<canvas id="fx"></canvas>
+<div id="luz"></div>
+
+<div id="app">
+ <header id="top">
+  <nav id="camino" aria-label="El camino"></nav>
+  <div id="ctl">
+   <button class="ib" id="bMus" aria-pressed="true" title="Música" aria-label="Música"></button>
+   <input id="vol" type="range" min="0" max="1" step="0.05" value="0.7" title="Volumen" aria-label="Volumen">
+   <button class="ib" id="bCal" title="Calidad" aria-label="Calidad">Calidad: alta</button>
+   <button class="ib" id="bAa" aria-pressed="false" title="Texto más grande" aria-label="Texto más grande">Aa</button>
+   <button class="ib" id="bRed" aria-pressed="false" title="Menos animación" aria-label="Menos animación"></button>
+   <button class="ib" id="bPan" aria-pressed="false" title="Pantalla completa" aria-label="Pantalla completa" hidden></button>
+   <button class="ib" id="bNue" title="Empezar de nuevo" aria-label="Empezar de nuevo"></button>
+  </div>
+ </header>
+ <div id="cuerpo">
+  <aside id="lado"><div id="info"></div><div id="mini"><div class="lab">El altar</div><div id="miniA"></div></div></aside>
+  <main id="main"></main>
+ </div>
+</div>
+<div id="modal" role="dialog" aria-modal="true"></div>
+<div id="demoVelo"></div>
+<div id="demo"><svg viewBox="0 0 24 24"><path d="M5 2l14 11h-7l4 8-3 1.5-4-8-4 5z" fill="#fff" stroke="#1a1030" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="admin" class="panel"></div>
+<script>
+'use strict';
+/* =====================================================================
+   EL CAMINO DE CEMPASÚCHIL — séance 2 « Día de muertos » (3e, LV2, A1+)
+   Fichier autonome : aucun fichier externe, aucune donnée envoyée.
+
+   ====== 1. CONTENU MODIFIABLE PAR LE PROFESSEUR ======================
+   QUESTIONS_VIDEO : questions de l'étape 1 (El reportaje).
+     pregunta : texte de la question (en espagnol)
+     opciones : 2 ou 3 réponses (vrai/faux = ['Verdadero','Falso'])
+     correcta : numéro de la bonne réponse (0 = la première de la liste)
+     mezclar  : false pour garder l'ordre écrit (utile pour vrai/faux)
+     activa   : false = la question n'est PAS posée aux élèves
+   L'ordre des réponses est mélangé à l'écran (sauf mezclar:false).
+   ===================================================================== */
+const URL_VIDEO = 'https://www.telemundo.com/shows/hoy-dia/cultura/video/asi-es-como-se-realizan-los-tradicionales-altares-de-dia-de-muertos-en-mexico-tmvo11406962';
+
+const QUESTIONS_VIDEO = [
+  // --- Questions sûres ---
+  { pregunta: '¿Dónde vive Yadira?',
+    opciones: ['En Estados Unidos', 'En España', 'En Argentina'], correcta: 0 },
+  { pregunta: '¿Adónde viaja?',
+    opciones: ['A la Ciudad de México', 'A Madrid', 'A Buenos Aires'], correcta: 0 },
+  { pregunta: '¿Qué quiere aprender?',
+    opciones: ['A preparar una ofrenda de Día de muertos', 'A tocar la guitarra', 'A pintar un mural'], correcta: 0 },
+  { pregunta: '¿Quién ayuda a Yadira?',
+    opciones: ['Un experto', 'Un futbolista', 'Un cantante'], correcta: 0 },
+
+  // --- Questions sur le détail de la vidéo : À COMPLÉTER PAR LE PROFESSEUR ---
+  // Les 4 questions ci-dessous sont des BROUILLONS non vérifiés avec la vidéo.
+  // Corrigez le texte et la bonne réponse, puis passez activa à true.
+  { activa: false, mezclar: false, pregunta: 'En el altar hay una foto del difunto.',
+    opciones: ['Verdadero', 'Falso'], correcta: 0 },
+  { activa: false, pregunta: '¿De qué color son las flores de cempasúchil?',
+    opciones: ['Naranja', 'Azul', 'Blanco'], correcta: 0 },
+  { activa: false, mezclar: false, pregunta: 'El altar es para recordar a los difuntos.',
+    opciones: ['Verdadero', 'Falso'], correcta: 0 },
+  { activa: false, pregunta: '¿Qué comida hay en la ofrenda?',
+    opciones: ['Pan de muerto', 'Pizza', 'Paella'], correcta: 0 },
+];
+
+const CODIGO_ADMIN = 'profe';   // code du mode professeur (Ctrl+Maj+A)
+
+/* ====== 2. DONNÉES DES AUTRES ÉTAPES ================================= */
+const OBJETOS = [
+  { id:'flores', n:'las flores de cempasúchil', f:'Las flores de cempasúchil guían a las almas con su color y su olor.', s:'guiar a las almas', p:'camino' },
+  { id:'velas',  n:'las velas',                 f:'Las velas iluminan el camino de los difuntos.',                      s:'iluminar el camino', p:'luz' },
+  { id:'pan',    n:'el pan de muerto',          f:'El pan de muerto es comida para los difuntos.',                      s:'comida para los difuntos', p:'plato' },
+  { id:'agua',   n:'el agua',                   f:'El agua calma la sed de las almas después del viaje.',               s:'calmar la sed', p:'gota' },
+  { id:'sal',    n:'la sal',                    f:'La sal purifica el alma.',                                           s:'purificar el alma', p:'brillo' },
+  { id:'copal',  n:'el copal',                  f:'El humo del copal limpia el lugar.',                                 s:'limpiar el lugar', p:'escoba' },
+  { id:'papel',  n:'el papel picado',           f:'El papel picado representa el viento.',                              s:'el viento', p:'viento' },
+  { id:'calav',  n:'las calaveritas de azúcar', f:'Las calaveritas de azúcar representan a los muertos con alegría.',   s:'los muertos con alegría', p:'alegria' },
+];
+const ORIGENES = [
+  { id:'o1', t:'la flor de cempasúchil', c:'pre', i:'flores' },
+  { id:'o2', t:'la cruz', c:'cat', i:'cruz' },
+  { id:'o3', t:'el copal', c:'pre', i:'copal' },
+  { id:'o4', t:'el 1 y el 2 de noviembre (calendario cristiano)', c:'cat', i:'calend' },
+  { id:'o5', t:'el pan de muerto', c:'pre', i:'pan' },
+  { id:'o6', t:'las ofrendas en el altar', c:'pre', i:'altarI' },
+  { id:'o7', t:'las tumbas adornadas con flores y velas', c:'cat', i:'tumba' },
+  { id:'o8', t:'el retorno de los difuntos', c:'pre', i:'almaI' },
+];
+const BILAN = 'Día de muertos mezcla dos culturas.';
+// ok : formes acceptées (sans accents, minuscules) ; sol : forme correcte réaffichée
+const PERSONAJES = [
+  { id:'bailar',  inf:'bailar',            ay:'la música + el cuerpo',        suj:'La catrina',     cola:'',               pl:0, ger:'bailando',     rad:'bail' },
+  { id:'cantar',  inf:'cantar',            ay:'la voz + la música',           suj:'El cantante',    cola:'',               pl:0, ger:'cantando',     rad:'cant' },
+  { id:'tocar',   inf:'tocar la guitarra', ay:'hacer música',                 suj:'Los músicos',    cola:'la guitarra',    pl:1, ger:'tocando',      rad:'toc' },
+  { id:'comer',   inf:'comer',             ay:'ejemplo: comer pan',           suj:'El abuelo',      cola:'pan de muerto',  pl:0, ger:'comiendo',     rad:'com' },
+  { id:'beber',   inf:'beber',             ay:'ejemplo: beber agua',          suj:'Los amigos',     cola:'',               pl:1, ger:'bebiendo',     rad:'beb' },
+  { id:'adornar', inf:'adornar la tumba',  ay:'adornar = decorar',            suj:'La familia',     cola:'la tumba',       pl:0, ger:'adornando',    rad:'adorn' },
+  { id:'desfilar',inf:'desfilar',          ay:'caminar en grupo por la calle',suj:'Los esqueletos', cola:'',               pl:1, ger:'desfilando',   rad:'desfil' },
+  { id:'disfrazarse', inf:'disfrazarse',   ay:'ponerse una máscara',          suj:'El chico',       cola:'',               pl:0, ger:'disfrazando',  rad:'disfraz', refl:1 },
+];
+const FRASES5 = [
+  { ini:'A finales de octubre, los mexicanos suelen', mod:'A finales de octubre, los mexicanos suelen preparar un altar para sus difuntos.' },
+  { ini:'El 1 y el 2 de noviembre, la familia suele', mod:'El 1 y el 2 de noviembre, la familia suele reunirse en el cementerio y adornar las tumbas.' },
+  { ini:'También suelen', mod:'También suelen disfrazarse, desfilar, bailar y cantar.' },
+];
+const BANCO = ['preparar un altar','adornar las tumbas','reunirse en el cementerio','bailar y cantar','disfrazarse','comer pan de muerto','poner flores y velas','desfilar por las calles','recordar a los difuntos'];
+const VOCAB = [['calavera','la calavera'],['calav','la calaverita de azúcar'],['mascara','la máscara'],['papel','el papel picado'],['musico','el músico'],['disfraz','disfrazarse'],['desfile','desfilar'],['cementerio','el cementerio']];
+const ETAPAS = ['El reportaje','La ofrenda','Dos orígenes','La fiesta','Mi ofrenda'];
+const HABIL = ['Escucha y comprende','Escucha y asocia','Lee y clasifica','Escribe: estar + gerundio','Escribe: soler + infinitivo'];
+
+/* ====== 3. UTILITAIRES + ÉTAT ======================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const main = $('#main');
+const norm = t => (t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[.,;:!¡?¿"«»]/g, ' ').replace(/\s+/g, ' ').trim();
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const baraja = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const espera = ms => new Promise(r => setTimeout(r, ms));
+
+const CLAVE = 'caminoCempasuchil.v1';
+const base = () => ({ v:1, etapa:0, hechas:[0,0,0,0,0], estrellas:[0,0,0,0,0], e4:[], frases:['','',''], quiz:null, demos:{}, fin:0,
+  cfg:{ mus:1, vol:.7, cal:'alta', calManual:0, big:0, red:0 } });
+let S = cargar();
+function cargar() { try { const r = JSON.parse(localStorage.getItem(CLAVE)); if (r && r.v === 1) { const b = base(); return Object.assign(b, r, { cfg: Object.assign(b.cfg, r.cfg || {}) }); } } catch (e) {} return base(); }
+function guardar() { try { localStorage.setItem(CLAVE, JSON.stringify(S)); } catch (e) {} }
+let ADMIN = false, etapaVista = 0, limpiar = null;
+
+function aviso(t, ms = 3200) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(aviso.t); aviso.t = setTimeout(() => el.classList.remove('on'), ms); }
+function estrellasDe(err) { return err <= 1 ? 3 : err <= 4 ? 2 : 1; }
+
+/* ====== 4. SON : Web Audio (musique + bruitages) ===================== */
+const AU = { ctx:null, capas:0 };
+function iniciarAudio() {
+  if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+  const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+  try {
+    const c = AU.ctx = new C();
+    AU.master = c.createGain(); AU.master.gain.value = S.cfg.vol; AU.master.connect(c.destination);
+    AU.mus = c.createGain(); AU.mus.gain.value = S.cfg.mus ? .55 : 0; AU.mus.connect(AU.master);
+    AU.sfx = c.createGain(); AU.sfx.gain.value = .8; AU.sfx.connect(AU.master);
+    const n = c.sampleRate * .3, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    AU.ruido = b; AU.paso = 0; AU.sig = c.currentTime + .15;
+    setInterval(secuenciar, 60);
+  } catch (e) { AU.ctx = null; }
+}
+const mf = m => 440 * Math.pow(2, (m - 69) / 12);
+function nota(t, m, o = {}) {
+  const c = AU.ctx; if (!c) return;
+  const { tipo = 'triangle', g = .2, a = .005, d = .5, dest = AU.mus, lp = 0, sos = 0 } = o;
+  const os = c.createOscillator(), ga = c.createGain(); os.type = tipo; os.frequency.value = mf(m);
+  ga.gain.setValueAtTime(0, t); ga.gain.linearRampToValueAtTime(g, t + a);
+  if (sos) ga.gain.setValueAtTime(g, t + a + sos);
+  ga.gain.exponentialRampToValueAtTime(.0008, t + a + sos + d);
+  let fin = ga;
+  if (lp) { const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(lp * 3, t); f.frequency.exponentialRampToValueAtTime(lp, t + .15); os.connect(f); f.connect(ga); } else os.connect(ga);
+  fin.connect(dest); os.start(t); os.stop(t + a + sos + d + .05);
+}
+function chis(t, g = .05, d = .05, hz = 6000) {
+  const c = AU.ctx; if (!c) return; const s = c.createBufferSource(); s.buffer = AU.ruido;
+  const f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hz; const ga = c.createGain();
+  ga.gain.setValueAtTime(g, t); ga.gain.exponentialRampToValueAtTime(.0005, t + d);
+  s.connect(f); f.connect(ga); ga.connect(AU.mus); s.start(t); s.stop(t + d + .02);
+}
+// Valse en la mineur : 8 mesures de 3 temps (6 croches par mesure)
+const ACORDES = { Am:[45,57,60,64], Dm:[50,57,62,65], E:[40,56,59,62] };
+const COMPAS = ['Am','Am','Dm','Am','E','E','Am','Am'];
+const MELO = [[76,0,72,0,69,0],[72,0,0,71,69,0],[74,0,77,0,74,0],[72,0,0,0,69,0],[71,0,74,0,76,0],[80,0,76,0,74,0],[72,0,71,0,69,0],[69,0,0,0,0,0]];
+function secuenciar() {
+  const c = AU.ctx; if (!c || c.state !== 'running') return;
+  if (AU.sig < c.currentTime - .5) AU.sig = c.currentTime + .1;
+  const dur = .31;
+  while (AU.sig < c.currentTime + .25) {
+    const p = AU.paso % 48, cp = Math.floor(p / 6), s = p % 6, ac = ACORDES[COMPAS[cp]], t = AU.sig, k = AU.capas, me = MELO[cp][s];
+    // base : guitare arpégée + marimba discret
+    if (s === 0) nota(t, ac[0], { g:.2, d:1.1, lp:900 });
+    if (s === 2) nota(t, ac[1], { g:.1, d:.6, lp:1400 });
+    if (s === 3) nota(t, ac[2], { g:.09, d:.6, lp:1400 });
+    if (s === 4) nota(t, ac[3], { g:.1, d:.6, lp:1400 });
+    if (s === 0 && me) nota(t, me, { tipo:'sine', g:.1, d:.5 });
+    if (k >= 1 && (s === 0 || s === 4)) nota(t, ac[0] - 12, { tipo:'sine', g:.26, d:.5 });           // guitarrón
+    if (k >= 2) chis(t, s % 2 ? .02 : .045, .05);                                                        // maracas
+    if (k >= 3 && (s === 2 || s === 4)) ac.slice(1).forEach((m, i) => nota(t + i * .018, m + 12, { tipo:'sawtooth', g:.03, d:.22, lp:1800 })); // rasgueo
+    if (k >= 4 && me && s !== 0) { nota(t, me, { tipo:'sine', g:.11, d:.45 }); nota(t, me + 12, { tipo:'sine', g:.02, d:.2 }); }  // marimba
+    if (k >= 5 && (s === 0 || s === 3 || s === 4)) nota(t, 96, { tipo:'sine', g:.05, d:.05 });        // claves
+    if (k >= 6 && me) nota(t, me - 12, { tipo:'sawtooth', g:.045, a:.04, sos:.18, d:.25, lp:1500 });  // trompeta
+    if (k >= 7 && s === 2) chis(t, .05, .16, 2500);                                                      // güiro
+    if (k >= 8 && s === 0 && cp % 2 === 0) nota(t, ac[1] + 24, { tipo:'sine', g:.06, d:1.6 });        // campana
+    AU.paso++; AU.sig += dur;
+  }
+}
+function sfx(tipo) {
+  const c = AU.ctx; if (!c) return; const t = c.currentTime + .01, d = AU.sfx;
+  if (tipo === 'ok') [81, 88, 93].forEach((m, i) => nota(t + i * .03, m, { tipo:'sine', g:.16 - i * .04, d:1.3, dest:d }));
+  else if (tipo === 'mal') { nota(t, 50, { tipo:'sine', g:.2, d:.22, dest:d }); nota(t + .09, 47, { tipo:'sine', g:.14, d:.25, dest:d }); }
+  else if (tipo === 'clic') nota(t, 84, { tipo:'sine', g:.06, d:.06, dest:d });
+  else if (tipo === 'fin') [69, 72, 76, 81, 84, 88].forEach((m, i) => nota(t + i * .13, m, { tipo:'sine', g:.15, d:1.6, dest:d }));
+}
+
+/* ====== 5. VOIX : speechSynthesis ==================================== */
+const VOZ = { lista:[], i:0, sin:false, avisado:false, u:null, t0:Date.now() };
+function cargarVoces() {
+  if (!('speechSynthesis' in window)) { VOZ.sin = true; return; }
+  let v = []; try { v = speechSynthesis.getVoices().filter(x => /^es([-_]|$)/i.test(x.lang)); } catch (e) {}
+  const r = x => /google/i.test(x.name) && /es[-_](ES|US)/i.test(x.lang) ? 0 : /google/i.test(x.name) ? 1 : /natural/i.test(x.name) ? 2 : x.localService ? 3 : 4;
+  VOZ.lista = v.sort((a, b) => r(a) - r(b));
+  if (v.length) VOZ.sin = false;
+}
+if ('speechSynthesis' in window) { cargarVoces(); try { speechSynthesis.addEventListener('voiceschanged', cargarVoces); } catch (e) {} } else VOZ.sin = true;
+function sinVoz() { VOZ.sin = true; if (!VOZ.avisado) { VOZ.avisado = true; aviso('No hay voz en español en este ordenador: lee el texto.', 5000); } document.documentElement.classList.add('sinvoz'); }
+// decir(texte, bouton) → Promise<boolean> : true si la phrase a été prononcée
+function decir(texto, btn) {
+  return new Promise(res => {
+    if (!('speechSynthesis' in window)) { sinVoz(); return res(false); }
+    if (!VOZ.lista.length) cargarVoces();
+    if (!VOZ.lista.length || VOZ.i >= VOZ.lista.length) { sinVoz(); return res(false); }
+    try { speechSynthesis.cancel(); } catch (e) {}
+    const voz = VOZ.lista[VOZ.i], u = new SpeechSynthesisUtterance(texto);
+    VOZ.u = u; u.voice = voz; u.lang = voz.lang; u.rate = .85; u.volume = Math.min(1, S.cfg.vol + .3);
+    let hecho = false, empezo = false;
+    const fin = ok => { if (hecho) return; hecho = true; clearTimeout(tm); if (btn) btn.classList.remove('habla'); if (VOZ.u === u) musNivel(1); res(ok); };
+    const falla = () => { if (hecho) return; hecho = true; clearTimeout(tm); if (btn) btn.classList.remove('habla'); VOZ.i++; try { speechSynthesis.cancel(); } catch (e) {} decir(texto, btn).then(res); };
+    u.onstart = () => { empezo = true; musNivel(.25); if (btn) btn.classList.add('habla'); };
+    u.onend = () => fin(true);
+    u.onerror = e => (e.error === 'interrupted' || e.error === 'canceled') ? fin(true) : falla();
+    const tm = setTimeout(() => { if (!empezo) falla(); }, 4000);   // voix en ligne bloquée par le réseau → voix suivante
+    setTimeout(() => { try { speechSynthesis.speak(u); } catch (e) { falla(); } }, 60);
+  });
+}
+function musNivel(k) { if (AU.ctx && AU.mus) try { AU.mus.gain.setTargetAtTime(S.cfg.mus ? .55 * k : 0, AU.ctx.currentTime, .15); } catch (e) {} }
+function callar() { musNivel(1); try { speechSynthesis.cancel(); } catch (e) {} }
+
+/* ====== 6. DESSINS SVG =============================================== */
+const R = n => Math.round(n * 10) / 10;
+const flor = (x, y, r = 8) => `<g transform="translate(${x},${y})"><circle r="${r}" fill="#e87400"/><circle r="${R(r*.8)}" fill="#ff9a1f" stroke="#c85f00" stroke-width="${R(r*.13)}" stroke-dasharray="${R(r*.5)} ${R(r*.3)}"/><circle r="${R(r*.48)}" fill="#ffb648" stroke="#e07000" stroke-width="${R(r*.1)}" stroke-dasharray="${R(r*.3)} ${R(r*.2)}"/><circle r="${R(r*.16)}" fill="#c85f00"/></g>`;
+const vela = (x, y, h = 30, w = 8, cl = '') => `<g transform="translate(${x},${y})"><circle class="halo" cy="${-h-8}" r="${R(w*3.4)}" fill="url(#gHalo)"/><rect x="${-w/2}" y="${-h}" width="${w}" height="${h}" rx="1.5" fill="#f6ead0" stroke="#1a1030" stroke-width="1"/><path d="M0,${-h}v-4" stroke="#1a1030" stroke-width="1"/><g transform="translate(0,${-h-3})"><g class="llama ${cl}"><path d="M0,-13C5,-6 4.5,0 0,0C-4.5,0 -5,-6 0,-13Z" fill="#ff9a1f"/><path d="M0,-7C2.4,-3 2,0 0,0C-2,0 -2.4,-3 0,-7Z" fill="#fff3b0"/></g></g></g>`;
+const bandera = (x, y, c, s = 1) => `<g transform="translate(${x},${y}) scale(${s})"><g class="pp"><path d="M0,0h26v25l-4.3,5l-4.4,-5l-4.3,5l-4.3,-5l-4.4,5l-4.3,-5z" fill="${c}"/><circle cx="13" cy="12" r="4.5" fill="#1a1030" fill-opacity=".55" class="k"/><path d="M5,5l2.5,3l-2.5,3l-2.5,-3zM21,5l2.5,3l-2.5,3l-2.5,-3zM5,17l2,2.5l-2,2.5l-2,-2.5zM21,17l2,2.5l-2,2.5l-2,-2.5z" fill="#1a1030" fill-opacity=".55" class="k"/></g></g>`;
+function craneo(o = {}) {
+  const k = 'fill="#1a1030" class="k"';
+  return `<path class="hueso" d="M-18,-4C-18,-27 18,-27 18,-4C18,5 14,9 11,12L11,19C11,23 -11,23 -11,19L-11,12C-14,9 -18,5 -18,-4Z"/>
+<ellipse cx="-8" cy="-3" rx="5.5" ry="6.5" ${k}/><ellipse cx="8" cy="-3" rx="5.5" ry="6.5" ${k}/><path d="M0,4l-3,6h6z" ${k}/>
+${o.boca ? `<ellipse class="an boca k" cx="0" cy="17" rx="5" ry="4" fill="#1a1030"/>` : o.sonr ? `<path d="M-10,12Q0,23 10,12" stroke="#1a1030" stroke-width="1.6" fill="none"/><path d="M-5,15.5v3M0,17v3M5,15.5v3" stroke="#1a1030" stroke-width="1.2"/>` : `<path d="M-8,15H8M-5,12v6M-2,12v7M2,12v7M5,12v6" stroke="#1a1030" stroke-width="1.3" fill="none"/>`}
+${o.big ? `<path d="M-10,11Q-5,6 0,10Q5,6 10,11Q5,14 0,12Q-5,14 -10,11Z" ${k}/>` : ''}
+${o.az ? `<circle cx="-8" cy="-3" r="8" fill="none" stroke="#e0218a" stroke-width="2" stroke-dasharray="2.2 2"/><circle cx="8" cy="-3" r="8" fill="none" stroke="#e0218a" stroke-width="2" stroke-dasharray="2.2 2"/><circle cy="-16" r="3.2" fill="#22c7c0"/><circle cx="-6" cy="-17" r="1.6" fill="#ff9a1f"/><circle cx="6" cy="-17" r="1.6" fill="#ff9a1f"/><path d="M-15,6q3,2 1,6M15,6q-3,2 -1,6" stroke="#22c7c0" stroke-width="1.5" fill="none"/>` : ''}`;
+}
+const SOMB = (c, c2) => `<path d="M-17,-17C-15,-52 15,-52 17,-17Z" fill="${c}" stroke="#1a1030"/><ellipse cy="-16" rx="42" ry="9" fill="${c}" stroke="#1a1030"/><ellipse cy="-16" rx="36" ry="6.5" fill="none" stroke="${c2}" stroke-width="1.6" stroke-dasharray="3 4"/><path d="M-16,-24Q0,-19 16,-24" stroke="${c2}" stroke-width="4" fill="none"/>`;
+const HATS = {
+  catrina: () => `<path d="M8,-34C22,-74 56,-66 52,-42C42,-54 30,-50 16,-28Z" fill="#22c7c0" stroke="#1a1030"/><path d="M0,-36C4,-82 38,-84 40,-62C28,-68 18,-58 8,-32Z" fill="#e0218a" stroke="#1a1030"/><path d="M-20,-18C-20,-46 20,-50 20,-22Z" fill="#3b1a78" stroke="#1a1030"/><ellipse cy="-18" rx="47" ry="10" fill="#3b1a78" stroke="#1a1030" transform="rotate(-6)"/>${flor(-18,-27,8)}${flor(-3,-31,7)}${flor(-30,-21,6)}`,
+  corona: () => flor(-13,-21,6.5) + flor(0,-25,7.5) + flor(13,-21,6.5),
+  bombin: () => `<path d="M-14,-19C-14,-42 14,-42 14,-19Z" fill="#2b2b3a" stroke="#1a1030"/><ellipse cy="-19" rx="25" ry="5" fill="#2b2b3a" stroke="#1a1030"/><path d="M-14,-23h28" stroke="#f0c75e" stroke-width="3"/>`,
+  gorra: () => `<path d="M-18,-12C-18,-32 18,-32 18,-12Z" fill="#e0218a" stroke="#1a1030"/><path d="M-18,-12h-10" stroke="#e0218a" stroke-width="5" stroke-linecap="round"/>`,
+};
+const PROP = {
+  pan: `<ellipse rx="9" ry="6.5" fill="#c98a3c" stroke="#1a1030"/><path d="M-6,-1Q0,-6 6,-1" stroke="#f3e0b0" stroke-width="2" fill="none"/>`,
+  copa: `<path d="M-6,-14h12l-2.5,14h-7z" fill="#b5562b" stroke="#1a1030"/><path d="M-5,-10h10" stroke="#f0c75e" stroke-width="1.5"/>`,
+  ramo: `<path d="M0,2V-10M0,0L-7,-6M0,0L7,-7" stroke="#2f8f4e" stroke-width="2"/>${flor(0,-13,6.5)}${flor(-8,-7,5.5)}${flor(8,-8,5.5)}`,
+  mascara: `<g transform="translate(0,-2)"><path d="M-10,-18C-14,-34 -4,-36 -2,-22M10,-18C14,-34 4,-36 2,-22" fill="#e0218a" stroke="#1a1030"/><path d="M-16,-10C-16,-23 16,-23 16,-10C16,4 6,13 0,13C-6,13 -16,4 -16,-10Z" fill="#22c7c0" stroke="#1a1030" stroke-width="1.4"/><ellipse cx="-7" cy="-7" rx="4.5" ry="3.5" fill="#1a1030" class="k"/><ellipse cx="7" cy="-7" rx="4.5" ry="3.5" fill="#1a1030" class="k"/><path d="M-6,4Q0,9 6,4" stroke="#f0c75e" stroke-width="2" fill="none"/><circle cy="-15" r="2.2" fill="#f0c75e"/></g>`,
+  vela: `<rect x="-3" y="-20" width="6" height="22" rx="1" fill="#f6ead0" stroke="#1a1030"/><g class="solo-vivo"><circle cy="-27" r="16" fill="url(#gHalo)" class="halo"/><g transform="translate(0,-21)"><path class="llama" d="M0,-11C4,-5 4,0 0,0C-4,0 -4,-5 0,-11Z" fill="#ffb648"/></g></g>`,
+  estandarte: c => `<path d="M0,6V-92" stroke="#6b4a2a" stroke-width="3" stroke-linecap="round"/><path d="M-22,-90h44" stroke="#6b4a2a" stroke-width="3" stroke-linecap="round"/><g transform="translate(-18,-88)"><g class="pp"><path d="M0,0h36v36l-6,7l-6,-7l-6,7l-6,-7l-6,7l-6,-7z" fill="${c}" stroke="#1a1030"/><circle cx="18" cy="17" r="8" fill="#f3e9d2"/><circle cx="15" cy="16" r="2" fill="#1a1030" class="k"/><circle cx="21" cy="16" r="2" fill="#1a1030" class="k"/></g></g>`,
+};
+const GUITARRA = `<g transform="translate(-2,-112) rotate(-24)"><rect x="14" y="-3" width="46" height="5.5" fill="#3a1d10" stroke="#1a1030" stroke-width=".8"/><rect x="58" y="-5.5" width="10" height="10" rx="2" fill="#3a1d10" stroke="#1a1030" stroke-width=".8"/><ellipse cx="-8" cy="3" rx="18" ry="15" fill="#c9742c" stroke="#1a1030"/><ellipse cx="10" cy="0" rx="12" ry="11" fill="#c9742c" stroke="#1a1030"/><circle cx="3" cy="1" r="5" fill="#1a1030" class="k"/><path d="M-14,0H60" stroke="#f3e9d2" stroke-width=".6"/></g>`;
+const NOTAS = (x, y) => `<g transform="translate(${x},${y})" class="solo-vivo"><g class="nt"><path d="M0,0v-16l9,-3v14" stroke="#f0c75e" stroke-width="2" fill="none"/><ellipse cx="-3" cy="0" rx="4" ry="3" fill="#f0c75e"/><ellipse cx="6" cy="-5" rx="4" ry="3" fill="#f0c75e"/></g><g class="nt b" transform="translate(16,10)"><path d="M0,0v-14" stroke="#22c7c0" stroke-width="2"/><ellipse cx="-3" cy="0" rx="4" ry="3" fill="#22c7c0"/></g></g>`;
+
+/* Personnage articulé (calavera façon gravure populaire) — origine aux pieds.
+   L / R : [angle bras, angle avant-bras, style épaule, style coude] ; angles en degrés depuis la verticale. */
+function fig(o) {
+  const { x = 0, y = 0, s = 1, flip = 0, c1 = '#2a1250', c2 = '#e0218a', falda = 0, hat = '', L = [18, 8], R: RR = [18, 8], pL = '', pR = '', body = '', head = '', cab = {}, front = '', extra = '' } = o;
+  const arm = (sg, a, prop) => {
+    const A = a[0] * Math.PI / 180, ex = R(Math.sin(A) * 30 * sg), ey = R(Math.cos(A) * 30), B = (a[0] + a[1]) * Math.PI / 180, hx = R(Math.sin(B) * 28 * sg), hy = R(Math.cos(B) * 28);
+    return `<g transform="translate(${16 * sg},-148)"><g class="an sw" style="${a[2] || ''}"><path d="M0,0L${ex},${ey}" class="manga" stroke="${c1}"/><g transform="translate(${ex},${ey})"><g class="an sw" style="${a[3] || ''}"><path d="M0,0L${hx},${hy}" class="manga" stroke="${c1}"/><g transform="translate(${hx},${hy})"><circle r="5.5" class="hueso"/>${prop}</g></g></g></g></g>`;
+  };
+  const piernas = falda
+    ? `<path d="M-13,-100C-20,-60 -40,-22 -45,0Q-34,-8 -22.500,0Q-11,-8 0,0Q11,-8 22.500,0Q34,-8 45,0C40,-22 20,-60 13,-100Z" fill="${c1}" stroke="#1a1030" stroke-width="1.4"/><path d="M-38,-24Q0,-10 38,-24" stroke="${c2}" stroke-width="5" fill="none"/><path d="M-30,-44Q0,-32 30,-44" stroke="#f0c75e" stroke-width="2" fill="none" stroke-dasharray="4 4"/>`
+    : `<path d="M-8,-94L-10,-5M8,-94L10,-5" stroke="${c1}" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M-14,-40v34M14,-40v34" stroke="${c2}" stroke-width="1.6" stroke-dasharray="2 4" fill="none"/><ellipse cx="-13" cy="-2" rx="9" ry="4" fill="#1a1030" class="k"/><ellipse cx="13" cy="-2" rx="9" ry="4" fill="#1a1030" class="k"/>`;
+  return `<g transform="translate(${x},${y}) scale(${flip ? -s : s},${s})"><g class="an bob" style="${body}">
+${piernas}<path d="M-19,-154Q0,-161 19,-154L14,-95Q0,-89 -14,-95Z" fill="${c1}" stroke="#1a1030" stroke-width="1.4"/><path d="M0,-152V-96" stroke="${c2}" stroke-width="2.4" stroke-dasharray="2 6" fill="none"/><path d="M-12,-153L0,-140L12,-153" stroke="${c2}" stroke-width="2.5" fill="none"/>
+<rect x="-3" y="-167" width="6" height="14" class="hueso"/>${front}
+${arm(-1, L, pL)}<g transform="translate(0,-160)"><g class="an sw" style="${head}"><g transform="translate(0,-24)">${craneo(cab)}${hat}</g></g></g>${arm(1, RR, pR)}${extra}
+</g></g>`;
+}
+
+const svgI = (inner, vb = '0 0 100 100') => `<svg class="ic" viewBox="${vb}" aria-hidden="true">${inner}</svg>`;
+const IC = {
+  flores: () => `<path d="M50,96Q46,70 30,42M50,96Q52,70 68,38M50,96V62" stroke="#2f8f4e" stroke-width="3.5" fill="none"/><path d="M50,84q-16,-2 -20,-14q14,0 20,14zM50,80q16,-4 18,-16q-13,2 -18,16z" fill="#2f8f4e"/>${flor(30,38,17)}${flor(69,33,18)}${flor(50,58,15)}`,
+  velas: () => vela(28, 90, 42, 11) + vela(52, 90, 58, 12, 'b') + vela(76, 90, 34, 11, 'c'),
+  pan: () => `<ellipse cx="50" cy="84" rx="42" ry="8" fill="#000" opacity=".3"/><ellipse cx="50" cy="60" rx="40" ry="26" fill="#c98a3c" stroke="#1a1030" stroke-width="1.5"/><path d="M14,62Q30,34 50,44Q70,34 86,62M50,36V80" stroke="#e9b871" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="50" cy="40" r="8" fill="#e9b871" stroke="#a86a24"/><path d="M24,70l2,1M36,76l2,1M64,76l2,-1M76,69l2,-1M40,56l2,1M60,57l2,-1M30,58l1,1M70,60l1,1" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>`,
+  agua: () => `<path d="M33,42L67,42L63,88L37,88Z" fill="#22c7c0" opacity=".8"/><path d="M28,16L72,16L65,90L35,90Z" fill="rgba(255,255,255,.12)" stroke="#dff" stroke-width="2.5" stroke-linejoin="round"/><path d="M36,24L39,80" stroke="#fff" stroke-width="2.5" opacity=".6" stroke-linecap="round"/><ellipse cx="50" cy="42" rx="17" ry="3" fill="#8ff" opacity=".7"/>`,
+  sal: () => `<path d="M28,58Q50,14 72,58Z" fill="#fff" stroke="#cfd6e6"/><path d="M16,56H84Q78,92 50,92Q22,92 16,56Z" fill="#b5562b" stroke="#1a1030" stroke-width="1.5"/><path d="M22,68Q50,78 78,68" stroke="#f0c75e" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/><path d="M40,44l2,1M52,34l2,1M58,48l2,-1M46,52l1,1" stroke="#b9c3d8" stroke-width="2" stroke-linecap="round"/>`,
+  copal: () => `<path class="humo" d="M44,46Q34,34 46,26Q58,18 48,6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><path class="humo" d="M58,46Q68,36 58,26Q50,18 60,10" stroke="#e6dcff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6"/><ellipse cx="50" cy="50" rx="22" ry="5" fill="#ff7a1a"/><path d="M26,50H74L66,72H34Z" fill="#b5562b" stroke="#1a1030" stroke-width="1.5"/><path d="M40,72H60L68,92H32Z" fill="#9c4521" stroke="#1a1030" stroke-width="1.5"/><path d="M31,58H69" stroke="#f0c75e" stroke-width="2.5" stroke-dasharray="3 4"/>`,
+  papel: () => `<path d="M2,16Q50,30 98,16" stroke="#f3e9d2" stroke-width="1.5" fill="none"/>${bandera(8,20,'#e0218a',1)}${bandera(37,24,'#22c7c0',1)}${bandera(66,20,'#ff9a1f',1)}<g transform="translate(22,58)">${bandera(0,0,'#f0c75e',.9)}</g><g transform="translate(54,58)">${bandera(0,0,'#8a3fd0',.9)}</g>`,
+  calav: () => `<g transform="translate(50,52) scale(1.9)">${craneo({ az:1, sonr:1 })}</g>`,
+  calavera: () => `<g transform="translate(50,52) scale(1.9)">${craneo()}</g>`,
+  // pictogrammes des symboles (étape 2)
+  camino: () => `<path d="M12,90Q20,60 46,56Q74,52 78,24" stroke="#ff9a1f" stroke-width="7" stroke-dasharray="1 13" stroke-linecap="round" fill="none"/><path d="M78,8L92,30L78,25L64,30Z" fill="#f0c75e"/><circle cx="30" cy="30" r="14" fill="url(#gAlma)"/>`,
+  luz: () => `<path d="M50,24C64,44 62,62 50,62C38,62 36,44 50,24Z" fill="#ff9a1f"/><path d="M50,42C56,52 55,62 50,62C45,62 44,52 50,42Z" fill="#fff3b0"/><path d="M50,6V16M16,44H26M74,44H84M24,18L31,26M76,18L69,26" stroke="#f0c75e" stroke-width="4" stroke-linecap="round"/><path d="M14,92L50,70L86,92" stroke="#f0c75e" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round" fill="none"/>`,
+  plato: () => `<circle cx="50" cy="52" r="26" fill="#f3e9d2" stroke="#1a1030" stroke-width="1.5"/><circle cx="50" cy="52" r="17" fill="none" stroke="#cdbf9f" stroke-width="2"/><path d="M12,22V46M7,22V34Q7,40 12,40Q17,40 17,34V22M12,46V84" stroke="#f0c75e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M88,84V22Q80,30 80,50H88" stroke="#f0c75e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
+  gota: () => `<path d="M50,10C72,42 78,56 78,66C78,82 66,92 50,92C34,92 22,82 22,66C22,56 28,42 50,10Z" fill="#22c7c0" stroke="#dff" stroke-width="2"/><path d="M36,62Q36,78 50,82" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/>`,
+  brillo: () => `<circle cx="50" cy="52" r="26" fill="url(#gAlma)"/><path d="M50,14L56,44L86,50L56,56L50,86L44,56L14,50L44,44Z" fill="#fff"/><path d="M82,14L84,22L92,24L84,26L82,34L80,26L72,24L80,22Z" fill="#f0c75e"/><path d="M20,70L22,76L28,78L22,80L20,86L18,80L12,78L18,76Z" fill="#f0c75e"/>`,
+  escoba: () => `<path d="M18,84H82L74,96H26Z" fill="#6b4a2a"/><path d="M14,84H86" stroke="#f0c75e" stroke-width="3"/><path d="M30,74Q22,58 36,48Q50,38 40,20" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".8"/><path d="M62,74Q72,60 60,48Q50,38 62,24" stroke="#e6dcff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/><path d="M80,30L82,36L88,38L82,40L80,46L78,40L72,38L78,36Z" fill="#f0c75e"/><path d="M20,36L21.500,40L26,41.500L21.500,43L20,47L18.500,43L14,41.500L18.500,40Z" fill="#f0c75e"/>`,
+  viento: () => `<path d="M8,34H62Q78,34 76,22Q74,12 64,16M8,54H80Q94,54 92,66Q90,76 80,72M8,74H50Q62,74 60,84Q58,92 50,88" stroke="#dff" stroke-width="5.5" stroke-linecap="round" fill="none"/>`,
+  alegria: () => `<circle cx="50" cy="54" r="30" fill="#f0c75e" stroke="#1a1030" stroke-width="1.5"/><path d="M36,46q4,-7 8,0M56,46q4,-7 8,0" stroke="#1a1030" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M33,60Q50,82 67,60Z" fill="#1a1030"/><circle cx="16" cy="18" r="4" fill="#e0218a"/><circle cx="86" cy="22" r="4" fill="#22c7c0"/><path d="M28,8l4,6M70,8l-3,7M90,44l-6,2M10,44l6,2" stroke="#ff9a1f" stroke-width="3.5" stroke-linecap="round"/>`,
+  // cartes de l'étape 3
+  cruz: () => `<circle cx="50" cy="42" r="34" fill="url(#gHalo)" opacity=".6"/><path d="M43,10H57V32H78V46H57V92H43V46H22V32H43Z" fill="#f0c75e" stroke="#1a1030" stroke-width="1.5"/><path d="M50,16V86M28,39H72" stroke="#fff3b0" stroke-width="2"/>`,
+  calend: () => `<rect x="14" y="16" width="72" height="72" rx="8" fill="#f3e9d2" stroke="#1a1030" stroke-width="1.5"/><path d="M14,24Q14,16 22,16H78Q86,16 86,24V38H14Z" fill="#e0218a"/><path d="M30,10V24M70,10V24" stroke="#1a1030" stroke-width="4" stroke-linecap="round"/><text x="50" y="33" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Arial,sans-serif">NOVIEMBRE</text><text x="50" y="76" text-anchor="middle" font-size="34" font-weight="700" fill="#2a1250" font-family="Georgia,serif">1 · 2</text>`,
+  altarI: () => `<path d="M8,92V72H26V52H40V34H60V52H74V72H92V92Z" fill="url(#gTela)" stroke="#1a1030" stroke-width="1.5"/><path d="M8,72H92M26,52H74" stroke="#f0c75e" stroke-width="2" stroke-dasharray="3 3"/>${vela(33,52,10,4)}${vela(67,52,10,4)}${flor(17,70,6)}${flor(83,70,6)}<rect x="43" y="14" width="14" height="18" fill="#d8c49a" stroke="#6b4a2a" stroke-width="2"/>`,
+  almaI: () => `<path d="M90,20Q40,10 30,48Q26,66 44,74" stroke="#22c7c0" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round" fill="none"/><path d="M36,62L47,77L30,80Z" fill="#22c7c0"/><circle cx="66" cy="68" r="26" fill="url(#gAlma)"/><path d="M8,94H92" stroke="#ff9a1f" stroke-width="5" stroke-dasharray="1 10" stroke-linecap="round"/>`,
+  tumba: () => `<circle cx="50" cy="50" r="40" fill="url(#gHalo)" opacity=".35"/><path d="M30,90V44Q30,24 50,24Q70,24 70,44V90Z" fill="#8f86a8" stroke="#1a1030" stroke-width="1.5"/><path d="M50,36V64M40,45H60" stroke="#f3e9d2" stroke-width="4"/><path d="M14,90H86" stroke="#3a2a5e" stroke-width="6" stroke-linecap="round"/>${flor(30,82,8)}${flor(44,86,7)}${flor(70,84,8)}${vela(84,90,16,5)}${vela(16,90,13,5,'b')}`,
+  piramide: () => `<circle cx="78" cy="20" r="10" fill="#ffb648"/><path d="M6,90L18,72H28L36,56H44L50,40H50L56,56H64L72,72H82L94,90Z" fill="#c9742c" stroke="#1a1030" stroke-width="1.5"/><path d="M40,90V60H60V90M18,72H82M36,56H64" stroke="#7a3d12" stroke-width="2" fill="none"/><path d="M44,40H56V30H44Z" fill="#c9742c" stroke="#1a1030" stroke-width="1.5"/>`,
+  iglesia: () => `<path d="M18,92V44H34V92M66,92V44H82V92" fill="#cfc4e6" stroke="#1a1030" stroke-width="1.5"/><path d="M18,44Q26,28 34,44M66,44Q74,28 82,44" fill="#22c7c0" stroke="#1a1030" stroke-width="1.5"/><path d="M34,92V56Q50,34 66,56V92Z" fill="#e9e0f7" stroke="#1a1030" stroke-width="1.5"/><path d="M44,92V74Q50,64 56,74V92Z" fill="#2a1250"/><path d="M50,8V30M43,15H57M26,22V34M22,26H30M74,22V34M70,26H78" stroke="#f0c75e" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="56" r="5" fill="#ffb648"/>`,
+  // vocabulaire nouveau
+  mascara: () => `<g transform="translate(50,58) scale(2.3)">${PROP.mascara}</g>`,
+  musico: () => fig({ x:50, y:98, s:.5, c1:'#1a1030', c2:'#f0c75e', hat:SOMB('#1a1030','#f0c75e'), front:GUITARRA, L:[55,60], R:[20,95] }),
+  disfraz: () => fig({ x:46, y:98, s:.5, c1:'#7a1fa2', c2:'#f0c75e', hat:HATS.gorra(), R:[110,147], pR:PROP.mascara, L:[15,10] }),
+  desfile: () => fig({ x:28, y:96, s:.42, c1:'#0e7c86', c2:'#f0c75e', hat:HATS.corona(), R:[60,95], pR:PROP.estandarte('#e0218a') }) + fig({ x:68, y:98, s:.46, c1:'#b3246b', c2:'#22c7c0', hat:SOMB('#3b1a78','#f0c75e'), R:[60,95], pR:PROP.estandarte('#ff9a1f') }),
+  cementerio: () => `<circle cx="76" cy="22" r="12" fill="#fbeecb"/><circle cx="76" cy="22" r="24" fill="url(#gLuna)"/><path d="M4,90H96" stroke="#3a2a5e" stroke-width="6" stroke-linecap="round"/><path d="M12,90V58Q12,46 24,46Q36,46 36,58V90Z" fill="#8f86a8" stroke="#1a1030"/><path d="M24,54V72M18,60H30" stroke="#f3e9d2" stroke-width="3"/><path d="M52,90V52M42,62H62" stroke="#cfc4e6" stroke-width="6" stroke-linecap="round"/><path d="M70,90V68Q70,60 79,60Q88,60 88,68V90Z" fill="#6f6690" stroke="#1a1030"/>${vela(44,90,10,4)}${flor(62,86,6)}${flor(92,86,5)}`,
+  foto: () => `<rect x="24" y="12" width="52" height="72" rx="3" fill="#6b4a2a" stroke="#f0c75e" stroke-width="3"/><rect x="31" y="19" width="38" height="58" fill="#d8c49a"/><circle cx="50" cy="40" r="10" fill="#7a5a3a"/><path d="M33,77Q34,56 50,56Q66,56 67,77Z" fill="#7a5a3a"/><path d="M38,36Q50,24 62,36L60,32Q50,22 40,32Z" fill="#3a2a1a"/>`,
+  guit: () => `<g transform="translate(40,70) rotate(-62) scale(1.5)"><rect x="14" y="-3" width="46" height="5.5" fill="#3a1d10"/><rect x="58" y="-5.5" width="10" height="10" rx="2" fill="#3a1d10"/><ellipse cx="-8" cy="3" rx="18" ry="15" fill="#c9742c" stroke="#1a1030"/><ellipse cx="10" cy="0" rx="12" ry="11" fill="#c9742c" stroke="#1a1030"/><circle cx="3" cy="1" r="5" fill="#1a1030"/><path d="M-14,0H60" stroke="#f3e9d2" stroke-width=".6"/></g>`,
+};
+const ico = n => svgI(IC[n]());
+const UI = {
+  casco: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 15v-3a8 8 0 0116 0v3"/><rect x="2.500" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16.500" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>`,
+  play: `<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>`,
+  alt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.500 8.500a5 5 0 010 7M19 6a8.500 8.500 0 010 12"/></svg>`,
+  nota: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 4l11-2v13.500a3 3 0 11-2-2.800V6.500l-7 1.300V18a3 3 0 11-2-2.800z"/></svg>`,
+  anim: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8q3-4 6 0t6 0 6 0M3 16q3-4 6 0t6 0 6 0"/><path d="M4 21L20 3" stroke-width="2.500"/></svg>`,
+  nuevo: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 108-8H7"/><path d="M10 1L7 4l3 3"/></svg>`,
+  ok: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7"/></svg>`,
+  lapiz: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 20l1-5L16 4l4 4L9 19z"/></svg>`,
+  ojo: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>`,
+  mano: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V4.500a1.500 1.500 0 013 0V10m0 0V8.500a1.500 1.500 0 013 0V11m0-.500a1.500 1.500 0 013 0V15a6 6 0 01-6 6h-1a6 6 0 01-5-2.700L3.500 14a1.500 1.500 0 012.500-1.600L9 15"/></svg>`,
+  est: on => `<svg viewBox="0 0 24 24" class="${on ? 'on' : ''}"><path d="M12 2l3 6.600 7.200.800-5.400 4.900 1.500 7.100L12 17.800 5.700 21.400l1.500-7.100L1.800 9.400 9 8.600z" fill="currentColor"/></svg>`,
+};
+const estrellas = n => [1, 2, 3].map(i => UI.est(i <= n)).join('');
+
+/* ---- L'altar (3 niveaux en perspective) ---- */
+function altarSVG(items, luz) {
+  const t = items.map(i => 't-' + i).join(' ') + (luz ? ' t-luz' : '');
+  const nivel = (xb1, xb2, xf1, xf2, yt, yf, yb) => `<path d="M${xb1},${yt}H${xb2}L${xf2},${yf}H${xf1}Z" fill="url(#gTapa)" stroke="#1a1030"/><path d="M${xf1},${yf}H${xf2}V${yb}H${xf1}Z" fill="url(#gTela)" stroke="#1a1030"/><path d="M${xf1},${yf + 9}H${xf2}" stroke="#f0c75e" stroke-width="2.500" stroke-dasharray="6 5"/><path d="M${xf1 + 4},${yb - 9}${Array.from({ length: Math.floor((xf2 - xf1 - 8) / 16) }, () => 'l8,-7l8,7').join('')}" stroke="#22c7c0" stroke-width="2" fill="none"/>`;
+  const arco = Array.from({ length: 17 }, (_, i) => { const a = Math.PI * (1 - i / 16), x = 200 + Math.cos(a) * 178, y = 205 - Math.sin(a) * 178; return flor(R(x), R(y), i % 2 ? 9 : 11); }).join('');
+  return `<svg class="altar ${t}" viewBox="0 0 400 360" role="img" aria-label="El altar">
+<ellipse cx="200" cy="345" rx="190" ry="14" fill="#000" opacity=".4"/>
+<g class="gloria"><circle cx="200" cy="170" r="210" fill="url(#gHalo)" opacity=".55"/></g>
+<g class="it it-flores">${arco}</g>
+<g class="it it-papel"><path d="M10,14Q200,44 390,14" stroke="#f3e9d2" stroke-width="1.2" fill="none"/>${['#e0218a','#22c7c0','#ff9a1f','#8a3fd0','#f0c75e','#e0218a','#22c7c0','#ff9a1f','#8a3fd0'].map((c, i) => { const x = 28 + i * 40, u = (x - 10) / 380, y = 14 + 60 * u * (1 - u); return bandera(x, R(y + 1), c, 1.1); }).join('')}</g>
+<g class="it it-cruz"><g transform="translate(0,-24)"><circle cx="200" cy="68" r="34" fill="url(#gHalo)" opacity=".55"/><path d="M194,48H206V62H220V73H206V112H194V73H180V62H194Z" fill="#f0c75e" stroke="#1a1030"/></g></g>
+${nivel(132, 268, 120, 280, 138, 152, 198)}
+${nivel(96, 304, 80, 320, 198, 214, 264)}
+${nivel(56, 344, 34, 366, 264, 282, 342)}
+<g class="it it-foto"><g transform="translate(168,62) scale(.64,.86)">${IC.foto()}</g></g>
+<g class="it it-velas">${vela(136, 150, 26, 7)}${vela(264, 150, 26, 7, 'b')}${vela(96, 210, 30, 8, 'c')}${vela(304, 210, 30, 8)}${vela(52, 278, 34, 9, 'b')}${vela(348, 278, 34, 9, 'c')}</g>
+<g class="it it-flores">${flor(152,150,8)}${flor(248,150,8)}${flor(116,210,10)}${flor(284,210,10)}${flor(76,278,12)}${flor(324,278,12)}${flor(95,283,9)}${flor(305,283,9)}</g>
+<g class="it it-pan"><g transform="translate(128,176) scale(.46)">${IC.pan()}</g></g>
+<g class="it it-calav"><g transform="translate(226,196) scale(.5)">${craneo({ az:1, sonr:1 })}</g><g transform="translate(250,198) scale(.42)">${craneo({ az:1, sonr:1 })}</g><g transform="translate(270,200) scale(.36)">${craneo({ az:1, sonr:1 })}</g></g>
+<g class="it it-agua"><g transform="translate(110,232) scale(.44)">${IC.agua()}</g></g>
+<g class="it it-sal"><g transform="translate(252,236) scale(.4)">${IC.sal()}</g></g>
+<g class="it it-copal"><g transform="translate(174,222) scale(.56)">${IC.copal().replace(/class="humo"/g, 'class="humo humoP"')}</g></g>
+<g class="it it-guit"><g transform="translate(330,268) scale(.7)">${IC.guit()}</g></g>
+<g class="gloria">${[60,110,160,240,290,340].map((x, i) => `<ellipse cx="${x}" cy="${346 + (i % 2) * 5}" rx="7" ry="3.500" fill="#ff9a1f" transform="rotate(${i * 40} ${x} 346)"/>`).join('')}</g>
+</svg>`;
+}
+function itemsAltar() {
+  const it = [];
+  if (S.hechas[0]) it.push('foto');
+  if (S.hechas[1]) it.push('flores', 'velas', 'pan', 'agua', 'sal', 'copal', 'papel', 'calav');
+  if (S.hechas[2]) it.push('cruz', 'humo');
+  if (S.hechas[3]) it.push('guit');
+  return it;
+}
+function pintarMini() { $('#miniA').innerHTML = altarSVG(itemsAltar(), S.hechas[4]); }
+
+/* ---- La fresque de l'étape 4 : cimetière en fête ---- */
+function escenaSVG() {
+  let rnd = 7; const rd = () => (rnd = (rnd * 16807) % 2147483647) / 2147483647;
+  const estr = Array.from({ length: 70 }, () => `<circle cx="${R(40 + rd() * 1520)}" cy="${R(160 + rd() * 200)}" r="${R(.6 + rd() * 1.6)}" fill="#fff" opacity="${R(.3 + rd() * .7)}"/>`).join('');
+  const tumbaS = (x, y, s, tipo) => `<g transform="translate(${x},${y}) scale(${s})">${tipo ? `<path d="M-14,0V-30Q-14,-44 0,-44Q14,-44 14,-30V0Z" fill="#4b3d78" stroke="#1a1030"/><path d="M0,-36V-16M-7,-29H7" stroke="#a79bd0" stroke-width="3"/>` : `<path d="M0,0V-48M-13,-34H13" stroke="#6b5c9c" stroke-width="7" stroke-linecap="round"/>`}<circle cx="18" cy="-10" r="16" fill="url(#gHalo)" class="halo"/><rect x="16" y="-12" width="4" height="12" fill="#f6ead0"/><circle cx="18" cy="-15" r="2.500" fill="#ffd27a"/>${flor(-16, -4, 6)}</g>`;
+  const fondoT = [[90,470,.8,1],[210,462,.7,0],[330,474,.85,1],[470,462,.7,0],[1090,466,.75,1],[1180,474,.8,0],[1480,470,.85,1],[1540,484,.9,0],[560,476,.7,1],[1010,478,.7,0]].map(a => tumbaS(...a)).join('');
+  const ppLinea = (y, sag, n, s) => `<path d="M20,${y}Q800,${y + sag * 2} 1580,${y}" stroke="#f3e9d2" stroke-width="1.500" fill="none" opacity=".8"/>` + Array.from({ length: n }, (_, i) => { const u = (i + .5) / n, x = 20 + 1560 * u - 13 * s, yy = y + sag * 4 * u * (1 - u) * .5 * 2 * .5 + sag * 2 * u * (1 - u); return bandera(R(x), R(yy), ['#e0218a','#22c7c0','#ff9a1f','#f0c75e','#8a3fd0'][i % 5], s); }).join('');
+  const P = {};
+  // Défilé (arrière-plan gauche)
+  P.desfilar = [140, 380, 330, 240,
+    fig({ x:190, y:610, s:.85, c1:'#7a1fa2', c2:'#f0c75e', hat:SOMB('#3b1a78','#f0c75e'), R:[60,95,'--f:-4deg;--t:6deg;--d:.5s'], pR:PROP.estandarte('#e0218a'), L:[25,10,'--f:-25deg;--t:25deg;--d:.5s'], body:'--by:-7px;--bx:5px;--br:2deg;--d:.5s' }) +
+    fig({ x:300, y:616, s:.82, c1:'#0e7c86', c2:'#ffb648', falda:1, hat:HATS.corona(), R:[60,95,'--f:-5deg;--t:5deg;--d:.5s'], pR:PROP.estandarte('#ff9a1f'), L:[25,10,'--f:25deg;--t:-25deg;--d:.5s'], body:'--by:-7px;--bx:5px;--br:-2deg;--d:.5s;animation-delay:-.5s' }) +
+    fig({ x:410, y:612, s:.85, c1:'#b3246b', c2:'#22c7c0', hat:HATS.bombin(), R:[70,80,'--f:-6deg;--t:6deg;--d:.5s'], pR:PROP.vela, L:[25,10,'--f:-25deg;--t:25deg;--d:.5s'], body:'--by:-7px;--bx:5px;--br:2deg;--d:.5s' })];
+  // Chanteur
+  P.cantar = [640, 390, 150, 235,
+    fig({ x:710, y:618, s:.95, c1:'#1b1235', c2:'#f0c75e', hat:SOMB('#1b1235','#f0c75e'), cab:{ boca:1, big:1 }, R:[115,25,'--f:-10deg;--t:14deg;--d:.9s'], L:[35,105], head:'--f:-7deg;--t:5deg;--d:.9s', body:'--by:-3px;--br:2deg;--d:.9s' }) + NOTAS(760, 420)];
+  // Musiciens
+  P.tocar = [800, 395, 260, 232,
+    fig({ x:875, y:620, s:.92, c1:'#5a1f8a', c2:'#f0c75e', hat:SOMB('#3b1a78','#ff9a1f'), front:GUITARRA, L:[55,60], R:[22,92,'','--f:-14deg;--t:14deg;--d:.16s'], head:'--f:-5deg;--t:5deg;--d:.62s', body:'--by:-4px;--br:2deg;--d:.31s' }) +
+    fig({ x:990, y:622, s:.92, c1:'#0e6a72', c2:'#ffb648', hat:SOMB('#0b4a52','#f0c75e'), front:GUITARRA, L:[55,60], R:[22,92,'','--f:-14deg;--t:14deg;--d:.16s'], head:'--f:5deg;--t:-5deg;--d:.62s', body:'--by:-4px;--br:-2deg;--d:.31s' }) + NOTAS(1040, 430)];
+  // Famille qui décore la tombe
+  P.adornar = [1150, 390, 330, 240,
+    `<g transform="translate(1310,618)"><path d="M-34,0V-74Q-34,-106 0,-106Q34,-106 34,-74V0Z" fill="#8f86a8" stroke="#1a1030" stroke-width="1.500"/><path d="M0,-92V-48M-14,-76H14" stroke="#f3e9d2" stroke-width="6"/><path d="M-46,0H46" stroke="#4b3d78" stroke-width="8" stroke-linecap="round"/><g class="solo-vivo">${flor(-22,-10,10)}${flor(0,-8,11)}${flor(22,-10,10)}${flor(-12,-108,8)}${flor(12,-108,8)}${flor(0,-114,9)}${vela(-44,0,20,6)}${vela(44,0,20,6,'b')}</g></g>` +
+    fig({ x:1215, y:622, s:.9, c1:'#b3246b', c2:'#f0c75e', falda:1, hat:HATS.corona(), R:[75,15,'--f:-12deg;--t:10deg;--d:.8s'], pR:PROP.ramo, L:[20,15], body:'--by:-2px;--br:2deg;--d:.8s' }) +
+    fig({ x:1410, y:622, s:.68, flip:1, c1:'#22808a', c2:'#ffb648', hat:HATS.gorra(), R:[80,10,'--f:-10deg;--t:12deg;--d:.7s'], pR:PROP.vela, L:[20,15], body:'--by:-3px;--br:2deg;--d:.7s' })];
+  // Amis qui trinquent (premier plan gauche)
+  P.beber = [120, 470, 330, 305,
+    fig({ x:215, y:770, s:1.22, c1:'#0e7c86', c2:'#f0c75e', hat:SOMB('#0b4a52','#e0218a'), R:[95,75,'--f:-6deg;--t:10deg;--d:.7s','--f:0deg;--t:38deg;--d:.7s'], pR:PROP.copa, L:[25,20], head:'--f:0deg;--t:-9deg;--d:.7s', body:'--by:-2px;--br:1.500deg;--d:.7s' }) +
+    fig({ x:360, y:772, s:1.18, flip:1, c1:'#8a2a9c', c2:'#22c7c0', falda:1, hat:HATS.corona(), R:[95,75,'--f:-6deg;--t:10deg;--d:.7s','--f:0deg;--t:38deg;--d:.7s;animation-delay:-.7s'], pR:PROP.copa, L:[25,20], head:'--f:-9deg;--t:0deg;--d:.7s', body:'--by:-2px;--br:1.500deg;--d:.7s' })];
+  // Catrina qui danse (centre)
+  P.bailar = [430, 420, 250, 360,
+    fig({ x:555, y:775, s:1.42, c1:'#d11c7e', c2:'#22c7c0', falda:1, hat:HATS.catrina(), cab:{ sonr:1 }, R:[125,35,'--f:-18deg;--t:18deg;--d:.6s','--f:-20deg;--t:25deg;--d:.6s'], L:[55,-25,'--f:-14deg;--t:14deg;--d:.6s'], pL:`<circle r="7" fill="#f0c75e" stroke="#1a1030"/><path d="M0,0L8,14" stroke="#6b4a2a" stroke-width="3"/>`, head:'--f:-8deg;--t:8deg;--d:.6s', body:'--by:-10px;--br:6deg;--d:.6s' })];
+  // Grand-père qui mange
+  P.comer = [1000, 470, 190, 305,
+    fig({ x:1090, y:772, s:1.22, c1:'#2d6a3a', c2:'#f0c75e', hat:HATS.bombin(), cab:{ boca:1, big:1 }, R:[110,147,'','--f:-34deg;--t:4deg;--d:.7s'], pR:PROP.pan, L:[30,80], pL:PROP.pan, head:'--f:-3deg;--t:4deg;--d:.7s', body:'--by:-2px;--br:1deg;--d:1.400s' })];
+  // Garçon qui se déguise
+  P.disfrazarse = [1375, 500, 200, 278,
+    fig({ x:1470, y:774, s:1.12, c1:'#6a2bb8', c2:'#ff9a1f', hat:HATS.gorra(), R:[110,147,'','--f:-58deg;--t:8deg;--d:1.100s'], pR:PROP.mascara, L:[25,15,'--f:-8deg;--t:8deg;--d:1.100s'], body:'--by:-3px;--br:2deg;--d:1.100s',
+      extra:`<path d="M-19,-152Q-44,-100 -34,-50L-14,-96Z" fill="#e0218a" stroke="#1a1030"/>` })];
+  const pj = PERSONAJES.map((p, i) => { const [bx, by, bw, bh, g] = P[p.id];
+    return `<g class="pj" data-id="${p.id}" tabindex="0" role="button" aria-label="Personaje ${i + 1}">${g}<rect class="hit" x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="14"/><g class="marca"><circle cx="${bx + bw / 2}" cy="${by - 6}" r="17" fill="#ff9a1f" stroke="#fff" stroke-width="3" class="k"/><text x="${bx + bw / 2}" y="${by}" text-anchor="middle" font-size="20" font-weight="700" fill="#2b1000" class="k" font-family="Arial,sans-serif">${i + 1}</text></g></g>`; });
+  const orden = ['desfilar', 'cantar', 'tocar', 'adornar', 'beber', 'comer', 'disfrazarse', 'bailar'].map(id => pj[PERSONAJES.findIndex(p => p.id === id)]);
+  const frente = Array.from({ length: 13 }, (_, i) => { const x = 60 + i * 124; return (i % 3 === 1 ? vela(x, 792, 26, 8, 'abc'[i % 3]) : '') + flor(x + 30, 786, 12) + flor(x + 62, 792, 10) + flor(x + 92, 784, 9); }).join('');
+  return `<svg id="escena" viewBox="0 140 1600 660" preserveAspectRatio="xMidYMid meet" role="group" aria-label="La fiesta en el cementerio">
+<defs><clipPath id="eArc"><path d="M14,794V280Q14,154 140,154H1460Q1586,154 1586,280V794Z"/></clipPath></defs>
+<g clip-path="url(#eArc)">
+<rect width="1600" height="800" fill="url(#gCielo)"/>${estr}
+<g transform="translate(60,128)"><circle cx="1290" cy="140" r="160" fill="url(#gLuna)"/><circle cx="1290" cy="140" r="58" fill="#fbeecb"/><circle cx="1272" cy="126" r="9" fill="#e8d6a8"/><circle cx="1306" cy="158" r="13" fill="#e8d6a8"/></g>
+<path d="M0,400Q200,300 420,370T860,340T1300,380T1600,330V480H0Z" fill="#1c0d3e"/>
+<g fill="#120828"><path d="M690,430V300H730V250Q745,222 760,250V300H840V300V250Q855,222 870,250V300H910V430Z"/><path d="M745,300Q800,214 855,300Z"/><path d="M743,226V196M733,206H753M857,226V196M847,206H867M800,254V228M791,237H809" stroke="#120828" stroke-width="5"/></g>
+<path d="M780,430V376Q800,350 820,376V430Z" fill="#ffb648"/><circle cx="800" cy="318" r="12" fill="#ffb648"/><rect x="738" y="262" width="12" height="24" rx="6" fill="#ffb648"/><rect x="850" y="262" width="12" height="24" rx="6" fill="#ffb648"/><circle cx="800" cy="400" r="90" fill="url(#gHalo)" opacity=".45" class="halo"/>
+<path d="M0,430H1600V456H0Z" fill="#24113f"/><path d="M0,430H1600" stroke="#3b2468" stroke-width="5" stroke-dasharray="40 14"/>
+<rect y="452" width="1600" height="348" fill="url(#gSuelo)"/>
+<path d="M770,452H830Q960,640 1010,800H560Q650,640 770,452Z" fill="url(#gCamino)"/><path d="M800,470Q770,620 700,790M800,470Q850,620 900,790M800,470V790" stroke="#ffcf6b" stroke-width="5" stroke-dasharray="2 22" stroke-linecap="round" fill="none" opacity=".8"/>
+${fondoT}
+<rect class="velo" id="velo" width="1600" height="800" fill="#0a0522" opacity=".45"/>
+<g class="bruma"><rect x="-100" y="440" width="1900" height="110" fill="url(#gBruma)"/></g>
+${ppLinea(176, 40, 22, 1.5)}${ppLinea(226, 30, 18, 1.15)}
+${orden.slice(0, 4).join('')}
+${tumbaS(770, 716, 1.5, 1)}${tumbaS(1270, 730, 1.5, 0)}${tumbaS(70, 640, 1.2, 0)}
+${orden.slice(4).join('')}
+<g class="bruma" style="animation-duration:38s"><rect x="-100" y="660" width="1900" height="150" fill="url(#gBruma)"/></g>
+${frente}
+</g>
+<path d="M14,794V280Q14,154 140,154H1460Q1586,154 1586,280V794Z" fill="none" stroke="#f0c75e" stroke-width="7"/><path d="M28,794V284Q28,168 144,168H1456Q1572,168 1572,284V794" fill="none" stroke="#f0c75e" stroke-width="1.500" opacity=".7"/>
+</svg>`;
+}
+
+/* ====== 7. FOND : shader WebGL + pétales Canvas ====================== */
+const FX = { gl:null, prog:null, pet:[], t0:performance.now(), alba:0, albaObj:0, mx:.5, my:.6, pmx:0, sucio:true, lluvia:0, fps:60, cuadros:0, tFps:0, arr:performance.now() };
+function iniciarGL() {
+  const cv = $('#gl'); let gl = null;
+  try { gl = cv.getContext('webgl', { antialias:false, alpha:false, powerPreference:'low-power' }); } catch (e) {}
+  if (!gl) return;
+  const vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fs = `precision mediump float;uniform vec2 uR;uniform float uT,uA,uQ;uniform vec2 uM;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p*=2.03;a*=.5;}return v;}
+void main(){vec2 uv=gl_FragCoord.xy/uR;float asp=uR.x/uR.y;vec2 p=vec2(uv.x*asp,uv.y);
+vec3 top=mix(vec3(.03,.018,.1),vec3(.2,.26,.55),uA),bot=mix(vec3(.2,.07,.3),vec3(1.,.58,.3),uA);
+vec3 col=mix(bot,top,smoothstep(.12,.95,uv.y));
+vec2 sp=p*80.+uM*1.5;float hh=h(floor(sp));
+col+=step(.982,hh)*smoothstep(.4,0.,length(fract(sp)-.5))*(.55+.45*sin(uT*2.+hh*60.))*(1.-uA)*smoothstep(.3,.6,uv.y);
+vec2 mp=vec2(asp*.8,.82)+uM*.012;float md=length(p-mp);
+col+=vec3(1.,.93,.78)*(smoothstep(.062,.057,md)+.3*exp(-md*6.))*(1.-.75*uA);
+col+=vec3(1.,.62,.22)*uA*exp(-length((p-vec2(asp*.45,.16))*vec2(.5,2.))*2.2);
+float h1=.27+.08*n(vec2(p.x*2.2+uM.x*.04+5.,1.))+.025*n(vec2(p.x*9.,3.));
+col=mix(col,mix(vec3(.085,.04,.2),vec3(.36,.2,.42),uA),smoothstep(h1+.003,h1-.003,uv.y));
+float m=fbm(vec2(p.x*1.6+uT*.025,uv.y*5.-uT*.008));
+col+=vec3(.5,.3,.72)*m*.24*smoothstep(.55,.1,uv.y)*uQ;
+float h2=.16+.07*n(vec2(p.x*1.4+uM.x*.09+9.,7.));
+col=mix(col,mix(vec3(.045,.02,.11),vec3(.18,.09,.26),uA),smoothstep(h2+.003,h2-.003,uv.y));
+float m2=fbm(vec2(p.x*2.4-uT*.04,uv.y*7.+3.));
+col+=vec3(.75,.3,.5)*m2*.12*smoothstep(.3,0.,uv.y)*uQ;
+col+=vec3(1.,.5,.12)*.2*(.9+.1*sin(uT*7.)*sin(uT*3.3))*exp(-uv.y*4.5);
+col*=1.-.42*pow(length(uv-.5)*1.25,2.2);
+gl_FragColor=vec4(col,1.);}`;
+  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
+  const a = sh(gl.VERTEX_SHADER, vs), b = sh(gl.FRAGMENT_SHADER, fs); if (!a || !b) return;
+  const pr = gl.createProgram(); gl.attachShader(pr, a); gl.attachShader(pr, b); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr); const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  FX.gl = gl; FX.u = {}; ['uR','uT','uA','uQ','uM'].forEach(n => FX.u[n] = gl.getUniformLocation(pr, n));
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); FX.gl = null; });
+}
+const NPET = { alta:60, media:30, baja:10 };
+function tamano() {
+  const esc = S.cfg.cal === 'alta' ? 1 : .5, g = $('#gl'), f = $('#fx');
+  g.width = Math.max(2, Math.round(innerWidth * esc)); g.height = Math.max(2, Math.round(innerHeight * esc));
+  f.width = innerWidth; f.height = innerHeight; if (FX.gl) FX.gl.viewport(0, 0, g.width, g.height); FX.sucio = true;
+}
+function petalo(arriba) { return { x: Math.random() * innerWidth, y: arriba ? -20 : Math.random() * innerHeight, vx: -.3 + Math.random() * .6, vy: .35 + Math.random() * .7, r: Math.random() * 6.28, vr: (-.5 + Math.random()) * .04, s: 5 + Math.random() * 7, f: Math.random() * 6.28, c: Math.random() < .5 ? '#ff9a1f' : Math.random() < .5 ? '#ffb648' : '#f07c00' }; }
+function cuadro(now) {
+  requestAnimationFrame(cuadro);
+  const bruto = now - (FX.ult || now), dt = Math.min(60, bruto); FX.ult = now;
+  // mesure des FPS → baisse automatique de la qualité sous 40 FPS
+  FX.cuadros++; if (bruto > 250) { FX.tFps = now; FX.cuadros = 0; }
+  if (now - FX.tFps > 3000) { FX.fps = FX.cuadros * 1000 / (now - FX.tFps); FX.tFps = now; FX.cuadros = 0;
+    if (FX.fps < 40 && !S.cfg.calManual && !S.cfg.red && now - FX.arr > 5000 && S.cfg.cal !== 'baja') { calidad(S.cfg.cal === 'alta' ? 'media' : 'baja'); aviso('Calidad: ' + S.cfg.cal); } }
+  const red = S.cfg.red, baja = S.cfg.cal === 'baja';
+  if (Math.abs(FX.albaObj - FX.alba) > .001) { FX.alba += (FX.albaObj - FX.alba) * Math.min(1, dt * .0012); FX.sucio = true; }
+  FX.pmx += (FX.mx - .5 - FX.pmx) * .05;
+  if (FX.gl && (FX.sucio || !(red || baja))) {
+    const gl = FX.gl, g = $('#gl');
+    gl.uniform2f(FX.u.uR, g.width, g.height); gl.uniform1f(FX.u.uT, red ? 3 : (now - FX.t0) / 1000); gl.uniform1f(FX.u.uA, FX.alba);
+    gl.uniform1f(FX.u.uQ, baja ? .6 : 1); gl.uniform2f(FX.u.uM, red ? 0 : FX.pmx * 2, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); FX.sucio = false;
+  }
+  if (!red && !baja) $('#fg').style.transform = `translateX(${R(-FX.pmx * 40)}px)`;
+  // pétales
+  const c = $('#fx').getContext('2d'); c.clearRect(0, 0, innerWidth, innerHeight);
+  const obj = red ? 0 : NPET[S.cfg.cal] * (FX.lluvia ? 2.5 : 1);
+  while (FX.pet.length < obj) FX.pet.push(petalo(FX.pet.length > 5 && FX.lluvia));
+  if (FX.pet.length > obj) FX.pet.length = Math.floor(obj);
+  const k = dt / 16.7, vel = FX.lluvia ? 2.2 : 1;
+  for (const p of FX.pet) {
+    p.f += .02 * k; p.x += (p.vx + Math.sin(p.f) * .6) * k; p.y += p.vy * k * vel; p.r += p.vr * k;
+    if (p.y > innerHeight + 20) Object.assign(p, petalo(true)); if (p.x < -20) p.x = innerWidth + 20; if (p.x > innerWidth + 20) p.x = -20;
+    c.save(); c.translate(p.x, p.y); c.rotate(p.r); c.scale(1, .55 + .45 * Math.sin(p.f * 2)); c.globalAlpha = .8; c.fillStyle = p.c;
+    c.beginPath(); c.moveTo(-p.s, 0); c.quadraticCurveTo(0, -p.s * .8, p.s, 0); c.quadraticCurveTo(0, p.s * .8, -p.s, 0); c.fill(); c.restore();
+  }
+}
+function calidad(q) { S.cfg.cal = q; document.documentElement.classList.remove('q-alta', 'q-media', 'q-baja'); document.documentElement.classList.add('q-' + q); $('#bCal').textContent = 'Calidad: ' + q; tamano(); guardar(); }
+function alba() { const n = S.hechas.reduce((a, b) => a + b, 0); FX.albaObj = S.fin ? 1 : [0, .06, .12, .2, .3, .42][n]; }
+function estallido(el, n = 14) {
+  if (S.cfg.red || !el) return; const r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+  for (let i = 0; i < n; i++) { const d = document.createElement('i'); d.className = 'petB'; const a = Math.random() * 6.28, l = 50 + Math.random() * 90;
+    d.style.cssText = `left:${x}px;top:${y}px;--dx:${R(Math.cos(a) * l)}px;--dy:${R(Math.sin(a) * l + 30)}px;--r:${Math.round(Math.random() * 500)}deg`; document.body.appendChild(d); setTimeout(() => d.remove(), 950); }
+}
+
+/* ====== 8. INTERFACE COMMUNE ========================================= */
+function modal(html) { const m = $('#modal'); m.innerHTML = html; m.classList.add('on'); }
+function cerrarModal() { const m = $('#modal'); m.classList.remove('on'); m.innerHTML = ''; }
+function info(n) {
+  $('#info').innerHTML = n >= 1 && n <= 5 ? `<div class="num">Etapa ${n} de 5</div><h2>${ETAPAS[n - 1]}</h2><div class="hab">${HABIL[n - 1]}</div>`
+    : n >= 6 ? `<div class="num">Final</div><h2>${n === 6 ? 'El altar' : 'Mi resumen'}</h2>` : '';
+}
+function crearCamino() {
+  $('#camino').innerHTML = ETAPAS.map((e, i) => `${i ? '<i class="pet"></i>' : ''}<button class="nodo" data-n="${i + 1}" aria-label="Etapa ${i + 1}: ${e}"><span class="fl">${i + 1}</span><span>${e}</span></button>`).join('') + '<div id="almaP"></div>';
+  $('#camino').addEventListener('click', e => { const n = e.target.closest('.nodo'); if (n && ADMIN) ir(+n.dataset.n); });
+}
+function pintarCamino() {
+  const c = $('#camino'), nodos = $$('.nodo', c), pets = $$('.pet', c);
+  nodos.forEach((n, i) => { n.classList.toggle('hecha', !!S.hechas[i]); n.classList.toggle('act', etapaVista === i + 1); n.tabIndex = ADMIN ? 0 : -1; });
+  pets.forEach((p, i) => p.classList.toggle('hecha', !!S.hechas[i]));
+  const k = Math.max(0, Math.min(4, etapaVista >= 6 ? 4 : etapaVista - 1)), fl = $('.fl', nodos[k]);
+  if (fl) $('#almaP').style.left = (fl.getBoundingClientRect().left - c.getBoundingClientRect().left + fl.offsetWidth / 2) + 'px';
+}
+const PANTALLAS = [];
+function ir(n) {
+  callar(); if (limpiar) { try { limpiar(); } catch (e) {} limpiar = null; }
+  cerrarModal(); finDemo(); etapaVista = n; if (n >= 1) { S.etapa = n; guardar(); }
+  document.body.classList.toggle('sinlado', n === 0 || n === 6);
+  main.classList.add('out'); clearTimeout(ir.t);
+  ir.t = setTimeout(() => { main.scrollTop = 0; PANTALLAS[n](); pintarCamino(); pintarMini(); alba(); main.classList.remove('out'); pintarAdmin(); }, S.cfg.red ? 0 : 350);
+}
+const PREMIO = [['foto', 'La foto del difunto está en el altar.'], ['velas', 'Los objetos están en el altar. Las velas iluminan la noche.'], ['cruz', 'La cruz y el humo del copal están en el altar.'], ['guit', 'La música llega al altar.']];
+function completar(n, err, saltar) {
+  S.hechas[n - 1] = 1; if (!saltar) S.estrellas[n - 1] = Math.max(S.estrellas[n - 1], estrellasDe(err));
+  if (n === 4) { S.e4 = PERSONAJES.map(p => p.id); AU.capas = 8; }
+  guardar(); pintarCamino(); pintarMini(); alba();
+  if (n === 5) { ir(6); return; }
+  sfx('fin');
+  modal(`<div class="caja panel"><h2 class="tit">Etapa ${n} completada</h2><div class="stars">${estrellas(S.estrellas[n - 1])}</div><div class="prem">${ico(PREMIO[n - 1][0])}<span>${PREMIO[n - 1][1]}</span></div><button class="btn grande" id="mSig">Continuar</button></div>`);
+  $('#mSig').onclick = () => { sfx('clic'); ir(n + 1); }; $('#mSig').focus();
+}
+
+/* ---- Démonstration animée (curseur fantôme) au premier essai d'une mécanique ---- */
+let demoStop = null;
+function finDemo() { if (demoStop) demoStop(); }
+async function demo(clave, pasos) {
+  if (S.demos[clave]) return; S.demos[clave] = 1; guardar();
+  await espera(S.cfg.red ? 50 : 800);
+  const d = $('#demo'), v = $('#demoVelo'); let alto = false; const marcas = [];
+  demoStop = () => { alto = true; d.classList.remove('on', 'clic'); v.classList.remove('on'); marcas.forEach(([e, c]) => e.classList.remove(c)); demoStop = null; };
+  v.classList.add('on'); v.onclick = finDemo;
+  d.style.transition = 'none'; d.style.transform = `translate(${innerWidth * .5}px,${innerHeight * .85}px)`; d.classList.add('on');
+  await espera(60); d.style.transition = '';
+  for (const p of pasos) {
+    if (alto) return; const el = typeof p.el === 'function' ? p.el() : p.el; if (!el || !document.contains(el)) continue;
+    const r = el.getBoundingClientRect(); d.style.transform = `translate(${r.left + r.width / 2}px,${r.top + r.height / 2}px)`;
+    await espera(1000); if (alto) return;
+    if (p.clic) { d.classList.remove('clic'); void d.offsetWidth; d.classList.add('clic'); sfx('clic'); }
+    if (p.cls) { el.classList.add(p.cls); marcas.push([el, p.cls]); }
+    if (p.haz) p.haz();
+    if (p.escribe) { const inp = el; for (let i = 1; i <= p.escribe.length && !alto; i++) { inp.placeholder = p.escribe.slice(0, i); await espera(70); } }
+    await espera(650);
+  }
+  if (!alto) finDemo();
+}
+
+/* ---- Glisser-déposer + clic-clic + clavier ---- */
+function arrastre(root, intento) {
+  let sel = null, drag = null, sinClic = false;
+  const quitar = () => { if (sel) sel.classList.remove('sel'); sel = null; };
+  const probar = (it, dst) => { if (!intento(it, dst)) { sfx('mal'); it.classList.remove('mal'); void it.offsetWidth; it.classList.add('mal'); } quitar(); };
+  const down = e => { const it = e.target.closest('.drag'); if (!it || it.classList.contains('fija') || e.target.closest('.aud,.leer')) return; drag = { it, x: e.clientX, y: e.clientY, mov: false, f: null }; };
+  const move = e => {
+    if (!drag) return;
+    if (!drag.mov && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 8) { drag.mov = true; const f = drag.it.cloneNode(true), r = drag.it.getBoundingClientRect(); f.classList.add('fant'); f.classList.remove('sel'); f.style.width = r.width + 'px'; f.style.animation = 'none'; document.body.appendChild(f); drag.f = f; drag.it.style.opacity = .3; }
+    if (drag.mov) { drag.f.style.left = e.clientX + 'px'; drag.f.style.top = e.clientY + 'px'; const d = document.elementFromPoint(e.clientX, e.clientY), dst = d && d.closest('.dest'); $$('.dest.sobre', root).forEach(x => x !== dst && x.classList.remove('sobre')); if (dst) dst.classList.add('sobre'); }
+  };
+  const up = e => {
+    if (!drag) return; const d = drag; drag = null; if (!d.mov) return;
+    d.f.remove(); d.it.style.opacity = ''; $$('.dest.sobre', root).forEach(x => x.classList.remove('sobre'));
+    sinClic = true; setTimeout(() => sinClic = false, 60);
+    const el = document.elementFromPoint(e.clientX, e.clientY), dst = el && el.closest('.dest'); if (dst && root.contains(dst)) probar(d.it, dst);
+  };
+  const clic = e => {
+    if (sinClic || e.target.closest('.aud,.leer')) return;
+    const it = e.target.closest('.drag'); if (it && !it.classList.contains('fija')) { if (sel === it) return quitar(); quitar(); sel = it; it.classList.add('sel'); sfx('clic'); return; }
+    const dst = e.target.closest('.dest'); if (dst && sel) probar(sel, dst);
+  };
+  root.addEventListener('pointerdown', down); root.addEventListener('click', clic);
+  window.addEventListener('pointermove', move); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+  return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); if (drag && drag.f) drag.f.remove(); };
+}
+
+/* ====== 9. ÉCRAN D'ACCUEIL =========================================== */
+PANTALLAS[0] = function inicio() {
+  info(0); const hay = S.etapa > 0;
+  main.innerHTML = `<div id="inicio"><div><div class="sup">Noche del 1 de noviembre · Día de muertos</div><h1>El camino <em>de cempasúchil</em></h1>
+<p class="lema">Guía al alma hasta el altar de su familia.</p><p class="cas">${UI.casco}<span>Ponte los auriculares.</span></p>
+<div class="fila">${hay ? `<button class="btn grande" id="go">Continuar</button><button class="btn sec" id="nue">Empezar de nuevo</button>` : `<button class="btn grande" id="go">Empezar</button>`}</div></div>
+<div class="altarG">${altarSVG(itemsAltar(), S.hechas[4])}</div></div>`;
+  $('#go').onclick = () => { iniciarAudio(); sfx('ok'); ir(hay ? Math.min(S.etapa, 7) : 1); };
+  if (hay) $('#nue').onclick = confirmarNuevo;
+  $('#go').focus();
+};
+function confirmarNuevo() {
+  modal(`<div class="caja panel"><h2 class="tit">¿Empezar de nuevo?</h2><p>Tu progreso se borra.</p><p class="fila" style="justify-content:center;margin-top:1rem"><button class="btn" id="siN">Sí, empezar de nuevo</button><button class="btn sec" id="noN" data-cerrar>No</button></p></div>`);
+  $('#siN').onclick = reiniciar; $('#noN').onclick = cerrarModal; $('#noN').focus();
+}
+function reiniciar() { const cfg = S.cfg; S = base(); S.cfg = cfg; guardar(); AU.capas = 0; iniciarAudio(); ir(0); }
+
+/* ====== 10. ÉTAPE 1 — El reportaje =================================== */
+PANTALLAS[1] = function etapa1() {
+  info(1); let err = 0, vistas = 0, fue = false, qi = 0, enPreg = false;
+  const QS = QUESTIONS_VIDEO.filter(q => q.activa !== false);
+  const enlace = (txt, cls) => `<a class="btn ${cls}" id="lnk" href="${URL_VIDEO}" target="_blank" rel="noopener noreferrer">${UI.play}<span>${txt}</span></a>`;
+  const cablear = () => {
+    const l = $('#lnk'); if (l) l.addEventListener('click', () => { vistas++; fue = true; const b = $('#irq'); if (b) b.hidden = false; if (vistas >= 2 && enPreg) setTimeout(() => l.setAttribute('aria-disabled', 'true'), 100); });
+    const b = $('#irq'); if (b) b.onclick = preguntas;
+  };
+  const volver = () => { if (fue && !document.hidden && document.hasFocus()) { fue = false; if (!enPreg) preguntas(); } };
+  window.addEventListener('focus', volver); document.addEventListener('visibilitychange', volver);
+  limpiar = () => { window.removeEventListener('focus', volver); document.removeEventListener('visibilitychange', volver); };
+  main.innerHTML = `<div class="panel centro"><p class="consigna">${UI.casco}<span>Mira el reportaje (2:20) con tus auriculares. Puedes verlo dos veces.</span></p>
+<p style="margin:1.4rem 0">${enlace('Ver el reportaje', 'grande')}</p><p class="nota">El reportaje se abre en otra pestaña. Después, vuelve aquí.</p>
+<p style="margin-top:1rem"><button class="btn sec" id="irq" hidden>Ver las preguntas</button></p></div>`;
+  cablear();
+  function preguntas() {
+    enPreg = true; if (etapaVista !== 1) return;
+    if (qi >= QS.length) return completar(1, err);
+    const q = QS[qi]; let ops = q.opciones.map((t, i) => ({ t, ok: i === q.correcta })); if (q.mezclar !== false) ops = baraja(ops);
+    main.innerHTML = `<div class="panel centro"><div class="puntos">${QS.map((_, i) => `<i class="${i < qi ? 'ok' : i === qi ? 'ya' : ''}"></i>`).join('')}</div>
+<p class="nota">Pregunta ${qi + 1} de ${QS.length}</p><p class="preg"><span>${esc(q.pregunta)}</span><button class="aud" id="aq" aria-label="Escuchar la pregunta" title="Escuchar">${UI.alt}</button></p>
+<div class="opcs">${ops.map((o, i) => `<button class="opc" data-ok="${o.ok ? 1 : 0}"><b>${'ABC'[i]}</b><span>${esc(o.t)}</span></button>`).join('')}</div>
+<p style="margin-top:1.1rem">${vistas < 2 ? enlace('Ver el reportaje otra vez', 'sec') : ''}</p></div>`;
+    cablear();
+    $('#aq').onclick = e => decir(q.pregunta, e.currentTarget);
+    $$('.opc').forEach(b => b.onclick = () => {
+      if (b.dataset.ok === '1') { b.classList.add('si', 'bienp'); $$('.opc').forEach(x => x !== b && x.classList.add('no')); sfx('ok'); estallido(b); qi++; setTimeout(preguntas, 1000); }
+      else { err++; sfx('mal'); b.classList.add('mal'); setTimeout(() => b.classList.add('no'), 450); }
+    });
+    if (qi === 0) demo('quiz', [{ el: () => $('#aq'), clic: 1 }, { el: () => $$('.opc')[0] }, { el: () => $$('.opc').pop() }]);
+  }
+};
+
+/* ====== 11. ÉTAPE 2 — La ofrenda ===================================== */
+PANTALLAS[2] = function etapa2() {
+  info(2); let err = 0, faseB = false; const oidos = {}, puestos = new Set();
+  main.innerHTML = `<p class="consigna panel" id="c2">${UI.casco}<span>Haz clic en cada objeto y escucha.</span></p>
+<div class="e2"><div class="altarBox" id="altB">${altarSVG(itemsAltar().filter(i => i === 'foto'))}</div><div class="der">
+<div class="objs" id="objs">${baraja(OBJETOS).map(o => `<div class="obj" role="button" tabindex="0" data-id="${o.id}">${ico(o.id)}<span class="nom">${o.n}</span><span class="esc" aria-hidden="true"><i></i><i></i><i></i></span></div>`).join('')}</div>
+<div class="slots" id="slots" hidden></div>
+<div class="fila" style="margin-top:.7rem;justify-content:flex-end"><span class="nota" id="n2">0 / 8</span><button class="btn" id="sig2" disabled>Continuar</button></div></div></div>`;
+  const der = $('.e2 .der');
+  const mostrar = (el, o) => { if (!$('.frase', el)) { const s = document.createElement('span'); s.className = 'frase'; s.textContent = o.f; el.appendChild(s); } const l = $('.leer', el); if (l) l.remove(); };
+  const escuchar = el => {
+    const o = OBJETOS.find(x => x.id === el.dataset.id); oidos[o.id] = (oidos[o.id] || 0) + 1; el.classList.add('oido');
+    $$('.esc i', el).forEach((d, i) => d.classList.toggle('on', i < oidos[o.id]));
+    if (oidos[o.id] >= 3 && !$('.leer', el) && !$('.frase', el)) { const b = document.createElement('button'); b.className = 'leer'; b.textContent = 'Leer'; el.appendChild(b); }
+    decir(o.f, el).then(ok => { if (!ok && document.contains(el)) mostrar(el, o); });
+    const n = Object.keys(oidos).length; if (!faseB) { $('#n2').textContent = n + ' / 8'; if (n === 8) $('#sig2').disabled = false; }
+  };
+  der.addEventListener('click', e => {
+    const l = e.target.closest('.leer'); if (l) { const el = l.closest('.obj'); mostrar(el, OBJETOS.find(x => x.id === el.dataset.id)); return; }
+    const a = e.target.closest('.mini-aud'); if (a) return escuchar(a.closest('.obj'));
+    const el = e.target.closest('.obj'); if (el && !faseB) escuchar(el);
+  });
+  $('#sig2').onclick = () => {
+    faseB = true; callar(); sfx('clic'); $('#sig2').hidden = true; $('#n2').textContent = '';
+    $('#c2').innerHTML = `${UI.mano}<span>Asocia cada objeto con su símbolo.</span>`;
+    $$('.obj', der).forEach(el => { el.classList.add('drag'); const b = document.createElement('button'); b.className = 'aud mini-aud'; b.innerHTML = UI.alt; b.setAttribute('aria-label', 'Escuchar'); el.appendChild(b); const e = $('.esc', el); if (e) e.remove(); const f = $('.frase', el); if (f) f.remove(); const l = $('.leer', el); if (l) l.remove(); });
+    const sl = $('#slots'); sl.hidden = false;
+    sl.innerHTML = baraja(OBJETOS).map(o => `<div class="drop dest" role="button" tabindex="0" data-id="${o.id}" data-sol="${o.n}">${ico(o.p)}<span class="sim">${o.s}</span></div>`).join('');
+    const o0 = OBJETOS[1];
+    demo('asociar', [{ el: () => $(`.obj[data-id=${o0.id}]`), clic: 1, cls: 'sel' }, { el: () => $(`.drop[data-id=${o0.id}]`), clic: 1, cls: 'sobre' }]);
+  };
+  const quita = arrastre(der, (it, dst) => {
+    if (!dst.classList.contains('drop') || dst.classList.contains('lleno')) return true;
+    if (dst.dataset.id !== it.dataset.id) { err++; return false; }
+    dst.appendChild(it); it.classList.add('fija'); it.classList.remove('sel'); dst.classList.add('lleno', 'bienp'); puestos.add(it.dataset.id);
+    sfx('ok'); estallido(dst); const al = $('#altB .altar'); if (al) al.classList.add('t-' + it.dataset.id);
+    if (puestos.size === 8) setTimeout(() => etapaVista === 2 && completar(2, err), 1300);
+    return true;
+  });
+  limpiar = quita;
+  demo('oir', [{ el: () => $('.obj'), clic: 1 }]);
+};
+
+/* ====== 12. ÉTAPE 3 — Dos orígenes =================================== */
+PANTALLAS[3] = function etapa3() {
+  info(3); let err = 0, n = 0;
+  const col = (c, i, t) => `<div class="col ${c} dest" data-c="${c}" role="button" tabindex="0" aria-label="${t}"><div class="cab">${ico(i)}<h3>${t}</h3></div><div class="lista"></div></div>`;
+  main.innerHTML = `<p class="consigna panel">${UI.mano}<span>Pon cada carta en su columna.</span></p><div class="e3">${col('pre', 'piramide', 'Cultura prehispánica')}
+<div class="cartas" id="cartas">${baraja(ORIGENES).map((o, i) => `<div class="carta drag" role="button" tabindex="0" data-id="${o.id}" data-c="${o.c}" data-sol="${o.c === 'pre' ? 'prehispánica' : 'católica'}" style="animation-delay:${i * .09}s">${ico(o.i)}<span>${o.t}</span></div>`).join('')}</div>
+${col('cat', 'iglesia', 'Religión católica')}</div>`;
+  limpiar = arrastre($('.e3'), (it, dst) => {
+    if (!dst.classList.contains('col')) return true;
+    if (dst.dataset.c !== it.dataset.c) { err++; return false; }
+    $('.lista', dst).appendChild(it); it.classList.add('fija'); it.classList.remove('sel'); it.style.animationDelay = ''; sfx('ok'); estallido(it, 8); n++;
+    if (n === 8) setTimeout(() => {
+      if (etapaVista !== 3) return;
+      $('#cartas').innerHTML = `<div class="bilan panel"><p class="tit"><b>${BILAN}</b></p><p class="fila" style="justify-content:center;margin-top:.8rem"><button class="aud" id="ab" aria-label="Escuchar">${UI.alt}</button><button class="btn" id="s3">Continuar</button></p></div>`;
+      $('#ab').onclick = e => decir(BILAN, e.currentTarget); decir(BILAN, $('#ab')); $('#s3').onclick = () => completar(3, err); $('#s3').focus();
+    }, 700);
+    return true;
+  });
+  demo('ordenar', [{ el: () => $('.carta[data-c=cat]'), clic: 1, cls: 'sel' }, { el: () => $('.col.cat .cab'), clic: 1 }]);
+};
+
+/* ====== 13. ÉTAPE 4 — La fiesta (estar + gerundio) =================== */
+function solucion4(p, encl) { const est = p.pl ? 'están' : 'está'; return p.refl ? (encl ? `${est} disfrazándose` : `se ${est} ${p.ger}`) : `${est} ${p.ger}`; }
+function comprobar4(p, val) {
+  let v = norm(val); const suj = norm(p.suj), cola = norm(p.cola);
+  if (v.startsWith(suj + ' ')) v = v.slice(suj.length + 1);
+  if (cola && v.endsWith(' ' + cola)) v = v.slice(0, -cola.length - 1);
+  const f = est => p.refl ? [`se ${est} ${p.ger}`, `${est} ${p.ger}se`] : [`${est} ${p.ger}`];
+  const a = f(p.pl ? 'estan' : 'esta'), i = a.indexOf(v); if (i >= 0) return { r: 'ok', encl: i === 1 };
+  return { r: f(p.pl ? 'esta' : 'estan').includes(v) ? 'num' : 'no' };
+}
+PANTALLAS[4] = function etapa4() {
+  info(4); let err = 0, actual = null; const fallos = {};
+  if (S.hechas[3]) S.e4 = PERSONAJES.map(p => p.id);
+  main.innerHTML = `<div class="e4"><p class="consigna panel" style="margin:0;padding:.5rem 1rem">${UI.lapiz}<span>Haz clic en un personaje y escribe la frase.</span><span class="cont" id="c4"></span></p>
+<div class="escBox">${escenaSVG()}</div><div class="panel escr" id="escr"></div></div>`;
+  const esc4 = $('#escena'), panel = $('#escr');
+  const estado = () => { const n = S.e4.length; AU.capas = n; $('#c4').textContent = n + ' / 8'; $('#velo').setAttribute('opacity', R(.45 * (1 - n / 8))); $$('.pj', esc4).forEach(g => g.classList.toggle('vivo', S.e4.includes(g.dataset.id))); };
+  const vacio = () => { panel.innerHTML = S.e4.length === 8 ? `<span class="correcta tit">La fiesta está viva.</span><button class="btn" id="s4" style="margin-left:auto">Continuar</button>` : `<span class="nota">${UI.mano.replace('<svg', '<svg style="width:1.4rem;height:1.4rem;vertical-align:middle"')} Elige un personaje de la fiesta.</span>`; const b = $('#s4'); if (b) { b.onclick = () => completar(4, err); b.focus(); } };
+  const elegir = id => {
+    const p = PERSONAJES.find(x => x.id === id); actual = id; $$('.pj', esc4).forEach(g => g.classList.toggle('elegido', g.dataset.id === id));
+    if (S.e4.includes(id)) { panel.innerHTML = `<div class="inf"><b>${p.inf}</b><small>${p.ay}</small></div><div class="correcta">${p.suj} <b>${solucion4(p)}</b>${p.cola ? ' ' + p.cola : ''}.</div><button class="aud" id="a4" aria-label="Escuchar">${UI.alt}</button>`; $('#a4').onclick = e => decir(`${p.suj} ${solucion4(p)} ${p.cola}.`, e.currentTarget); return; }
+    panel.innerHTML = `<div class="inf"><b>${p.inf}</b><small>${p.ay}</small></div>
+<form class="oracion" id="f4"><span>${p.suj}</span><input id="in4" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="estar + gerundio" aria-label="Escribe el verbo"><span>${p.cola ? p.cola + '.' : '.'}</span><button class="btn" type="submit">Comprobar</button></form>
+<div class="pista" id="pista" data-sol="${solucion4(p)}"></div>`;
+    pistas(p); const inp = $('#in4'); inp.focus({ preventScroll: true });
+    $('#f4').onsubmit = e => {
+      e.preventDefault(); if (!inp.value.trim()) return; const res = comprobar4(p, inp.value);
+      if (res.r === 'ok') {
+        S.e4.push(id); guardar(); sfx('ok'); estado(); estallido(inp, 18);
+        const fr = `${p.suj} ${solucion4(p, res.encl)}${p.cola ? ' ' + p.cola : ''}.`;
+        panel.innerHTML = `<div class="inf"><b>${p.inf}</b><small>${p.ay}</small></div><div class="correcta bienp">${p.suj} <b>${solucion4(p, res.encl)}</b>${p.cola ? ' ' + p.cola : ''}.</div><button class="aud" id="a4" aria-label="Escuchar">${UI.alt}</button>${S.e4.length === 8 ? `<button class="btn" id="s4" style="margin-left:auto">Continuar</button>` : ''}`;
+        $('#a4').onclick = e => decir(fr, e.currentTarget); decir(fr, $('#a4'));
+        const b = $('#s4'); if (b) { b.onclick = () => completar(4, err); sfx('fin'); }
+      } else {
+        err++; sfx('mal'); inp.classList.remove('mal'); void inp.offsetWidth; inp.classList.add('mal');
+        if (res.r === 'num') pistas(p, 'Casi. Mira el sujeto: él / ella → <b>está</b> · ellos / ellas → <b>están</b>');
+        else { fallos[id] = (fallos[id] || 0) + 1; pistas(p); }
+        inp.select();
+      }
+    };
+  };
+  const pistas = (p, msg) => {
+    const f = fallos[p.id] || 0, ar = /ar(se)?$/.test(p.inf.split(' ')[0]); let h = msg ? `<span>${msg}</span>` : '';
+    if (f >= 1) h += `<span class="regla ${ar ? 'on' : ''}">-ar <i>→</i> -ando</span><span class="regla ${ar ? '' : 'on'}">-er, -ir <i>→</i> -iendo</span>`;
+    if (f >= 2) h += `<span class="rad">${p.refl ? 'se ' : ''}${p.pl ? 'están' : 'está'} ${p.rad}…</span>`;
+    $('#pista').innerHTML = h;
+  };
+  esc4.addEventListener('click', e => { const g = e.target.closest('.pj'); if (g) { sfx('clic'); elegir(g.dataset.id); } });
+  estado(); vacio();
+  demo('escribir', [{ el: () => $('.pj:not(.vivo) .marca', esc4), clic: 1, haz: () => { const g = $('.pj:not(.vivo)', esc4); if (g) elegir(g.dataset.id); } }, { el: () => $('#in4'), clic: 1, escribe: 'ejemplo: está mirando' }]);
+};
+
+/* ====== 14. ÉTAPE 5 — Mi ofrenda (soler + infinitivo) ================ */
+function valida5(val) { const v = norm(val).replace(/^suelen?\s+/, ''), w = v.split(' ')[0] || ''; return /^[a-z]{2,}(ar|er|ir)(se)?$/.test(w); }
+function frase5(i, val) { let t = val.trim().replace(/^suelen?\s+/i, '').replace(/\s+/g, ' '); if (t && !/[.!?]$/.test(t)) t += '.'; return FRASES5[i].ini + ' ' + t; }
+PANTALLAS[5] = function etapa5() {
+  info(5); let err = 0, foco = null;
+  main.innerHTML = `<div class="e5 panel"><p class="consigna" id="c5">${UI.lapiz}<span>Completa las tres frases con un infinitivo.</span></p>
+${FRASES5.map((f, i) => `<div class="f5" data-i="${i}"><label for="f5${i}">${f.ini}…</label><div class="lin"><input id="f5${i}" type="text" autocomplete="off" spellcheck="false"><span class="est">${UI.ok}</span></div><div class="av" hidden>Después de «suele / suelen»: un infinitivo (-ar, -er, -ir). Ejemplo: suelen bailar.</div><div class="mod" hidden><b>Modelo:</b> ${f.mod}</div></div>`).join('')}
+<div class="fila"><button class="btn sec" id="ay5" aria-expanded="false">${UI.ojo}<span>Ayuda: palabras</span></button><button class="btn" id="ver5">Comprobar</button><button class="btn" id="fin5" hidden>Terminar</button></div>
+<div class="banco" id="banco" hidden>${BANCO.map(b => `<button class="chip">${b}</button>`).join('')}</div></div>`;
+  const ins = $$('.f5 input');
+  ins.forEach(i => { i.addEventListener('focus', () => foco = i); i.addEventListener('input', () => { i.closest('.f5').classList.remove('ok'); $('#fin5').hidden = true; }); });
+  $('#ay5').onclick = e => { const b = $('#banco'); b.hidden = !b.hidden; e.currentTarget.setAttribute('aria-expanded', !b.hidden); sfx('clic'); };
+  $('#banco').onclick = e => { const c = e.target.closest('.chip'); if (!c) return; const i = (foco && document.contains(foco) ? foco : null) || ins.find(x => !x.value.trim()) || ins[0]; i.value = i.value.trim() ? i.value.trim() + ', ' + c.textContent : c.textContent; i.dispatchEvent(new Event('input')); i.focus(); sfx('clic'); };
+  $('#ver5').onclick = () => {
+    let todas = true;
+    ins.forEach((inp, i) => { const f = inp.closest('.f5'), ok = valida5(inp.value); f.classList.toggle('ok', ok); $('.av', f).hidden = ok || !inp.value.trim(); $('.mod', f).hidden = !ok; if (!ok) { todas = false; if (inp.value.trim()) err++; inp.classList.remove('mal'); void inp.offsetWidth; inp.classList.add('mal'); } });
+    if (todas) { sfx('ok'); S.frases = ins.map((inp, i) => frase5(i, inp.value)); guardar(); $('#fin5').hidden = false; $('#c5 span').textContent = 'Compara tus frases con el modelo. Puedes corregir.'; estallido($('#fin5')); }
+    else sfx('mal');
+  };
+  $('#fin5').onclick = () => { S.frases = ins.map((inp, i) => frase5(i, inp.value)); completar(5, err); };
+  demo('soler', [{ el: () => ins[0], clic: 1, escribe: 'ejemplo: bailar y cantar' }, { el: () => $('#ay5') }]);
+  ins[0].focus({ preventScroll: true });
+};
+
+/* ====== 15. FINAL + RÉCAPITULATIF ==================================== */
+const FRASE_FIN = 'El alma llega al altar de su familia.';
+PANTALLAS[6] = function final() {
+  info(6); S.fin = 1; guardar(); FX.lluvia = 1; AU.capas = 8;
+  main.innerHTML = `<div id="final"><div class="altarG">${altarSVG(['foto','flores','velas','pan','agua','sal','papel','calav','cruz','copal','humo','guit'])}<div id="almaF"></div></div>
+<p class="msg tit">${FRASE_FIN}</p><button class="btn grande" id="aRes">Ver mi resumen</button></div>`;
+  const t1 = setTimeout(() => { const a = $('#final .altar'); if (a) a.classList.add('t-luz'); sfx('fin'); }, 600);
+  const t2 = setTimeout(() => decir(FRASE_FIN), 3200);
+  limpiar = () => { FX.lluvia = 0; clearTimeout(t1); clearTimeout(t2); };
+  $('#aRes').onclick = () => ir(7);
+};
+PANTALLAS[7] = function resumen() {
+  info(7);
+  const fr = S.frases.map(f => f && f.trim() ? esc(f) : '—');
+  main.innerHTML = `<div class="res panel"><h1 class="tit">El camino de cempasúchil</h1><p class="nota" style="text-align:center">Mi resumen · Día de muertos</p>
+<h3>Mis estrellas</h3><div class="estr">${ETAPAS.map((e, i) => `<div>${e}<br>${estrellas(S.estrellas[i])}</div>`).join('')}</div>
+<h3>Mis tres frases</h3><ol class="misf">${fr.map(f => `<li>${f}</li>`).join('')}</ol><p class="copia">Copia tus tres frases en tu cuaderno.</p>
+<h3>Palabras nuevas</h3><div class="voc">${VOCAB.map(([i, t]) => `<div>${ico(i)}${t}</div>`).join('')}</div>
+<div id="miq"></div>
+<div class="fila noimp" style="justify-content:center;margin-top:1rem"><button class="btn" id="imp">Imprimir</button><button class="btn sec" id="cop">Copiar el resumen</button></div>
+<div class="bonus noimp"><h3>Para los rápidos: crea una pregunta de quiz sobre Día de muertos</h3>
+<input type="text" id="bq" placeholder="Tu pregunta: ¿…?" aria-label="Tu pregunta" maxlength="140">
+${[0, 1, 2].map(i => `<div class="r"><input type="radio" name="bok" value="${i}" aria-label="Respuesta correcta ${i + 1}"><input type="text" id="br${i}" placeholder="Respuesta ${'ABC'[i]}" aria-label="Respuesta ${'ABC'[i]}" maxlength="80"></div>`).join('')}
+<p class="nota">Marca la respuesta correcta con el círculo.</p><p style="margin-top:.5rem"><button class="btn sec" id="bg">Guardar mi pregunta</button></p></div></div>`;
+  const pintaQ = () => { const q = S.quiz; $('#miq').innerHTML = q ? `<h3>Mi pregunta de quiz</h3><div class="miquiz"><b>${esc(q.p)}</b><ol type="A">${q.r.map((r, i) => `<li class="${i === q.ok ? 'ok' : ''}">${esc(r)}${i === q.ok ? ' (correcta)' : ''}</li>`).join('')}</ol></div>` : ''; };
+  pintaQ(); if (S.quiz) { $('#bq').value = S.quiz.p; S.quiz.r.forEach((r, i) => $('#br' + i).value = r); $$('[name=bok]')[S.quiz.ok].checked = true; }
+  $('#bg').onclick = () => { const p = $('#bq').value.trim(), r = [0, 1, 2].map(i => $('#br' + i).value.trim()), c = $('[name=bok]:checked');
+    if (!p || r.some(x => !x) || !c) { sfx('mal'); return aviso('Escribe la pregunta, tres respuestas y marca la correcta.'); }
+    S.quiz = { p, r, ok: +c.value }; guardar(); pintaQ(); sfx('ok'); estallido($('#miq')); $('#miq').scrollIntoView({ block: 'center', behavior: S.cfg.red ? 'auto' : 'smooth' }); };
+  $('#imp').onclick = () => window.print();
+  $('#cop').onclick = () => {
+    let t = `EL CAMINO DE CEMPASÚCHIL — Mi resumen\n\nMis estrellas:\n${ETAPAS.map((e, i) => `  ${i + 1}. ${e}: ${S.estrellas[i]} / 3`).join('\n')}\n\nMis tres frases:\n${S.frases.map((f, i) => `  ${i + 1}. ${f || '—'}`).join('\n')}\n\nPalabras nuevas: ${VOCAB.map(v => v[1]).join(', ')}.`;
+    if (S.quiz) t += `\n\nMi pregunta de quiz: ${S.quiz.p}\n${S.quiz.r.map((r, i) => `  ${'ABC'[i]}. ${r}${i === S.quiz.ok ? ' (correcta)' : ''}`).join('\n')}`;
+    const hecho = () => aviso('Resumen copiado.');
+    const plan = () => { try { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); hecho(); } catch (e) { aviso('No es posible copiar. Usa «Imprimir».'); } };
+    try { navigator.clipboard.writeText(t).then(hecho, plan); } catch (e) { plan(); }
+  };
+};
+
+/* ====== 16. MODE PROFESSEUR (Ctrl+Maj+A, code « profe ») ============= */
+function pedirCodigo() {
+  if (ADMIN) { $('#admin').classList.toggle('on'); return; }
+  modal(`<div class="caja panel"><h2 class="tit">Modo profesor</h2><form id="fc"><input type="password" id="cod" placeholder="Código" aria-label="Código" autocomplete="off"><p class="fila" style="justify-content:center"><button class="btn" type="submit">Entrar</button><button class="btn sec" type="button" id="cc" data-cerrar>Cerrar</button></p></form></div>`);
+  $('#cod').focus(); $('#cc').onclick = cerrarModal;
+  $('#fc').onsubmit = e => { e.preventDefault(); if ($('#cod').value.trim().toLowerCase() === CODIGO_ADMIN) { ADMIN = true; document.documentElement.classList.add('admin'); cerrarModal(); $('#admin').classList.add('on'); pintarAdmin(); pintarCamino(); } else { sfx('mal'); $('#cod').classList.add('mal'); $('#cod').value = ''; setTimeout(() => $('#cod') && $('#cod').classList.remove('mal'), 500); } };
+}
+function pintarAdmin() {
+  if (!ADMIN) return; const a = $('#admin'), resp = document.documentElement.classList.contains('resp');
+  a.innerHTML = `<b>Modo profesor</b> · etapa actual: ${etapaVista >= 1 && etapaVista <= 5 ? etapaVista : '—'}
+<div class="fila">Ir a: <button class="ib" data-ir="0">Inicio</button>${[1, 2, 3, 4, 5].map(n => `<button class="ib" data-ir="${n}">${n}</button>`).join('')}<button class="ib" data-ir="6">Final</button><button class="ib" data-ir="7">Resumen</button></div>
+<div class="fila"><button class="ib" id="aVal" ${etapaVista >= 1 && etapaVista <= 5 ? '' : 'disabled'}>Validar esta etapa</button><button class="ib" id="aRes2" aria-pressed="${resp}">Mostrar respuestas</button></div>
+<div class="fila"><button class="ib" id="aRei">Reiniciar</button><button class="ib" id="aCer">Cerrar</button></div>`;
+  $$('[data-ir]', a).forEach(b => b.onclick = () => { iniciarAudio(); ir(+b.dataset.ir); });
+  $('#aVal').onclick = () => { if (etapaVista >= 1 && etapaVista <= 5) { callar(); finDemo(); completar(etapaVista, 0, true); } };
+  $('#aRes2').onclick = () => { document.documentElement.classList.toggle('resp'); pintarAdmin(); };
+  $('#aRei').onclick = reiniciar; $('#aCer').onclick = () => a.classList.remove('on');
+}
+
+/* ====== 17. DÉMARRAGE ================================================= */
+function aplicarCfg() {
+  const h = document.documentElement, c = S.cfg;
+  h.classList.toggle('big', !!c.big); h.classList.toggle('red', !!c.red);
+  $('#bAa').setAttribute('aria-pressed', !!c.big); $('#bRed').setAttribute('aria-pressed', !!c.red); $('#bMus').setAttribute('aria-pressed', !!c.mus);
+  $('#vol').value = c.vol; if (AU.ctx) { AU.master.gain.value = c.vol; AU.mus.gain.value = c.mus ? .55 : 0; }
+  FX.sucio = true; guardar(); setTimeout(pintarCamino, 50);
+}
+(function arrancar() {
+  $('#bMus').innerHTML = UI.nota; $('#bRed').innerHTML = UI.anim; $('#bNue').innerHTML = UI.nuevo;
+  $('#fg').innerHTML = `<svg viewBox="0 0 1600 160" preserveAspectRatio="none"><path fill="#07031a" d="M0,160V120Q60,96 120,118V70H104V58H120V40H134V58H150V70H134V120Q220,100 300,122Q330,60 380,60Q430,60 440,122Q560,96 660,120V84H650V74H660V62H670V74H680V84H670V120Q800,104 930,124Q950,76 990,76Q1030,76 1040,124Q1150,100 1240,118V60H1222V46H1240V26H1256V46H1274V60H1256V118Q1380,96 1470,122Q1490,84 1520,84Q1550,84 1560,122L1600,116V160Z"/>${[40, 200, 250, 520, 580, 760, 880, 1100, 1160, 1340, 1420, 1580].map((x, i) => `<circle cx="${x}" cy="${128 + (i % 3) * 8}" r="${5 + i % 3}" fill="#ff9a1f" opacity=".55"/>`).join('')}</svg>`;
+  if (!S.cfg.calManual) S.cfg.cal = 'alta';
+  try { if (matchMedia('(prefers-reduced-motion: reduce)').matches && !localStorage.getItem(CLAVE)) S.cfg.red = 1; } catch (e) {}
+  crearCamino(); iniciarGL(); calidad(S.cfg.cal); aplicarCfg(); AU.capas = S.hechas[3] ? 8 : S.e4.length;
+  addEventListener('resize', () => { tamano(); pintarCamino(); });
+  addEventListener('pointermove', e => { FX.mx = e.clientX / innerWidth; FX.my = e.clientY / innerHeight; const l = $('#luz').style; l.setProperty('--mx', e.clientX + 'px'); l.setProperty('--my', e.clientY + 'px'); }, { passive: true });
+  addEventListener('pointerdown', iniciarAudio, { once: true }); addEventListener('keydown', iniciarAudio, { once: true });
+  // la musique se tait quand l'élève regarde la vidéo dans l'autre onglet
+  document.addEventListener('visibilitychange', () => { if (!AU.ctx) return; try { document.hidden ? AU.ctx.suspend() : AU.ctx.resume(); } catch (e) {} if (document.hidden) callar(); });
+  $('#bMus').onclick = () => { S.cfg.mus = S.cfg.mus ? 0 : 1; aplicarCfg(); };
+  $('#vol').oninput = e => { S.cfg.vol = +e.target.value; aplicarCfg(); };
+  $('#bCal').onclick = () => { S.cfg.calManual = 1; calidad({ alta: 'media', media: 'baja', baja: 'alta' }[S.cfg.cal]); };
+  $('#bAa').onclick = () => { S.cfg.big = S.cfg.big ? 0 : 1; aplicarCfg(); };
+  $('#bRed').onclick = () => { S.cfg.red = S.cfg.red ? 0 : 1; aplicarCfg(); };
+  $('#bNue').onclick = confirmarNuevo;
+  // plein écran (tablette) : bouton affiché seulement si le navigateur l'autorise
+  { const de = document.documentElement, pide = de.requestFullscreen || de.webkitRequestFullscreen, sale = document.exitFullscreen || document.webkitExitFullscreen,
+      en = () => document.fullscreenElement || document.webkitFullscreenElement, bp = $('#bPan');
+    bp.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+    if (pide && sale && (document.fullscreenEnabled || document.webkitFullscreenEnabled)) {
+      bp.hidden = false;
+      bp.onclick = () => { try { const r = en() ? sale.call(document) : pide.call(de); if (r && r.catch) r.catch(() => aviso('Pantalla completa no disponible.')); } catch (e) { aviso('Pantalla completa no disponible.'); } };
+      const cambio = () => { bp.setAttribute('aria-pressed', !!en()); setTimeout(() => { tamano(); pintarCamino(); }, 200); };
+      document.addEventListener('fullscreenchange', cambio); document.addEventListener('webkitfullscreenchange', cambio);
+    } }
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a')) { e.preventDefault(); pedirCodigo(); return; }
+    const t = e.target;
+    if ((e.key === 'Enter' || e.key === ' ') && t.matches && t.matches('[role=button]') && t.tagName !== 'BUTTON') { e.preventDefault(); t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })); }
+    if (e.key === 'Escape') { if (demoStop) finDemo(); else if ($('#modal [data-cerrar]')) cerrarModal(); }
+  });
+  if (location.hash === '#profe') setTimeout(pedirCodigo, 400);
+  etapaVista = 0; PANTALLAS[0](); pintarCamino(); pintarMini(); alba(); FX.alba = FX.albaObj;
+  requestAnimationFrame(cuadro);
+})();
+</script>
+</body>
+</html>
