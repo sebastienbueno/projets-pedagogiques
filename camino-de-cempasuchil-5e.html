@@ -550,6 +550,47 @@ button.hist:hover{transform:translateX(6px);border-color:var(--nar)}
 .hk{display:inline-flex;align-items:center;gap:.25rem;vertical-align:middle}
 .hk svg.ic{width:2.6rem;height:2.6rem}
 .txt5 .texto{line-height:2.7}
+.e3c{flex:1;min-height:0;display:grid;grid-template-columns:1fr auto 1fr;gap:.9rem;align-items:stretch}
+.tx3{padding:.9rem 1.1rem;overflow:auto}
+.cab3{display:flex;align-items:center;gap:.6rem;font-size:1.25rem;margin-bottom:.4rem;color:var(--nar2)}
+.cab3>svg{width:1.5rem;height:1.5rem}
+.texto3{font-size:1.2rem;line-height:1.8;margin-bottom:.5rem}
+.tz{cursor:pointer;border-radius:.3rem;padding:.05rem .15rem;transition:background .3s}
+.tz:hover{background:rgba(255,255,255,.12)}
+.tz.visto{background:rgba(34,199,192,.28)}
+.tz.mira{background:var(--nar);color:#2b1000;animation:bienp .6s 2}
+.car{display:flex;align-items:center;justify-content:center;min-height:0}
+.cartel{height:100%;max-height:36rem;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:.6rem .7rem;border-radius:.8rem;background:var(--cf);border:5px solid #f3e9d2;box-shadow:0 14px 34px rgba(0,0,0,.6);color:#fff;overflow:hidden;transition:background .4s;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cpapel{width:100%;flex:none}.cpapel svg{width:100%;height:auto;display:block}
+.cartel h3{flex:none;font-size:1.7rem;color:#ffd76a;text-transform:uppercase;letter-spacing:.06em;text-align:center;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.cinfo{flex:1;min-height:0;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:.4rem;align-content:center}
+.cslot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.1rem;text-align:center;padding:.3rem;border-radius:.7rem;font-size:1rem;font-weight:700;line-height:1.15;color:#fff;background:rgba(0,0,0,.28);border:2px dashed rgba(255,255,255,.55);min-height:5rem}
+.cslot:last-child{grid-column:1/-1}
+button.cslot{cursor:pointer}
+.cslot b{font-size:1.5rem;color:#ffd76a;line-height:1}
+.cslot.act{border-style:solid;border-color:#ffd76a;background:rgba(255,154,31,.35);box-shadow:0 0 0 4px rgba(255,215,106,.3)}
+.cslot.lleno{border:0;background:rgba(255,255,255,.14)}
+.cslot svg.ic{width:4.6rem;height:4.6rem}
+.cpie{flex:none;display:flex;justify-content:center;gap:.3rem}
+.cpie svg{width:3.4rem;height:3.4rem}
+.cnom{flex:none;font-size:.85rem;opacity:.95}
+.band{padding:.9rem 1rem;text-align:center;overflow:auto}
+.band .preg{font-size:1.45rem;margin:.2rem 0 .3rem;flex-wrap:wrap}
+.pegs{display:grid;gap:.6rem;margin-top:.6rem}
+.peg{display:flex;align-items:center;gap:.9rem;padding:.5rem .9rem;border-radius:.9rem;border:1px solid var(--lin);background:rgba(50,26,105,.75);cursor:pointer;font-size:1.2rem;font-weight:600;text-align:left;transition:transform .15s,border-color .2s}
+.peg:hover{transform:translateX(-5px);border-color:var(--nar)}
+.peg svg.ic{width:4.4rem;height:4.4rem;flex:none}
+.peg.no{opacity:.35;pointer-events:none}
+.cols{display:flex;gap:.6rem;justify-content:center;margin:.3rem 0 .7rem}
+.col5{width:3rem;height:3rem;border-radius:50%;border:3px solid rgba(255,255,255,.45);cursor:pointer}
+.col5.on{border-color:#fff;box-shadow:0 0 0 4px var(--nar)}
+.decs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:.3rem 0 .7rem}
+.dec5{width:4rem;height:4rem;border-radius:.8rem;border:2px solid var(--lin);background:rgba(0,0,0,.3);cursor:pointer;padding:.2rem}
+.dec5 svg{width:100%;height:100%}
+.dec5.on{border-color:var(--tur);background:rgba(34,199,192,.28)}
+#nom5{width:100%;padding:.45rem .7rem;border-radius:.6rem;border:2px solid var(--oro);background:rgba(0,0,0,.4);font-size:1.1rem;text-align:center;margin:.3rem 0 .8rem}
+.carRes{display:flex;justify-content:center;margin:.4rem 0}.carRes .cartel{height:30rem}
+@media (max-width:1000px){.e3c{grid-template-columns:1fr 1fr}.tx3{grid-column:1/-1}}
 @media (max-width:760px){.orden{grid-template-columns:1fr}}
 @media print{.ficha b{color:#7a2d00}}
 
@@ -681,20 +722,20 @@ const OBJETOS = [
   { id:'velas',  n:'las velas',                 f:'Las velas dan luz.', xy:[84, 196] },
   { id:'pan',    n:'el pan de muerto',          f:'El pan de muerto es comida para los difuntos.', xy:[148, 196] },
   { id:'calav',  n:'las calaveritas de azúcar', f:'Las calaveritas de azúcar son dulces.', xy:[258, 200] },
-  { id:'copal',  n:'el copal',                  f:'El copal es un incienso.', xy:[200, 262] },
+  { id:'copal',  n:'el copal',                  f:'El copal perfuma el altar.', xy:[200, 262] },
 ];
-// Étape 3 : le texte de la séquence, morceau par morceau, avec une question illustrée par morceau ; clave = mot mis en évidence
+// Étape 3 : le texte de la séquence, morceau par morceau, avec une question illustrée par morceau ; cartel = phrase écrite sur le cartel quand la réponse est trouvée
 const TEXTO = [
   { t:'Día de muertos es una tradición mexicana que remonta a la época prehispánica', nota:'prehispánico = antes de la colonización española',
-    pregunta:'¿De qué país es la tradición?', opciones:['De México', 'De España', 'De Bolivia'], icos:['bMX', 'bES', 'bBO'], clave:'mexicana', correcta:0 },
+    pregunta:'¿De qué país es la tradición?', opciones:['De México', 'De España', 'De Bolivia'], icos:['bMX', 'bES', 'bBO'], clave:'mexicana', cartel:'Una tradición de México', correcta:0 },
   { t:'y que se celebra el 1 y el 2 de noviembre.',
-    pregunta:'¿Cuándo se celebra?', opciones:['El 1 y el 2 de noviembre', 'El 25 de diciembre', 'El 14 de julio'], icos:['calNov', 'calDic', 'calJul'], clave:'el 1 y el 2 de noviembre', correcta:0 },
+    pregunta:'¿Cuándo se celebra?', opciones:['El 1 y el 2 de noviembre', 'El 25 de diciembre', 'El 14 de julio'], icos:['calNov', 'calDic', 'calJul'], clave:'el 1 y el 2 de noviembre', cartel:'El 1 y el 2 de noviembre', correcta:0 },
   { t:'Los difuntos regresan al mundo de los vivos para visitar a la familia y disfrutar de las ofrendas preparadas en su honor.', nota:'un difunto = un muerto ≠ un vivo · En el vídeo: la mamá es una difunta.',
-    pregunta:'¿Quién regresa para visitar a la familia?', opciones:['Los difuntos', 'Los turistas', 'Los profesores'], icos:['calav', 'maleta', 'profesora'], clave:'Los difuntos regresan', correcta:0 },
+    pregunta:'¿Quién regresa para visitar a la familia?', opciones:['Los difuntos', 'Los turistas', 'Los profesores'], icos:['calav', 'maleta', 'profesora'], clave:'Los difuntos regresan', cartel:'Los difuntos regresan', correcta:0 },
   { t:'Es una celebración alegre.',
-    pregunta:'¿Cómo es la celebración?', opciones:['Es alegre', 'Es triste', 'Es aburrida'], icos:['caraAlegre', 'caraTriste', 'caraAburrida'], clave:'alegre', correcta:0 },
+    pregunta:'¿Cómo es la celebración?', opciones:['Es alegre', 'Es triste', 'Es aburrida'], icos:['caraAlegre', 'caraTriste', 'caraAburrida'], clave:'alegre', cartel:'Una fiesta alegre', correcta:0 },
   { t:'En casa, las familias realizan altares decorados con flores de cempasúchil, calaveritas de azúcar, pan de muerto, copal, etc.',
-    pregunta:'¿Dónde realizan los altares las familias?', opciones:['En casa', 'En el colegio', 'En la playa'], icos:['casa', 'colegio', 'playa'], clave:'En casa', correcta:0 },
+    pregunta:'¿Dónde realizan los altares las familias?', opciones:['En casa', 'En el colegio', 'En la playa'], icos:['casa', 'colegio', 'playa'], clave:'En casa', cartel:'Altares en casa', correcta:0 },
 ];
 // Texte à trous : les mots entre accolades sont les trous ; HUECOS_EXTRA = mots en trop dans la banque
 const HUECOS = 'Día de muertos es una tradición {mexicana} que remonta a la época prehispánica y que se celebra el 1 y el 2 de {noviembre}. Los {difuntos} regresan al mundo de los vivos para visitar a la {familia} y disfrutar de las ofrendas preparadas en su honor. Es una celebración {alegre}. En casa, las familias realizan {altares} decorados con flores de cempasúchil, calaveritas de azúcar, pan de muerto, copal, etc.';
@@ -940,9 +981,9 @@ const IC = {
   cementerio: () => `<circle cx="76" cy="22" r="12" fill="#fbeecb"/><circle cx="76" cy="22" r="24" fill="url(#gLuna)"/><path d="M4,90H96" stroke="#3a2a5e" stroke-width="6" stroke-linecap="round"/><path d="M12,90V58Q12,46 24,46Q36,46 36,58V90Z" fill="#8f86a8" stroke="#1a1030"/><path d="M24,54V72M18,60H30" stroke="#f3e9d2" stroke-width="3"/><path d="M52,90V52M42,62H62" stroke="#cfc4e6" stroke-width="6" stroke-linecap="round"/><path d="M70,90V68Q70,60 79,60Q88,60 88,68V90Z" fill="#6f6690" stroke="#1a1030"/>${vela(44,90,10,4)}${flor(62,86,6)}${flor(92,86,5)}`,
   // ---- pictogrammes de la version A1 (réponses illustrées) ----
   caraAlegre: () => CARA(`<path d="M32,53q6,-8 12,0M56,53q6,-8 12,0" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M33,64Q50,84 67,64Z" fill="#7a1230" stroke="#1a1030"/><path d="M38,66h24" stroke="#fff" stroke-width="3"/><circle cx="27" cy="62" r="5" fill="#ff8fa8" opacity=".7"/><circle cx="73" cy="62" r="5" fill="#ff8fa8" opacity=".7"/>`) + `<path d="M84,12l2,6l6,2l-6,2l-2,6l-2,-6l-6,-2l6,-2z" fill="#f0c75e"/>`,
-  caraTriste: () => CARA(`<path d="M29,44l13,5M71,44l-13,5" stroke="#1a1030" stroke-width="3" stroke-linecap="round"/><circle cx="37" cy="55" r="4" fill="#1a1030"/><circle cx="63" cy="55" r="4" fill="#1a1030"/><path d="M38,76Q50,65 62,76" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M31,60q-6,11 0,15q6,-4 0,-15z" fill="#4fc3ff" stroke="#1a6fb0"/>`),
+  caraTriste: () => CARA(`<path d="M29,49l13,-5M71,49l-13,-5" stroke="#1a1030" stroke-width="3" stroke-linecap="round"/><circle cx="37" cy="55" r="4" fill="#1a1030"/><circle cx="63" cy="55" r="4" fill="#1a1030"/><path d="M38,76Q50,65 62,76" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M31,60q-6,11 0,15q6,-4 0,-15z" fill="#4fc3ff" stroke="#1a6fb0"/>`),
   caraCansada: () => CARA(`<path d="M30,55h14M56,55h14" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round"/><path d="M30,60q7,5 14,0M56,60q7,5 14,0" stroke="#8a6a55" stroke-width="2" fill="none"/><ellipse cx="50" cy="73" rx="6" ry="7" fill="#7a1230" stroke="#1a1030"/>`) + `<text x="72" y="26" font-size="20" font-weight="700" fill="#cdbfe6" font-family="Arial,sans-serif">z</text><text x="84" y="14" font-size="14" font-weight="700" fill="#cdbfe6" font-family="Arial,sans-serif">z</text>`,
-  caraEnferma: () => CARA(`<path d="M30,48l12,3M70,48l-12,3" stroke="#1a1030" stroke-width="3" stroke-linecap="round"/><path d="M32,57h10M58,57h10" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round"/><path d="M40,73Q50,68 60,73" stroke="#1a1030" stroke-width="3" fill="none"/><path d="M56,72L84,86" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M56,72L72,80" stroke="#e2433f" stroke-width="2.5"/><circle cx="85" cy="86.500" r="5.500" fill="#e2433f" stroke="#1a1030"/>`, '#cfd8a0'),
+  caraEnferma: () => CARA(`<path d="M30,51l12,-3M70,51l-12,-3" stroke="#1a1030" stroke-width="3" stroke-linecap="round"/><path d="M32,57h10M58,57h10" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round"/><path d="M40,73Q50,68 60,73" stroke="#1a1030" stroke-width="3" fill="none"/><path d="M56,72L84,86" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M56,72L72,80" stroke="#e2433f" stroke-width="2.5"/><circle cx="85" cy="86.500" r="5.500" fill="#e2433f" stroke="#1a1030"/>`, '#cfd8a0'),
   caraAburrida: () => CARA(`<path d="M30,50h14M56,50h14" stroke="#1a1030" stroke-width="3"/><path d="M30,51a7,7 0 0 0 14,0zM56,51a7,7 0 0 0 14,0z" fill="#fff" stroke="#1a1030"/><circle cx="40" cy="54" r="2.500" fill="#1a1030"/><circle cx="66" cy="54" r="2.500" fill="#1a1030"/><path d="M38,73h24" stroke="#1a1030" stroke-width="3.400" stroke-linecap="round"/>`),
   colegio: () => `<path d="M10,92V46H90V92Z" fill="#f0dfb4" stroke="#1a1030" stroke-width="1.500"/><path d="M6,46L50,18L94,46Z" fill="#c2433a" stroke="#1a1030" stroke-width="1.500"/><circle cx="50" cy="35" r="7" fill="#fff" stroke="#1a1030"/><path d="M50,31v4l3,2" stroke="#1a1030" stroke-width="1.500" fill="none"/><rect x="42" y="66" width="16" height="26" rx="2" fill="#6b4a2a" stroke="#1a1030"/><rect x="17" y="54" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><rect x="67" y="54" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><rect x="17" y="73" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><rect x="67" y="73" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><path d="M50,18V4h14l-4,5l4,5H50" fill="#22c7c0" stroke="#1a1030"/>`,
   playa: () => `<circle cx="78" cy="22" r="13" fill="#ffd23a"/><path d="M78,2v5M78,37v5M58,22h5M93,22h5M64,8l3,3M92,8l-3,3" stroke="#ffd23a" stroke-width="3" stroke-linecap="round"/><path d="M0,52Q12,46 25,52T50,52T75,52T100,52V72H0Z" fill="#2f9bff"/><path d="M0,60Q12,55 25,60T50,60T75,60T100,60" stroke="#bfe6ff" stroke-width="2" fill="none"/><path d="M0,68Q30,60 100,70V100H0Z" fill="#f2d79a"/><path d="M34,92V46" stroke="#6b4a2a" stroke-width="4" stroke-linecap="round"/><path d="M6,48Q34,10 62,48Z" fill="#e2433f" stroke="#1a1030"/><path d="M20,48Q34,14 34,48M48,48Q34,14 34,48" fill="#fff"/><rect x="56" y="80" width="30" height="8" rx="3" fill="#22c7c0" stroke="#1a1030" transform="rotate(-8 71 84)"/>`,
@@ -953,7 +994,7 @@ const IC = {
   profesora: () => `<rect x="40" y="10" width="54" height="42" rx="3" fill="#1f6b4a" stroke="#6b4a2a" stroke-width="4"/><text x="67" y="38" text-anchor="middle" font-size="17" font-weight="700" fill="#fff" font-family="Arial,sans-serif">A B C</text>${PERS(28, 94, 1.3, '#8a3fd0', '<path d="M16,-14L34,-40" stroke="#6b4a2a" stroke-width="2.500" stroke-linecap="round"/><path d="M-6,-46h5M1,-46h5" stroke="#1a1030" stroke-width="2"/>')}`,
   amiga: () => `${PERS(32, 94, 1.08, '#22c7c0', '')}${PERS(68, 94, 1.08, '#ff9a1f', '<path d="M-9,-50Q0,-56 9,-50" stroke="#fff" stroke-width="2.500" fill="none"/>')}<path d="M46,74H54" stroke="#e9b98c" stroke-width="5" stroke-linecap="round"/><path d="M50,16l3,7l7,1l-5,5l1,7l-6,-3l-6,3l1,-7l-5,-5l7,-1z" fill="#f0c75e"/>`,
   ofrendaI: () => `<g transform="translate(2,10) scale(.5)">${IC.foto()}</g>${flor(54, 72, 13)}${flor(40, 84, 9)}${vela(84, 92, 40, 11)}`,
-  bMX: () => `<rect x="10" y="24" width="80" height="52" rx="4" fill="#fff" stroke="#1a1030" stroke-width="1.500"/><path d="M10,28Q10,24 14,24H36.700V76H14Q10,76 10,72Z" fill="#0b7a45"/><path d="M63.300,24H86Q90,24 90,28V72Q90,76 86,76H63.300Z" fill="#d0202d"/><circle cx="50" cy="50" r="7" fill="#8a5a2a"/><path d="M43,54q7,6 14,0" stroke="#0b7a45" stroke-width="2.500" fill="none"/>`,
+  bMX: () => `<rect x="10" y="24" width="80" height="52" rx="4" fill="#fff" stroke="#1a1030" stroke-width="1.5"/><path d="M10,28Q10,24 14,24H36.7V76H14Q10,76 10,72Z" fill="#006847"/><path d="M63.3,24H86Q90,24 90,28V72Q90,76 86,76H63.3Z" fill="#ce1126"/><g transform="translate(50,50) scale(1.12)"><path d="M-9,5Q0,13 9,5" stroke="#2f9e4e" stroke-width="1.8" fill="none"/><path d="M-9,5l-1.5,-2M-6,7.6l-2,-1.4M6,7.6l2,-1.4M9,5l1.5,-2" stroke="#2f9e4e" stroke-width="1.4" stroke-linecap="round"/><path d="M-5,8.5Q0,11.5 5,8.5" stroke="#4fa8ff" stroke-width="1.6" fill="none"/><ellipse cx="0" cy="6" rx="3.4" ry="2.6" fill="#3fae4f" stroke="#1f6b2f" stroke-width=".5"/><ellipse cx="-4" cy="4.4" rx="2.3" ry="1.8" fill="#3fae4f" stroke="#1f6b2f" stroke-width=".5"/><ellipse cx="4" cy="4.4" rx="2.3" ry="1.8" fill="#3fae4f" stroke="#1f6b2f" stroke-width=".5"/><circle cx="-5" cy="2.6" r=".9" fill="#ce1126"/><circle cx="5" cy="2.6" r=".9" fill="#ce1126"/><path d="M1.5,-3C8,-4 11,-8 10,-12.5C7.5,-8.5 4.5,-7.5 0.5,-7Z" fill="#6b4423" stroke="#3a2412" stroke-width=".5"/><path d="M-2.5,-2.5C-9,-3.5 -11,-8 -9,-12C-7,-8 -4,-7 -0.5,-6.5Z" fill="#8a5a2a" stroke="#3a2412" stroke-width=".5"/><ellipse cx="0" cy="-1.5" rx="3.6" ry="5" fill="#8a5a2a" stroke="#3a2412" stroke-width=".5"/><path d="M-1.6,-0.5q1.6,1.4 3.2,0M-1.6,1.5q1.6,1.4 3.2,0" stroke="#c9a06a" stroke-width=".6" fill="none"/><path d="M1.5,3l3.5,3.2l-1.6,.4l.6,1.6l-2,-1l-1.2,-1.6Z" fill="#6b4423" stroke="#3a2412" stroke-width=".4"/><path d="M-1.2,3.2v2.6M0.8,3.2v2.6" stroke="#f6c800" stroke-width=".9" stroke-linecap="round"/><circle cx="-2.6" cy="-7.4" r="2.4" fill="#a8743a" stroke="#3a2412" stroke-width=".5"/><circle cx="-3.2" cy="-7.9" r=".55" fill="#1a1030"/><path d="M-4.6,-7.6l-2.8,.9l2.6,.9z" fill="#f6c800" stroke="#8a6a00" stroke-width=".3"/><path d="M-7,-6.6q-2.6,1.6 -1.4,3.8q1.4,2 -0.6,3.8q-1.6,1.4 .2,3" stroke="#3fae4f" stroke-width="1.1" fill="none" stroke-linecap="round"/></g>`,
   bES: () => `<rect x="10" y="24" width="80" height="52" rx="4" fill="#f6c800" stroke="#1a1030" stroke-width="1.500"/><path d="M10,28Q10,24 14,24H86Q90,24 90,28V37H10Z" fill="#c8102e"/><path d="M10,63H90V72Q90,76 86,76H14Q10,76 10,72Z" fill="#c8102e"/><rect x="28" y="43" width="9" height="13" rx="2" fill="#c8102e" stroke="#8a5a2a"/>`,
   bBO: () => `<rect x="10" y="24" width="80" height="52" rx="4" fill="#f6c800" stroke="#1a1030" stroke-width="1.500"/><path d="M10,28Q10,24 14,24H86Q90,24 90,28V41.300H10Z" fill="#d0202d"/><path d="M10,58.700H90V72Q90,76 86,76H14Q10,76 10,72Z" fill="#0b7a45"/>`,
   calNov: () => CAL('NOVIEMBRE', '1 · 2'), calDic: () => CAL('DICIEMBRE', '25'), calJul: () => CAL('JULIO', '14'),
@@ -1223,7 +1264,7 @@ function arrastre(root, intento) {
 const AYUDA = {
   1: [['cementerio', '<b>Mira el vídeo</b>. No hay palabras: mira bien las imágenes.'], ['calav', 'Después, contesta a las preguntas: <b>haz clic en la respuesta correcta</b>.'], ['tumba', 'Al final, <b>ordena la historia</b> del vídeo.']],
   2: [['velas', '<b>Haz clic en cada objeto</b>: escucha su nombre. El objeto va al altar.'], ['brillo', 'Un objeto brilla en el altar: <b>elige su nombre</b>.'], ['papel', 'Mira los números del altar y <b>pon cada palabra</b> al lado de su número.']],
-  3: [['mama', 'En el vídeo, la mamá regresa. <b>¿Por qué?</b> El texto lo explica.'], ['calend', '<b>Lee y escucha</b> cada frase. Después, haz clic en el <b>dibujo correcto</b>.'], ['papel', 'Al final, <b>completa el texto</b>: mira el dibujo y pon la palabra.']],
+  3: [['mama', 'En el vídeo, la mamá regresa. <b>¿Por qué?</b> El texto lo explica.'], ['papel', '<b>Crea tu cartel</b>: haz clic en un «?» del cartel, busca en el texto y elige el dibujo correcto.'], ['flores', 'Después, <b>decora tu cartel</b>: color, decoraciones y tu nombre.'], ['calend', 'Al final, <b>completa el texto</b>: mira el dibujo y pon la palabra.']],
   4: [['calavera', 'La fiesta está dormida: las 8 cartas están <b>en gris</b>.'], ['musico', 'Haz clic en una carta. <b>Mira el sujeto</b>: ¿una persona o varias personas?'], ['papel', '<b>Elige el verbo correcto</b>. Ejemplo: La chica mira. Los chicos miran.'], ['calav', 'Si es correcto, la carta <b>toma color</b> y la música crece.']],
 };
 function ayuda(n, luego) {
@@ -1388,10 +1429,21 @@ PANTALLAS[2] = function etapa2() {
   ronda1(); ayudaAuto(2);
 };
 
-/* ====== 12. ÉTAPE 3 — La tradición : comprendre avec des images, puis compléter ===== */
+/* ====== 12. ÉTAPE 3 — La tradición : créer le cartel à partir du texte, puis compléter ===== */
+const COLORES5 = ['#3b1a78', '#b3246b', '#c2571a', '#0e6f78'];
+const DECOS5 = ['papel', 'flores', 'velas', 'calav', 'pan'];
+// Le cartel : hechos = numéros des informations déjà trouvées ; activo = case en cours
+function cartelHTML(c, hechos, activo) {
+  const d = c.decos || [], pie = ['flores', 'velas', 'pan', 'calav', 'velas', 'flores'].filter(x => d.includes(x));
+  return `<div class="cartel" style="--cf:${c.fondo || COLORES5[0]}">${d.includes('papel') ? `<div class="cpapel">${svgI(['#e0218a', '#22c7c0', '#ff9a1f', '#f0c75e', '#8a3fd0', '#e0218a', '#22c7c0', '#ff9a1f'].map((col, i) => bandera(4 + i * 37, 3, col, 1.1).replace('class="pp"', '')).join(''), '0 0 300 40')}</div>` : ''}
+<h3 class="tit">Día de muertos</h3><div class="cinfo">${TEXTO.map((x, i) => hechos.includes(i)
+    ? `<div class="cslot lleno" data-i="${i}">${ico(x.icos[x.correcta])}<span>${x.cartel}</span></div>`
+    : `<button class="cslot ${i === activo ? 'act' : ''}" data-i="${i}"><b>?</b><span>${x.pregunta}</span></button>`).join('')}</div>
+<div class="cpie">${pie.map(ico).join('')}</div>${c.nombre ? `<p class="cnom">Cartel de ${esc(c.nombre)}</p>` : ''}</div>`;
+}
 PANTALLAS[3] = function etapa3() {
-  info(3); let err = 0;
-  const marca = x => x.clave ? esc(x.t).replace(esc(x.clave), `<mark>${esc(x.clave)}</mark>`) : esc(x.t);
+  info(3); let err = 0, act = 0, fase = 'info'; const hechos = [], N = TEXTO.length;
+  const C = Object.assign({ fondo: COLORES5[0], decos: [], nombre: '' }, S.cartel || {}); C.decos = C.decos.slice();
   const huecos = () => {
     const partes = HUECOS.split(/\{(.+?)\}/), pal = partes.filter((_, i) => i % 2); let n = 0;
     main.innerHTML = `<div class="consigna panel barra">${etq(3)}<span class="ronda">2 / 2</span>${UI.mano}<span>Completa el texto: mira el dibujo y pon la palabra correcta.</span><span class="cont" id="n3">0 / ${pal.length}</span>${ayb(3)}</div>
@@ -1407,15 +1459,44 @@ PANTALLAS[3] = function etapa3() {
       return true;
     });
   };
-  const leer = i => { const b = $('#at'); if (b) decir(TEXTO[i].t, b); };
-  quiz(TEXTO, 3, qi => `<p class="consigna"><span class="ronda">1 / 2</span>${UI.casco}<span>En el vídeo, la mamá regresa. ¿Por qué? Lee y escucha.</span></p>
-<div class="leer5"><button class="aud" id="at" data-i="${qi}" aria-label="Escuchar el texto" title="Escuchar el texto">${UI.alt}</button><p>${TEXTO.slice(0, qi + 1).map((x, i) => `<span class="${i === qi ? 'ya' : ''}">${i === qi ? marca(x) : esc(x.t)}</span>`).join(' ')}</p>${TEXTO[qi].nota ? `<small>${esc(TEXTO[qi].nota)}</small>` : ''}</div>`,
-    e => { err += e; obs.disconnect(); huecos(); });
-  // le morceau courant est lu à voix haute à chaque nouvelle question
-  const obs = new MutationObserver(() => { const b = $('#at'); if (b && !b.dataset.ok) { b.dataset.ok = 1; const i = +b.dataset.i; b.onclick = () => leer(i); setTimeout(() => leer(i), 500); } });
-  obs.observe(main, { childList: true }); limpiar = () => obs.disconnect();
-  { const b = $('#at'); if (b) { b.dataset.ok = 1; b.onclick = () => leer(0); } }
-  ayudaAuto(3, () => leer(0));
+  main.innerHTML = `<div class="consigna panel barra">${etq(3)}<span class="ronda">1 / 2</span>${UI.lapiz}<span id="c3t">Crea el cartel de Día de muertos: la información está en el texto.</span><span class="cont" id="n3">0 / ${N}</span>${ayb(3)}</div>
+<div class="e3c" id="e3c"><div class="panel tx3"><p class="cab3">${UI.casco}<b>El texto</b><button class="aud" id="at" aria-label="Escuchar el texto" title="Escuchar el texto">${UI.alt}</button></p>
+<p class="texto3" id="tx3">${TEXTO.map((x, i) => `<span class="tz" data-i="${i}" role="button" tabindex="0">${esc(x.t)}</span>`).join(' ')}</p><p class="nota">Haz clic en una frase para escucharla.</p></div>
+<div class="car" id="car"></div><div class="panel band" id="band"></div></div>`;
+  const pinta = () => { $('#car').innerHTML = cartelHTML(C, hechos, fase === 'info' ? act : -1); };
+  const bandeja = () => {
+    const x = TEXTO[act], ops = baraja(x.opciones.map((t, i) => ({ t, i })));
+    $('#band').innerHTML = `<p class="preg">${esc(x.pregunta)}<button class="aud" id="aq" aria-label="Escuchar la pregunta">${UI.alt}</button></p><p class="nota">Busca en el texto y elige el dibujo para tu cartel.</p>
+<div class="pegs">${ops.map(o => `<button class="peg" data-k="${o.i}">${ico(x.icos[o.i])}<span>${esc(o.t)}</span></button>`).join('')}</div>`;
+    $('#aq').onclick = e => decir(x.pregunta, e.currentTarget);
+  };
+  const decorar = () => {
+    fase = 'deco'; pinta(); $('#c3t').textContent = 'Ahora, decora tu cartel: color, decoraciones y tu nombre.';
+    $('#band').innerHTML = `<p class="preg">Decora tu cartel</p><p class="nota">Elige un color.</p><div class="cols">${COLORES5.map(c => `<button class="col5 ${c === C.fondo ? 'on' : ''}" data-c="${c}" style="background:${c}" aria-label="Color"></button>`).join('')}</div>
+<p class="nota">Elige las decoraciones.</p><div class="decs">${DECOS5.map(d => `<button class="dec5 ${C.decos.includes(d) ? 'on' : ''}" data-d="${d}" aria-label="Decoración">${ico(d)}</button>`).join('')}</div>
+<p class="nota">Escribe tu nombre.</p><input id="nom5" type="text" maxlength="24" autocomplete="off" aria-label="Tu nombre" value="${esc(C.nombre)}"><p><button class="btn" id="listo">Mi cartel está listo</button></p>`;
+    $('#nom5').oninput = e => { C.nombre = e.target.value.trim(); pinta(); };
+    $('#listo').onclick = () => { S.cartel = C; guardar(); sfx('ok'); callar(); huecos(); };
+  };
+  $('#e3c').addEventListener('click', e => {
+    const tz = e.target.closest('.tz'); if (tz) return decir(TEXTO[+tz.dataset.i].t, $('#at'));
+    if (e.target.closest('#at')) return decir(TEXTO.map(x => x.t).join(' '), $('#at'));
+    const sl = e.target.closest('button.cslot'); if (sl && fase === 'info') { act = +sl.dataset.i; sfx('clic'); pinta(); bandeja(); return; }
+    const col = e.target.closest('.col5'); if (col) { C.fondo = col.dataset.c; $$('.col5').forEach(b => b.classList.toggle('on', b === col)); sfx('clic'); pinta(); return; }
+    const dec = e.target.closest('.dec5'); if (dec) { const d = dec.dataset.d, k = C.decos.indexOf(d); if (k >= 0) C.decos.splice(k, 1); else C.decos.push(d); dec.classList.toggle('on', k < 0); sfx('clic'); pinta(); return; }
+    const pg = e.target.closest('.peg'); if (!pg || fase !== 'info') return;
+    const x = TEXTO[act], tz2 = $(`.tz[data-i="${act}"]`);
+    if (+pg.dataset.k === x.correcta) {
+      hechos.push(act); sfx('ok'); tz2.classList.remove('mira'); tz2.classList.add('visto'); $('#n3').textContent = hechos.length + ' / ' + N; decir(x.cartel);
+      const sig = TEXTO.findIndex((_, i) => !hechos.includes(i));
+      if (sig < 0) { pinta(); estallido($('#car'), 30); setTimeout(() => etapaVista === 3 && fase === 'info' && decorar(), 900); }
+      else { act = sig; pinta(); estallido($(`.cslot[data-i="${hechos[hechos.length - 1]}"]`), 14); bandeja(); }
+    } else {
+      err++; sfx('mal'); pg.classList.add('mal'); setTimeout(() => pg.classList.add('no'), 450);
+      tz2.classList.remove('mira'); void tz2.offsetWidth; tz2.classList.add('mira'); decir(x.t, $('#at'));
+    }
+  });
+  pinta(); bandeja(); ayudaAuto(3);
 };
 
 /* ====== 13. ÉTAPE 4 — La fiesta (presente de indicativo) ============= */
@@ -1477,7 +1558,7 @@ PANTALLAS[7] = function resumen() {
   info(7);
   main.innerHTML = `<div class="res panel"><h1 class="tit">El camino de cempasúchil</h1><p class="nota" style="text-align:center">Mi resumen · Día de muertos</p>
 <h3>Mis estrellas</h3><div class="estr">${ETAPAS.map((e, i) => `<div>${e}<br>${estrellas(S.estrellas[i])}</div>`).join('')}</div>
-<div class="copia cuad"><p>Mi ficha para el cartel</p><ul class="ficha">${FICHA.map(([k, v]) => `<li><b>${k}</b> ${v}</li>`).join('')}</ul><p style="margin-top:.6rem">Copia la ficha en tu cuaderno.</p></div>
+${S.cartel ? `<h3>Mi cartel</h3><div class="carRes">${cartelHTML(S.cartel, TEXTO.map((_, i) => i), -1)}</div>` : ''}<div class="copia cuad"><p>Mi ficha para el cartel</p><ul class="ficha">${FICHA.map(([k, v]) => `<li><b>${k}</b> ${v}</li>`).join('')}</ul><p style="margin-top:.6rem">Copia la ficha en tu cuaderno.</p></div>
 <h3>Palabras nuevas</h3><div class="voc">${VOCAB.map(([i, t]) => `<div>${ico(i)}${t}</div>`).join('')}</div>
 <div id="miq"></div>
 <div class="fila noimp" style="justify-content:center;margin-top:1rem"><button class="btn" id="imp">Imprimir</button><button class="btn sec" id="cop">Copiar el resumen</button></div>
