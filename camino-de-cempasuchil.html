@@ -1413,6 +1413,7 @@ function aplicarCfg() {
     if (e.key === 'Escape') { if (demoStop) finDemo(); else if ($('#modal [data-cerrar]')) cerrarModal(); }
   });
   if (location.hash === '#profe') setTimeout(pedirCodigo, 400);
+  document.body.classList.add('sinlado');
   etapaVista = 0; PANTALLAS[0](); pintarCamino(); pintarMini(); alba(); FX.alba = FX.albaObj;
   requestAnimationFrame(cuadro);
 })();
