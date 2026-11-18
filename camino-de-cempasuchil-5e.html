@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>El camino de cempasúchil · A1</title>
+<style>
+:root{--ind:#120a2e;--vio:#2a1250;--nar:#ff9a1f;--nar2:#ffb648;--mag:#e0218a;--tur:#22c7c0;--oro:#f0c75e;--hue:#f3e9d2;--txt:#f8f1e4;--sua:#cdbfe6;--pan:rgba(20,11,50,.82);--lin:rgba(240,199,94,.28);--lh:1.45;--fs:1}
+*{box-sizing:border-box}
+html{font-size:calc(clamp(15px,.68vw + .8vh,22px)*var(--fs))}
+html.big{--fs:1.2;--lh:1.85}
+html.big body{letter-spacing:.02em;word-spacing:.08em}
+body{margin:0;height:100vh;height:100dvh;overflow:hidden;background:#0b0620 linear-gradient(#0d0725,#2a1250 70%,#3a1550);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:var(--lh);-webkit-font-smoothing:antialiased}
+h1,h2,h3,.tit{font-family:Georgia,"Palatino Linotype","Book Antiqua",Palatino,serif;font-weight:700;letter-spacing:.01em;margin:0}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+#gl,#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#gl{z-index:0}#fx{z-index:2}
+#fg{position:fixed;left:-4%;right:-4%;bottom:0;height:17vh;z-index:1;pointer-events:none;opacity:.9;transition:opacity 1s}
+#fg svg{width:100%;height:100%;display:block}
+#luz{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(circle 26vmax at var(--mx,50%) var(--my,60%),rgba(255,170,70,.13),rgba(255,120,40,.05) 45%,transparent 70%);mix-blend-mode:screen}
+html.q-baja #luz,html.red #luz{display:none}
+#app{position:fixed;inset:0;z-index:4;display:flex;flex-direction:column}
+
+/* ---------- barra superior : camino + controles ---------- */
+#top{display:flex;align-items:center;gap:1rem;padding:.45rem .9rem;background:linear-gradient(rgba(10,5,30,.85),rgba(10,5,30,.35) 80%,transparent);flex:none}
+#camino{position:relative;flex:1;display:flex;align-items:center;min-width:0;max-width:52rem}
+.nodo{position:relative;flex:none;display:flex;align-items:center;gap:.4rem;background:none;border:0;padding:.2rem .3rem;border-radius:2rem;cursor:default;color:var(--sua);font-size:.82rem;white-space:nowrap}
+.nodo .fl{width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;border:2px solid rgba(255,154,31,.45);color:var(--nar2);font-weight:700;font-size:.85rem;background:rgba(18,10,46,.8);transition:all .5s}
+.nodo.hecha .fl{background:radial-gradient(circle,#ffcf6b,#ff9a1f 55%,#d96500);border-color:#ffcf6b;color:#3a1500;box-shadow:0 0 14px rgba(255,154,31,.8)}
+.nodo.act{color:#fff}.nodo.act .fl{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.15),0 0 18px rgba(255,200,120,.7)}
+html.admin .nodo{cursor:pointer}
+.pet{flex:1;height:.5rem;min-width:.6rem;background:radial-gradient(circle,rgba(255,154,31,.75) 38%,transparent 42%) 0 50%/.8rem .5rem repeat-x;opacity:.35;transition:opacity .8s}
+.pet.hecha{opacity:1;filter:drop-shadow(0 0 4px #ff9a1f)}
+#almaP{position:absolute;top:50%;left:0;width:1.5rem;height:1.5rem;margin:-.75rem 0 0 -.75rem;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fff 0,#bff 25%,rgba(34,199,192,.55) 45%,transparent 70%);transform:translate(.75rem,-.6rem);transition:left 1.6s cubic-bezier(.5,0,.2,1);animation:alma 2.4s ease-in-out infinite alternate;z-index:2}
+@keyframes alma{from{transform:translate(.75rem,-.45rem) scale(.85);opacity:.8}to{transform:translate(.75rem,-.75rem) scale(1.1);opacity:1}}
+#ctl{display:flex;align-items:center;gap:.35rem;flex:none}
+.ib{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;min-width:2.5rem;height:2.5rem;padding:0 .6rem;border-radius:.7rem;border:1px solid var(--lin);background:rgba(30,16,70,.7);cursor:pointer;font-size:.85rem;font-weight:600;transition:transform .15s,background .2s,box-shadow .2s}
+.ib:hover{background:rgba(70,35,130,.85);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.ib:active{transform:translateY(1px) scale(.96)}
+.ib[aria-pressed=true]{background:rgba(255,154,31,.22);border-color:var(--nar)}
+.ib svg{width:1.25rem;height:1.25rem}
+#vol{width:5rem;accent-color:var(--nar);cursor:pointer}
+:focus-visible{outline:3px solid var(--tur);outline-offset:2px}
+
+/* ---------- cuerpo ---------- */
+#cuerpo{flex:1;display:flex;min-height:0;gap:.8rem;padding:0 .9rem .7rem}
+#lado{flex:none;width:13.5rem;display:flex;flex-direction:column;justify-content:space-between;gap:.6rem;transition:width .6s,opacity .6s}
+body.sinlado #lado{width:0;opacity:0;overflow:hidden;pointer-events:none}
+#info .num{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--nar2)}
+#info h2{font-size:1.55rem;line-height:1.15;margin:.15rem 0 .4rem;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+#info .hab{font-size:.85rem;color:var(--sua)}
+#mini{border:1px solid var(--lin);border-radius:.9rem;background:radial-gradient(ellipse at 50% 100%,rgba(255,154,31,.16),rgba(18,10,46,.75) 70%);padding:.3rem;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#mini .lab{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--nar2);text-align:center}
+#main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:auto;transition:opacity .35s,transform .35s}
+#main.out{opacity:0;transform:translateY(12px) scale(.99)}
+.panel{background:var(--pan);border:1px solid var(--lin);border-radius:1.1rem;padding:1rem 1.2rem;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+html.q-baja .panel{backdrop-filter:none}
+.consigna{display:flex;align-items:center;gap:.6rem;font-size:1.12rem;font-weight:600;margin-bottom:.7rem}
+.consigna>svg{flex:none;width:1.7rem;height:1.7rem;color:var(--nar2)}
+.nota{font-size:.9rem;color:var(--sua)}
+.fila{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+.centro{margin:auto;max-width:46rem;width:100%;text-align:center}
+.centro .consigna{justify-content:center}
+
+/* ---------- botones ---------- */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.9rem;padding:.55rem 1.3rem;border-radius:2rem;border:0;cursor:pointer;font-weight:700;font-size:1.02rem;text-decoration:none;color:#2b1000;background:linear-gradient(#ffc45e,#ff9a1f 60%,#e87a00);box-shadow:0 6px 0 #a34d00,0 12px 26px rgba(255,140,20,.35);transition:transform .14s,box-shadow .14s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 8px 0 #a34d00,0 16px 34px rgba(255,140,20,.5)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #a34d00,0 4px 10px rgba(255,140,20,.3)}
+.btn.grande{font-size:1.3rem;padding:.8rem 2.2rem;min-height:3.6rem}
+.btn.sec{color:var(--txt);background:rgba(60,30,120,.75);border:1px solid var(--lin);box-shadow:0 5px 0 rgba(8,4,26,.9)}
+.btn.sec:hover{box-shadow:0 7px 0 rgba(8,4,26,.9),0 10px 24px rgba(120,60,220,.35)}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.4;pointer-events:none;filter:grayscale(.6)}
+.btn svg{width:1.3rem;height:1.3rem}
+.aud{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid var(--tur);background:rgba(34,199,192,.14);color:var(--tur);cursor:pointer;display:inline-grid;place-items:center;transition:transform .15s,background .2s}
+.aud:hover{background:rgba(34,199,192,.3);transform:scale(1.08)}
+.aud svg{width:1.3rem;height:1.3rem}
+.habla{animation:habla .7s ease-in-out infinite alternate}
+@keyframes habla{to{box-shadow:0 0 0 .5rem rgba(34,199,192,.18),0 0 22px rgba(34,199,192,.6)}}
+.mal{animation:mal .45s}
+@keyframes mal{20%{transform:translateX(-7px)}45%{transform:translateX(6px)}70%{transform:translateX(-4px)}100%{transform:none}}
+.bienp{animation:bienp .6s}
+@keyframes bienp{40%{transform:scale(1.07)}100%{transform:none}}
+[hidden]{display:none!important}
+.altar:not(.t-humo) .humoP{display:none}
+.f5:not(.ok) .est svg{opacity:0}.est svg{width:1.1rem;height:1.1rem}
+html.resp .f5 .mod[hidden]{display:block!important}
+
+/* ---------- inicio ---------- */
+#inicio{flex:1;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:2rem;padding:0 3vw}
+#inicio .sup{letter-spacing:.3em;text-transform:uppercase;color:var(--nar2);font-size:.9rem}
+#inicio h1{font-size:4.3rem;line-height:1.02;margin:.6rem 0 1rem;text-shadow:0 4px 30px rgba(255,120,20,.45),0 2px 0 #3a1200}
+#inicio h1 em{font-style:italic;color:var(--nar);display:block}
+#inicio .lema{font-size:1.3rem;margin-bottom:.8rem;max-width:30rem}
+#inicio .cas{display:flex;align-items:center;gap:.6rem;color:var(--sua);margin-bottom:1.6rem}
+#inicio .cas svg{width:1.6rem;height:1.6rem;color:var(--tur)}
+#inicio .altarG{animation:flota 6s ease-in-out infinite alternate}
+@keyframes flota{to{transform:translateY(-10px)}}
+
+/* ---------- altar ---------- */
+.altar{display:block;width:100%;height:auto;overflow:visible}
+.altar .it{opacity:0;transform:translateY(-16px);transition:opacity .9s,transform .9s cubic-bezier(.3,1.5,.5,1)}
+.altar.t-foto .it-foto,.altar.t-flores .it-flores,.altar.t-velas .it-velas,.altar.t-pan .it-pan,.altar.t-agua .it-agua,.altar.t-sal .it-sal,.altar.t-copal .it-copal,.altar.t-papel .it-papel,.altar.t-calav .it-calav,.altar.t-cruz .it-cruz,.altar.t-guit .it-guit{opacity:1;transform:none}
+.altar .gloria{opacity:0;transition:opacity 3s}.altar.t-luz .gloria{opacity:1}
+.llama{transform-box:fill-box;transform-origin:50% 100%;animation:llama .28s ease-in-out infinite alternate}
+.llama.b{animation-duration:.37s}.llama.c{animation-duration:.22s}
+@keyframes llama{from{transform:scale(.92,1.06) skewX(-4deg)}to{transform:scale(1.06,.9) skewX(5deg)}}
+.halo{animation:halo 1.3s ease-in-out infinite alternate}
+@keyframes halo{from{opacity:.55}to{opacity:1}}
+.humo{stroke-dasharray:7 9;animation:humo 2.6s linear infinite}
+@keyframes humo{from{stroke-dashoffset:0;opacity:.75}to{stroke-dashoffset:-32;opacity:.3}}
+.pp{transform-box:fill-box;transform-origin:50% 0;animation:pp 2.2s ease-in-out infinite alternate}
+.pp:nth-child(2n){animation-delay:-.7s}.pp:nth-child(3n){animation-delay:-1.3s}
+@keyframes pp{from{transform:skewX(-7deg) scaleY(.97)}to{transform:skewX(8deg) scaleY(1.03)}}
+.hueso{fill:url(#gHueso);stroke:#1a1030;stroke-width:1.4}
+.manga{stroke-width:10;stroke-linecap:round;fill:none}
+
+/* ---------- etapa 1 ---------- */
+.puntos{display:flex;gap:.4rem;justify-content:center;margin-bottom:.8rem}
+.puntos i{width:.8rem;height:.8rem;border-radius:50%;background:rgba(255,255,255,.18);transition:all .4s}
+.puntos i.ok{background:var(--nar);box-shadow:0 0 10px var(--nar)}.puntos i.ya{background:#fff}
+.preg{font-size:1.5rem;font-weight:700;margin:.4rem 0 1rem;display:flex;align-items:center;justify-content:center;gap:.8rem}
+.opcs{display:grid;gap:.7rem}
+.opc{display:flex;align-items:center;gap:.9rem;text-align:left;min-height:3.4rem;padding:.6rem 1.1rem;border-radius:.9rem;border:1px solid var(--lin);background:rgba(50,26,105,.7);cursor:pointer;font-size:1.12rem;transition:transform .15s,background .2s,border-color .2s}
+.opc b{flex:none;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:rgba(255,154,31,.2);color:var(--nar2)}
+.opc:hover{transform:translateX(6px);background:rgba(80,42,150,.85);border-color:var(--nar)}
+.opc.no{opacity:.38;pointer-events:none;text-decoration:line-through}
+.opc.si{background:rgba(34,199,192,.28);border-color:var(--tur);pointer-events:none}
+html.resp .opc[data-ok="1"]{outline:2px dashed var(--tur)}
+
+/* ---------- etapas 2 y 3 : fichas ---------- */
+.e2{flex:1;display:grid;grid-template-columns:minmax(15rem,.62fr) 1.38fr;gap:.9rem;min-height:0}
+.e2 .altarBox{display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(ellipse at 50% 95%,rgba(255,154,31,.2),transparent 65%);border-radius:1rem}
+.e2 .der{display:flex;flex-direction:column;min-height:0}
+.objs{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
+.obj{position:relative;display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.5rem .35rem .45rem;border-radius:.9rem;border:1px solid var(--lin);background:linear-gradient(160deg,rgba(70,36,140,.85),rgba(28,14,66,.9));cursor:pointer;text-align:center;transition:transform .2s,box-shadow .2s,border-color .2s;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.obj:hover{transform:translateY(-4px) rotateX(6deg);border-color:var(--nar);box-shadow:0 14px 26px rgba(0,0,0,.5),0 0 18px rgba(255,154,31,.25)}
+.obj svg.ic{width:4.2rem;height:4.2rem}
+.obj .nom{font-size:.92rem;font-weight:600;line-height:1.2;min-height:2.2em;display:flex;align-items:center}
+.obj .esc{display:flex;gap:.25rem;height:.6rem}
+.obj .esc i{width:.55rem;height:.55rem;border-radius:50%;border:1px solid var(--tur)}
+.obj .esc i.on{background:var(--tur);box-shadow:0 0 6px var(--tur)}
+.obj.oido{border-color:rgba(34,199,192,.6)}
+.leer{font-size:.8rem;padding:.15rem .7rem;border-radius:1rem;border:1px solid var(--oro);background:rgba(240,199,94,.14);color:var(--oro);cursor:pointer;font-weight:700}
+.leer:hover{background:rgba(240,199,94,.3)}
+.frase{font-size:.86rem;line-height:1.3;color:#fff;background:rgba(0,0,0,.35);border-radius:.5rem;padding:.25rem .4rem}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:.7rem}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.1rem;min-height:8.2rem;padding:.4rem .3rem;border-radius:.9rem;border:2px dashed rgba(240,199,94,.45);background:rgba(10,5,30,.5);text-align:center;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.drop svg.ic{width:2.6rem;height:2.6rem}
+.drop .sim{font-size:.9rem;font-weight:700;color:var(--oro);line-height:1.15}
+.drop.sobre,.drop:hover{background:rgba(255,154,31,.16);border-color:var(--nar)}
+.drop.lleno{border-style:solid;border-color:var(--tur);background:rgba(34,199,192,.12);cursor:default}
+.drag{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.drag.sel{outline:3px solid var(--nar);outline-offset:2px;transform:translateY(-4px) scale(1.04);box-shadow:0 0 26px rgba(255,154,31,.6)}
+.drag.fija{cursor:default;pointer-events:none;box-shadow:none;background:none;border-color:transparent;padding:.1rem}
+.drag.fija svg.ic{width:2.4rem;height:2.4rem}.drag.fija .nom{font-size:.78rem;min-height:0}
+.drag.fija .aud{display:none}
+.fant{position:fixed;z-index:60;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) rotate(-4deg) scale(1.05);box-shadow:0 20px 40px rgba(0,0,0,.6)}
+html.resp [data-sol]::after{content:attr(data-sol);display:block;font-size:.72rem;color:var(--tur);font-weight:700}
+.mini-aud{position:absolute;top:.25rem;right:.25rem;width:1.9rem;height:1.9rem}
+.mini-aud svg{width:1rem;height:1rem}
+
+.e3{flex:1;display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:.9rem;min-height:0}
+.col{display:flex;flex-direction:column;align-items:stretch;gap:.4rem;padding:.7rem;border-radius:1.1rem;border:2px dashed rgba(240,199,94,.45);background:rgba(10,5,30,.55);cursor:pointer;transition:background .2s,border-color .2s;min-height:0}
+.col.sobre,.col:hover{background:rgba(255,154,31,.13);border-color:var(--nar)}
+.col h3{font-size:1.2rem;text-align:center;line-height:1.15}
+.col .cab svg{width:4.2rem;height:4.2rem;display:block;margin:0 auto}
+.col.pre h3{color:var(--nar2)}.col.cat h3{color:var(--tur)}
+.col .lista{display:flex;flex-direction:column;gap:.35rem}
+.cartas{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;align-content:start;perspective:900px}
+.carta{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:.6rem .35rem;border-radius:.9rem;border:1px solid var(--oro);background:linear-gradient(155deg,#4a2590,#1f0f48);box-shadow:0 10px 22px rgba(0,0,0,.5);text-align:center;font-weight:600;font-size:.92rem;line-height:1.2;min-height:8.6rem;transform-style:preserve-3d;transition:transform .35s,box-shadow .3s;animation:reparte .7s backwards cubic-bezier(.3,1.3,.5,1)}
+.carta:hover{transform:rotateY(-12deg) rotateX(8deg) translateY(-5px);box-shadow:14px 18px 30px rgba(0,0,0,.55),0 0 18px rgba(240,199,94,.3)}
+.carta svg.ic{width:3.8rem;height:3.8rem}
+@keyframes reparte{from{transform:rotateY(180deg) translateY(40px) scale(.6);opacity:0}}
+.carta.fija{flex-direction:row;min-height:0;padding:.25rem .5rem;font-size:.82rem;text-align:left;animation:bienp .5s;pointer-events:none;border-color:transparent;box-shadow:none;background:rgba(255,255,255,.07)}
+.carta.fija svg.ic{width:2rem;height:2rem;flex:none}
+.bilan{grid-column:1/-1;text-align:center;font-size:1.6rem;padding:.8rem;animation:bienp .7s}
+.bilan b{color:var(--nar)}
+
+/* ---------- etapa 4 ---------- */
+.e4{flex:1;display:flex;flex-direction:column;min-height:0;gap:.5rem}
+.escBox{flex:1;min-height:0}
+@keyframes marca{from{transform:scale(.8);opacity:.7}to{transform:scale(1.15);opacity:1}}
+.an{transform-origin:0px 0px}
+.vivo .sw{animation:sw var(--d,.6s) ease-in-out infinite alternate}
+@keyframes sw{from{transform:rotate(var(--f,0deg))}to{transform:rotate(var(--t,0deg))}}
+.vivo .bob{animation:bob var(--d,.5s) ease-in-out infinite alternate}
+@keyframes bob{from{transform:translate(0,0) rotate(calc(var(--br,0deg)*-1))}to{transform:translate(var(--bx,0px),var(--by,-4px)) rotate(var(--br,0deg))}}
+.vivo .boca{animation:boca .35s ease-in-out infinite alternate;transform-origin:0px 17px}
+@keyframes boca{from{transform:scaleY(.25)}to{transform:scaleY(1.15)}}
+.vivo .nt{animation:nt 2.2s linear infinite}
+.nt{opacity:0}.nt.b{animation-delay:-1.1s!important}
+@keyframes nt{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(14px,-70px) rotate(20deg);opacity:0}}
+.bruma{animation:bruma 26s linear infinite alternate}
+@keyframes bruma{to{transform:translateX(-140px)}}
+.velo{transition:opacity 1.2s}
+.escr{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;padding:.6rem 1rem;min-height:5.2rem}
+.inf{display:flex;flex-direction:column;align-items:center;padding:.3rem 1rem;border-radius:.8rem;background:rgba(224,33,138,.2);border:1px solid var(--mag);min-width:9rem}
+.inf b{font-size:1.25rem;color:#fff}.inf small{font-size:.8rem;color:var(--sua)}
+.oracion{display:flex;align-items:center;gap:.5rem;font-size:1.25rem;font-weight:600;flex-wrap:wrap}
+.oracion input,.f5 input{min-width:13rem;padding:.4rem .7rem;border-radius:.6rem;border:2px solid var(--oro);background:rgba(0,0,0,.4);font-size:1.15rem;font-weight:600;caret-color:var(--nar)}
+.oracion input:focus,.f5 input:focus{outline:none;border-color:var(--nar);box-shadow:0 0 0 4px rgba(255,154,31,.22)}
+.pista{font-size:1rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.regla{display:inline-flex;gap:.4rem;align-items:center;padding:.2rem .7rem;border-radius:.6rem;background:rgba(255,255,255,.08);font-weight:700;opacity:.55}
+.regla.on{opacity:1;background:rgba(34,199,192,.22);outline:1px solid var(--tur)}
+.regla i{font-style:normal;color:var(--nar)}
+.rad{font-family:Consolas,"Courier New",monospace;font-size:1.15rem;color:var(--oro);letter-spacing:.06em}
+.correcta{font-size:1.3rem;color:#fff}.correcta b{color:var(--tur)}
+.cont{margin-left:auto;font-weight:700;color:var(--nar2);white-space:nowrap}
+
+/* ---------- etapa 5 ---------- */
+.e5{margin:auto;width:100%;max-width:58rem}
+.f5{display:grid;gap:.25rem;margin-bottom:.8rem}
+.f5 label{font-size:1.15rem;font-weight:600}
+.f5 .lin{display:flex;gap:.5rem;align-items:center}
+.f5 input{flex:1}
+.f5 .est{flex:none;width:1.8rem;height:1.8rem;border-radius:50%;display:grid;place-items:center;border:2px solid rgba(255,255,255,.25)}
+.f5.ok .est{background:var(--tur);border-color:var(--tur);color:#062a2a}
+.f5 .mod{font-size:.95rem;color:var(--oro)}
+.f5 .av{font-size:.95rem;color:#ffb0c8}
+.banco{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0}
+.chip{padding:.4rem .9rem;border-radius:2rem;border:1px solid var(--tur);background:rgba(34,199,192,.12);cursor:pointer;font-weight:600;transition:transform .15s,background .2s}
+.chip:hover{background:rgba(34,199,192,.32);transform:translateY(-2px)}
+
+/* ---------- final ---------- */
+#final{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;min-height:0;padding-bottom:.6rem}
+#final .altarG{height:100%;max-height:78vh;aspect-ratio:400/360;position:relative}
+#final .altarG svg{height:100%;width:100%}
+#final .msg{font-size:1.7rem;text-align:center;text-shadow:0 2px 16px #000;margin:.3rem 0 .6rem;animation:sube 2s 3s backwards}
+#final .btn{animation:sube 1.5s 6s backwards}
+@keyframes sube{from{opacity:0;transform:translateY(20px)}}
+#almaF{position:absolute;left:8%;top:30%;width:9rem;height:9rem;margin:-4.5rem;border-radius:50%;background:radial-gradient(circle,#fff 0,#cff 18%,rgba(34,199,192,.5) 40%,rgba(255,200,120,.18) 60%,transparent 72%);animation:llega 6s cubic-bezier(.4,0,.2,1) backwards,alma2 3s 6s ease-in-out infinite alternate;pointer-events:none}
+@keyframes llega{0%{transform:translate(-48vw,30vh) scale(.3);opacity:0}20%{opacity:1}50%{transform:translate(-18vw,-12vh) scale(.7)}100%{transform:none}}
+@keyframes alma2{to{transform:translateY(-12px) scale(1.06)}}
+.res{margin:0 auto;width:100%;max-width:64rem}
+.res h1{font-size:2rem;color:var(--nar);text-align:center}
+.res h3{font-size:1.15rem;color:var(--nar2);margin:1rem 0 .4rem;border-bottom:1px solid var(--lin);padding-bottom:.2rem}
+.estr{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+.estr div{text-align:center;padding:.4rem;border-radius:.7rem;background:rgba(255,255,255,.06);font-size:.9rem}
+.estr svg{width:1.3rem;height:1.3rem;color:rgba(255,255,255,.2)}.estr svg.on{color:var(--oro);filter:drop-shadow(0 0 5px var(--oro))}
+.misf li{font-size:1.15rem;margin:.3rem 0}
+.voc{display:grid;grid-template-columns:repeat(8,1fr);gap:.5rem}
+.voc div{text-align:center;font-weight:600;font-size:.88rem;line-height:1.15;padding:.4rem .2rem;border-radius:.7rem;background:rgba(255,255,255,.06)}
+.voc svg{width:100%;max-width:4.4rem;height:auto;display:block;margin:0 auto}
+.copia{font-size:1.25rem;font-weight:700;text-align:center;margin:1rem 0;color:#fff;padding:.6rem;border:2px solid var(--nar);border-radius:.9rem;background:rgba(255,154,31,.12)}
+.cuad{text-align:left;padding:.9rem 1.4rem}.cuad p{text-align:center;color:var(--nar2);margin-bottom:.3rem}.cuad ol{margin:0;padding-left:1.6rem;display:grid;gap:.25rem;font-size:1.3rem}
+.bonus input[type=text]{width:100%;padding:.45rem .7rem;border-radius:.6rem;border:1px solid var(--lin);background:rgba(0,0,0,.35);margin:.2rem 0}
+.bonus .r{display:flex;align-items:center;gap:.5rem}
+.bonus input[type=radio]{width:1.3rem;height:1.3rem;accent-color:var(--tur)}
+.miquiz{padding:.7rem 1rem;border-radius:.8rem;border:1px solid var(--tur);background:rgba(34,199,192,.1);margin-top:.5rem}
+.miquiz .ok{color:var(--tur);font-weight:700}
+
+/* ---------- modal, aviso, demo, admin ---------- */
+#modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(6,3,20,.72);backdrop-filter:blur(3px)}
+#modal.on{display:grid}
+#modal .caja{max-width:34rem;width:calc(100% - 2rem);text-align:center;animation:entra .5s cubic-bezier(.3,1.4,.5,1)}
+@keyframes entra{from{transform:scale(.8) translateY(30px);opacity:0}}
+#modal h2{font-size:1.8rem;color:var(--nar);margin-bottom:.4rem}
+#modal .stars svg{width:2.6rem;height:2.6rem;color:rgba(255,255,255,.18)}
+#modal .stars svg.on{color:var(--oro);filter:drop-shadow(0 0 10px var(--oro));animation:bienp .6s backwards}
+#modal .stars svg.on:nth-child(2){animation-delay:.25s}#modal .stars svg.on:nth-child(3){animation-delay:.5s}
+#modal .prem{display:flex;align-items:center;justify-content:center;gap:.8rem;margin:.7rem 0 1rem;font-size:1.15rem}
+#modal .prem svg{width:4.5rem;height:4.5rem;flex:none}
+#modal input{padding:.5rem .8rem;border-radius:.6rem;border:1px solid var(--lin);background:rgba(0,0,0,.4);text-align:center;margin:.6rem 0}
+#toast{position:fixed;left:50%;bottom:1.2rem;transform:translate(-50%,200%);z-index:70;padding:.55rem 1.2rem;border-radius:2rem;background:rgba(10,5,30,.95);border:1px solid var(--lin);font-size:.95rem;transition:transform .4s;pointer-events:none;max-width:90vw}
+#toast.on{transform:translate(-50%,0)}
+#demo{position:fixed;z-index:65;left:0;top:0;width:2.6rem;height:2.6rem;pointer-events:none;display:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.7));transition:transform .9s cubic-bezier(.4,0,.2,1)}
+#demo.on{display:block}
+#demo.clic::after{content:"";position:absolute;left:.3rem;top:0;width:1.4rem;height:1.4rem;margin:-.4rem;border-radius:50%;border:3px solid var(--nar);animation:onda .6s}
+@keyframes onda{from{transform:scale(.3);opacity:1}to{transform:scale(2.6);opacity:0}}
+#demoVelo{position:fixed;inset:0;z-index:64;display:none}
+#demoVelo.on{display:block}
+#admin{position:fixed;right:.8rem;bottom:.8rem;z-index:80;display:none;max-width:22rem;font-size:.9rem}
+#admin.on{display:block}
+#admin .fila{gap:.35rem;margin:.35rem 0}
+#admin .ib{height:2.1rem;min-width:2.1rem}
+.petB{position:fixed;z-index:66;width:.9rem;height:.55rem;border-radius:60% 40% 60% 40%;background:linear-gradient(90deg,#ffb648,#f07c00);pointer-events:none;animation:petB .9s ease-out forwards}
+@keyframes petB{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+
+/* ---------- versión 2 : más espacio, más color, escena por capas ---------- */
+.panel{background:linear-gradient(90deg,#e0218a,#ff9a1f,#f0c75e,#22c7c0,#8a3fd0) top/100% 4px no-repeat,linear-gradient(160deg,rgba(58,24,112,.95),rgba(24,11,62,.96));border:1px solid rgba(240,199,94,.4);backdrop-filter:none}
+#modal{backdrop-filter:none;background:rgba(6,3,20,.8)}
+#luz{mix-blend-mode:normal}
+#guir{flex:none;height:1.7rem;margin-top:-.2rem;pointer-events:none;overflow:hidden}
+#guir svg{display:block;width:100%;height:100%}
+body.e4on #guir{display:none}
+#cuerpo{padding-top:.35rem}
+#lado{position:fixed;left:.8rem;bottom:.7rem;width:11.5rem;z-index:5;display:block;pointer-events:none;transition:opacity .5s,transform .5s}
+#info{display:none}
+body.sinlado #lado{width:11.5rem;opacity:0;transform:translateY(20px);pointer-events:none}
+.alt3{flex:1;min-height:0;display:flex;justify-content:center;align-items:flex-end}.alt3 svg{height:100%;width:auto;max-height:12rem}
+.etq{flex:none;padding:.2rem .8rem;border-radius:2rem;background:linear-gradient(90deg,#e0218a,#b3246b);color:#fff;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.consigna{font-size:1.2rem}
+.barra{margin-bottom:.6rem;padding:.6rem 1.1rem}
+.barra .cont{font-size:1.15rem}.barra .btn{min-height:2.4rem;padding:.3rem 1.1rem;margin-left:.4rem}
+.centro{max-width:60rem;padding:1.6rem 2rem}
+.centro .consigna{font-size:1.4rem;flex-wrap:wrap}
+.preg{font-size:1.9rem}
+.opc{min-height:4rem;font-size:1.3rem;padding:.8rem 1.3rem}
+.opc:nth-child(1) b{background:rgba(224,33,138,.3);color:#ff8cc8}.opc:nth-child(2) b{background:rgba(34,199,192,.25);color:#7df0ea}.opc:nth-child(3) b{background:rgba(255,154,31,.28);color:#ffc45e}
+#inicio h1{font-size:5rem}
+
+/* etapa 2 */
+.e2{grid-template-columns:minmax(20rem,.92fr) 1.08fr;gap:1rem}
+.e2 .altarBox{position:relative;min-height:0;align-items:stretch;background:radial-gradient(ellipse at 50% 80%,rgba(255,154,31,.28),rgba(224,33,138,.1) 45%,transparent 70%)}
+.e2 .altarBox .altar{width:100%;height:100%;min-height:0}
+.altNom{position:absolute;left:50%;bottom:.2rem;transform:translateX(-50%);padding:.3rem 1.1rem;border-radius:2rem;background:rgba(10,5,30,.85);border:1px solid var(--oro);font-size:1.05rem;white-space:nowrap}
+.altNom b{color:var(--nar2)}
+.altar .nuevo{animation:nuevo 1.6s}
+@keyframes nuevo{0%,35%{filter:brightness(1.9) drop-shadow(0 0 10px #ffd27a)}100%{filter:none}}
+.e2 .der{justify-content:center}
+.objs,.slots{gap:.7rem}
+.obj{padding:.7rem .4rem .6rem;border-top:4px solid var(--mag)}
+.obj:nth-child(4n+2){border-top-color:var(--tur)}.obj:nth-child(4n+3){border-top-color:var(--nar)}.obj:nth-child(4n){border-top-color:var(--oro)}
+.obj svg.ic{width:5.6rem;height:5.6rem;filter:drop-shadow(0 4px 5px rgba(0,0,0,.45))}
+.obj .nom{font-size:1.02rem}
+.frase{font-size:.95rem}
+.der.faseB .obj{padding:.35rem .3rem}
+.der.faseB .obj svg.ic{width:3.6rem;height:3.6rem}
+.der.faseB .obj .nom{font-size:.9rem;min-height:2em}
+.drop{min-height:8.6rem}
+.drop svg.ic{width:3.2rem;height:3.2rem}
+.drop .sim{font-size:1rem}
+.drag.fija svg.ic{width:2.8rem!important;height:2.8rem!important;filter:none}
+
+/* etapa 3 */
+.ayuda3{display:flex;align-items:center;justify-content:center;gap:.5rem;margin:0 0 .6rem;font-size:1.02rem;color:#ffe7b0}
+.ayuda3 svg{width:1.3rem;height:1.3rem;color:var(--tur);flex:none}
+.e3{grid-template-columns:1fr 1.7fr 1fr}
+.col{border-width:3px;border-style:solid;background:linear-gradient(180deg,rgba(255,154,31,.16),rgba(10,5,30,.6) 40%)}
+.col.cat{background:linear-gradient(180deg,rgba(34,199,192,.16),rgba(10,5,30,.6) 40%);border-color:rgba(34,199,192,.55)}
+.col.pre{border-color:rgba(255,154,31,.6)}
+.col h3{font-size:1.4rem}
+.col .sub{text-align:center;font-size:.95rem;color:var(--sua);margin:.15rem 0 .3rem}
+.col .cab svg{width:5rem;height:5rem}
+.medio{display:flex;flex-direction:column;gap:.6rem;min-height:0}
+.carta{font-size:1rem;min-height:9.4rem;border-width:2px}
+.carta svg.ic{width:4.6rem;height:4.6rem}
+.carta.fija{font-size:.9rem}
+.expl{min-height:3.2rem;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.08rem;padding:.4rem .8rem;border-radius:.8rem;background:rgba(10,5,30,.7);border:1px solid var(--lin)}
+.expl .linea b{color:var(--oro);font-size:1.25rem;margin-right:.4rem}
+.expl .si{display:flex;align-items:center;gap:.5rem;animation:bienp .5s}.expl .si svg{width:1.4rem;height:1.4rem;color:var(--tur);flex:none}
+.expl .no{color:#ffb0c8}
+.expl:empty{display:none}
+
+/* etapa 4 : escena por capas */
+.e4{gap:.45rem}
+.e4 .barra{margin:0;padding:.45rem 1rem;font-size:1.08rem}
+.medidor{flex:none;margin-left:auto;width:9rem;height:.8rem;border-radius:1rem;background:#55506a;overflow:hidden;border:1px solid rgba(255,255,255,.3)}
+.medidor i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e0218a,#ff9a1f,#f0c75e,#22c7c0);transition:width 1s}
+.e4 .barra .cont{margin-left:.6rem}
+.escBox{display:grid;place-items:center}
+.escena{position:relative;overflow:hidden;box-sizing:border-box;border:5px solid var(--oro);border-radius:3.2rem 3.2rem .8rem .8rem;box-shadow:0 16px 40px rgba(0,0,0,.6);background:#1a0f40}
+.escena>svg{position:absolute;overflow:visible;display:block}
+.escena .fondo,.escena .capa{left:0;width:100%;pointer-events:none}
+.escena .fondo{top:0;height:100%}
+.escena .fondo,.escena .pps{filter:grayscale(var(--g,1)) brightness(var(--b,.42));transition:filter 1.4s}
+.escena.todo .fondo,.escena.todo .pps{filter:none}
+.escena:not(.todo) .pp{animation:none}
+.escena .fuegos{display:none}.escena.todo .fuegos{display:block}
+.fuego{transform-origin:0px 0px;opacity:0;animation:fuego 2.4s ease-out infinite}
+@keyframes fuego{0%{transform:scale(.05);opacity:1}60%{transform:scale(1);opacity:1}100%{transform:scale(1.15);opacity:0}}
+.fv:not(.on) .llama,.fv:not(.on) .halo{display:none}
+.pj{cursor:pointer;outline:none}
+.pj .hit{fill:transparent}
+.pj:not(.vivo) .cu{filter:grayscale(1) brightness(.78) contrast(1.15)}
+.pj:not(.vivo):hover .cu,.pj.elegido:not(.vivo) .cu,.pj:not(.vivo):focus-visible .cu{filter:grayscale(1) brightness(1.2) contrast(1.1)}
+.pj:not(.vivo) .solo-vivo{display:none}
+.pj.vivo .cu{animation:nace 1.1s}
+@keyframes nace{0%{filter:grayscale(1) brightness(2.4)}100%{filter:grayscale(0) brightness(1)}}
+.pj .marca{animation:marca 1.2s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 50%}
+.pj.vivo .marca{display:none}
+.pj.elegido .hit,.pj:focus-visible .hit{stroke:#ffcf6b;stroke-width:3;stroke-dasharray:8 6}
+.escr{min-height:5.4rem}
+.guia{display:flex;align-items:center;gap:.5rem;font-size:1.12rem;font-weight:600}.guia svg{width:1.6rem;height:1.6rem;color:var(--nar2);flex:none}
+.ej{margin-left:auto;padding:.3rem .9rem;border-radius:.7rem;background:rgba(34,199,192,.14);border:1px solid rgba(34,199,192,.5);font-size:1.02rem}
+.ej i{font-style:normal;color:var(--nar)}.ej b{color:var(--tur)}
+.oracion{font-size:1.4rem}
+.oracion input,.cu5 input{min-width:13rem;padding:.45rem .8rem;border-radius:.6rem;border:2px solid var(--oro);background:rgba(0,0,0,.4);font-size:1.25rem;font-weight:600;caret-color:var(--nar)}
+.oracion input:focus,.cu5 input:focus{outline:none;border-color:var(--nar);box-shadow:0 0 0 4px rgba(255,154,31,.22)}
+.correcta{font-size:1.5rem}
+
+/* etapa 5 */
+.e5{max-width:66rem;padding:1.3rem 1.8rem}
+.regla5{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;padding:.55rem 1rem;border-radius:.8rem;background:rgba(34,199,192,.12);border:1px solid rgba(34,199,192,.5);font-size:1.05rem}
+.regla5 .form{font-size:1.25rem;padding:.1rem .7rem;border-radius:.5rem;background:rgba(0,0,0,.35)}
+.regla5 b{color:var(--nar2)}.regla5 u{text-decoration-color:var(--tur);text-underline-offset:.2em}
+.regla5 .ej5{margin-left:auto;color:var(--sua)}
+.pasos{display:flex;align-items:center;justify-content:center;gap:.4rem;margin:.8rem 0}
+.pasos i{font-style:normal;width:2.2rem;height:2.2rem;border-radius:50%;display:grid;place-items:center;font-weight:700;border:2px solid rgba(255,255,255,.3);color:var(--sua)}
+.pasos i.ya{border-color:var(--nar);color:#fff;box-shadow:0 0 14px rgba(255,154,31,.6)}
+.pasos i.ok{background:var(--tur);border-color:var(--tur);color:#062a2a}
+.pasos b{width:3rem;height:.35rem;background:radial-gradient(circle,rgba(255,154,31,.8) 38%,transparent 42%) 0 50%/.7rem .35rem repeat-x}
+.tarj5{display:grid;grid-template-columns:13rem 1fr;gap:1.4rem;align-items:center}
+.img5{border-radius:1.2rem;padding:.8rem;background:radial-gradient(circle,rgba(255,154,31,.3),rgba(224,33,138,.12) 60%,transparent 75%);border:2px solid var(--lin)}
+.img5 svg{width:100%;height:auto;display:block}
+.cu5 h3{font-size:1.7rem;color:var(--nar2);margin-bottom:.4rem}
+.cu5 label{display:block;font-size:1.3rem;font-weight:600;margin-bottom:.4rem}
+.cu5 .lin{display:flex;gap:.6rem;align-items:center}.cu5 .lin input{flex:1}
+.cu5 .av{font-size:1.02rem;color:#ffb0c8;margin-top:.4rem}
+.cu5 .mod{display:flex;gap:.5rem;align-items:flex-start;font-size:1.05rem;color:#ffe7b0;margin-top:.5rem}
+.cu5 .mod svg{width:1.3rem;height:1.3rem;color:var(--tur);flex:none;margin-top:.15rem}
+html.resp .cu5 .mod[hidden]{display:flex!important}
+.chip{font-size:1.05rem;padding:.5rem 1.1rem}
+.rep5{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.7rem}
+.rep5 li{display:flex;align-items:center;gap:1rem;font-size:1.3rem;padding:.6rem 1rem;border-radius:.9rem;background:rgba(255,255,255,.07);border-left:5px solid var(--nar)}
+.rep5 li:nth-child(2){border-left-color:var(--mag)}.rep5 li:nth-child(3){border-left-color:var(--tur)}
+.rep5 svg{width:3.6rem;height:3.6rem;flex:none}
+.res{max-width:72rem}
+@media (max-width:1000px){.e2{grid-template-columns:1fr}.regla5 .ej5{margin-left:0}.tarj5{grid-template-columns:7rem 1fr}.medidor{width:5rem}.ej{display:none}#inicio h1{font-size:3.2rem}}
+
+/* ---------- versión 3 : altar más grande, viñetas de la fiesta, fichas de ayuda ---------- */
+.e2{grid-template-columns:1.22fr 1fr}
+.e2 .altarBox{display:flex;flex-direction:column;align-items:stretch}
+.e2 .altarBox .altar{flex:1;height:auto;min-height:0}
+.altNom{position:static;transform:none;align-self:center;flex:none;margin:.1rem 0 .3rem;font-size:1.3rem;padding:.35rem 1.4rem;border-width:2px}
+.altNom.pulso{animation:pulso 1.4s}
+@keyframes pulso{0%{transform:scale(.7);background:#ff9a1f;color:#2b1000}30%{transform:scale(1.18)}100%{transform:none}}
+.vuela{position:fixed;z-index:66;width:10rem;height:10rem;transform:translate(-50%,-50%) scale(.45);transition:transform .85s cubic-bezier(.3,.8,.3,1);pointer-events:none;filter:drop-shadow(0 0 20px #ffd27a)}
+.vuela svg{width:100%;height:100%}
+.foco{transform-box:fill-box;transform-origin:50% 50%;animation:foco 2.5s forwards;pointer-events:none}
+@keyframes foco{0%{opacity:0;transform:scale(.3)}18%{opacity:1;transform:scale(1.5)}55%{opacity:.9;transform:scale(1.1)}100%{opacity:0;transform:scale(1)}}
+.obj svg.ic{width:4.6rem;height:4.6rem}
+.obj .nom{font-size:.95rem}
+.der.faseB .obj svg.ic{width:3.2rem;height:3.2rem}
+.drop{min-height:7.8rem}
+.drop svg.ic{width:2.8rem;height:2.8rem}.drop .sim{font-size:.92rem}
+.drop.lleno{background:rgba(34,199,192,.28);border-width:3px}
+.drop.lleno::after{content:"";position:absolute;top:.3rem;right:.3rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--tur) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23062a2a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7'/%3E%3C/svg%3E") center/70% no-repeat}
+#final .altarG{aspect-ratio:400/384}
+.ayb{width:2.3rem;height:2.3rem;font-weight:800;font-size:1.15rem;margin-left:.3rem;border-color:var(--oro);color:var(--oro);background:rgba(240,199,94,.14)}
+.barra .ayb{margin-left:.5rem}
+#modal .ayu{max-width:46rem;text-align:left}
+#modal .ayu h2{text-align:center;margin-bottom:.8rem}
+.pasosA{list-style:none;margin:0 0 1.1rem;padding:0;display:grid;gap:.6rem}
+.pasosA li{display:flex;align-items:center;gap:.9rem;font-size:1.15rem;padding:.5rem .8rem;border-radius:.9rem;background:rgba(255,255,255,.07)}
+.pasosA .nA{flex:none;width:2.1rem;height:2.1rem;border-radius:50%;display:grid;place-items:center;background:var(--nar);color:#2b1000}
+.pasosA svg{flex:none;width:3.4rem;height:3.4rem}
+.pasosA li span b{color:var(--nar2)}
+#modal .ayu .btn{display:flex;margin:0 auto}
+.carta.ejemplo{opacity:.85;border:1px dashed var(--oro);font-style:italic;animation:none}
+
+/* etapa 4 : viñetas */
+.e4{gap:.6rem}
+.e4 .escr{flex:none;display:block;padding:.5rem 1rem .55rem;min-height:0}
+.lin4{display:flex;align-items:center;gap:.7rem;margin-bottom:.45rem}
+.tit4{font-weight:700;font-size:1.1rem}
+.lin4 .medidor{width:11rem}
+.lin4 .cont{margin-left:.2rem;font-size:1.15rem}
+.cu4{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;min-height:3.3rem}
+.pasos4{list-style:none;margin:0;padding:0;display:flex;gap:.45rem;flex-wrap:wrap}
+.pasos4 li{display:flex;align-items:center;gap:.45rem;padding:.3rem .75rem .3rem .3rem;border-radius:2rem;background:rgba(255,255,255,.08);font-size:1rem;font-weight:600}
+.pasos4 b{flex:none;width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;background:var(--nar);color:#2b1000}
+.pasos4 u{text-decoration-color:var(--tur);text-underline-offset:.2em}
+.cu4 .ej{margin-left:0}
+.correcta svg{width:1.6rem;height:1.6rem;color:var(--tur);vertical-align:-.25rem;margin-right:.4rem}
+.fiesta{flex:1;min-height:17rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:.7rem}
+.tarj{position:relative;display:flex;flex-direction:column;min-height:0;min-width:0;border-radius:2.6rem 2.6rem .9rem .9rem;border:3px solid #7d798f;background:#23222e;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .4s;box-shadow:0 8px 18px rgba(0,0,0,.45)}
+.tarj:hover{transform:translateY(-3px)}
+.vin{flex:1;min-height:0;padding:.3rem .3rem 0;background:linear-gradient(to top,#3b3944 0 13%,#5b5868 13% 14.5%,#2c2b36 14.5%)}
+.vin svg{width:100%;height:100%;display:block;overflow:visible}
+.tarj:not(.vivo) .vin{filter:grayscale(1) brightness(.8) contrast(1.1)}
+.tarj:not(.vivo):hover .vin,.tarj.elegido:not(.vivo) .vin{filter:grayscale(1) brightness(1.15)}
+.tarj:not(.vivo) .solo-vivo{display:none}
+.tarj.vivo{border-color:var(--oro);box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 18px rgba(255,200,90,.35)}
+.tarj.vivo .vin{background:linear-gradient(to top,#3a1a66 0 13%,#f0c75e 13% 14.5%,transparent 14.5%),repeating-conic-gradient(from 0deg at 50% 86%,rgba(255,255,255,.13) 0 9deg,transparent 9deg 18deg),linear-gradient(var(--c1),var(--c2))}
+.tarj.elegido{outline:4px solid #ffcf6b;outline-offset:2px;transform:translateY(-4px) scale(1.02);z-index:2}
+.tarj.nace{animation:naceT 1.4s}
+@keyframes naceT{0%{transform:scale(.9);filter:brightness(2.6)}35%{transform:scale(1.08);filter:brightness(1.5)}100%{transform:none;filter:none}}
+.num{position:absolute;top:.55rem;left:.7rem;z-index:2;width:2.2rem;height:2.2rem;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.1rem;background:var(--nar);color:#2b1000;border:2px solid #fff;animation:marca 1.2s ease-in-out infinite alternate}
+.tarj.vivo .num{animation:none;background:var(--tur);color:#062a2a}
+.pie{flex:none;display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.3rem .4rem;font-weight:700;font-size:1.08rem;background:#16151e;color:#e9e6f2;white-space:nowrap;overflow:hidden}
+.pie svg{width:1.1rem;height:1.1rem;flex:none}
+.tarj.vivo .pie{background:var(--c2);color:#fff}
+@media (max-width:1000px){.e2{grid-template-columns:1fr 1fr}.e2 .altarBox{display:flex}.tit4{display:none}.pasos4 li{font-size:.9rem}.pie{font-size:.9rem}}
+@media (max-width:760px){.e2{grid-template-columns:1fr;grid-template-rows:40vh auto}.fiesta{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,12rem)}}
+
+/* ---------- versión A1 (5e) ---------- */
+.vid5{max-width:64rem}
+.marco{position:relative;margin:.4rem auto 0;width:min(100%,calc(52vh*16/9));aspect-ratio:16/9;border-radius:1rem;overflow:hidden;border:3px solid var(--oro);background:#000}
+.marco iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.orden{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start}
+.orden ol{list-style:none;margin:0;padding:.6rem;display:grid;gap:.5rem;min-height:12rem;border-radius:1.1rem;border:3px dashed rgba(240,199,94,.5);background:rgba(10,5,30,.55)}
+.sueltas{display:grid;gap:.5rem}
+.hist{display:flex;align-items:center;gap:.8rem;text-align:left;padding:.5rem .9rem;border-radius:.9rem;border:2px solid var(--oro);background:linear-gradient(155deg,#4a2590,#1f0f48);font-size:1.15rem;font-weight:600;cursor:pointer;transition:transform .15s,border-color .2s}
+button.hist:hover{transform:translateX(6px);border-color:var(--nar)}
+.hist svg.ic{width:3.4rem;height:3.4rem;flex:none}
+.hist.ok{cursor:default;border-color:var(--tur);background:rgba(34,199,192,.2)}
+.hist.ok>b{flex:none;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:var(--tur);color:#062a2a}
+.orden .bilan{grid-column:auto}
+.objs.o5{grid-template-columns:repeat(3,1fr)}
+.objs.o5 .obj svg.ic{width:5.6rem;height:5.6rem}
+.objs.o5 .obj .nom{font-size:1.1rem}
+.obj.puesto{opacity:.35;pointer-events:none;filter:grayscale(.6)}
+.pide{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.7rem;padding:.6rem 1rem;font-size:1.2rem;font-weight:600}
+.pide b{color:var(--nar2);font-size:1.3rem}
+.leer5{margin:.2rem 0 .9rem;padding:.8rem 1.1rem;border-radius:.9rem;background:rgba(0,0,0,.35);font-size:1.3rem;line-height:1.6;text-align:left}
+.leer5 span{color:var(--sua)}.leer5 span.ya{color:#fff;font-weight:700;background:rgba(255,154,31,.22);border-radius:.3rem;padding:0 .2rem}
+.leer5 small{display:block;margin-top:.5rem;font-size:1rem;color:var(--tur)}
+.txt5{margin:0 auto;max-width:66rem;width:100%;padding:1.2rem 1.6rem}
+.txt5 .texto{font-size:1.4rem;line-height:2.3;margin:.6rem 0 1rem}
+.hueco{display:inline-block;min-width:7.5rem;min-height:2.2rem;vertical-align:middle;text-align:center;padding:0 .6rem;border-radius:.6rem;border:2px dashed var(--oro);background:rgba(0,0,0,.35);cursor:pointer;line-height:2.1rem}
+.hueco.sobre,.hueco:hover{border-color:var(--nar);background:rgba(255,154,31,.18)}
+.hueco.lleno{border-style:solid;border-color:var(--tur);background:rgba(34,199,192,.22);color:#fff;font-weight:700;cursor:default}
+.txt5 .chip{font-size:1.25rem;display:inline-block}
+.memo{font-size:1.3rem;color:var(--nar2)}
+.ops4{display:inline-flex;gap:.5rem}
+.op4{font-size:1.3rem;min-height:3rem;padding:.4rem 1.3rem;border:2px solid var(--oro)}
+.ficha{list-style:none;margin:0;padding:0;display:grid;gap:.3rem;font-size:1.2rem;font-weight:500}
+.ficha b{color:var(--nar2);margin-right:.3rem}
+@media (max-width:760px){.orden{grid-template-columns:1fr}}
+@media print{.ficha b{color:#7a2d00}}
+
+html.red *,html.red *::before,html.red *::after{animation:none!important;transition:none!important}
+html.red .nt{opacity:0}
+
+@media (max-width:1000px){
+ #lado{width:9.5rem}#info h2{font-size:1.2rem}.nodo span{display:none}
+ .e2{grid-template-columns:1fr}.e2 .altarBox{display:none}
+ #inicio{grid-template-columns:1fr}#inicio .altarG{display:none}#inicio h1{font-size:3rem}
+ .voc{grid-template-columns:repeat(4,1fr)}#vol{width:3.5rem}
+}
+@media (max-height:640px){.obj svg.ic{width:3.3rem;height:3.3rem}.drop{min-height:7rem}.carta{min-height:7.4rem}}
+@media print{
+ body{background:#fff!important;color:#000!important;height:auto;overflow:visible}
+ #gl,#fx,#fg,#luz,#top,#lado,#modal,#toast,#admin,.noimp{display:none!important}
+ #app,#cuerpo,#main{position:static;display:block;overflow:visible;padding:0}
+ .panel{background:#fff!important;border:0;box-shadow:none;color:#000;backdrop-filter:none}
+ .res h1,.res h3,.cuad p{color:#7a2d00}.copia{color:#000;border-color:#000;background:none}
+ .voc div,.estr div{background:none;border:1px solid #bbb;color:#000}
+ .estr svg{color:#ccc}.estr svg.on{color:#d08a00;filter:none}
+ .miquiz{border-color:#555;background:none}.miquiz .ok{color:#06605c}
+}
+</style>
+</head>
+<body>
+<!-- Degradados compartidos por todos los dibujos SVG -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<radialGradient id="gHalo"><stop offset="0" stop-color="#ffd27a" stop-opacity=".95"/><stop offset=".35" stop-color="#ff9a1f" stop-opacity=".45"/><stop offset="1" stop-color="#ff7a00" stop-opacity="0"/></radialGradient>
+<radialGradient id="gLuna"><stop offset="0" stop-color="#fff6d8" stop-opacity=".7"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></radialGradient>
+<radialGradient id="gAlma"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#bff" stop-opacity=".9"/><stop offset="1" stop-color="#22c7c0" stop-opacity="0"/></radialGradient>
+<radialGradient id="gFlorR"><stop offset="0" stop-color="#ffe08a"/><stop offset=".55" stop-color="#ff9a1f"/><stop offset="1" stop-color="#e06200"/></radialGradient>
+<radialGradient id="gHueso" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fffdf5"/><stop offset=".7" stop-color="#f1e4c6"/><stop offset="1" stop-color="#d9c59c"/></radialGradient>
+<radialGradient id="gPanR" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#f2be6a"/><stop offset=".6" stop-color="#cf8a38"/><stop offset="1" stop-color="#9a5a1c"/></radialGradient>
+<linearGradient id="gCera"><stop offset="0" stop-color="#fffaf0"/><stop offset=".55" stop-color="#f6ead0"/><stop offset="1" stop-color="#d6c08e"/></linearGradient>
+<linearGradient id="gBarro"><stop offset="0" stop-color="#e08a52"/><stop offset=".5" stop-color="#c2622f"/><stop offset="1" stop-color="#7e3516"/></linearGradient>
+<linearGradient id="gAguaL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ff5ef"/><stop offset="1" stop-color="#0f9a95"/></linearGradient>
+<linearGradient id="gPiedra"><stop offset="0" stop-color="#cfc6ea"/><stop offset="1" stop-color="#7d73a3"/></linearGradient>
+<linearGradient id="gTela" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2187a"/><stop offset="1" stop-color="#6d0f52"/></linearGradient>
+<linearGradient id="gTapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3fd0"/><stop offset="1" stop-color="#5a23a0"/></linearGradient>
+<linearGradient id="gCielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0628"/><stop offset=".6" stop-color="#2a1250"/><stop offset="1" stop-color="#7a1f6e"/></linearGradient>
+<linearGradient id="gSuelo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34165e"/><stop offset="1" stop-color="#150a34"/></linearGradient>
+<linearGradient id="gBruma" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9c8ff" stop-opacity="0"/><stop offset=".5" stop-color="#d9c8ff" stop-opacity=".2"/><stop offset="1" stop-color="#d9c8ff" stop-opacity="0"/></linearGradient>
+<linearGradient id="gCamino" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a1f" stop-opacity=".25"/><stop offset="1" stop-color="#ff9a1f" stop-opacity=".8"/></linearGradient>
+</defs></svg>
+
+<canvas id="gl"></canvas>
+<div id="fg"></div>
+<canvas id="fx"></canvas>
+<div id="luz"></div>
+
+<div id="app">
+ <header id="top">
+  <nav id="camino" aria-label="El camino"></nav>
+  <div id="ctl">
+   <button class="ib" id="bMus" aria-pressed="true" title="Música" aria-label="Música"></button>
+   <input id="vol" type="range" min="0" max="1" step="0.05" value="0.7" title="Volumen" aria-label="Volumen">
+   <button class="ib" id="bCal" title="Calidad" aria-label="Calidad">Calidad: alta</button>
+   <button class="ib" id="bAa" aria-pressed="false" title="Texto más grande" aria-label="Texto más grande">Aa</button>
+   <button class="ib" id="bRed" aria-pressed="false" title="Menos animación" aria-label="Menos animación"></button>
+   <button class="ib" id="bPan" aria-pressed="false" title="Pantalla completa" aria-label="Pantalla completa" hidden></button>
+   <button class="ib" id="bNue" title="Empezar de nuevo" aria-label="Empezar de nuevo"></button>
+  </div>
+ </header>
+ <div id="guir" aria-hidden="true"></div>
+ <div id="cuerpo">
+  <aside id="lado"><div id="info"></div><div id="mini"><div class="lab">El altar</div><div id="miniA"></div></div></aside>
+  <main id="main"></main>
+ </div>
+</div>
+<div id="modal" role="dialog" aria-modal="true"></div>
+<div id="demoVelo"></div>
+<div id="demo"><svg viewBox="0 0 24 24"><path d="M5 2l14 11h-7l4 8-3 1.5-4-8-4 5z" fill="#fff" stroke="#1a1030" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="admin" class="panel"></div>
+<script>
+'use strict';
+/* =====================================================================
+   EL CAMINO DE CEMPASÚCHIL — version 5e (A1, première année) « Día de muertos »
+   Fichier autonome : aucun fichier externe, aucune donnée envoyée.
+
+   ====== 1. CONTENU MODIFIABLE PAR LE PROFESSEUR ======================
+   QUESTIONS_VIDEO : questions de l'étape 1 (El vídeo).
+     pregunta : texte de la question (en espagnol)
+     opciones : 2 ou 3 réponses (vrai/faux = ['Verdadero','Falso'])
+     correcta : numéro de la bonne réponse (0 = la première de la liste)
+     mezclar  : false pour garder l'ordre écrit (utile pour vrai/faux)
+     activa   : false = la question n'est PAS posée aux élèves
+   L'ordre des réponses est mélangé à l'écran (sauf mezclar:false).
+   ===================================================================== */
+// Vidéo : court-métrage sans paroles « Dia de los Muertos » (Whoo Kazoo / Ringling, 2013).
+// VIDEO_ID = identifiant YouTube ; le film va de VIDEO_INICIO à VIDEO_FIN (en secondes), le reste est le générique.
+const VIDEO_ID = 'jCQnUuq-TEE';
+const VIDEO_INICIO = 4, VIDEO_FIN = 178;
+const URL_VIDEO = 'https://www.youtube.com/watch?v=' + VIDEO_ID;
+
+const QUESTIONS_VIDEO = [
+  { pregunta: '¿Dónde está la niña al principio?',
+    opciones: ['En el cementerio', 'En el colegio', 'En la playa'], correcta: 0 },
+  { pregunta: '¿Qué hay en la tumba?',
+    opciones: ['Una foto, flores y una vela', 'Un libro y un teléfono', 'Una guitarra'], correcta: 0 },
+  { pregunta: '¿Cómo está la niña al principio?',
+    opciones: ['Está triste', 'Está alegre', 'Está cansada'], correcta: 0 },
+  { pregunta: '¿Qué hacen los esqueletos en la fiesta?',
+    opciones: ['Tocan música, bailan y comen', 'Estudian y leen', 'Duermen'], correcta: 0 },
+  { pregunta: '¿Quién es el esqueleto con la flor azul?',
+    opciones: ['Es la mamá de la niña', 'Es la profesora de la niña', 'Es una amiga de la niña'], correcta: 0 },
+  { pregunta: '¿Cómo está la niña al final?',
+    opciones: ['Está alegre', 'Está triste', 'Está enferma'], correcta: 0 },
+];
+
+// L'histoire du film, à remettre dans l'ordre (l'ordre écrit ici est le bon ordre)
+const HISTORIA = [
+  { i:'tumba',      t:'La niña está triste en el cementerio.' },
+  { i:'florazul',   t:'La niña toma una flor azul y entra en el mundo de los muertos.' },
+  { i:'musico',     t:'Los esqueletos tocan música, bailan y comen.' },
+  { i:'corazon',    t:'El esqueleto es su mamá.' },
+  { i:'cementerio', t:'La niña regresa al cementerio. Está alegre.' },
+];
+const BILAN = 'En Día de muertos, los difuntos regresan para visitar a la familia.';
+
+const CODIGO_ADMIN = 'profe';   // code du mode professeur (Ctrl+Maj+A)
+
+/* ====== 2. DONNÉES DES AUTRES ÉTAPES ================================= */
+// Étape 2 : les six éléments de l'altar (ceux de la fiche de la séquence)
+const OBJETOS = [
+  { id:'flores', n:'las flores de cempasúchil', f:'Las flores de cempasúchil decoran el altar.' },
+  { id:'foto',   n:'la foto del difunto',       f:'Es la foto de un difunto de la familia.' },
+  { id:'velas',  n:'las velas',                 f:'Las velas dan luz.' },
+  { id:'pan',    n:'el pan de muerto',          f:'El pan de muerto es comida para los difuntos.' },
+  { id:'calav',  n:'las calaveritas de azúcar', f:'Las calaveritas de azúcar son dulces.' },
+  { id:'copal',  n:'el copal',                  f:'El copal es un incienso.' },
+];
+// Étape 3 : le texte de la séquence, morceau par morceau, avec une question par morceau
+const TEXTO = [
+  { t:'Día de muertos es una tradición mexicana que remonta a la época prehispánica', nota:'prehispánico = antes de la colonización española',
+    pregunta:'¿De qué país es la tradición?', opciones:['De México', 'De España', 'De Bolivia'], correcta:0 },
+  { t:'y que se celebra el 1 y el 2 de noviembre.',
+    pregunta:'¿Cuándo se celebra?', opciones:['El 1 y el 2 de noviembre', 'El 25 de diciembre', 'El 14 de julio'], correcta:0 },
+  { t:'Los difuntos regresan al mundo de los vivos para visitar a la familia y disfrutar de las ofrendas preparadas en su honor.', nota:'un difunto = un muerto ≠ un vivo · En el vídeo: la mamá es una difunta.',
+    pregunta:'¿Quién regresa para visitar a la familia?', opciones:['Los difuntos', 'Los turistas', 'Los profesores'], correcta:0 },
+  { t:'Es una celebración alegre.',
+    pregunta:'¿Cómo es la celebración?', opciones:['Es alegre', 'Es triste', 'Es aburrida'], correcta:0 },
+  { t:'En casa, las familias realizan altares decorados con flores de cempasúchil, calaveritas de azúcar, pan de muerto, copal, etc.',
+    pregunta:'¿Dónde realizan los altares las familias?', opciones:['En casa', 'En el colegio', 'En la playa'], correcta:0 },
+];
+// Texte à trous : les mots entre accolades sont les trous ; HUECOS_EXTRA = mots en trop dans la banque
+const HUECOS = 'Día de muertos es una tradición {mexicana} que remonta a la época prehispánica y que se celebra el 1 y el 2 de {noviembre}. Los {difuntos} regresan al mundo de los vivos para visitar a la {familia} y disfrutar de las ofrendas preparadas en su honor. Es una celebración {alegre}. En casa, las familias realizan {altares} decorados con flores de cempasúchil, calaveritas de azúcar, pan de muerto, copal, etc.';
+const HUECOS_EXTRA = ['triste', 'diciembre'];
+// Étape 4 : présent de l'indicatif. f3 = él / ella ; f6 = ellos / ellas ; pl = 1 si le sujet est pluriel
+const PERSONAJES = [
+  { id:'bailar',      inf:'bailar',             ay:'la música + el cuerpo', suj:'La catrina',     cola:'',               pl:0, f3:'baila',    f6:'bailan' },
+  { id:'cantar',      inf:'cantar',             ay:'la voz + la música',    suj:'El cantante',    cola:'',               pl:0, f3:'canta',    f6:'cantan' },
+  { id:'tocar',       inf:'tocar la guitarra',  ay:'hacer música',          suj:'Los músicos',    cola:'la guitarra',    pl:1, f3:'toca',     f6:'tocan' },
+  { id:'comer',       inf:'comer',              ay:'ejemplo: comer pan',    suj:'El abuelo',      cola:'pan de muerto',  pl:0, f3:'come',     f6:'comen' },
+  { id:'beber',       inf:'beber',              ay:'ejemplo: beber agua',   suj:'Los amigos',     cola:'',               pl:1, f3:'bebe',     f6:'beben' },
+  { id:'adornar',     inf:'decorar la tumba',   ay:'poner flores y velas',  suj:'La familia',     cola:'la tumba',       pl:0, f3:'decora',   f6:'decoran' },
+  { id:'desfilar',    inf:'celebrar',           ay:'hacer una fiesta',      suj:'Los esqueletos', cola:'Día de muertos', pl:1, f3:'celebra',  f6:'celebran' },
+  { id:'disfrazarse', inf:'llevar una máscara', ay:'tener en la cara',      suj:'El chico',       cola:'una máscara',    pl:0, f3:'lleva',    f6:'llevan' },
+];
+// Écran final : la fiche-bilan pour préparer le cartel
+const FICHA = [
+  ['Un país:', 'México.'],
+  ['Dos fechas:', 'el 1 y el 2 de noviembre.'],
+  ['Un origen:', 'la época prehispánica.'],
+  ['Una idea:', 'los difuntos regresan para visitar a la familia. Es una celebración alegre.'],
+  ['En el altar:', 'flores de cempasúchil, fotos de los difuntos, velas, pan de muerto, calaveritas de azúcar, copal.'],
+];
+const VOCAB = [['altarI','el altar'],['flores','las flores de cempasúchil'],['velas','las velas'],['pan','el pan de muerto'],['calav','las calaveritas de azúcar'],['copal','el copal'],['foto','la foto del difunto'],['cementerio','el cementerio']];
+const ETAPAS = ['El vídeo','El altar','La tradición','La fiesta'];
+const HABIL = ['Mira y comprende','Escucha y elige','Lee y completa','Elige el verbo: presente'];
+
+/* ====== 3. UTILITAIRES + ÉTAT ======================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const main = $('#main');
+const norm = t => (t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[.,;:!¡?¿"«»]/g, ' ').replace(/\s+/g, ' ').trim();
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const baraja = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const espera = ms => new Promise(r => setTimeout(r, ms));
+
+const CLAVE = 'caminoCempasuchil5e.v1';
+const base = () => ({ v:1, etapa:0, hechas:[0,0,0,0,0], estrellas:[0,0,0,0,0], e4:[], frases:['','',''], quiz:null, demos:{}, fin:0,
+  cfg:{ mus:1, vol:.7, cal:'alta', calManual:0, big:0, red:0 } });
+let S = cargar();
+function cargar() { try { const r = JSON.parse(localStorage.getItem(CLAVE)); if (r && r.v === 1) { const b = base(); return Object.assign(b, r, { cfg: Object.assign(b.cfg, r.cfg || {}) }); } } catch (e) {} return base(); }
+function guardar() { try { localStorage.setItem(CLAVE, JSON.stringify(S)); } catch (e) {} }
+let ADMIN = false, etapaVista = 0, limpiar = null;
+
+function aviso(t, ms = 3200) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(aviso.t); aviso.t = setTimeout(() => el.classList.remove('on'), ms); }
+function estrellasDe(err) { return err <= 1 ? 3 : err <= 4 ? 2 : 1; }
+
+/* ====== 4. SON : Web Audio (musique + bruitages) ===================== */
+const AU = { ctx:null, capas:0 };
+function iniciarAudio() {
+  if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+  const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+  try {
+    const c = AU.ctx = new C();
+    AU.master = c.createGain(); AU.master.gain.value = S.cfg.vol; AU.master.connect(c.destination);
+    AU.mus = c.createGain(); AU.mus.gain.value = S.cfg.mus ? .55 : 0; AU.mus.connect(AU.master);
+    AU.sfx = c.createGain(); AU.sfx.gain.value = .8; AU.sfx.connect(AU.master);
+    const n = c.sampleRate * .3, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    AU.ruido = b; AU.paso = 0; AU.sig = c.currentTime + .15;
+    setInterval(secuenciar, 60);
+  } catch (e) { AU.ctx = null; }
+}
+const mf = m => 440 * Math.pow(2, (m - 69) / 12);
+function nota(t, m, o = {}) {
+  const c = AU.ctx; if (!c) return;
+  const { tipo = 'triangle', g = .2, a = .005, d = .5, dest = AU.mus, lp = 0, sos = 0 } = o;
+  const os = c.createOscillator(), ga = c.createGain(); os.type = tipo; os.frequency.value = mf(m);
+  ga.gain.setValueAtTime(0, t); ga.gain.linearRampToValueAtTime(g, t + a);
+  if (sos) ga.gain.setValueAtTime(g, t + a + sos);
+  ga.gain.exponentialRampToValueAtTime(.0008, t + a + sos + d);
+  let fin = ga;
+  if (lp) { const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(lp * 3, t); f.frequency.exponentialRampToValueAtTime(lp, t + .15); os.connect(f); f.connect(ga); } else os.connect(ga);
+  fin.connect(dest); os.start(t); os.stop(t + a + sos + d + .05);
+}
+function chis(t, g = .05, d = .05, hz = 6000) {
+  const c = AU.ctx; if (!c) return; const s = c.createBufferSource(); s.buffer = AU.ruido;
+  const f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hz; const ga = c.createGain();
+  ga.gain.setValueAtTime(g, t); ga.gain.exponentialRampToValueAtTime(.0005, t + d);
+  s.connect(f); f.connect(ga); ga.connect(AU.mus); s.start(t); s.stop(t + d + .02);
+}
+// Valse en la mineur : 8 mesures de 3 temps (6 croches par mesure)
+const ACORDES = { Am:[45,57,60,64], Dm:[50,57,62,65], E:[40,56,59,62] };
+const COMPAS = ['Am','Am','Dm','Am','E','E','Am','Am'];
+const MELO = [[76,0,72,0,69,0],[72,0,0,71,69,0],[74,0,77,0,74,0],[72,0,0,0,69,0],[71,0,74,0,76,0],[80,0,76,0,74,0],[72,0,71,0,69,0],[69,0,0,0,0,0]];
+function secuenciar() {
+  const c = AU.ctx; if (!c || c.state !== 'running') return;
+  if (AU.sig < c.currentTime - .5) AU.sig = c.currentTime + .1;
+  const dur = .31;
+  while (AU.sig < c.currentTime + .25) {
+    const p = AU.paso % 48, cp = Math.floor(p / 6), s = p % 6, ac = ACORDES[COMPAS[cp]], t = AU.sig, k = AU.capas, me = MELO[cp][s];
+    // base : guitare arpégée + marimba discret
+    if (s === 0) nota(t, ac[0], { g:.2, d:1.1, lp:900 });
+    if (s === 2) nota(t, ac[1], { g:.1, d:.6, lp:1400 });
+    if (s === 3) nota(t, ac[2], { g:.09, d:.6, lp:1400 });
+    if (s === 4) nota(t, ac[3], { g:.1, d:.6, lp:1400 });
+    if (s === 0 && me) nota(t, me, { tipo:'sine', g:.1, d:.5 });
+    if (k >= 1 && (s === 0 || s === 4)) nota(t, ac[0] - 12, { tipo:'sine', g:.26, d:.5 });           // guitarrón
+    if (k >= 2) chis(t, s % 2 ? .02 : .045, .05);                                                        // maracas
+    if (k >= 3 && (s === 2 || s === 4)) ac.slice(1).forEach((m, i) => nota(t + i * .018, m + 12, { tipo:'sawtooth', g:.03, d:.22, lp:1800 })); // rasgueo
+    if (k >= 4 && me && s !== 0) { nota(t, me, { tipo:'sine', g:.11, d:.45 }); nota(t, me + 12, { tipo:'sine', g:.02, d:.2 }); }  // marimba
+    if (k >= 5 && (s === 0 || s === 3 || s === 4)) nota(t, 96, { tipo:'sine', g:.05, d:.05 });        // claves
+    if (k >= 6 && me) nota(t, me - 12, { tipo:'sawtooth', g:.045, a:.04, sos:.18, d:.25, lp:1500 });  // trompeta
+    if (k >= 7 && s === 2) chis(t, .05, .16, 2500);                                                      // güiro
+    if (k >= 8 && s === 0 && cp % 2 === 0) nota(t, ac[1] + 24, { tipo:'sine', g:.06, d:1.6 });        // campana
+    AU.paso++; AU.sig += dur;
+  }
+}
+function sfx(tipo) {
+  const c = AU.ctx; if (!c) return; const t = c.currentTime + .01, d = AU.sfx;
+  if (tipo === 'ok') [81, 88, 93].forEach((m, i) => nota(t + i * .03, m, { tipo:'sine', g:.16 - i * .04, d:1.3, dest:d }));
+  else if (tipo === 'mal') { nota(t, 50, { tipo:'sine', g:.2, d:.22, dest:d }); nota(t + .09, 47, { tipo:'sine', g:.14, d:.25, dest:d }); }
+  else if (tipo === 'clic') nota(t, 84, { tipo:'sine', g:.06, d:.06, dest:d });
+  else if (tipo === 'fin') [69, 72, 76, 81, 84, 88].forEach((m, i) => nota(t + i * .13, m, { tipo:'sine', g:.15, d:1.6, dest:d }));
+}
+
+/* ====== 5. VOIX : speechSynthesis ==================================== */
+const VOZ = { lista:[], i:0, sin:false, avisado:false, u:null, t0:Date.now() };
+function cargarVoces() {
+  if (!('speechSynthesis' in window)) { VOZ.sin = true; return; }
+  let v = []; try { v = speechSynthesis.getVoices().filter(x => /^es([-_]|$)/i.test(x.lang)); } catch (e) {}
+  const r = x => /google/i.test(x.name) && /es[-_](ES|US)/i.test(x.lang) ? 0 : /google/i.test(x.name) ? 1 : /natural/i.test(x.name) ? 2 : x.localService ? 3 : 4;
+  VOZ.lista = v.sort((a, b) => r(a) - r(b));
+  if (v.length) VOZ.sin = false;
+}
+if ('speechSynthesis' in window) { cargarVoces(); try { speechSynthesis.addEventListener('voiceschanged', cargarVoces); } catch (e) {} } else VOZ.sin = true;
+function sinVoz() { VOZ.sin = true; if (!VOZ.avisado) { VOZ.avisado = true; aviso('No hay voz en español en este ordenador: lee el texto.', 5000); } document.documentElement.classList.add('sinvoz'); }
+// decir(texte, bouton) → Promise<boolean> : true si la phrase a été prononcée
+function decir(texto, btn) {
+  return new Promise(res => {
+    if (!('speechSynthesis' in window)) { sinVoz(); return res(false); }
+    if (!VOZ.lista.length) cargarVoces();
+    if (!VOZ.lista.length || VOZ.i >= VOZ.lista.length) { sinVoz(); return res(false); }
+    try { speechSynthesis.cancel(); } catch (e) {}
+    const voz = VOZ.lista[VOZ.i], u = new SpeechSynthesisUtterance(texto);
+    VOZ.u = u; u.voice = voz; u.lang = voz.lang; u.rate = .75; u.volume = Math.min(1, S.cfg.vol + .3);
+    let hecho = false, empezo = false;
+    const fin = ok => { if (hecho) return; hecho = true; clearTimeout(tm); if (btn) btn.classList.remove('habla'); if (VOZ.u === u) musNivel(1); res(ok); };
+    const falla = () => { if (hecho) return; hecho = true; clearTimeout(tm); if (btn) btn.classList.remove('habla'); VOZ.i++; try { speechSynthesis.cancel(); } catch (e) {} decir(texto, btn).then(res); };
+    u.onstart = () => { empezo = true; musNivel(.25); if (btn) btn.classList.add('habla'); };
+    u.onend = () => fin(true);
+    u.onerror = e => (e.error === 'interrupted' || e.error === 'canceled') ? fin(true) : falla();
+    const tm = setTimeout(() => { if (!empezo) falla(); }, 4000);   // voix en ligne bloquée par le réseau → voix suivante
+    setTimeout(() => { try { speechSynthesis.speak(u); } catch (e) { falla(); } }, 60);
+  });
+}
+function musNivel(k) { if (AU.ctx && AU.mus) try { AU.mus.gain.setTargetAtTime(S.cfg.mus ? .55 * k : 0, AU.ctx.currentTime, .15); } catch (e) {} }
+function callar() { musNivel(1); try { speechSynthesis.cancel(); } catch (e) {} }
+
+/* ====== 6. DESSINS SVG =============================================== */
+const R = n => Math.round(n * 10) / 10;
+const flor = (x, y, r = 8) => `<g transform="translate(${x},${y})"><circle r="${r}" fill="#d95f00"/><circle r="${R(r*.86)}" fill="url(#gFlorR)" stroke="#ffb648" stroke-width="${R(r*.26)}" stroke-dasharray="${R(r*.44)} ${R(r*.2)}"/><circle r="${R(r*.5)}" fill="none" stroke="#e06c00" stroke-width="${R(r*.14)}" stroke-dasharray="${R(r*.3)} ${R(r*.18)}"/><circle r="${R(r*.2)}" fill="#ffe08a"/></g>`;
+const vela = (x, y, h = 30, w = 8, cl = '') => `<g transform="translate(${x},${y})"><circle class="halo" cy="${-h-8}" r="${R(w*3.6)}" fill="url(#gHalo)"/><ellipse rx="${R(w*.95)}" ry="${R(w*.3)}" fill="#b5562b" stroke="#1a1030" stroke-width=".8"/><rect x="${-w/2}" y="${-h}" width="${w}" height="${h}" rx="1.5" fill="url(#gCera)" stroke="#1a1030" stroke-width="1"/><path d="M${-w/2},${-h+1}q${R(w*.18)},${R(h*.32)} ${R(w*.34)},0z" fill="#fffdf2"/><path d="M0,${-h}v-4" stroke="#1a1030" stroke-width="1"/><g transform="translate(0,${-h-3})"><g class="llama ${cl}"><path d="M0,-14C5.5,-6 5,0 0,0C-5,0 -5.5,-6 0,-14Z" fill="#ff7a1a"/><path d="M0,-10.5C3.6,-5 3.2,0 0,0C-3.2,0 -3.6,-5 0,-10.5Z" fill="#ffc23a"/><path d="M0,-6C1.8,-3 1.6,0 0,0C-1.6,0 -1.8,-3 0,-6Z" fill="#fff8d0"/></g></g></g>`;
+const bandera = (x, y, c, s = 1) => `<g transform="translate(${x},${y}) scale(${s})"><g class="pp"><path d="M0,0h26v25l-4.3,5l-4.4,-5l-4.3,5l-4.3,-5l-4.4,5l-4.3,-5z" fill="${c}"/><circle cx="13" cy="12" r="4.5" fill="#1a1030" fill-opacity=".55"/><path d="M5,5l2.5,3l-2.5,3l-2.5,-3zM21,5l2.5,3l-2.5,3l-2.5,-3zM5,17l2,2.5l-2,2.5l-2,-2.5zM21,17l2,2.5l-2,2.5l-2,-2.5z" fill="#1a1030" fill-opacity=".55"/></g></g>`;
+function craneo(o = {}) {
+  const k = 'fill="#1a1030"', d = o.d || '#e0218a', d2 = o.d2 || '#22c7c0';
+  return `<path class="hueso" d="M-18,-4C-18,-27 18,-27 18,-4C18,5 14,9 11,12L11,19C11,23 -11,23 -11,19L-11,12C-14,9 -18,5 -18,-4Z"/>
+<path d="M18,-4C18,5 14,9 11,12L11,19C11,21 6,22.5 1,22.8L2,13C9,11 14,5 15,-8Z" fill="#a8895c" opacity=".3"/>
+<ellipse cx="-8" cy="-3" rx="5.5" ry="6.5" ${k}/><ellipse cx="8" cy="-3" rx="5.5" ry="6.5" ${k}/><path d="M0,4l-3,6h6z" ${k}/>
+${o.boca ? `<ellipse class="an boca" cx="0" cy="17" rx="5" ry="4" fill="#1a1030"/>` : o.sonr ? `<path d="M-10,12Q0,23 10,12" stroke="#1a1030" stroke-width="1.6" fill="none"/><path d="M-5,15.5v3M0,17v3M5,15.5v3" stroke="#1a1030" stroke-width="1.2"/>` : `<path d="M-8,15H8M-5,12v6M-2,12v7M2,12v7M5,12v6" stroke="#1a1030" stroke-width="1.3" fill="none"/>`}
+${o.big ? `<path d="M-10,11Q-5,6 0,10Q5,6 10,11Q5,14 0,12Q-5,14 -10,11Z" ${k}/>` : ''}
+${o.plain ? '' : `<circle cx="-8" cy="-3" r="7.8" fill="none" stroke="${d}" stroke-width="1.8" stroke-dasharray="2.2 2"/><circle cx="8" cy="-3" r="7.8" fill="none" stroke="${d}" stroke-width="1.8" stroke-dasharray="2.2 2"/><path d="M0,-22l2.6,4.2l-2.6,4.2l-2.6,-4.2z" fill="${d2}"/>`}
+${o.az ? `<circle cx="-6" cy="-17" r="1.6" fill="#ff9a1f"/><circle cx="6" cy="-17" r="1.6" fill="#ff9a1f"/><path d="M-15,6q3,2 1,6M15,6q-3,2 -1,6" stroke="#22c7c0" stroke-width="1.5" fill="none"/><circle cx="-12" cy="9" r="1.2" fill="#e0218a"/><circle cx="12" cy="9" r="1.2" fill="#e0218a"/>` : ''}`;
+}
+const SOMB = (c, c2) => `<path d="M-17,-17C-15,-52 15,-52 17,-17Z" fill="${c}" stroke="#1a1030"/><ellipse cy="-16" rx="42" ry="9" fill="${c}" stroke="#1a1030"/><ellipse cy="-16" rx="36" ry="6.5" fill="none" stroke="${c2}" stroke-width="1.6" stroke-dasharray="3 4"/><path d="M-16,-24Q0,-19 16,-24" stroke="${c2}" stroke-width="4" fill="none"/>`;
+const HATS = {
+  catrina: () => `<path d="M8,-34C22,-74 56,-66 52,-42C42,-54 30,-50 16,-28Z" fill="#22c7c0" stroke="#1a1030"/><path d="M0,-36C4,-82 38,-84 40,-62C28,-68 18,-58 8,-32Z" fill="#e0218a" stroke="#1a1030"/><path d="M-20,-18C-20,-46 20,-50 20,-22Z" fill="#3b1a78" stroke="#1a1030"/><ellipse cy="-18" rx="47" ry="10" fill="#3b1a78" stroke="#1a1030" transform="rotate(-6)"/>${flor(-18,-27,8)}${flor(-3,-31,7)}${flor(-30,-21,6)}`,
+  corona: () => flor(-13,-21,6.5) + flor(0,-25,7.5) + flor(13,-21,6.5),
+  bombin: () => `<path d="M-14,-19C-14,-42 14,-42 14,-19Z" fill="#2b2b3a" stroke="#1a1030"/><ellipse cy="-19" rx="25" ry="5" fill="#2b2b3a" stroke="#1a1030"/><path d="M-14,-23h28" stroke="#f0c75e" stroke-width="3"/>`,
+  gorra: () => `<path d="M-18,-12C-18,-32 18,-32 18,-12Z" fill="#e0218a" stroke="#1a1030"/><path d="M-18,-12h-10" stroke="#e0218a" stroke-width="5" stroke-linecap="round"/>`,
+};
+const PROP = {
+  pan: `<ellipse rx="9" ry="6.5" fill="#c98a3c" stroke="#1a1030"/><path d="M-6,-1Q0,-6 6,-1" stroke="#f3e0b0" stroke-width="2" fill="none"/>`,
+  copa: `<path d="M-6,-14h12l-2.5,14h-7z" fill="#b5562b" stroke="#1a1030"/><path d="M-5,-10h10" stroke="#f0c75e" stroke-width="1.5"/>`,
+  ramo: `<path d="M0,2V-10M0,0L-7,-6M0,0L7,-7" stroke="#2f8f4e" stroke-width="2"/>${flor(0,-13,6.5)}${flor(-8,-7,5.5)}${flor(8,-8,5.5)}`,
+  mascara: `<g transform="translate(0,-2)"><path d="M-10,-18C-14,-34 -4,-36 -2,-22M10,-18C14,-34 4,-36 2,-22" fill="#e0218a" stroke="#1a1030"/><path d="M-16,-10C-16,-23 16,-23 16,-10C16,4 6,13 0,13C-6,13 -16,4 -16,-10Z" fill="#22c7c0" stroke="#1a1030" stroke-width="1.4"/><ellipse cx="-7" cy="-7" rx="4.5" ry="3.5" fill="#1a1030"/><ellipse cx="7" cy="-7" rx="4.5" ry="3.5" fill="#1a1030"/><path d="M-6,4Q0,9 6,4" stroke="#f0c75e" stroke-width="2" fill="none"/><circle cy="-15" r="2.2" fill="#f0c75e"/></g>`,
+  vela: `<rect x="-3" y="-20" width="6" height="22" rx="1" fill="#f6ead0" stroke="#1a1030"/><g class="solo-vivo"><circle cy="-27" r="16" fill="url(#gHalo)" class="halo"/><g transform="translate(0,-21)"><path class="llama" d="M0,-11C4,-5 4,0 0,0C-4,0 -4,-5 0,-11Z" fill="#ffb648"/></g></g>`,
+  estandarte: c => `<path d="M0,6V-92" stroke="#6b4a2a" stroke-width="3" stroke-linecap="round"/><path d="M-22,-90h44" stroke="#6b4a2a" stroke-width="3" stroke-linecap="round"/><g transform="translate(-18,-88)"><g class="pp"><path d="M0,0h36v36l-6,7l-6,-7l-6,7l-6,-7l-6,7l-6,-7z" fill="${c}" stroke="#1a1030"/><circle cx="18" cy="17" r="8" fill="#f3e9d2"/><circle cx="15" cy="16" r="2" fill="#1a1030"/><circle cx="21" cy="16" r="2" fill="#1a1030"/></g></g>`,
+};
+const GUITARRA = `<g transform="translate(-2,-112) rotate(-24)"><rect x="14" y="-3" width="46" height="5.5" fill="#3a1d10" stroke="#1a1030" stroke-width=".8"/><rect x="58" y="-5.5" width="10" height="10" rx="2" fill="#3a1d10" stroke="#1a1030" stroke-width=".8"/><ellipse cx="-8" cy="3" rx="18" ry="15" fill="#c9742c" stroke="#1a1030"/><ellipse cx="10" cy="0" rx="12" ry="11" fill="#c9742c" stroke="#1a1030"/><circle cx="3" cy="1" r="5" fill="#1a1030"/><path d="M-14,0H60" stroke="#f3e9d2" stroke-width=".6"/></g>`;
+const NOTAS = (x, y) => `<g transform="translate(${x},${y})" class="solo-vivo"><g class="nt"><path d="M0,0v-16l9,-3v14" stroke="#f0c75e" stroke-width="2" fill="none"/><ellipse cx="-3" cy="0" rx="4" ry="3" fill="#f0c75e"/><ellipse cx="6" cy="-5" rx="4" ry="3" fill="#f0c75e"/></g><g class="nt b" transform="translate(16,10)"><path d="M0,0v-14" stroke="#22c7c0" stroke-width="2"/><ellipse cx="-3" cy="0" rx="4" ry="3" fill="#22c7c0"/></g></g>`;
+
+/* Personnage articulé (calavera façon gravure populaire) — origine aux pieds.
+   L / R : [angle bras, angle avant-bras, style épaule, style coude] ; angles en degrés depuis la verticale. */
+function fig(o) {
+  const { x = 0, y = 0, s = 1, flip = 0, c1 = '#2a1250', c2 = '#e0218a', falda = 0, hat = '', L = [18, 8], R: RR = [18, 8], pL = '', pR = '', body = '', head = '', cab = {}, front = '', extra = '' } = o;
+  const arm = (sg, a, prop) => {
+    const A = a[0] * Math.PI / 180, ex = R(Math.sin(A) * 30 * sg), ey = R(Math.cos(A) * 30), B = (a[0] + a[1]) * Math.PI / 180, hx = R(Math.sin(B) * 28 * sg), hy = R(Math.cos(B) * 28);
+    return `<g transform="translate(${16 * sg},-148)"><g class="an sw" style="${a[2] || ''}"><path d="M0,0L${ex},${ey}" class="manga" stroke="${c1}"/><g transform="translate(${ex},${ey})"><g class="an sw" style="${a[3] || ''}"><path d="M0,0L${hx},${hy}" class="manga" stroke="${c1}"/><path d="M${R(hx*.66)},${R(hy*.66)}L${R(hx*.84)},${R(hy*.84)}" stroke="${c2}" stroke-width="11.5" fill="none"/><g transform="translate(${hx},${hy})"><circle r="5.5" class="hueso"/>${prop}</g></g></g></g></g>`;
+  };
+  const piernas = falda
+    ? `<path d="M-13,-100C-20,-60 -40,-22 -45,0Q-34,-8 -22.5,0Q-11,-8 0,0Q11,-8 22.5,0Q34,-8 45,0C40,-22 20,-60 13,-100Z" fill="${c1}" stroke="#1a1030" stroke-width="1.4"/><path d="M13,-100C20,-60 40,-22 45,0Q34,-8 22.5,0Q17,-4 12,-1C15,-40 11,-80 5,-100Z" fill="#000" opacity=".2"/><path d="M-41,-14Q0,2 41,-14" stroke="#fff3d6" stroke-width="3" fill="none" stroke-dasharray="2 3"/><path d="M-38,-24Q0,-10 38,-24" stroke="${c2}" stroke-width="5.5" fill="none"/><path d="M-30,-46Q0,-34 30,-46" stroke="#f0c75e" stroke-width="2.4" fill="none" stroke-dasharray="4 4"/>${flor(-19, -62, 5)}${flor(2, -70, 5.5)}${flor(17, -58, 4.5)}<path d="M-9,-66q-4,8 -10,10M2,-64q0,10 6,14" stroke="#2f8f4e" stroke-width="1.6" fill="none"/>`
+    : `<path d="M-8,-94L-10,-5M8,-94L10,-5" stroke="${c1}" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M11,-92L13,-6" stroke="#000" stroke-width="4" opacity=".2" stroke-linecap="round"/><path d="M-14,-84v78M14.5,-84v78" stroke="${c2}" stroke-width="2" stroke-dasharray="2.2 4" fill="none"/><ellipse cx="-13" cy="-2" rx="9" ry="4" fill="#1a1030"/><ellipse cx="13" cy="-2" rx="9" ry="4" fill="#1a1030"/>`;
+  const pecho = falda
+    ? `<path d="M-13,-153Q0,-138 13,-153" stroke="#fff3d6" stroke-width="3.4" fill="none" stroke-dasharray="1.6 2.4"/>${flor(0, -124, 5.5)}<path d="M-14,-101Q0,-95 14,-101" stroke="${c2}" stroke-width="5" fill="none"/>`
+    : `<path d="M-12,-153L0,-136L12,-153" stroke="${c2}" stroke-width="2.6" fill="none"/><path d="M-6,-132V-98M6,-132V-98" stroke="${c2}" stroke-width="2.2" stroke-dasharray="1.5 5.5" fill="none"/><path d="M0,-150l-9,-5v10zM0,-150l9,-5v10z" fill="${c2}" stroke="#1a1030" stroke-width=".8"/><path d="M-14,-99Q0,-93 14,-99" stroke="#f0c75e" stroke-width="3.5" fill="none"/>`;
+  return `<g transform="translate(${x},${y}) scale(${flip ? -s : s},${s})"><ellipse cy="1" rx="${falda ? 46 : 28}" ry="6" fill="#000" opacity=".3"/><g class="an bob" style="${body}">
+${piernas}<path d="M-19,-154Q0,-161 19,-154L14,-95Q0,-89 -14,-95Z" fill="${c1}" stroke="#1a1030" stroke-width="1.4"/><path d="M19,-154L14,-95Q9,-92.5 4,-92L7,-157Z" fill="#000" opacity=".2"/>${pecho}
+<rect x="-3" y="-167" width="6" height="14" class="hueso"/>${front}
+${arm(-1, L, pL)}<g transform="translate(0,-160)"><g class="an sw" style="${head}"><g transform="translate(0,-24)">${craneo(Object.assign({ d: c2 }, cab))}${hat}</g></g></g>${arm(1, RR, pR)}${extra}
+</g></g>`;
+}
+
+const svgI = (inner, vb = '0 0 100 100') => `<svg class="ic" viewBox="${vb}" aria-hidden="true">${inner}</svg>`;
+const IC = {
+  flores: () => `<path d="M50,96Q46,70 30,42M50,96Q52,70 68,38M50,96V62" stroke="#2f8f4e" stroke-width="3.5" fill="none"/><path d="M50,84q-16,-2 -20,-14q14,0 20,14zM50,80q16,-4 18,-16q-13,2 -18,16z" fill="#2f8f4e"/>${flor(30,38,17)}${flor(69,33,18)}${flor(50,58,15)}`,
+  velas: () => vela(28, 90, 42, 11) + vela(52, 90, 58, 12, 'b') + vela(76, 90, 34, 11, 'c'),
+  pan: () => `<ellipse cx="50" cy="82" rx="46" ry="11" fill="#f3e9d2" stroke="#1a1030" stroke-width="1.2"/><ellipse cx="50" cy="81" rx="38" ry="7" fill="#d2c096"/><ellipse cx="50" cy="58" rx="40" ry="26" fill="url(#gPanR)" stroke="#5a3210" stroke-width="1.5"/><path d="M14,60Q30,34 50,44Q70,34 86,60M50,36V80" stroke="#f4cb8c" stroke-width="7.5" stroke-linecap="round" fill="none"/><path d="M17,62Q31,40 50,48Q69,40 83,62" stroke="#a9651f" stroke-width="1" fill="none" opacity=".7"/><circle cx="50" cy="40" r="8.5" fill="#f4cb8c" stroke="#a86a24"/><ellipse cx="34" cy="47" rx="12" ry="4.5" fill="#fff" opacity=".25" transform="rotate(-22 34 47)"/><path d="M24,70l2,1M36,76l2,1M64,76l2,-1M76,69l2,-1M40,57l2,1M60,58l2,-1M30,60l1,1M70,62l1,1M46,70l1.5,.5M56,68l1.5,-.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>`,
+  agua: () => `<ellipse cx="50" cy="90" rx="20" ry="4" fill="#000" opacity=".3"/><path d="M32.5,40L67.5,40L64,88Q50,92 36,88Z" fill="url(#gAguaL)" opacity=".92"/><ellipse cx="50" cy="40" rx="17.5" ry="3.5" fill="#c4fffb"/><path d="M28,16L72,16L65,89Q50,94 35,89Z" fill="rgba(255,255,255,.14)" stroke="#e8ffff" stroke-width="2.2" stroke-linejoin="round"/><ellipse cx="50" cy="16" rx="22" ry="3.5" fill="none" stroke="#e8ffff" stroke-width="1.8"/><path d="M35,24L38.5,80" stroke="#fff" stroke-width="3" opacity=".65" stroke-linecap="round"/><path d="M63,26L60,60" stroke="#fff" stroke-width="1.5" opacity=".4" stroke-linecap="round"/><circle cx="54" cy="66" r="2" fill="#fff" opacity=".6"/><circle cx="47" cy="54" r="1.4" fill="#fff" opacity=".6"/>`,
+  sal: () => `<ellipse cx="50" cy="91" rx="26" ry="4" fill="#000" opacity=".3"/><path d="M26,58Q50,10 74,58Z" fill="#fff"/><path d="M50,22Q66,40 74,58H56Q58,40 50,22Z" fill="#cfd7ea"/><path d="M14,56H86Q80,92 50,92Q20,92 14,56Z" fill="url(#gBarro)" stroke="#1a1030" stroke-width="1.5"/><ellipse cx="50" cy="56" rx="36" ry="4.5" fill="#f4f6fb" stroke="#1a1030" stroke-width="1"/><path d="M21,67l6,6l6,-6l6,6l6,-6l6,6l6,-6l6,6l6,-6l5,6" stroke="#f0c75e" stroke-width="2.2" fill="none"/><path d="M27,81Q50,89 73,81" stroke="#22c7c0" stroke-width="2.2" fill="none"/><path d="M40,42l2,1M50,32l2,1M58,46l2,-1M45,50l1,1" stroke="#aab4cc" stroke-width="2" stroke-linecap="round"/><path d="M82,24l1.5,5l5,1.5l-5,1.5l-1.5,5l-1.5,-5l-5,-1.5l5,-1.5z" fill="#fff"/>`,
+  copal: () => `<ellipse cx="50" cy="92" rx="22" ry="3.5" fill="#000" opacity=".3"/><path class="humo" d="M44,46Q34,34 46,26Q58,18 48,6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><path class="humo" d="M58,46Q68,36 58,26Q50,18 60,10" stroke="#e6dcff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6"/><circle cx="50" cy="48" r="17" fill="url(#gHalo)" opacity=".8"/><path d="M26,50H74L66,72H34Z" fill="url(#gBarro)" stroke="#1a1030" stroke-width="1.5"/><ellipse cx="50" cy="50" rx="24" ry="5" fill="#3a1408" stroke="#1a1030"/><ellipse cx="50" cy="50" rx="17" ry="3" fill="#ff7a1a"/><ellipse cx="46" cy="49.5" rx="6" ry="1.4" fill="#ffd27a"/><path d="M40,72H60L68,92H32Z" fill="url(#gBarro)" stroke="#1a1030" stroke-width="1.5"/><path d="M30,57H70" stroke="#f0c75e" stroke-width="2.5" stroke-dasharray="3 4"/><path d="M33,66l4,-4l4,4l4,-4l4,4l4,-4l4,4l4,-4l4,4" stroke="#22c7c0" stroke-width="1.8" fill="none"/><path d="M37,84H63" stroke="#e0218a" stroke-width="2.5"/>`,
+  papel: () => `<path d="M2,16Q50,30 98,16" stroke="#f3e9d2" stroke-width="1.5" fill="none"/>${bandera(8,20,'#e0218a',1)}${bandera(37,24,'#22c7c0',1)}${bandera(66,20,'#ff9a1f',1)}<g transform="translate(22,58)">${bandera(0,0,'#f0c75e',.9)}</g><g transform="translate(54,58)">${bandera(0,0,'#8a3fd0',.9)}</g>`,
+  calav: () => `<g transform="translate(50,52) scale(1.9)">${craneo({ az:1, sonr:1 })}</g>`,
+  calavera: () => `<g transform="translate(50,52) scale(1.9)">${craneo({ plain:1 })}</g>`,
+  // pictogrammes des symboles (étape 2)
+  camino: () => `<path d="M12,90Q20,60 46,56Q74,52 78,24" stroke="#ff9a1f" stroke-width="7" stroke-dasharray="1 13" stroke-linecap="round" fill="none"/><path d="M78,8L92,30L78,25L64,30Z" fill="#f0c75e"/><circle cx="30" cy="30" r="14" fill="url(#gAlma)"/>`,
+  luz: () => `<path d="M50,24C64,44 62,62 50,62C38,62 36,44 50,24Z" fill="#ff9a1f"/><path d="M50,42C56,52 55,62 50,62C45,62 44,52 50,42Z" fill="#fff3b0"/><path d="M50,6V16M16,44H26M74,44H84M24,18L31,26M76,18L69,26" stroke="#f0c75e" stroke-width="4" stroke-linecap="round"/><path d="M14,92L50,70L86,92" stroke="#f0c75e" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round" fill="none"/>`,
+  plato: () => `<circle cx="50" cy="52" r="26" fill="#f3e9d2" stroke="#1a1030" stroke-width="1.5"/><circle cx="50" cy="52" r="17" fill="none" stroke="#cdbf9f" stroke-width="2"/><path d="M12,22V46M7,22V34Q7,40 12,40Q17,40 17,34V22M12,46V84" stroke="#f0c75e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M88,84V22Q80,30 80,50H88" stroke="#f0c75e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
+  gota: () => `<path d="M50,10C72,42 78,56 78,66C78,82 66,92 50,92C34,92 22,82 22,66C22,56 28,42 50,10Z" fill="#22c7c0" stroke="#dff" stroke-width="2"/><path d="M36,62Q36,78 50,82" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/>`,
+  brillo: () => `<circle cx="50" cy="52" r="26" fill="url(#gAlma)"/><path d="M50,14L56,44L86,50L56,56L50,86L44,56L14,50L44,44Z" fill="#fff"/><path d="M82,14L84,22L92,24L84,26L82,34L80,26L72,24L80,22Z" fill="#f0c75e"/><path d="M20,70L22,76L28,78L22,80L20,86L18,80L12,78L18,76Z" fill="#f0c75e"/>`,
+  escoba: () => `<path d="M18,84H82L74,96H26Z" fill="#6b4a2a"/><path d="M14,84H86" stroke="#f0c75e" stroke-width="3"/><path d="M30,74Q22,58 36,48Q50,38 40,20" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".8"/><path d="M62,74Q72,60 60,48Q50,38 62,24" stroke="#e6dcff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/><path d="M80,30L82,36L88,38L82,40L80,46L78,40L72,38L78,36Z" fill="#f0c75e"/><path d="M20,36L21.500,40L26,41.500L21.500,43L20,47L18.500,43L14,41.500L18.500,40Z" fill="#f0c75e"/>`,
+  viento: () => `<path d="M8,34H62Q78,34 76,22Q74,12 64,16M8,54H80Q94,54 92,66Q90,76 80,72M8,74H50Q62,74 60,84Q58,92 50,88" stroke="#dff" stroke-width="5.5" stroke-linecap="round" fill="none"/>`,
+  alegria: () => `<circle cx="50" cy="54" r="30" fill="#f0c75e" stroke="#1a1030" stroke-width="1.5"/><path d="M36,46q4,-7 8,0M56,46q4,-7 8,0" stroke="#1a1030" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M33,60Q50,82 67,60Z" fill="#1a1030"/><circle cx="16" cy="18" r="4" fill="#e0218a"/><circle cx="86" cy="22" r="4" fill="#22c7c0"/><path d="M28,8l4,6M70,8l-3,7M90,44l-6,2M10,44l6,2" stroke="#ff9a1f" stroke-width="3.5" stroke-linecap="round"/>`,
+  // cartes de l'étape 3
+  cruz: () => `<circle cx="50" cy="42" r="34" fill="url(#gHalo)" opacity=".6"/><path d="M43,10H57V32H78V46H57V92H43V46H22V32H43Z" fill="#f0c75e" stroke="#1a1030" stroke-width="1.5"/><path d="M50,16V86M28,39H72" stroke="#fff3b0" stroke-width="2"/>`,
+  calend: () => `<rect x="14" y="16" width="72" height="72" rx="8" fill="#f3e9d2" stroke="#1a1030" stroke-width="1.5"/><path d="M14,24Q14,16 22,16H78Q86,16 86,24V38H14Z" fill="#e0218a"/><path d="M30,10V24M70,10V24" stroke="#1a1030" stroke-width="4" stroke-linecap="round"/><text x="50" y="33" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Arial,sans-serif">NOVIEMBRE</text><text x="50" y="76" text-anchor="middle" font-size="34" font-weight="700" fill="#2a1250" font-family="Georgia,serif">1 · 2</text>`,
+  altarI: () => `<path d="M8,92V72H26V52H40V34H60V52H74V72H92V92Z" fill="url(#gTela)" stroke="#1a1030" stroke-width="1.5"/><path d="M8,72H92M26,52H74" stroke="#f0c75e" stroke-width="2" stroke-dasharray="3 3"/>${vela(33,52,10,4)}${vela(67,52,10,4)}${flor(17,70,6)}${flor(83,70,6)}<rect x="43" y="14" width="14" height="18" fill="#d8c49a" stroke="#6b4a2a" stroke-width="2"/>`,
+  almaI: () => `<path d="M90,20Q40,10 30,48Q26,66 44,74" stroke="#22c7c0" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round" fill="none"/><path d="M36,62L47,77L30,80Z" fill="#22c7c0"/><circle cx="66" cy="68" r="26" fill="url(#gAlma)"/><path d="M8,94H92" stroke="#ff9a1f" stroke-width="5" stroke-dasharray="1 10" stroke-linecap="round"/>`,
+  tumba: () => `<circle cx="50" cy="50" r="40" fill="url(#gHalo)" opacity=".35"/><path d="M30,90V44Q30,24 50,24Q70,24 70,44V90Z" fill="#8f86a8" stroke="#1a1030" stroke-width="1.5"/><path d="M50,36V64M40,45H60" stroke="#f3e9d2" stroke-width="4"/><path d="M14,90H86" stroke="#3a2a5e" stroke-width="6" stroke-linecap="round"/>${flor(30,82,8)}${flor(44,86,7)}${flor(70,84,8)}${vela(84,90,16,5)}${vela(16,90,13,5,'b')}`,
+  piramide: () => `<circle cx="78" cy="20" r="10" fill="#ffb648"/><path d="M6,90L18,72H28L36,56H44L50,40H50L56,56H64L72,72H82L94,90Z" fill="#c9742c" stroke="#1a1030" stroke-width="1.5"/><path d="M40,90V60H60V90M18,72H82M36,56H64" stroke="#7a3d12" stroke-width="2" fill="none"/><path d="M44,40H56V30H44Z" fill="#c9742c" stroke="#1a1030" stroke-width="1.5"/>`,
+  iglesia: () => `<path d="M18,92V44H34V92M66,92V44H82V92" fill="#cfc4e6" stroke="#1a1030" stroke-width="1.5"/><path d="M18,44Q26,28 34,44M66,44Q74,28 82,44" fill="#22c7c0" stroke="#1a1030" stroke-width="1.5"/><path d="M34,92V56Q50,34 66,56V92Z" fill="#e9e0f7" stroke="#1a1030" stroke-width="1.5"/><path d="M44,92V74Q50,64 56,74V92Z" fill="#2a1250"/><path d="M50,8V30M43,15H57M26,22V34M22,26H30M74,22V34M70,26H78" stroke="#f0c75e" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="56" r="5" fill="#ffb648"/>`,
+  // vocabulaire nouveau
+  mascara: () => `<g transform="translate(50,58) scale(2.3)">${PROP.mascara}</g>`,
+  musico: () => fig({ x:50, y:98, s:.5, c1:'#1a1030', c2:'#f0c75e', hat:SOMB('#1a1030','#f0c75e'), front:GUITARRA, L:[55,60], R:[20,95] }),
+  disfraz: () => fig({ x:46, y:98, s:.5, c1:'#7a1fa2', c2:'#f0c75e', hat:HATS.gorra(), R:[110,147], pR:PROP.mascara, L:[15,10] }),
+  desfile: () => fig({ x:28, y:96, s:.42, c1:'#0e7c86', c2:'#f0c75e', hat:HATS.corona(), R:[60,95], pR:PROP.estandarte('#e0218a') }) + fig({ x:68, y:98, s:.46, c1:'#b3246b', c2:'#22c7c0', hat:SOMB('#3b1a78','#f0c75e'), R:[60,95], pR:PROP.estandarte('#ff9a1f') }),
+  cementerio: () => `<circle cx="76" cy="22" r="12" fill="#fbeecb"/><circle cx="76" cy="22" r="24" fill="url(#gLuna)"/><path d="M4,90H96" stroke="#3a2a5e" stroke-width="6" stroke-linecap="round"/><path d="M12,90V58Q12,46 24,46Q36,46 36,58V90Z" fill="#8f86a8" stroke="#1a1030"/><path d="M24,54V72M18,60H30" stroke="#f3e9d2" stroke-width="3"/><path d="M52,90V52M42,62H62" stroke="#cfc4e6" stroke-width="6" stroke-linecap="round"/><path d="M70,90V68Q70,60 79,60Q88,60 88,68V90Z" fill="#6f6690" stroke="#1a1030"/>${vela(44,90,10,4)}${flor(62,86,6)}${flor(92,86,5)}`,
+  florazul: () => `<path d="M50,96Q48,70 50,52" stroke="#2f8f4e" stroke-width="4" fill="none"/><path d="M50,78q-16,-2 -20,-14q14,0 20,14z" fill="#2f8f4e"/><g transform="translate(50,38)">${[0, 60, 120, 180, 240, 300].map(a => `<path d="M0,0C-14,-10 -12,-30 0,-34C12,-30 14,-10 0,0Z" fill="#2f86ff" stroke="#0b3fa8" transform="rotate(${a})"/>`).join('')}<circle r="7" fill="#ffe08a" stroke="#c98a00"/></g><circle cx="50" cy="38" r="44" fill="url(#gAlma)" opacity=".35"/>`,
+  corazon: () => `<circle cx="50" cy="50" r="44" fill="url(#gHalo)" opacity=".5"/><path d="M50,84C20,62 12,46 12,34C12,22 22,14 32,14C40,14 46,18 50,26C54,18 60,14 68,14C78,14 88,22 88,34C88,46 80,62 50,84Z" fill="#e0218a" stroke="#1a1030" stroke-width="1.5"/><path d="M26,30q4,-8 12,-8" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/>`,
+  foto: () => `<rect x="24" y="12" width="52" height="72" rx="3" fill="#6b4a2a" stroke="#f0c75e" stroke-width="3"/><rect x="31" y="19" width="38" height="58" fill="#d8c49a"/><circle cx="50" cy="40" r="10" fill="#7a5a3a"/><path d="M33,77Q34,56 50,56Q66,56 67,77Z" fill="#7a5a3a"/><path d="M38,36Q50,24 62,36L60,32Q50,22 40,32Z" fill="#3a2a1a"/>`,
+  guit: () => `<g transform="translate(40,70) rotate(-62) scale(1.5)"><rect x="14" y="-3" width="46" height="5.5" fill="#3a1d10"/><rect x="58" y="-5.5" width="10" height="10" rx="2" fill="#3a1d10"/><ellipse cx="-8" cy="3" rx="18" ry="15" fill="#c9742c" stroke="#1a1030"/><ellipse cx="10" cy="0" rx="12" ry="11" fill="#c9742c" stroke="#1a1030"/><circle cx="3" cy="1" r="5" fill="#1a1030"/><path d="M-14,0H60" stroke="#f3e9d2" stroke-width=".6"/></g>`,
+};
+const ico = n => svgI(IC[n]());
+const UI = {
+  casco: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 15v-3a8 8 0 0116 0v3"/><rect x="2.500" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16.500" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>`,
+  play: `<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>`,
+  alt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.500 8.500a5 5 0 010 7M19 6a8.500 8.500 0 010 12"/></svg>`,
+  nota: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 4l11-2v13.500a3 3 0 11-2-2.800V6.500l-7 1.300V18a3 3 0 11-2-2.800z"/></svg>`,
+  anim: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8q3-4 6 0t6 0 6 0M3 16q3-4 6 0t6 0 6 0"/><path d="M4 21L20 3" stroke-width="2.500"/></svg>`,
+  nuevo: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 108-8H7"/><path d="M10 1L7 4l3 3"/></svg>`,
+  ok: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7"/></svg>`,
+  lapiz: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 20l1-5L16 4l4 4L9 19z"/></svg>`,
+  ojo: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>`,
+  mano: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V4.500a1.500 1.500 0 013 0V10m0 0V8.500a1.500 1.500 0 013 0V11m0-.500a1.500 1.500 0 013 0V15a6 6 0 01-6 6h-1a6 6 0 01-5-2.700L3.500 14a1.500 1.500 0 012.500-1.600L9 15"/></svg>`,
+  est: on => `<svg viewBox="0 0 24 24" class="${on ? 'on' : ''}"><path d="M12 2l3 6.600 7.200.800-5.400 4.900 1.500 7.100L12 17.800 5.700 21.400l1.500-7.100L1.800 9.400 9 8.600z" fill="currentColor"/></svg>`,
+};
+const estrellas = n => [1, 2, 3].map(i => UI.est(i <= n)).join('');
+
+/* ---- L'altar (3 niveaux en perspective, grands objets) ---- */
+function altarSVG(items, luz) {
+  const t = items.map(i => 't-' + i).join(' ') + (luz ? ' t-luz' : '');
+  const nivel = (xb1, xb2, xf1, xf2, yt, yf, yb) => `<path d="M${xb1},${yt}H${xb2}L${xf2},${yf}H${xf1}Z" fill="url(#gTapa)" stroke="#1a1030"/><path d="M${xf1},${yf}H${xf2}V${yb}H${xf1}Z" fill="url(#gTela)" stroke="#1a1030"/><path d="M${xf1},${yf}H${xf2}V${yf + 5}H${xf1}Z" fill="#fff" opacity=".14"/><path d="M${xf1},${yf + 11}H${xf2}" stroke="#f0c75e" stroke-width="2.5" stroke-dasharray="6 5"/>${Array.from({ length: Math.floor((xf2 - xf1 - 30) / 36) + 1 }, (_, i) => { const x = xf1 + 18 + i * 36, y = (yf + yb) / 2 + 4; return `<circle cx="${x}" cy="${y}" r="5" fill="${['#ff9a1f', '#22c7c0', '#f0c75e'][i % 3]}"/><circle cx="${x}" cy="${y}" r="2" fill="#fff3d6"/><path d="M${x + 9},${y}h18" stroke="#ff7ac0" stroke-width="1.6" stroke-dasharray="2 3"/>`; }).join('')}<path d="M${xf1 + 4},${yb - 7}${Array.from({ length: Math.floor((xf2 - xf1 - 8) / 16) }, () => 'l8,-7l8,7').join('')}" stroke="#22c7c0" stroke-width="2" fill="none"/>`;
+  const arco = Array.from({ length: 21 }, (_, i) => { const a = Math.PI * (1 - i / 20), x = 200 + Math.cos(a) * 186, y = 215 - Math.sin(a) * 186; return flor(R(x), R(y), i % 2 ? 10 : 12.5); }).join('');
+  return `<svg class="altar ${t}" viewBox="0 0 400 384" role="img" aria-label="El altar">
+<path d="M14,376V215Q14,14 200,14Q386,14 386,215V376Z" fill="#1a0b40" opacity=".62" stroke="#f0c75e" stroke-opacity=".3"/>
+<ellipse cx="200" cy="374" rx="196" ry="10" fill="#000" opacity=".45"/>
+<g class="gloria"><circle cx="200" cy="190" r="225" fill="url(#gHalo)" opacity=".6"/></g>
+<g class="it it-flores">${arco}</g>
+<g class="it it-papel"><path d="M6,10Q200,44 394,10" stroke="#f3e9d2" stroke-width="1.2" fill="none"/>${['#e0218a','#22c7c0','#ff9a1f','#8a3fd0','#f0c75e','#e0218a','#22c7c0','#ff9a1f','#8a3fd0'].map((c, i) => { const x = 22 + i * 40, u = (x + 16 - 6) / 388; return bandera(x, R(11 + 68 * u * (1 - u)), c, 1.2); }).join('')}</g>
+<g class="it it-cruz"><g transform="translate(0,6)"><circle cx="200" cy="52" r="42" fill="url(#gHalo)" opacity=".6"/><path d="M193,22H207V38H223V51H207V96H193V51H177V38H193Z" fill="#f0c75e" stroke="#1a1030"/><path d="M200,26V92M181,44.5H219" stroke="#fff3b0" stroke-width="2"/></g></g>
+${nivel(128, 272, 114, 286, 150, 166, 216)}
+${nivel(92, 308, 72, 328, 216, 234, 288)}
+${nivel(52, 348, 26, 374, 288, 308, 372)}
+<g class="it it-foto"><g transform="translate(150,57) scale(1,1.25)">${IC.foto()}</g></g>
+<g class="it it-velas">${vela(126, 164, 38, 9)}${vela(274, 164, 38, 9, 'b')}${vela(84, 232, 44, 10, 'c')}${vela(316, 232, 44, 10)}${vela(40, 306, 50, 11, 'b')}${vela(360, 306, 50, 11, 'c')}</g>
+<g class="it it-flores">${flor(146,165,10)}${flor(254,165,10)}${flor(104,233,12)}${flor(198,238,9)}${flor(62,306,14)}${flor(338,306,14)}${flor(84,313,11)}${flor(318,314,10)}</g>
+<g class="it it-pan"><g transform="translate(104,150) scale(.92)">${IC.pan()}</g></g>
+<g class="it it-calav"><g transform="translate(228,208) scale(1.05)">${craneo({ az:1, sonr:1 })}</g><g transform="translate(262,212) scale(.88)">${craneo({ az:1, sonr:1, d:'#22c7c0', d2:'#ff9a1f' })}</g><g transform="translate(290,216) scale(.72)">${craneo({ az:1, sonr:1, d:'#ff9a1f', d2:'#e0218a' })}</g></g>
+<g class="it it-agua"><g transform="translate(78,232) scale(.8)">${IC.agua()}</g></g>
+<g class="it it-sal"><g transform="translate(236,232) scale(.78)">${IC.sal()}</g></g>
+<g class="it it-copal"><g transform="translate(152.5,217) scale(.95)">${IC.copal().replace(/class="humo"/g, 'class="humo humoP"')}</g></g>
+<g class="it it-guit"><g transform="translate(338,290) scale(.8)">${IC.guit()}</g></g>
+<g class="gloria">${[60,110,160,240,290,340].map((x, i) => `<ellipse cx="${x}" cy="${374 + (i % 2) * 5}" rx="7" ry="3.5" fill="#ff9a1f" transform="rotate(${i * 40} ${x} 374)"/>`).join('')}</g>
+</svg>`;
+}
+function itemsAltar() {
+  const it = [];
+  if (S.hechas[0]) it.push('papel');
+  if (S.hechas[1]) it.push('flores', 'foto', 'velas', 'pan', 'calav', 'copal');
+  if (S.hechas[2]) it.push('cruz', 'humo');
+  if (S.hechas[3]) it.push('guit');
+  return it;
+}
+function pintarMini() { $('#miniA').innerHTML = altarSVG(itemsAltar(), S.hechas[4]); }
+
+/* ---- Étape 4 : huit vignettes (une par personnage), grises puis en couleur ---- */
+function vinetas() {
+  const V = {};
+  V.bailar = ['-88 -292 176 300', '#e0218a', '#7a1250',
+    fig({ c1:'#ff4fa8', c2:'#22c7c0', falda:1, hat:HATS.catrina(), cab:{ sonr:1, az:1 }, R:[125,35,'--f:-18deg;--t:18deg;--d:.6s','--f:-20deg;--t:25deg;--d:.6s'], L:[55,-25,'--f:-14deg;--t:14deg;--d:.6s'], pL:`<circle r="7" fill="#f0c75e" stroke="#1a1030"/><path d="M0,0L8,14" stroke="#6b4a2a" stroke-width="3"/>`, head:'--f:-8deg;--t:8deg;--d:.6s', body:'--by:-10px;--br:6deg;--d:.6s' })];
+  V.cantar = ['-88 -262 176 270', '#3b5fe0', '#1c2a8a',
+    fig({ c1:'#241a52', c2:'#f0c75e', hat:SOMB('#241a52','#f0c75e'), cab:{ boca:1, big:1 }, R:[115,25,'--f:-10deg;--t:14deg;--d:.9s'], L:[35,105], head:'--f:-7deg;--t:5deg;--d:.9s', body:'--by:-3px;--br:2deg;--d:.9s' }) + NOTAS(46, -210)];
+  V.tocar = ['-125 -262 250 270', '#8a3fd0', '#40187a',
+    fig({ x:-58, c1:'#f0c75e', c2:'#7a1fa2', hat:SOMB('#3b1a78','#ff9a1f'), front:GUITARRA, L:[55,60], R:[22,92,'','--f:-14deg;--t:14deg;--d:.16s'], head:'--f:-5deg;--t:5deg;--d:.62s', body:'--by:-4px;--br:2deg;--d:.31s' }) +
+    fig({ x:58, c1:'#22c7c0', c2:'#ffb648', hat:SOMB('#0b5a64','#f0c75e'), front:GUITARRA, L:[55,60], R:[22,92,'','--f:-14deg;--t:14deg;--d:.16s'], head:'--f:5deg;--t:-5deg;--d:.62s', body:'--by:-4px;--br:-2deg;--d:.31s' }) + NOTAS(96, -215)];
+  V.comer = ['-88 -262 176 270', '#2fa866', '#135a34',
+    fig({ c1:'#f0c75e', c2:'#b3246b', hat:HATS.bombin(), cab:{ boca:1, big:1 }, R:[110,147,'','--f:-34deg;--t:4deg;--d:.7s'], pR:PROP.pan, L:[30,80], pL:PROP.pan, head:'--f:-3deg;--t:4deg;--d:.7s', body:'--by:-2px;--br:1deg;--d:1.4s' })];
+  V.beber = ['-125 -262 250 270', '#12b3b0', '#0a5a66',
+    fig({ x:-60, c1:'#ff9a1f', c2:'#7a1fa2', hat:SOMB('#0b5a64','#e0218a'), R:[95,75,'--f:-6deg;--t:10deg;--d:.7s','--f:0deg;--t:38deg;--d:.7s'], pR:PROP.copa, L:[25,20], head:'--f:0deg;--t:-9deg;--d:.7s', body:'--by:-2px;--br:1.5deg;--d:.7s' }) +
+    fig({ x:60, flip:1, c1:'#e0218a', c2:'#f0c75e', falda:1, hat:HATS.corona(), R:[95,75,'--f:-6deg;--t:10deg;--d:.7s','--f:0deg;--t:38deg;--d:.7s;animation-delay:-.7s'], pR:PROP.copa, L:[25,20], head:'--f:-9deg;--t:0deg;--d:.7s', body:'--by:-2px;--br:1.5deg;--d:.7s' })];
+  V.adornar = ['-140 -262 280 270', '#ff8a1f', '#a8400a',
+    `<g transform="translate(18,0) scale(1.15)"><ellipse cy="1" rx="52" ry="7" fill="#000" opacity=".3"/><path d="M-34,0V-74Q-34,-106 0,-106Q34,-106 34,-74V0Z" fill="url(#gPiedra)" stroke="#1a1030" stroke-width="1.5"/><path d="M0,-92V-48M-14,-76H14" stroke="#f3e9d2" stroke-width="6"/><path d="M-46,0H46" stroke="#6f6690" stroke-width="8" stroke-linecap="round"/><g class="solo-vivo">${flor(-22,-10,10)}${flor(0,-8,11)}${flor(22,-10,10)}${flor(-12,-108,8)}${flor(12,-108,8)}${flor(0,-114,9)}${vela(-44,0,20,6)}${vela(44,0,20,6,'b')}</g></g>` +
+    fig({ x:-82, c1:'#e0218a', c2:'#f0c75e', falda:1, hat:HATS.corona(), R:[75,15,'--f:-12deg;--t:10deg;--d:.8s'], pR:PROP.ramo, L:[20,15], body:'--by:-2px;--br:2deg;--d:.8s' }) +
+    fig({ x:108, s:.72, flip:1, c1:'#22c7c0', c2:'#7a1fa2', hat:HATS.gorra(), R:[80,10,'--f:-10deg;--t:12deg;--d:.7s'], pR:PROP.vela, L:[20,15], body:'--by:-3px;--br:2deg;--d:.7s' })];
+  V.desfilar = ['-150 -270 300 278', '#e2433f', '#7a1420',
+    fig({ x:-96, s:.92, c1:'#7a1fa2', c2:'#f0c75e', hat:SOMB('#3b1a78','#f0c75e'), R:[60,95,'--f:-4deg;--t:6deg;--d:.5s'], pR:PROP.estandarte('#e0218a'), L:[25,10,'--f:-25deg;--t:25deg;--d:.5s'], body:'--by:-7px;--bx:5px;--br:2deg;--d:.5s' }) +
+    fig({ x:4, s:.92, c1:'#22c7c0', c2:'#ffb648', falda:1, hat:HATS.corona(), R:[60,95,'--f:-5deg;--t:5deg;--d:.5s'], pR:PROP.estandarte('#ff9a1f'), L:[25,10,'--f:25deg;--t:-25deg;--d:.5s'], body:'--by:-7px;--bx:5px;--br:-2deg;--d:.5s;animation-delay:-.5s' }) +
+    fig({ x:100, s:.92, c1:'#f0c75e', c2:'#e0218a', hat:HATS.bombin(), R:[70,80,'--f:-6deg;--t:6deg;--d:.5s'], pR:PROP.vela, L:[25,10,'--f:-25deg;--t:25deg;--d:.5s'], body:'--by:-7px;--bx:5px;--br:2deg;--d:.5s' })];
+  V.disfrazarse = ['-88 -262 176 270', '#b04fe0', '#4a1a8a',
+    fig({ c1:'#ff9a1f', c2:'#22c7c0', hat:HATS.gorra(), R:[110,147,'','--f:-58deg;--t:8deg;--d:1.1s'], pR:PROP.mascara, L:[25,15,'--f:-8deg;--t:8deg;--d:1.1s'], body:'--by:-3px;--br:2deg;--d:1.1s',
+      extra:`<path d="M-19,-152Q-44,-100 -34,-50L-14,-96Z" fill="#e0218a" stroke="#1a1030"/>` })];
+  return PERSONAJES.map((p, i) => { const [vb, c1, c2, g] = V[p.id], w = +vb.split(' ')[2];
+    return `<div class="tarj" data-id="${p.id}" role="button" tabindex="0" aria-label="Carta ${i + 1}: ${p.inf}" style="--c1:${c1};--c2:${c2}"><span class="num">${i + 1}</span><div class="vin"><svg viewBox="${vb}" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${g}<g class="solo-vivo">${flor(R(-w / 2 + 12), 2, 9)}${flor(R(w / 2 - 12), 2, 9)}</g></svg></div><span class="pie"></span></div>`; }).join('');
+}
+
+/* ====== 7. FOND : shader WebGL + pétales Canvas ====================== */
+const FX = { gl:null, prog:null, pet:[], t0:performance.now(), alba:0, albaObj:0, mx:.5, my:.6, pmx:0, sucio:true, lluvia:0, fps:60, cuadros:0, tFps:0, arr:performance.now() };
+function iniciarGL() {
+  const cv = $('#gl'); let gl = null;
+  try { gl = cv.getContext('webgl', { antialias:false, alpha:false, powerPreference:'low-power' }); } catch (e) {}
+  if (!gl) return;
+  const vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fs = `precision mediump float;uniform vec2 uR;uniform float uT,uA,uQ;uniform vec2 uM;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p*=2.03;a*=.5;}return v;}
+void main(){vec2 uv=gl_FragCoord.xy/uR;float asp=uR.x/uR.y;vec2 p=vec2(uv.x*asp,uv.y);
+vec3 top=mix(vec3(.05,.025,.17),vec3(.2,.26,.55),uA),bot=mix(vec3(.44,.09,.42),vec3(1.,.58,.3),uA);
+vec3 col=mix(bot,top,smoothstep(.12,.95,uv.y));
+vec2 sp=p*80.+uM*1.5;float hh=h(floor(sp));
+col+=step(.982,hh)*smoothstep(.4,0.,length(fract(sp)-.5))*(.55+.45*sin(uT*2.+hh*60.))*(1.-uA)*smoothstep(.3,.6,uv.y);
+vec2 mp=vec2(asp*.8,.82)+uM*.012;float md=length(p-mp);
+col+=vec3(1.,.93,.78)*(smoothstep(.062,.057,md)+.3*exp(-md*6.))*(1.-.75*uA);
+col+=vec3(1.,.62,.22)*uA*exp(-length((p-vec2(asp*.45,.16))*vec2(.5,2.))*2.2);
+float h1=.27+.08*n(vec2(p.x*2.2+uM.x*.04+5.,1.))+.025*n(vec2(p.x*9.,3.));
+col=mix(col,mix(vec3(.085,.04,.2),vec3(.36,.2,.42),uA),smoothstep(h1+.003,h1-.003,uv.y));
+float m=fbm(vec2(p.x*1.6+uT*.025,uv.y*5.-uT*.008));
+col+=vec3(.5,.3,.72)*m*.24*smoothstep(.55,.1,uv.y)*uQ;
+float h2=.16+.07*n(vec2(p.x*1.4+uM.x*.09+9.,7.));
+col=mix(col,mix(vec3(.045,.02,.11),vec3(.18,.09,.26),uA),smoothstep(h2+.003,h2-.003,uv.y));
+float m2=fbm(vec2(p.x*2.4-uT*.04,uv.y*7.+3.));
+col+=vec3(.75,.3,.5)*m2*.12*smoothstep(.3,0.,uv.y)*uQ;
+col+=vec3(1.,.5,.12)*.2*(.9+.1*sin(uT*7.)*sin(uT*3.3))*exp(-uv.y*4.5);
+col*=1.-.42*pow(length(uv-.5)*1.25,2.2);
+gl_FragColor=vec4(col,1.);}`;
+  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
+  const a = sh(gl.VERTEX_SHADER, vs), b = sh(gl.FRAGMENT_SHADER, fs); if (!a || !b) return;
+  const pr = gl.createProgram(); gl.attachShader(pr, a); gl.attachShader(pr, b); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr); const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  FX.gl = gl; FX.u = {}; ['uR','uT','uA','uQ','uM'].forEach(n => FX.u[n] = gl.getUniformLocation(pr, n));
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); FX.gl = null; });
+}
+const NPET = { alta:60, media:30, baja:10 };
+function tamano() {
+  const esc = S.cfg.cal === 'alta' ? 1 : .5, g = $('#gl'), f = $('#fx');
+  g.width = Math.max(2, Math.round(innerWidth * esc)); g.height = Math.max(2, Math.round(innerHeight * esc));
+  f.width = innerWidth; f.height = innerHeight; if (FX.gl) FX.gl.viewport(0, 0, g.width, g.height); FX.sucio = true;
+}
+function petalo(arriba) { return { x: Math.random() * innerWidth, y: arriba ? -20 : Math.random() * innerHeight, vx: -.3 + Math.random() * .6, vy: .35 + Math.random() * .7, r: Math.random() * 6.28, vr: (-.5 + Math.random()) * .04, s: 5 + Math.random() * 7, f: Math.random() * 6.28, c: Math.random() < .5 ? '#ff9a1f' : Math.random() < .5 ? '#ffb648' : '#f07c00' }; }
+function cuadro(now) {
+  requestAnimationFrame(cuadro);
+  const bruto = now - (FX.ult || now), dt = Math.min(60, bruto); FX.ult = now;
+  // mesure des FPS → baisse automatique de la qualité sous 40 FPS
+  FX.cuadros++; if (bruto > 250) { FX.tFps = now; FX.cuadros = 0; }
+  if (now - FX.tFps > 3000) { FX.fps = FX.cuadros * 1000 / (now - FX.tFps); FX.tFps = now; FX.cuadros = 0;
+    if (FX.fps < 40 && !S.cfg.calManual && !S.cfg.red && now - FX.arr > 5000 && S.cfg.cal !== 'baja') { calidad(S.cfg.cal === 'alta' ? 'media' : 'baja'); aviso('Calidad: ' + S.cfg.cal); } }
+  const red = S.cfg.red, baja = S.cfg.cal === 'baja' || !!FX.calma;
+  if (Math.abs(FX.albaObj - FX.alba) > .001) { FX.alba += (FX.albaObj - FX.alba) * Math.min(1, dt * .0012); FX.sucio = true; }
+  FX.pmx += (FX.mx - .5 - FX.pmx) * .05;
+  if (FX.gl && (FX.sucio || !(red || baja))) {
+    const gl = FX.gl, g = $('#gl');
+    gl.uniform2f(FX.u.uR, g.width, g.height); gl.uniform1f(FX.u.uT, red ? 3 : (now - FX.t0) / 1000); gl.uniform1f(FX.u.uA, FX.alba);
+    gl.uniform1f(FX.u.uQ, baja ? .6 : 1); gl.uniform2f(FX.u.uM, red ? 0 : FX.pmx * 2, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); FX.sucio = false;
+  }
+  if (!red && !baja) $('#fg').style.transform = `translateX(${R(-FX.pmx * 40)}px)`;
+  // pétales
+  const c = $('#fx').getContext('2d'); c.clearRect(0, 0, innerWidth, innerHeight);
+  const obj = red ? 0 : NPET[S.cfg.cal] * (FX.lluvia ? 2.5 : FX.calma ? .35 : 1);
+  while (FX.pet.length < obj) FX.pet.push(petalo(FX.pet.length > 5 && FX.lluvia));
+  if (FX.pet.length > obj) FX.pet.length = Math.floor(obj);
+  const k = dt / 16.7, vel = FX.lluvia ? 2.2 : 1;
+  for (const p of FX.pet) {
+    p.f += .02 * k; p.x += (p.vx + Math.sin(p.f) * .6) * k; p.y += p.vy * k * vel; p.r += p.vr * k;
+    if (p.y > innerHeight + 20) Object.assign(p, petalo(true)); if (p.x < -20) p.x = innerWidth + 20; if (p.x > innerWidth + 20) p.x = -20;
+    c.save(); c.translate(p.x, p.y); c.rotate(p.r); c.scale(1, .55 + .45 * Math.sin(p.f * 2)); c.globalAlpha = .8; c.fillStyle = p.c;
+    c.beginPath(); c.moveTo(-p.s, 0); c.quadraticCurveTo(0, -p.s * .8, p.s, 0); c.quadraticCurveTo(0, p.s * .8, -p.s, 0); c.fill(); c.restore();
+  }
+}
+function calidad(q) { S.cfg.cal = q; document.documentElement.classList.remove('q-alta', 'q-media', 'q-baja'); document.documentElement.classList.add('q-' + q); $('#bCal').textContent = 'Calidad: ' + q; tamano(); guardar(); }
+function alba() { const n = S.hechas.reduce((a, b) => a + b, 0); FX.albaObj = S.fin ? 1 : [0, .06, .12, .2, .3, .42][n]; }
+function estallido(el, n = 14) {
+  if (S.cfg.red || !el) return; const r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+  for (let i = 0; i < n; i++) { const d = document.createElement('i'); d.className = 'petB'; const a = Math.random() * 6.28, l = 50 + Math.random() * 90;
+    d.style.cssText = `left:${x}px;top:${y}px;--dx:${R(Math.cos(a) * l)}px;--dy:${R(Math.sin(a) * l + 30)}px;--r:${Math.round(Math.random() * 500)}deg`; document.body.appendChild(d); setTimeout(() => d.remove(), 950); }
+}
+
+/* ====== 8. INTERFACE COMMUNE ========================================= */
+function modal(html) { const m = $('#modal'); m.innerHTML = html; m.classList.add('on'); }
+function cerrarModal() { const m = $('#modal'); m.classList.remove('on'); m.innerHTML = ''; }
+function info(n) {
+  $('#info').innerHTML = n >= 1 && n <= 4 ? `<div class="num">Etapa ${n} de 4</div><h2>${ETAPAS[n - 1]}</h2><div class="hab">${HABIL[n - 1]}</div>`
+    : n >= 6 ? `<div class="num">Final</div><h2>${n === 6 ? 'El altar' : 'Mi resumen'}</h2>` : '';
+}
+function crearCamino() {
+  $('#camino').innerHTML = ETAPAS.map((e, i) => `${i ? '<i class="pet"></i>' : ''}<button class="nodo" data-n="${i + 1}" aria-label="Etapa ${i + 1}: ${e}"><span class="fl">${i + 1}</span><span>${e}</span></button>`).join('') + '<div id="almaP"></div>';
+  $('#camino').addEventListener('click', e => { const n = e.target.closest('.nodo'); if (n && ADMIN) ir(+n.dataset.n); });
+}
+function pintarCamino() {
+  const c = $('#camino'), nodos = $$('.nodo', c), pets = $$('.pet', c);
+  nodos.forEach((n, i) => { n.classList.toggle('hecha', !!S.hechas[i]); n.classList.toggle('act', etapaVista === i + 1); n.tabIndex = ADMIN ? 0 : -1; });
+  pets.forEach((p, i) => p.classList.toggle('hecha', !!S.hechas[i]));
+  const k = Math.max(0, Math.min(3, etapaVista >= 6 ? 3 : etapaVista - 1)), fl = $('.fl', nodos[k]);
+  if (fl) $('#almaP').style.left = (fl.getBoundingClientRect().left - c.getBoundingClientRect().left + fl.offsetWidth / 2) + 'px';
+}
+const PANTALLAS = [];
+function ir(n) {
+  callar(); if (limpiar) { try { limpiar(); } catch (e) {} limpiar = null; }
+  cerrarModal(); finDemo(); if (n === 5) n = S.hechas[3] ? 6 : 4;
+  etapaVista = n; if (n >= 1) { S.etapa = n; guardar(); }
+  const cl = document.body.classList; cl.toggle('sinlado', [0, 2, 3, 4, 6, 7].includes(n)); cl.toggle('e3on', n === 3); cl.toggle('e4on', n === 4);
+  main.classList.add('out'); clearTimeout(ir.t);
+  ir.t = setTimeout(() => { main.scrollTop = 0; PANTALLAS[n](); pintarCamino(); pintarMini(); alba(); main.classList.remove('out'); pintarAdmin(); }, S.cfg.red ? 0 : 350);
+}
+const PREMIO = [['papel', 'El papel picado decora el altar.'], ['velas', 'Los objetos están en el altar.'], ['cruz', 'La cruz y el humo del copal están en el altar.'], ['guit', 'La música llega al altar.']];
+function completar(n, err, saltar) {
+  S.hechas[n - 1] = 1; if (!saltar) S.estrellas[n - 1] = Math.max(S.estrellas[n - 1], estrellasDe(err));
+  if (n === 4) { S.e4 = PERSONAJES.map(p => p.id); AU.capas = 8; }
+  guardar(); pintarCamino(); pintarMini(); alba();
+  sfx('fin');
+  modal(`<div class="caja panel"><h2 class="tit">Etapa ${n} completada</h2><div class="stars">${estrellas(S.estrellas[n - 1])}</div><div class="prem">${ico(PREMIO[n - 1][0])}<span>${PREMIO[n - 1][1]}</span></div><button class="btn grande" id="mSig">Continuar</button></div>`);
+  $('#mSig').onclick = () => { sfx('clic'); ir(n === 4 ? 6 : n + 1); }; $('#mSig').focus();
+}
+
+/* ---- Démonstration animée (curseur fantôme) au premier essai d'une mécanique ---- */
+let demoStop = null;
+function finDemo() { if (demoStop) demoStop(); }
+async function demo(clave, pasos) {
+  if (S.demos[clave]) return; S.demos[clave] = 1; guardar();
+  await espera(S.cfg.red ? 50 : 800);
+  const d = $('#demo'), v = $('#demoVelo'); let alto = false; const marcas = [];
+  demoStop = () => { alto = true; d.classList.remove('on', 'clic'); v.classList.remove('on'); marcas.forEach(([e, c]) => e.classList.remove(c)); demoStop = null; };
+  v.classList.add('on'); v.onclick = finDemo;
+  d.style.transition = 'none'; d.style.transform = `translate(${innerWidth * .5}px,${innerHeight * .85}px)`; d.classList.add('on');
+  await espera(60); d.style.transition = '';
+  for (const p of pasos) {
+    if (alto) return; const el = typeof p.el === 'function' ? p.el() : p.el; if (!el || !document.contains(el)) continue;
+    const r = el.getBoundingClientRect(); d.style.transform = `translate(${r.left + r.width / 2}px,${r.top + r.height / 2}px)`;
+    await espera(1000); if (alto) return;
+    if (p.clic) { d.classList.remove('clic'); void d.offsetWidth; d.classList.add('clic'); sfx('clic'); }
+    if (p.cls) { el.classList.add(p.cls); marcas.push([el, p.cls]); }
+    if (p.haz) p.haz();
+    if (p.escribe) { const inp = el; for (let i = 1; i <= p.escribe.length && !alto; i++) { inp.placeholder = p.escribe.slice(0, i); await espera(70); } }
+    await espera(650);
+  }
+  if (!alto) finDemo();
+}
+
+/* ---- Glisser-déposer + clic-clic + clavier ---- */
+function arrastre(root, intento) {
+  let sel = null, drag = null, sinClic = false;
+  const quitar = () => { if (sel) sel.classList.remove('sel'); sel = null; };
+  const probar = (it, dst) => { if (!intento(it, dst)) { sfx('mal'); it.classList.remove('mal'); void it.offsetWidth; it.classList.add('mal'); } quitar(); };
+  const down = e => { const it = e.target.closest('.drag'); if (!it || it.classList.contains('fija') || e.target.closest('.aud,.leer')) return; drag = { it, x: e.clientX, y: e.clientY, mov: false, f: null }; };
+  const move = e => {
+    if (!drag) return;
+    if (!drag.mov && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 8) { drag.mov = true; const f = drag.it.cloneNode(true), r = drag.it.getBoundingClientRect(); f.classList.add('fant'); f.classList.remove('sel'); f.style.width = r.width + 'px'; f.style.animation = 'none'; document.body.appendChild(f); drag.f = f; drag.it.style.opacity = .3; }
+    if (drag.mov) { drag.f.style.left = e.clientX + 'px'; drag.f.style.top = e.clientY + 'px'; const d = document.elementFromPoint(e.clientX, e.clientY), dst = d && d.closest('.dest'); $$('.dest.sobre', root).forEach(x => x !== dst && x.classList.remove('sobre')); if (dst) dst.classList.add('sobre'); }
+  };
+  const up = e => {
+    if (!drag) return; const d = drag; drag = null; if (!d.mov) return;
+    d.f.remove(); d.it.style.opacity = ''; $$('.dest.sobre', root).forEach(x => x.classList.remove('sobre'));
+    sinClic = true; setTimeout(() => sinClic = false, 60);
+    const el = document.elementFromPoint(e.clientX, e.clientY), dst = el && el.closest('.dest'); if (dst && root.contains(dst)) probar(d.it, dst);
+  };
+  const clic = e => {
+    if (sinClic || e.target.closest('.aud,.leer')) return;
+    const it = e.target.closest('.drag'); if (it && !it.classList.contains('fija')) { if (sel === it) return quitar(); quitar(); sel = it; it.classList.add('sel'); sfx('clic'); return; }
+    const dst = e.target.closest('.dest'); if (dst && sel) probar(sel, dst);
+  };
+  root.addEventListener('pointerdown', down); root.addEventListener('click', clic);
+  window.addEventListener('pointermove', move); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+  return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); if (drag && drag.f) drag.f.remove(); };
+}
+
+/* ---- Fiche « ¿Qué hay que hacer? » : affichée à la première entrée dans une étape, puis via le bouton « ? » ---- */
+const AYUDA = {
+  1: [['cementerio', '<b>Mira el vídeo</b>. No hay palabras: mira bien las imágenes.'], ['calav', 'Después, contesta a las preguntas: <b>haz clic en la respuesta correcta</b>.'], ['tumba', 'Al final, <b>ordena la historia</b> del vídeo.']],
+  2: [['velas', 'Haz clic en cada objeto y <b>escucha su nombre</b>.'], ['altarI', 'Después, escucha y <b>haz clic en el objeto correcto</b>: el objeto va al altar.']],
+  3: [['calend', '<b>Lee y escucha</b> el texto, frase por frase.'], ['brillo', 'Contesta a las preguntas: haz clic en la respuesta correcta.'], ['papel', 'Al final, <b>completa el texto</b>: pon cada palabra en su lugar.']],
+  4: [['calavera', 'La fiesta está dormida: las 8 cartas están <b>en gris</b>.'], ['musico', 'Haz clic en una carta. <b>Mira el sujeto</b>: ¿una persona o varias personas?'], ['papel', '<b>Elige el verbo correcto</b>. Ejemplo: La chica mira. Los chicos miran.'], ['calav', 'Si es correcto, la carta <b>toma color</b> y la música crece.']],
+};
+function ayuda(n, luego) {
+  finDemo();
+  modal(`<div class="caja panel ayu"><h2 class="tit">${ETAPAS[n - 1]}: ¿qué hay que hacer?</h2><ol class="pasosA">${AYUDA[n].map(([i, t], k) => `<li><b class="nA">${k + 1}</b>${ico(i)}<span>${t}</span></li>`).join('')}</ol><button class="btn grande" id="okA" data-cerrar>Entendido</button></div>`);
+  $('#okA').onclick = () => { sfx('clic'); cerrarModal(); if (luego) luego(); }; $('#okA').focus();
+}
+function ayudaAuto(n, luego) { if (S.demos['ay' + n]) { if (luego) luego(); return; } S.demos['ay' + n] = 1; guardar(); ayuda(n, luego); }
+// l'objet « vole » de sa case jusqu'à sa place sur l'altar, puis un halo le signale
+function volar(desde, hasta, html) {
+  if (S.cfg.red || !desde || !hasta) return; const a = desde.getBoundingClientRect(), b = hasta.getBoundingClientRect(), d = document.createElement('div');
+  d.className = 'vuela'; d.innerHTML = html; d.style.left = (a.left + a.width / 2) + 'px'; d.style.top = (a.top + a.height / 2) + 'px'; document.body.appendChild(d);
+  requestAnimationFrame(() => requestAnimationFrame(() => { d.style.transform = `translate(${b.left + b.width / 2 - a.left - a.width / 2}px,${b.top + b.height / 2 - a.top - a.height / 2}px) translate(-50%,-50%) scale(1)`; }));
+  setTimeout(() => d.remove(), 1000);
+}
+function foco(svg, g) {
+  if (!svg || !g) return; try { const bb = g.getBBox(), c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', bb.x + bb.width / 2); c.setAttribute('cy', bb.y + bb.height / 2); c.setAttribute('r', Math.max(46, Math.max(bb.width, bb.height) * .75)); c.setAttribute('fill', 'url(#gHalo)'); c.setAttribute('class', 'foco');
+    g.parentNode.insertBefore(c, g); setTimeout(() => c.remove(), 2600); } catch (e) {}
+}
+
+/* ====== 9. ÉCRAN D'ACCUEIL =========================================== */
+PANTALLAS[0] = function inicio() {
+  info(0); const hay = S.etapa > 0;
+  main.innerHTML = `<div id="inicio"><div><div class="sup">Noche del 1 de noviembre · Día de muertos</div><h1>El camino <em>de cempasúchil</em></h1>
+<p class="lema">Guía al alma hasta el altar de su familia.</p><p class="cas">${UI.casco}<span>Ponte los auriculares.</span></p>
+<div class="fila">${hay ? `<button class="btn grande" id="go">Continuar</button><button class="btn sec" id="nue">Empezar de nuevo</button>` : `<button class="btn grande" id="go">Empezar</button>`}</div></div>
+<div class="altarG">${altarSVG(itemsAltar(), S.hechas[4])}</div></div>`;
+  $('#go').onclick = () => { iniciarAudio(); sfx('ok'); ir(hay ? Math.min(S.etapa, 7) : 1); };
+  if (hay) $('#nue').onclick = confirmarNuevo;
+  $('#go').focus();
+};
+function confirmarNuevo() {
+  modal(`<div class="caja panel"><h2 class="tit">¿Empezar de nuevo?</h2><p>Tu progreso se borra.</p><p class="fila" style="justify-content:center;margin-top:1rem"><button class="btn" id="siN">Sí, empezar de nuevo</button><button class="btn sec" id="noN" data-cerrar>No</button></p></div>`);
+  $('#siN').onclick = reiniciar; $('#noN').onclick = cerrarModal; $('#noN').focus();
+}
+function reiniciar() { const cfg = S.cfg; S = base(); S.cfg = cfg; guardar(); AU.capas = 0; iniciarAudio(); ir(0); }
+
+/* ====== 10. ÉTAPE 1 — El vídeo ======================================= */
+const etq = n => `<span class="etq">Etapa ${n} · ${ETAPAS[n - 1]}</span>`;
+const ayb = n => `<button class="aud ayb" data-ay="${n}" aria-label="Ayuda" title="Ayuda">?</button>`;
+// QCM générique : pose les questions une par une, puis appelle fin(erreurs)
+function quiz(lista, n, cab, fin) {
+  let qi = 0, err = 0;
+  const paso = () => {
+    if (etapaVista !== n) return; if (qi >= lista.length) return fin(err);
+    const q = lista[qi]; let ops = q.opciones.map((t, i) => ({ t, ok: i === q.correcta })); if (q.mezclar !== false) ops = baraja(ops);
+    main.innerHTML = `<div class="panel centro"><p style="margin-bottom:.7rem">${etq(n)}</p>${cab ? cab(qi) : ''}<div class="puntos">${lista.map((_, i) => `<i class="${i < qi ? 'ok' : i === qi ? 'ya' : ''}"></i>`).join('')}</div>
+<p class="preg"><span>${esc(q.pregunta)}</span><button class="aud" id="aq" aria-label="Escuchar la pregunta" title="Escuchar">${UI.alt}</button></p>
+<div class="opcs">${ops.map((o, i) => `<button class="opc" data-ok="${o.ok ? 1 : 0}"><b>${'ABC'[i]}</b><span>${esc(o.t)}</span></button>`).join('')}</div></div>`;
+    $('#aq').onclick = e => decir(q.pregunta, e.currentTarget);
+    $$('.opc').forEach(b => b.onclick = () => {
+      if (b.dataset.ok === '1') { b.classList.add('si', 'bienp'); $$('.opc').forEach(x => x !== b && x.classList.add('no')); sfx('ok'); estallido(b); qi++; setTimeout(paso, 1100); }
+      else { err++; sfx('mal'); b.classList.add('mal'); setTimeout(() => b.classList.add('no'), 450); }
+    });
+  };
+  paso();
+}
+PANTALLAS[1] = function etapa1() {
+  info(1); let err = 0;
+  limpiar = () => musNivel(1);
+  const ver = () => {
+    musNivel(0);
+    main.innerHTML = `<div class="panel centro vid5"><p style="margin-bottom:.6rem">${etq(1)}</p><p class="consigna">${UI.casco}<span>Mira el vídeo (3 minutos). No hay palabras: mira bien las imágenes.</span></p>
+<div class="marco"><iframe src="https://www.youtube-nocookie.com/embed/${VIDEO_ID}?start=${VIDEO_INICIO}&end=${VIDEO_FIN}&rel=0&modestbranding=1" title="Vídeo" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<p class="nota" style="margin:.5rem 0">Puedes ver el vídeo dos veces.</p>
+<p class="fila" style="justify-content:center"><a class="btn sec" href="${URL_VIDEO}" target="_blank" rel="noopener noreferrer">${UI.play}<span>Abrir el vídeo en otra pestaña</span></a><button class="btn grande" id="irq">Ya vi el vídeo</button></p></div>`;
+    $('#irq').onclick = () => { sfx('clic'); musNivel(1); preguntas(); };
+  };
+  const preguntas = () => quiz(QUESTIONS_VIDEO.filter(q => q.activa !== false), 1,
+    () => `<p class="fila" style="justify-content:center;margin-bottom:.6rem"><button class="btn sec" id="otra">${UI.play}<span>Ver el vídeo otra vez</span></button></p>`,
+    e => { err += e; ordenar(); });
+  main.addEventListener('click', function otra(e) { if (etapaVista !== 1) return main.removeEventListener('click', otra); if (e.target.closest('#otra')) ver(); });
+  const ordenar = () => {
+    let k = 0;
+    main.innerHTML = `<div class="consigna panel barra">${etq(1)}${UI.mano}<span>Ordena la historia del vídeo: haz clic en las frases, de la primera a la última.</span><span class="cont" id="n1">0 / ${HISTORIA.length}</span></div>
+<div class="orden"><ol class="hecho" id="hecho"></ol><div class="sueltas" id="sueltas">${baraja(HISTORIA.map((h, i) => ({ h, i }))).map(({ h, i }) => `<button class="hist" data-i="${i}">${ico(h.i)}<span>${h.t}</span></button>`).join('')}</div></div>`;
+    $('#sueltas').onclick = e => {
+      const b = e.target.closest('.hist'); if (!b) return;
+      if (+b.dataset.i !== k) { err++; sfx('mal'); b.classList.remove('mal'); void b.offsetWidth; b.classList.add('mal'); return; }
+      const li = document.createElement('li'); li.className = 'hist ok bienp'; li.innerHTML = `<b>${k + 1}</b>${b.innerHTML}`; $('#hecho').appendChild(li); b.remove(); sfx('ok'); estallido(li, 8); k++; $('#n1').textContent = k + ' / ' + HISTORIA.length;
+      if (k === HISTORIA.length) setTimeout(() => {
+        if (etapaVista !== 1) return;
+        $('#sueltas').innerHTML = `<div class="bilan panel"><p class="tit"><b>${BILAN}</b></p><p class="fila" style="justify-content:center;margin-top:.8rem"><button class="aud" id="ab" aria-label="Escuchar">${UI.alt}</button><button class="btn" id="s1">Continuar</button></p></div>`;
+        $('#ab').onclick = ev => decir(BILAN, ev.currentTarget); decir(BILAN, $('#ab')); $('#s1').onclick = () => completar(1, err); $('#s1').focus();
+      }, 700);
+    };
+  };
+  ver(); ayudaAuto(1);
+};
+
+/* ====== 11. ÉTAPE 2 — El altar ======================================= */
+PANTALLAS[2] = function etapa2() {
+  info(2); let err = 0, faseB = false, cola = [], actual = null, rep = 0, bloqueo = false; const oidos = {}, puestos = new Set(), N = OBJETOS.length;
+  main.innerHTML = `<div class="consigna panel barra">${etq(2)}${UI.casco}<span id="c2t">En casa, las familias preparan un altar. Haz clic en cada objeto y escucha.</span><span class="cont" id="n2">0 / ${N}</span><button class="btn" id="sig2" disabled>Continuar</button>${ayb(2)}</div>
+<div class="e2"><div class="altarBox" id="altB">${altarSVG(itemsAltar())}<div class="altNom" id="altNom" aria-live="polite">El altar de la familia</div></div><div class="der">
+<div class="pide panel" id="pide" hidden></div>
+<div class="objs o5" id="objs">${baraja(OBJETOS).map(o => `<div class="obj" role="button" tabindex="0" data-id="${o.id}">${ico(o.id)}<span class="nom">${o.n}</span><span class="frase" hidden>${o.f}</span></div>`).join('')}</div></div></div>`;
+  const orden = o => `Pon ${o.n} en el altar.`;
+  const siguiente = () => {
+    actual = cola.shift(); rep = 0; bloqueo = false; const o = OBJETOS.find(x => x.id === actual);
+    $('#pide').innerHTML = `<button class="aud" id="rp" aria-label="Escuchar otra vez" title="Escuchar otra vez">${UI.alt}</button><span>Escucha y haz clic en el objeto correcto.</span><button class="leer" id="lp" hidden>Leer</button><b id="tp" hidden>${orden(o)}</b>`;
+    const di = () => decir(orden(o), $('#rp')).then(ok => { if (!ok && $('#tp')) $('#tp').hidden = false; });
+    $('#rp').onclick = () => { rep++; if (rep >= 2) $('#lp').hidden = false; di(); };
+    $('#lp').onclick = () => { $('#tp').hidden = false; $('#lp').hidden = true; };
+    di();
+  };
+  $('#objs').addEventListener('click', e => {
+    const el = e.target.closest('.obj'); if (!el || el.classList.contains('puesto')) return; const o = OBJETOS.find(x => x.id === el.dataset.id);
+    if (!faseB) {
+      oidos[o.id] = 1; el.classList.add('oido'); $('.frase', el).hidden = false; decir(o.n + '. ' + o.f, el);
+      const n = Object.keys(oidos).length; $('#n2').textContent = n + ' / ' + N; if (n === N) $('#sig2').disabled = false; return;
+    }
+    if (bloqueo) return;
+    if (o.id !== actual) { err++; sfx('mal'); el.classList.remove('mal'); void el.offsetWidth; el.classList.add('mal'); return; }
+    bloqueo = true; callar(); puestos.add(o.id); el.classList.add('puesto'); sfx('ok'); estallido(el); $('#n2').textContent = puestos.size + ' / ' + N;
+    const al = $('#altB .altar'), gs = $$('.it-' + o.id, al), g = gs[gs.length - 1], nom = $('#altNom');
+    volar(el, g, ico(o.id));
+    setTimeout(() => { if (!document.contains(al)) return; al.classList.add('t-' + o.id); foco(al, g); nom.innerHTML = `En el altar: <b>${o.n}</b>`; nom.classList.remove('pulso'); void nom.offsetWidth; nom.classList.add('pulso'); estallido(nom, 12); }, S.cfg.red ? 0 : 750);
+    if (puestos.size === N) { $('#pide').innerHTML = `<span>El altar está completo.</span>`; setTimeout(() => etapaVista === 2 && completar(2, err), 3000); }
+    else setTimeout(() => etapaVista === 2 && siguiente(), 1700);
+  });
+  $('#sig2').onclick = () => {
+    faseB = true; callar(); sfx('clic'); $('#sig2').hidden = true; $('#n2').textContent = '0 / ' + N;
+    $('#c2t').textContent = 'Ahora, completa el altar: escucha y haz clic en el objeto correcto.';
+    $$('.obj .frase').forEach(f => f.hidden = true); $('#pide').hidden = false; cola = baraja(OBJETOS.map(o => o.id)); siguiente();
+  };
+  ayudaAuto(2);
+};
+
+/* ====== 12. ÉTAPE 3 — La tradición =================================== */
+PANTALLAS[3] = function etapa3() {
+  info(3); let err = 0;
+  const huecos = () => {
+    obs.disconnect(); const partes = HUECOS.split(/\{(.+?)\}/), pal = partes.filter((_, i) => i % 2); let n = 0;
+    main.innerHTML = `<div class="consigna panel barra">${etq(3)}${UI.mano}<span>Completa el texto: pon cada palabra en su lugar.</span><span class="cont" id="n3">0 / ${pal.length}</span>${ayb(3)}</div>
+<div class="panel txt5" id="txt5"><div class="banco" id="banco5">${baraja(pal.concat(HUECOS_EXTRA)).map(w => `<span class="chip drag" role="button" tabindex="0" data-w="${w}">${w}</span>`).join('')}</div>
+<p class="texto">${partes.map((x, i) => i % 2 ? `<span class="hueco dest" role="button" tabindex="0" data-w="${x}" data-sol="${x}"></span>` : esc(x)).join('')}</p>
+<p class="fila" style="justify-content:center" id="fin3"></p></div>`;
+    limpiar = arrastre($('#txt5'), (it, dst) => {
+      if (!dst.classList.contains('hueco') || dst.classList.contains('lleno')) return true;
+      if (dst.dataset.w !== it.dataset.w) { err++; return false; }
+      dst.textContent = it.dataset.w; dst.classList.add('lleno', 'bienp'); it.remove(); sfx('ok'); estallido(dst, 8); n++; $('#n3').textContent = n + ' / ' + pal.length;
+      if (n === pal.length) { const t = HUECOS.replace(/[{}]/g, ''); $('#banco5').innerHTML = '<b class="memo">Memoriza este texto.</b>';
+        $('#fin3').innerHTML = `<button class="aud" id="ab" aria-label="Escuchar">${UI.alt}</button><button class="btn" id="s3">Continuar</button>`; $('#ab').onclick = e => decir(t, e.currentTarget); $('#s3').onclick = () => completar(3, err); $('#s3').focus(); }
+      return true;
+    });
+  };
+  quiz(TEXTO, 3, qi => `<p class="consigna">${UI.casco}<span>Lee y escucha el texto. Después, contesta.</span><button class="aud" id="at" aria-label="Escuchar el texto" title="Escuchar el texto">${UI.alt}</button></p>
+<div class="leer5">${TEXTO.slice(0, qi + 1).map((x, i) => `<span class="${i === qi ? 'ya' : ''}">${esc(x.t)}</span>`).join(' ')}${TEXTO[qi].nota ? `<small>${esc(TEXTO[qi].nota)}</small>` : ''}</div>`,
+    e => { err += e; huecos(); });
+  // lecture automatique du morceau courant à chaque nouvelle question
+  const obs = new MutationObserver(() => { const b = $('#at'); if (b && !b.dataset.ok) { b.dataset.ok = 1; const i = $$('.leer5 span').length - 1, t = TEXTO[i].t; b.onclick = () => decir(t, b); decir(t, b); } });
+  obs.observe(main, { childList: true }); const l0 = limpiar; limpiar = () => { obs.disconnect(); if (l0) l0(); };
+  { const b = $('#at'); if (b) { b.dataset.ok = 1; b.onclick = () => decir(TEXTO[0].t, b); } }
+  ayudaAuto(3, () => { const b = $('#at'); if (b) decir(TEXTO[0].t, b); });
+};
+
+/* ====== 13. ÉTAPE 4 — La fiesta (presente de indicativo) ============= */
+function solucion4(p) { return p.pl ? p.f6 : p.f3; }
+PANTALLAS[4] = function etapa4() {
+  info(4); let err = 0;
+  if (S.hechas[3]) S.e4 = PERSONAJES.map(p => p.id);
+  main.innerHTML = `<div class="e4"><div class="panel escr" id="escr"></div><div class="fiesta" id="escena">${vinetas()}</div></div>`;
+  const esc4 = $('#escena'), panel = $('#escr');
+  FX.calma = 1; FX.sucio = true; limpiar = () => { FX.calma = 0; FX.lluvia = 0; };
+  const pon = html => { const n = S.e4.length; panel.innerHTML = `<div class="lin4">${etq(4)}<span class="tit4">La fiesta toma color con tus respuestas.</span><span class="medidor" aria-hidden="true"><i style="width:${n / 8 * 100}%"></i></span><span class="cont">${n} / 8</span>${ayb(4)}</div><div class="cu4">${html}</div>`; };
+  const estado = () => {
+    const n = S.e4.length; AU.capas = n; esc4.classList.toggle('todo', n === 8);
+    $$('.tarj', esc4).forEach(c => { const p = PERSONAJES.find(x => x.id === c.dataset.id), v = S.e4.includes(p.id); c.classList.toggle('vivo', v);
+      $('.pie', c).innerHTML = v ? `${UI.ok}<span>${solucion4(p)}</span>` : `<span>${p.inf}</span>`; });
+  };
+  const frase = p => `${p.suj} <b>${solucion4(p)}</b>${p.cola ? ' ' + p.cola : ''}.`;
+  const guia = () => {
+    pon(S.e4.length === 8 ? `<span class="correcta tit">La fiesta está viva.</span><button class="btn" id="s4" style="margin-left:auto">Continuar</button>`
+      : `<ol class="pasos4"><li><b>1</b><span>Elige una carta gris.</span></li><li><b>2</b><span>Mira el sujeto.</span></li><li><b>3</b><span>Elige el verbo correcto.</span></li><li><b>4</b><span>La carta toma color.</span></li></ol><span class="ej">Ejemplo: La chica <b>mira</b>. Los chicos <b>miran</b>.</span>`);
+    const b = $('#s4'); if (b) { b.onclick = () => completar(4, err); b.focus(); }
+  };
+  const elegir = id => {
+    const p = PERSONAJES.find(x => x.id === id); $$('.tarj', esc4).forEach(g => g.classList.toggle('elegido', g.dataset.id === id));
+    const cab = `<div class="inf"><b>${p.inf}</b><small>${p.ay}</small></div>`, oir = () => decir(`${p.suj} ${solucion4(p)} ${p.cola}.`, $('#a4'));
+    const hecho = extra => { pon(`${cab}<div class="correcta">${UI.ok}${frase(p)}</div><button class="aud" id="a4" aria-label="Escuchar">${UI.alt}</button>${S.e4.length === 8 ? `<button class="btn" id="s4" style="margin-left:auto">Continuar</button>` : extra || ''}`); $('#a4').onclick = oir; const b = $('#s4'); if (b) b.onclick = () => completar(4, err); };
+    if (S.e4.includes(id)) return hecho();
+    const inf = p.inf.split(' ')[0];
+    pon(`${cab}<div class="oracion"><span>${p.suj}</span><span class="ops4">${baraja([p.f3, p.f6, inf]).map(f => `<button class="btn sec op4" data-f="${f}">${f}</button>`).join('')}</span><span>${p.cola ? p.cola + '.' : '.'}</span></div><div class="pista" id="pista" data-sol="${solucion4(p)}"></div>`);
+    $$('.op4', panel).forEach(b => b.onclick = () => {
+      const f = b.dataset.f;
+      if (f === solucion4(p)) {
+        S.e4.push(id); guardar(); sfx('ok'); estado(); const c = $(`.tarj[data-id=${id}]`, esc4); estallido(c, 30); c.classList.add('nace'); setTimeout(() => c.classList.remove('nace'), 1500);
+        hecho(`<span class="nota" style="margin-left:auto">Elige otra carta gris.</span>`); oir();
+        if (S.e4.length === 8) { sfx('fin'); FX.lluvia = 1; setTimeout(() => FX.lluvia = 0, 6000); }
+      } else {
+        err++; sfx('mal'); b.classList.add('mal'); b.disabled = true;
+        $('#pista').innerHTML = f === inf ? `<span>«${inf}» es el infinitivo. Elige el verbo conjugado.</span>`
+          : `<span>Mira el sujeto: <b>${p.suj}</b> = ${p.pl ? 'ellos / ellas (varias personas)' : 'él / ella (una persona)'}.</span><span class="regla ${p.pl ? '' : 'on'}">él / ella <i>→</i> -a, -e</span><span class="regla ${p.pl ? 'on' : ''}">ellos / ellas <i>→</i> -an, -en</span>`;
+      }
+    });
+  };
+  esc4.addEventListener('click', e => { const g = e.target.closest('.tarj'); if (g) { sfx('clic'); elegir(g.dataset.id); } });
+  estado(); guia(); ayudaAuto(4);
+};
+
+/* ====== 15. FINAL + RÉCAPITULATIF ==================================== */
+const FRASE_FIN = 'El alma llega al altar de su familia.';
+PANTALLAS[6] = function final() {
+  info(6); S.fin = 1; S.hechas[4] = 1; guardar(); FX.lluvia = 1; AU.capas = 8;
+  main.innerHTML = `<div id="final"><div class="altarG">${altarSVG(['foto','flores','velas','pan','papel','calav','cruz','copal','humo','guit'])}<div id="almaF"></div></div>
+<p class="msg tit">${FRASE_FIN}</p><button class="btn grande" id="aRes">Ver mi resumen</button></div>`;
+  const t1 = setTimeout(() => { const a = $('#final .altar'); if (a) a.classList.add('t-luz'); sfx('fin'); }, 600);
+  const t2 = setTimeout(() => decir(FRASE_FIN), 3200);
+  limpiar = () => { FX.lluvia = 0; clearTimeout(t1); clearTimeout(t2); };
+  $('#aRes').onclick = () => ir(7);
+};
+PANTALLAS[7] = function resumen() {
+  info(7);
+  main.innerHTML = `<div class="res panel"><h1 class="tit">El camino de cempasúchil</h1><p class="nota" style="text-align:center">Mi resumen · Día de muertos</p>
+<h3>Mis estrellas</h3><div class="estr">${ETAPAS.map((e, i) => `<div>${e}<br>${estrellas(S.estrellas[i])}</div>`).join('')}</div>
+<div class="copia cuad"><p>Mi ficha para el cartel</p><ul class="ficha">${FICHA.map(([k, v]) => `<li><b>${k}</b> ${v}</li>`).join('')}</ul><p style="margin-top:.6rem">Copia la ficha en tu cuaderno.</p></div>
+<h3>Palabras nuevas</h3><div class="voc">${VOCAB.map(([i, t]) => `<div>${ico(i)}${t}</div>`).join('')}</div>
+<div id="miq"></div>
+<div class="fila noimp" style="justify-content:center;margin-top:1rem"><button class="btn" id="imp">Imprimir</button><button class="btn sec" id="cop">Copiar el resumen</button></div>
+<div class="bonus noimp"><h3>Crea una pregunta de quiz (QCM) sobre Día de muertos</h3>
+<input type="text" id="bq" placeholder="Tu pregunta: ¿…?" aria-label="Tu pregunta" maxlength="140">
+${[0, 1, 2].map(i => `<div class="r"><input type="radio" name="bok" value="${i}" aria-label="Respuesta correcta ${i + 1}"><input type="text" id="br${i}" placeholder="Respuesta ${'ABC'[i]}" aria-label="Respuesta ${'ABC'[i]}" maxlength="80"></div>`).join('')}
+<p class="nota">Marca la respuesta correcta con el círculo.</p><p style="margin-top:.5rem"><button class="btn sec" id="bg">Guardar mi pregunta</button></p></div></div>`;
+  const pintaQ = () => { const q = S.quiz; $('#miq').innerHTML = q ? `<h3>Mi pregunta de quiz</h3><div class="miquiz"><b>${esc(q.p)}</b><ol type="A">${q.r.map((r, i) => `<li class="${i === q.ok ? 'ok' : ''}">${esc(r)}${i === q.ok ? ' (correcta)' : ''}</li>`).join('')}</ol></div>` : ''; };
+  pintaQ(); if (S.quiz) { $('#bq').value = S.quiz.p; S.quiz.r.forEach((r, i) => $('#br' + i).value = r); $$('[name=bok]')[S.quiz.ok].checked = true; }
+  $('#bg').onclick = () => { const p = $('#bq').value.trim(), r = [0, 1, 2].map(i => $('#br' + i).value.trim()), c = $('[name=bok]:checked');
+    if (!p || r.some(x => !x) || !c) { sfx('mal'); return aviso('Escribe la pregunta, tres respuestas y marca la correcta.'); }
+    S.quiz = { p, r, ok: +c.value }; guardar(); pintaQ(); sfx('ok'); estallido($('#miq')); $('#miq').scrollIntoView({ block: 'center', behavior: S.cfg.red ? 'auto' : 'smooth' }); };
+  $('#imp').onclick = () => window.print();
+  $('#cop').onclick = () => {
+    let t = `EL CAMINO DE CEMPASÚCHIL — Mi resumen\n\nMis estrellas:\n${ETAPAS.map((e, i) => `  ${i + 1}. ${e}: ${S.estrellas[i]} / 3`).join('\n')}\n\nMi ficha para el cartel:\n${FICHA.map(([k, v]) => `  ${k} ${v}`).join('\n')}\n\nPalabras nuevas: ${VOCAB.map(v => v[1]).join(', ')}.`;
+    if (S.quiz) t += `\n\nMi pregunta de quiz: ${S.quiz.p}\n${S.quiz.r.map((r, i) => `  ${'ABC'[i]}. ${r}${i === S.quiz.ok ? ' (correcta)' : ''}`).join('\n')}`;
+    const hecho = () => aviso('Resumen copiado.');
+    const plan = () => { try { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); hecho(); } catch (e) { aviso('No es posible copiar. Usa «Imprimir».'); } };
+    try { navigator.clipboard.writeText(t).then(hecho, plan); } catch (e) { plan(); }
+  };
+};
+
+/* ====== 16. MODE PROFESSEUR (Ctrl+Maj+A, code « profe ») ============= */
+function pedirCodigo() {
+  if (ADMIN) { $('#admin').classList.toggle('on'); return; }
+  modal(`<div class="caja panel"><h2 class="tit">Modo profesor</h2><form id="fc"><input type="password" id="cod" placeholder="Código" aria-label="Código" autocomplete="off"><p class="fila" style="justify-content:center"><button class="btn" type="submit">Entrar</button><button class="btn sec" type="button" id="cc" data-cerrar>Cerrar</button></p></form></div>`);
+  $('#cod').focus(); $('#cc').onclick = cerrarModal;
+  $('#fc').onsubmit = e => { e.preventDefault(); if ($('#cod').value.trim().toLowerCase() === CODIGO_ADMIN) { ADMIN = true; document.documentElement.classList.add('admin'); cerrarModal(); $('#admin').classList.add('on'); pintarAdmin(); pintarCamino(); } else { sfx('mal'); $('#cod').classList.add('mal'); $('#cod').value = ''; setTimeout(() => $('#cod') && $('#cod').classList.remove('mal'), 500); } };
+}
+function pintarAdmin() {
+  if (!ADMIN) return; const a = $('#admin'), resp = document.documentElement.classList.contains('resp');
+  a.innerHTML = `<b>Modo profesor</b> · etapa actual: ${etapaVista >= 1 && etapaVista <= 4 ? etapaVista : '—'}
+<div class="fila">Ir a: <button class="ib" data-ir="0">Inicio</button>${[1, 2, 3, 4].map(n => `<button class="ib" data-ir="${n}">${n}</button>`).join('')}<button class="ib" data-ir="6">Final</button><button class="ib" data-ir="7">Resumen</button></div>
+<div class="fila"><button class="ib" id="aVal" ${etapaVista >= 1 && etapaVista <= 4 ? '' : 'disabled'}>Validar esta etapa</button><button class="ib" id="aRes2" aria-pressed="${resp}">Mostrar respuestas</button></div>
+<div class="fila"><button class="ib" id="aRei">Reiniciar</button><button class="ib" id="aCer">Cerrar</button></div>`;
+  $$('[data-ir]', a).forEach(b => b.onclick = () => { iniciarAudio(); ir(+b.dataset.ir); });
+  $('#aVal').onclick = () => { if (etapaVista >= 1 && etapaVista <= 4) { callar(); finDemo(); completar(etapaVista, 0, true); } };
+  $('#aRes2').onclick = () => { document.documentElement.classList.toggle('resp'); pintarAdmin(); };
+  $('#aRei').onclick = reiniciar; $('#aCer').onclick = () => a.classList.remove('on');
+}
+
+/* ====== 17. DÉMARRAGE ================================================= */
+function aplicarCfg() {
+  const h = document.documentElement, c = S.cfg;
+  h.classList.toggle('big', !!c.big); h.classList.toggle('red', !!c.red);
+  $('#bAa').setAttribute('aria-pressed', !!c.big); $('#bRed').setAttribute('aria-pressed', !!c.red); $('#bMus').setAttribute('aria-pressed', !!c.mus);
+  $('#vol').value = c.vol; if (AU.ctx) { AU.master.gain.value = c.vol; AU.mus.gain.value = c.mus ? .55 : 0; }
+  FX.sucio = true; guardar(); setTimeout(pintarCamino, 50);
+}
+(function arrancar() {
+  $('#bMus').innerHTML = UI.nota; $('#bRed').innerHTML = UI.anim; $('#bNue').innerHTML = UI.nuevo;
+  $('#fg').innerHTML = `<svg viewBox="0 0 1600 160" preserveAspectRatio="none"><path fill="#07031a" d="M0,160V120Q60,96 120,118V70H104V58H120V40H134V58H150V70H134V120Q220,100 300,122Q330,60 380,60Q430,60 440,122Q560,96 660,120V84H650V74H660V62H670V74H680V84H670V120Q800,104 930,124Q950,76 990,76Q1030,76 1040,124Q1150,100 1240,118V60H1222V46H1240V26H1256V46H1274V60H1256V118Q1380,96 1470,122Q1490,84 1520,84Q1550,84 1560,122L1600,116V160Z"/>${[40, 200, 250, 520, 580, 760, 880, 1100, 1160, 1340, 1420, 1580].map((x, i) => `<circle cx="${x}" cy="${128 + (i % 3) * 8}" r="${5 + i % 3}" fill="#ff9a1f" opacity=".55"/>`).join('')}</svg>`;
+  $('#guir').innerHTML = `<svg viewBox="0 0 1600 34" preserveAspectRatio="xMidYMin slice"><path d="M0,3H1600" stroke="#f3e9d2" stroke-width="1.2"/>${Array.from({ length: 44 }, (_, i) => bandera(R(6 + i * 36.5), 3, ['#e0218a', '#22c7c0', '#ff9a1f', '#f0c75e', '#8a3fd0'][i % 5], .95).replace('class="pp"', '')).join('')}</svg>`;
+  if (!S.cfg.calManual) S.cfg.cal = 'alta';
+  try { if (matchMedia('(prefers-reduced-motion: reduce)').matches && !localStorage.getItem(CLAVE)) S.cfg.red = 1; } catch (e) {}
+  crearCamino(); iniciarGL(); calidad(S.cfg.cal); aplicarCfg(); AU.capas = S.hechas[3] ? 8 : S.e4.length;
+  addEventListener('resize', () => { tamano(); pintarCamino(); });
+  addEventListener('pointermove', e => { FX.mx = e.clientX / innerWidth; FX.my = e.clientY / innerHeight; const l = $('#luz').style; l.setProperty('--mx', e.clientX + 'px'); l.setProperty('--my', e.clientY + 'px'); }, { passive: true });
+  addEventListener('pointerdown', iniciarAudio, { once: true }); addEventListener('keydown', iniciarAudio, { once: true });
+  // la musique se tait quand l'élève regarde la vidéo dans l'autre onglet
+  document.addEventListener('visibilitychange', () => { if (!AU.ctx) return; try { document.hidden ? AU.ctx.suspend() : AU.ctx.resume(); } catch (e) {} if (document.hidden) callar(); });
+  $('#bMus').onclick = () => { S.cfg.mus = S.cfg.mus ? 0 : 1; aplicarCfg(); };
+  $('#vol').oninput = e => { S.cfg.vol = +e.target.value; aplicarCfg(); };
+  $('#bCal').onclick = () => { S.cfg.calManual = 1; calidad({ alta: 'media', media: 'baja', baja: 'alta' }[S.cfg.cal]); };
+  $('#bAa').onclick = () => { S.cfg.big = S.cfg.big ? 0 : 1; aplicarCfg(); };
+  $('#bRed').onclick = () => { S.cfg.red = S.cfg.red ? 0 : 1; aplicarCfg(); };
+  $('#bNue').onclick = confirmarNuevo;
+  main.addEventListener('click', e => { const b = e.target.closest('[data-ay]'); if (b) { sfx('clic'); ayuda(+b.dataset.ay); } });
+  // plein écran (tablette) : bouton affiché seulement si le navigateur l'autorise
+  { const de = document.documentElement, pide = de.requestFullscreen || de.webkitRequestFullscreen, sale = document.exitFullscreen || document.webkitExitFullscreen,
+      en = () => document.fullscreenElement || document.webkitFullscreenElement, bp = $('#bPan');
+    bp.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+    if (pide && sale && (document.fullscreenEnabled || document.webkitFullscreenEnabled)) {
+      bp.hidden = false;
+      bp.onclick = () => { try { const r = en() ? sale.call(document) : pide.call(de); if (r && r.catch) r.catch(() => aviso('Pantalla completa no disponible.')); } catch (e) { aviso('Pantalla completa no disponible.'); } };
+      const cambio = () => { bp.setAttribute('aria-pressed', !!en()); setTimeout(() => { tamano(); pintarCamino(); }, 200); };
+      document.addEventListener('fullscreenchange', cambio); document.addEventListener('webkitfullscreenchange', cambio);
+    } }
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a')) { e.preventDefault(); pedirCodigo(); return; }
+    const t = e.target;
+    if ((e.key === 'Enter' || e.key === ' ') && t.matches && t.matches('[role=button]') && t.tagName !== 'BUTTON') { e.preventDefault(); t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })); }
+    if (e.key === 'Escape') { if (demoStop) finDemo(); else if ($('#modal [data-cerrar]')) cerrarModal(); }
+  });
+  if (location.hash === '#profe') setTimeout(pedirCodigo, 400);
+  etapaVista = 0; PANTALLAS[0](); pintarCamino(); pintarMini(); alba(); FX.alba = FX.albaObj;
+  requestAnimationFrame(cuadro);
+})();
+</script>
+</body>
+</html>
