@@ -511,6 +511,45 @@ button.hist:hover{transform:translateX(6px);border-color:var(--nar)}
 .op4{font-size:1.3rem;min-height:3rem;padding:.4rem 1.3rem;border:2px solid var(--oro)}
 .ficha{list-style:none;margin:0;padding:0;display:grid;gap:.3rem;font-size:1.2rem;font-weight:500}
 .ficha b{color:var(--nar2);margin-right:.3rem}
+.marco video{position:absolute;inset:0;width:100%;height:100%;background:#000}
+.qz{max-width:66rem}
+.opcs.tiles{grid-template-columns:repeat(3,1fr);gap:.9rem}
+.tiles .opc{flex-direction:column;justify-content:flex-start;text-align:center;gap:.5rem;padding:.8rem .6rem;min-height:0}
+.tiles .opc:hover{transform:translateY(-5px)}
+.tiles .opc svg.ic{width:min(8.5rem,16vh);height:min(8.5rem,16vh);filter:drop-shadow(0 4px 5px rgba(0,0,0,.4))}
+.opc .tx{display:flex;align-items:center;gap:.7rem}
+.tiles .opc .tx{flex-direction:column;gap:.3rem;font-size:1.2rem;font-weight:600}
+.opc.no{text-decoration:none}.opc.no .tx>span{text-decoration:line-through}
+.ronda{flex:none;padding:.15rem .7rem;border-radius:2rem;border:1px solid var(--oro);color:var(--oro);font-size:.9rem;font-weight:700;white-space:nowrap}
+.altW{position:relative;flex:none;margin:auto}
+.e2 .altarBox .altW .altar{width:100%;height:100%}
+.hot{position:absolute;width:2.3rem;height:2.3rem;margin:-1.15rem;border-radius:50%;display:none;place-items:center;font-weight:800;font-size:1.1rem;background:var(--nar);color:#2b1000;border:2px solid #fff;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.6)}
+.hot.num{display:grid}
+.hot.ok{background:var(--tur);color:#062a2a}
+.hot.on{display:block;width:6.5rem;height:6.5rem;margin:-3.25rem;background:none;border:5px solid #ffd76a;color:transparent;box-shadow:0 0 0 6px rgba(255,154,31,.35),0 0 30px #ffb648;animation:marca .7s ease-in-out infinite alternate}
+.ficha2{display:flex;align-items:center;gap:1.2rem;min-height:8.6rem;margin-bottom:.8rem;padding:.7rem 1.2rem}
+.ficha2 svg.ic{width:7rem;height:7rem;flex:none}
+.ficha2 .pal{display:flex;align-items:center;gap:.8rem;font-size:1.9rem;font-weight:800;color:var(--nar2)}
+.ficha2 .fr{font-size:1.25rem;margin-top:.2rem}
+.objs.o5 .obj{justify-content:center;min-height:7.5rem}
+.objs.o5 .obj.puesto{opacity:.45;pointer-events:auto;filter:none;border-color:var(--tur)}
+.que{padding:1rem 1.4rem;text-align:center}
+.que .grande svg{width:min(11rem,22vh);height:min(11rem,22vh)}
+.que .opcs{margin-top:.6rem}.que .opc{justify-content:center;font-size:1.4rem;font-weight:700}
+.leyenda{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 1rem;margin-top:.9rem}
+.ley{display:flex;align-items:center;gap:.6rem}
+.ley>b{flex:none;width:2.3rem;height:2.3rem;border-radius:50%;display:grid;place-items:center;background:var(--nar);color:#2b1000;border:2px solid #fff;font-size:1.1rem}
+.ley .hueco{flex:1;min-height:2.8rem;line-height:2.6rem;font-size:1.1rem}
+#der3 .chip{font-size:1.15rem;display:inline-block}
+#der3{justify-content:flex-start}
+#fin2 .bilan{margin-top:.8rem;font-size:1.25rem;padding:.7rem}
+.leer5{display:flex;align-items:flex-start;gap:.8rem;flex-wrap:wrap}
+.leer5 p{flex:1;min-width:0}
+.leer5 small{flex-basis:100%;margin-top:0}
+.leer5 mark{background:var(--nar);color:#2b1000;border-radius:.3rem;padding:0 .25rem}
+.hk{display:inline-flex;align-items:center;gap:.25rem;vertical-align:middle}
+.hk svg.ic{width:2.6rem;height:2.6rem}
+.txt5 .texto{line-height:2.7}
 @media (max-width:760px){.orden{grid-template-columns:1fr}}
 @media print{.ficha b{color:#7a2d00}}
 
@@ -602,24 +641,24 @@ html.red .nt{opacity:0}
    L'ordre des réponses est mélangé à l'écran (sauf mezclar:false).
    ===================================================================== */
 // Vidéo : court-métrage sans paroles « Dia de los Muertos » (Whoo Kazoo / Ringling, 2013).
-// VIDEO_ID = identifiant YouTube ; le film va de VIDEO_INICIO à VIDEO_FIN (en secondes), le reste est le générique.
-const VIDEO_ID = 'jCQnUuq-TEE';
+// Le fichier vidéo est lu directement depuis le dossier videos/ ; le film va de VIDEO_INICIO à VIDEO_FIN (en secondes), le reste est le générique.
+const URL_VIDEO = 'videos/dia-de-los-muertos.mp4';
 const VIDEO_INICIO = 4, VIDEO_FIN = 178;
-const URL_VIDEO = 'https://www.youtube.com/watch?v=' + VIDEO_ID;
+// icos : un pictogramme par réponse, dans le même ordre que opciones
 
 const QUESTIONS_VIDEO = [
   { pregunta: '¿Dónde está la niña al principio?',
-    opciones: ['En el cementerio', 'En el colegio', 'En la playa'], correcta: 0 },
+    opciones: ['En el cementerio', 'En el colegio', 'En la playa'], icos: ['cementerio', 'colegio', 'playa'], correcta: 0 },
   { pregunta: '¿Qué hay en la tumba?',
-    opciones: ['Una foto, flores y una vela', 'Un libro y un teléfono', 'Una guitarra'], correcta: 0 },
+    opciones: ['Una foto, flores y una vela', 'Un libro y un teléfono', 'Una guitarra'], icos: ['ofrendaI', 'libroTel', 'guit'], correcta: 0 },
   { pregunta: '¿Cómo está la niña al principio?',
-    opciones: ['Está triste', 'Está alegre', 'Está cansada'], correcta: 0 },
+    opciones: ['Está triste', 'Está alegre', 'Está cansada'], icos: ['caraTriste', 'caraAlegre', 'caraCansada'], correcta: 0 },
   { pregunta: '¿Qué hacen los esqueletos en la fiesta?',
-    opciones: ['Tocan música, bailan y comen', 'Estudian y leen', 'Duermen'], correcta: 0 },
+    opciones: ['Tocan música, bailan y comen', 'Estudian y leen', 'Duermen'], icos: ['musico', 'libro', 'dormir'], correcta: 0 },
   { pregunta: '¿Quién es el esqueleto con la flor azul?',
-    opciones: ['Es la mamá de la niña', 'Es la profesora de la niña', 'Es una amiga de la niña'], correcta: 0 },
+    opciones: ['Es la mamá de la niña', 'Es la profesora de la niña', 'Es una amiga de la niña'], icos: ['mama', 'profesora', 'amiga'], correcta: 0 },
   { pregunta: '¿Cómo está la niña al final?',
-    opciones: ['Está alegre', 'Está triste', 'Está enferma'], correcta: 0 },
+    opciones: ['Está alegre', 'Está triste', 'Está enferma'], icos: ['caraAlegre', 'caraTriste', 'caraEnferma'], correcta: 0 },
 ];
 
 // L'histoire du film, à remettre dans l'ordre (l'ordre écrit ici est le bon ordre)
@@ -635,31 +674,33 @@ const BILAN = 'En Día de muertos, los difuntos regresan para visitar a la famil
 const CODIGO_ADMIN = 'profe';   // code du mode professeur (Ctrl+Maj+A)
 
 /* ====== 2. DONNÉES DES AUTRES ÉTAPES ================================= */
-// Étape 2 : les six éléments de l'altar (ceux de la fiche de la séquence)
+// Étape 2 : les six éléments de l'altar (ceux de la fiche de la séquence) ; xy = position du numéro sur le dessin de l'altar
 const OBJETOS = [
-  { id:'flores', n:'las flores de cempasúchil', f:'Las flores de cempasúchil decoran el altar.' },
-  { id:'foto',   n:'la foto del difunto',       f:'Es la foto de un difunto de la familia.' },
-  { id:'velas',  n:'las velas',                 f:'Las velas dan luz.' },
-  { id:'pan',    n:'el pan de muerto',          f:'El pan de muerto es comida para los difuntos.' },
-  { id:'calav',  n:'las calaveritas de azúcar', f:'Las calaveritas de azúcar son dulces.' },
-  { id:'copal',  n:'el copal',                  f:'El copal es un incienso.' },
+  { id:'flores', n:'las flores de cempasúchil', f:'Las flores de cempasúchil decoran el altar.', xy:[338, 296] },
+  { id:'foto',   n:'la foto del difunto',       f:'Es la foto de un difunto de la familia.', xy:[200, 100] },
+  { id:'velas',  n:'las velas',                 f:'Las velas dan luz.', xy:[84, 196] },
+  { id:'pan',    n:'el pan de muerto',          f:'El pan de muerto es comida para los difuntos.', xy:[148, 196] },
+  { id:'calav',  n:'las calaveritas de azúcar', f:'Las calaveritas de azúcar son dulces.', xy:[258, 200] },
+  { id:'copal',  n:'el copal',                  f:'El copal es un incienso.', xy:[200, 262] },
 ];
-// Étape 3 : le texte de la séquence, morceau par morceau, avec une question par morceau
+// Étape 3 : le texte de la séquence, morceau par morceau, avec une question illustrée par morceau ; clave = mot mis en évidence
 const TEXTO = [
   { t:'Día de muertos es una tradición mexicana que remonta a la época prehispánica', nota:'prehispánico = antes de la colonización española',
-    pregunta:'¿De qué país es la tradición?', opciones:['De México', 'De España', 'De Bolivia'], correcta:0 },
+    pregunta:'¿De qué país es la tradición?', opciones:['De México', 'De España', 'De Bolivia'], icos:['bMX', 'bES', 'bBO'], clave:'mexicana', correcta:0 },
   { t:'y que se celebra el 1 y el 2 de noviembre.',
-    pregunta:'¿Cuándo se celebra?', opciones:['El 1 y el 2 de noviembre', 'El 25 de diciembre', 'El 14 de julio'], correcta:0 },
+    pregunta:'¿Cuándo se celebra?', opciones:['El 1 y el 2 de noviembre', 'El 25 de diciembre', 'El 14 de julio'], icos:['calNov', 'calDic', 'calJul'], clave:'el 1 y el 2 de noviembre', correcta:0 },
   { t:'Los difuntos regresan al mundo de los vivos para visitar a la familia y disfrutar de las ofrendas preparadas en su honor.', nota:'un difunto = un muerto ≠ un vivo · En el vídeo: la mamá es una difunta.',
-    pregunta:'¿Quién regresa para visitar a la familia?', opciones:['Los difuntos', 'Los turistas', 'Los profesores'], correcta:0 },
+    pregunta:'¿Quién regresa para visitar a la familia?', opciones:['Los difuntos', 'Los turistas', 'Los profesores'], icos:['calav', 'maleta', 'profesora'], clave:'Los difuntos regresan', correcta:0 },
   { t:'Es una celebración alegre.',
-    pregunta:'¿Cómo es la celebración?', opciones:['Es alegre', 'Es triste', 'Es aburrida'], correcta:0 },
+    pregunta:'¿Cómo es la celebración?', opciones:['Es alegre', 'Es triste', 'Es aburrida'], icos:['caraAlegre', 'caraTriste', 'caraAburrida'], clave:'alegre', correcta:0 },
   { t:'En casa, las familias realizan altares decorados con flores de cempasúchil, calaveritas de azúcar, pan de muerto, copal, etc.',
-    pregunta:'¿Dónde realizan los altares las familias?', opciones:['En casa', 'En el colegio', 'En la playa'], correcta:0 },
+    pregunta:'¿Dónde realizan los altares las familias?', opciones:['En casa', 'En el colegio', 'En la playa'], icos:['casa', 'colegio', 'playa'], clave:'En casa', correcta:0 },
 ];
 // Texte à trous : les mots entre accolades sont les trous ; HUECOS_EXTRA = mots en trop dans la banque
 const HUECOS = 'Día de muertos es una tradición {mexicana} que remonta a la época prehispánica y que se celebra el 1 y el 2 de {noviembre}. Los {difuntos} regresan al mundo de los vivos para visitar a la {familia} y disfrutar de las ofrendas preparadas en su honor. Es una celebración {alegre}. En casa, las familias realizan {altares} decorados con flores de cempasúchil, calaveritas de azúcar, pan de muerto, copal, etc.';
 const HUECOS_EXTRA = ['triste', 'diciembre'];
+// pictogramme affiché devant chaque trou, pour aider à trouver le mot
+const HUECOS_ICO = { mexicana:'bMX', noviembre:'calNov', difuntos:'calav', familia:'mama', alegre:'caraAlegre', altares:'altarI' };
 // Étape 4 : présent de l'indicatif. f3 = él / ella ; f6 = ellos / ellas ; pl = 1 si le sujet est pluriel
 const PERSONAJES = [
   { id:'bailar',      inf:'bailar',             ay:'la música + el cuerpo', suj:'La catrina',     cola:'',               pl:0, f3:'baila',    f6:'bailan' },
@@ -859,6 +900,10 @@ ${arm(-1, L, pL)}<g transform="translate(0,-160)"><g class="an sw" style="${head
 </g></g>`;
 }
 
+// ---- briques des pictogrammes A1 : visage, personnage, calendrier ----
+function CARA(expr, piel = '#e9b98c') { return `<circle cx="50" cy="56" r="34" fill="${piel}" stroke="#1a1030" stroke-width="1.5"/><path d="M15,54C10,22 36,10 50,10C64,10 90,22 85,54C80,38 68,30 50,30C32,30 20,38 15,54Z" fill="#2a1a12"/><path d="M19,38Q50,18 81,38" stroke="#e0218a" stroke-width="6" fill="none"/>${expr}`; }
+function PERS(x, y, s, c, extra) { return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-7,-30L-16,-14M7,-30L16,-14" stroke="#e9b98c" stroke-width="4.5" stroke-linecap="round"/><path d="M-13,0L-7,-35H7L13,0Z" fill="${c}" stroke="#1a1030" stroke-width="1.2"/><circle cy="-44" r="10" fill="#e9b98c" stroke="#1a1030" stroke-width="1.2"/><path d="M-11,-45C-13,-59 13,-59 11,-45C8,-51 -8,-51 -11,-45Z" fill="#2a1a12"/><circle cx="-3.5" cy="-43" r="1.2" fill="#1a1030"/><circle cx="3.5" cy="-43" r="1.2" fill="#1a1030"/><path d="M-3,-39q3,2.5 6,0" stroke="#1a1030" stroke-width="1" fill="none"/>${extra}</g>`; }
+function CAL(mes, dia) { return `<rect x="14" y="16" width="72" height="72" rx="8" fill="#f3e9d2" stroke="#1a1030" stroke-width="1.5"/><path d="M14,24Q14,16 22,16H78Q86,16 86,24V38H14Z" fill="#e0218a"/><path d="M30,10V24M70,10V24" stroke="#1a1030" stroke-width="4" stroke-linecap="round"/><text x="50" y="33" text-anchor="middle" font-size="${mes.length > 6 ? 12 : 15}" font-weight="700" fill="#fff" font-family="Arial,sans-serif">${mes}</text><text x="50" y="76" text-anchor="middle" font-size="34" font-weight="700" fill="#2a1250" font-family="Georgia,serif">${dia}</text>`; }
 const svgI = (inner, vb = '0 0 100 100') => `<svg class="ic" viewBox="${vb}" aria-hidden="true">${inner}</svg>`;
 const IC = {
   flores: () => `<path d="M50,96Q46,70 30,42M50,96Q52,70 68,38M50,96V62" stroke="#2f8f4e" stroke-width="3.5" fill="none"/><path d="M50,84q-16,-2 -20,-14q14,0 20,14zM50,80q16,-4 18,-16q-13,2 -18,16z" fill="#2f8f4e"/>${flor(30,38,17)}${flor(69,33,18)}${flor(50,58,15)}`,
@@ -893,6 +938,27 @@ const IC = {
   disfraz: () => fig({ x:46, y:98, s:.5, c1:'#7a1fa2', c2:'#f0c75e', hat:HATS.gorra(), R:[110,147], pR:PROP.mascara, L:[15,10] }),
   desfile: () => fig({ x:28, y:96, s:.42, c1:'#0e7c86', c2:'#f0c75e', hat:HATS.corona(), R:[60,95], pR:PROP.estandarte('#e0218a') }) + fig({ x:68, y:98, s:.46, c1:'#b3246b', c2:'#22c7c0', hat:SOMB('#3b1a78','#f0c75e'), R:[60,95], pR:PROP.estandarte('#ff9a1f') }),
   cementerio: () => `<circle cx="76" cy="22" r="12" fill="#fbeecb"/><circle cx="76" cy="22" r="24" fill="url(#gLuna)"/><path d="M4,90H96" stroke="#3a2a5e" stroke-width="6" stroke-linecap="round"/><path d="M12,90V58Q12,46 24,46Q36,46 36,58V90Z" fill="#8f86a8" stroke="#1a1030"/><path d="M24,54V72M18,60H30" stroke="#f3e9d2" stroke-width="3"/><path d="M52,90V52M42,62H62" stroke="#cfc4e6" stroke-width="6" stroke-linecap="round"/><path d="M70,90V68Q70,60 79,60Q88,60 88,68V90Z" fill="#6f6690" stroke="#1a1030"/>${vela(44,90,10,4)}${flor(62,86,6)}${flor(92,86,5)}`,
+  // ---- pictogrammes de la version A1 (réponses illustrées) ----
+  caraAlegre: () => CARA(`<path d="M32,53q6,-8 12,0M56,53q6,-8 12,0" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M33,64Q50,84 67,64Z" fill="#7a1230" stroke="#1a1030"/><path d="M38,66h24" stroke="#fff" stroke-width="3"/><circle cx="27" cy="62" r="5" fill="#ff8fa8" opacity=".7"/><circle cx="73" cy="62" r="5" fill="#ff8fa8" opacity=".7"/>`) + `<path d="M84,12l2,6l6,2l-6,2l-2,6l-2,-6l-6,-2l6,-2z" fill="#f0c75e"/>`,
+  caraTriste: () => CARA(`<path d="M29,44l13,5M71,44l-13,5" stroke="#1a1030" stroke-width="3" stroke-linecap="round"/><circle cx="37" cy="55" r="4" fill="#1a1030"/><circle cx="63" cy="55" r="4" fill="#1a1030"/><path d="M38,76Q50,65 62,76" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M31,60q-6,11 0,15q6,-4 0,-15z" fill="#4fc3ff" stroke="#1a6fb0"/>`),
+  caraCansada: () => CARA(`<path d="M30,55h14M56,55h14" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round"/><path d="M30,60q7,5 14,0M56,60q7,5 14,0" stroke="#8a6a55" stroke-width="2" fill="none"/><ellipse cx="50" cy="73" rx="6" ry="7" fill="#7a1230" stroke="#1a1030"/>`) + `<text x="72" y="26" font-size="20" font-weight="700" fill="#cdbfe6" font-family="Arial,sans-serif">z</text><text x="84" y="14" font-size="14" font-weight="700" fill="#cdbfe6" font-family="Arial,sans-serif">z</text>`,
+  caraEnferma: () => CARA(`<path d="M30,48l12,3M70,48l-12,3" stroke="#1a1030" stroke-width="3" stroke-linecap="round"/><path d="M32,57h10M58,57h10" stroke="#1a1030" stroke-width="3.4" stroke-linecap="round"/><path d="M40,73Q50,68 60,73" stroke="#1a1030" stroke-width="3" fill="none"/><path d="M56,72L84,86" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M56,72L72,80" stroke="#e2433f" stroke-width="2.5"/><circle cx="85" cy="86.500" r="5.500" fill="#e2433f" stroke="#1a1030"/>`, '#cfd8a0'),
+  caraAburrida: () => CARA(`<path d="M30,50h14M56,50h14" stroke="#1a1030" stroke-width="3"/><path d="M30,51a7,7 0 0 0 14,0zM56,51a7,7 0 0 0 14,0z" fill="#fff" stroke="#1a1030"/><circle cx="40" cy="54" r="2.500" fill="#1a1030"/><circle cx="66" cy="54" r="2.500" fill="#1a1030"/><path d="M38,73h24" stroke="#1a1030" stroke-width="3.400" stroke-linecap="round"/>`),
+  colegio: () => `<path d="M10,92V46H90V92Z" fill="#f0dfb4" stroke="#1a1030" stroke-width="1.500"/><path d="M6,46L50,18L94,46Z" fill="#c2433a" stroke="#1a1030" stroke-width="1.500"/><circle cx="50" cy="35" r="7" fill="#fff" stroke="#1a1030"/><path d="M50,31v4l3,2" stroke="#1a1030" stroke-width="1.500" fill="none"/><rect x="42" y="66" width="16" height="26" rx="2" fill="#6b4a2a" stroke="#1a1030"/><rect x="17" y="54" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><rect x="67" y="54" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><rect x="17" y="73" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><rect x="67" y="73" width="16" height="13" fill="#8fd3ff" stroke="#1a1030"/><path d="M50,18V4h14l-4,5l4,5H50" fill="#22c7c0" stroke="#1a1030"/>`,
+  playa: () => `<circle cx="78" cy="22" r="13" fill="#ffd23a"/><path d="M78,2v5M78,37v5M58,22h5M93,22h5M64,8l3,3M92,8l-3,3" stroke="#ffd23a" stroke-width="3" stroke-linecap="round"/><path d="M0,52Q12,46 25,52T50,52T75,52T100,52V72H0Z" fill="#2f9bff"/><path d="M0,60Q12,55 25,60T50,60T75,60T100,60" stroke="#bfe6ff" stroke-width="2" fill="none"/><path d="M0,68Q30,60 100,70V100H0Z" fill="#f2d79a"/><path d="M34,92V46" stroke="#6b4a2a" stroke-width="4" stroke-linecap="round"/><path d="M6,48Q34,10 62,48Z" fill="#e2433f" stroke="#1a1030"/><path d="M20,48Q34,14 34,48M48,48Q34,14 34,48" fill="#fff"/><rect x="56" y="80" width="30" height="8" rx="3" fill="#22c7c0" stroke="#1a1030" transform="rotate(-8 71 84)"/>`,
+  libro: () => `<path d="M50,26Q30,14 8,20V80Q30,74 50,86Q70,74 92,80V20Q70,14 50,26Z" fill="#fff" stroke="#1a1030" stroke-width="1.500"/><path d="M50,26V86" stroke="#1a1030" stroke-width="1.500"/><path d="M16,34q14,-4 26,2M16,46q14,-4 26,2M16,58q14,-4 26,2M58,36q14,-6 26,-2M58,48q14,-6 26,-2M58,60q14,-6 26,-2" stroke="#8a84a8" stroke-width="2.500" fill="none"/><path d="M8,80Q30,74 50,86Q70,74 92,80V86Q70,80 50,92Q30,80 8,86Z" fill="#3b5fe0" stroke="#1a1030"/>`,
+  libroTel: () => `<g transform="translate(-4,6) scale(.72)">${IC.libro()}</g><rect x="62" y="30" width="30" height="58" rx="6" fill="#1a1030" stroke="#cfc4e6" stroke-width="2"/><rect x="66" y="37" width="22" height="38" fill="#4fc3ff"/><circle cx="77" cy="81.500" r="3" fill="#cfc4e6"/>`,
+  dormir: () => `<circle cx="80" cy="20" r="11" fill="#fff3cf"/><circle cx="85" cy="16" r="10" fill="#241a52"/><text x="46" y="30" font-size="20" font-weight="700" fill="#cdbfe6" font-family="Arial,sans-serif">z</text><text x="58" y="18" font-size="14" font-weight="700" fill="#cdbfe6" font-family="Arial,sans-serif">z</text><path d="M8,40V88M92,58V88M8,74H92" stroke="#6b4a2a" stroke-width="6" stroke-linecap="round"/><rect x="12" y="50" width="24" height="14" rx="6" fill="#fff" stroke="#1a1030"/><circle cx="30" cy="48" r="10" fill="#e9b98c" stroke="#1a1030"/><path d="M21,46C20,36 40,36 39,46C34,41 26,41 21,46Z" fill="#2a1a12"/><path d="M26,50h7" stroke="#1a1030" stroke-width="2"/><path d="M34,56Q60,40 90,58V72H34Z" fill="#3b5fe0" stroke="#1a1030"/><path d="M40,62h44" stroke="#8fb0ff" stroke-width="3" stroke-dasharray="6 6"/>`,
+  mama: () => `<path d="M50,6c-5,-7 -15,-2 -10,6l10,10l10,-10c5,-8 -5,-13 -10,-6z" fill="#e0218a" stroke="#1a1030"/>${PERS(36, 94, 1.38, '#e0218a', '<circle cx="9" cy="-52" r="4.500" fill="#2f86ff" stroke="#0b3fa8"/>')}${PERS(72, 94, .92, '#4fa8ff', '<path d="M-9,-50Q0,-56 9,-50" stroke="#fff" stroke-width="2.500" fill="none"/>')}<path d="M52,62L62,72" stroke="#e9b98c" stroke-width="5" stroke-linecap="round"/>`,
+  profesora: () => `<rect x="40" y="10" width="54" height="42" rx="3" fill="#1f6b4a" stroke="#6b4a2a" stroke-width="4"/><text x="67" y="38" text-anchor="middle" font-size="17" font-weight="700" fill="#fff" font-family="Arial,sans-serif">A B C</text>${PERS(28, 94, 1.3, '#8a3fd0', '<path d="M16,-14L34,-40" stroke="#6b4a2a" stroke-width="2.500" stroke-linecap="round"/><path d="M-6,-46h5M1,-46h5" stroke="#1a1030" stroke-width="2"/>')}`,
+  amiga: () => `${PERS(32, 94, 1.08, '#22c7c0', '')}${PERS(68, 94, 1.08, '#ff9a1f', '<path d="M-9,-50Q0,-56 9,-50" stroke="#fff" stroke-width="2.500" fill="none"/>')}<path d="M46,74H54" stroke="#e9b98c" stroke-width="5" stroke-linecap="round"/><path d="M50,16l3,7l7,1l-5,5l1,7l-6,-3l-6,3l1,-7l-5,-5l7,-1z" fill="#f0c75e"/>`,
+  ofrendaI: () => `<g transform="translate(2,10) scale(.5)">${IC.foto()}</g>${flor(54, 72, 13)}${flor(40, 84, 9)}${vela(84, 92, 40, 11)}`,
+  bMX: () => `<rect x="10" y="24" width="80" height="52" rx="4" fill="#fff" stroke="#1a1030" stroke-width="1.500"/><path d="M10,28Q10,24 14,24H36.700V76H14Q10,76 10,72Z" fill="#0b7a45"/><path d="M63.300,24H86Q90,24 90,28V72Q90,76 86,76H63.300Z" fill="#d0202d"/><circle cx="50" cy="50" r="7" fill="#8a5a2a"/><path d="M43,54q7,6 14,0" stroke="#0b7a45" stroke-width="2.500" fill="none"/>`,
+  bES: () => `<rect x="10" y="24" width="80" height="52" rx="4" fill="#f6c800" stroke="#1a1030" stroke-width="1.500"/><path d="M10,28Q10,24 14,24H86Q90,24 90,28V37H10Z" fill="#c8102e"/><path d="M10,63H90V72Q90,76 86,76H14Q10,76 10,72Z" fill="#c8102e"/><rect x="28" y="43" width="9" height="13" rx="2" fill="#c8102e" stroke="#8a5a2a"/>`,
+  bBO: () => `<rect x="10" y="24" width="80" height="52" rx="4" fill="#f6c800" stroke="#1a1030" stroke-width="1.500"/><path d="M10,28Q10,24 14,24H86Q90,24 90,28V41.300H10Z" fill="#d0202d"/><path d="M10,58.700H90V72Q90,76 86,76H14Q10,76 10,72Z" fill="#0b7a45"/>`,
+  calNov: () => CAL('NOVIEMBRE', '1 · 2'), calDic: () => CAL('DICIEMBRE', '25'), calJul: () => CAL('JULIO', '14'),
+  maleta: () => `<path d="M38,30V20Q38,14 44,14H56Q62,14 62,20V30" fill="none" stroke="#6b4a2a" stroke-width="5"/><rect x="14" y="30" width="72" height="54" rx="8" fill="#ff9a1f" stroke="#1a1030" stroke-width="1.500"/><path d="M14,48H86" stroke="#a34d00" stroke-width="3"/><rect x="44" y="43" width="12" height="10" rx="2" fill="#f0c75e" stroke="#1a1030"/><circle cx="30" cy="68" r="8" fill="#22c7c0" stroke="#1a1030"/><rect x="58" y="60" width="18" height="14" rx="2" fill="#e0218a" stroke="#1a1030"/><circle cx="26" cy="88" r="4" fill="#1a1030"/><circle cx="74" cy="88" r="4" fill="#1a1030"/>`,
+  casa: () => `<rect x="62" y="16" width="10" height="20" fill="#9c4521" stroke="#1a1030"/><path d="M16,92V48H84V92Z" fill="#f6e3b8" stroke="#1a1030" stroke-width="1.500"/><path d="M6,50L50,14L94,50Z" fill="#c2433a" stroke="#1a1030" stroke-width="1.500"/><rect x="42" y="62" width="17" height="30" rx="2" fill="#22808a" stroke="#1a1030"/><circle cx="55" cy="78" r="1.800" fill="#f0c75e"/><rect x="22" y="58" width="14" height="14" fill="#ffd27a" stroke="#1a1030"/><path d="M29,58v14M22,65h14" stroke="#1a1030"/><rect x="66" y="58" width="14" height="14" fill="#ffd27a" stroke="#1a1030"/><path d="M73,58v14M66,65h14" stroke="#1a1030"/>${flor(14, 90, 6)}${flor(88, 90, 6)}`,
   florazul: () => `<path d="M50,96Q48,70 50,52" stroke="#2f8f4e" stroke-width="4" fill="none"/><path d="M50,78q-16,-2 -20,-14q14,0 20,14z" fill="#2f8f4e"/><g transform="translate(50,38)">${[0, 60, 120, 180, 240, 300].map(a => `<path d="M0,0C-14,-10 -12,-30 0,-34C12,-30 14,-10 0,0Z" fill="#2f86ff" stroke="#0b3fa8" transform="rotate(${a})"/>`).join('')}<circle r="7" fill="#ffe08a" stroke="#c98a00"/></g><circle cx="50" cy="38" r="44" fill="url(#gAlma)" opacity=".35"/>`,
   corazon: () => `<circle cx="50" cy="50" r="44" fill="url(#gHalo)" opacity=".5"/><path d="M50,84C20,62 12,46 12,34C12,22 22,14 32,14C40,14 46,18 50,26C54,18 60,14 68,14C78,14 88,22 88,34C88,46 80,62 50,84Z" fill="#e0218a" stroke="#1a1030" stroke-width="1.5"/><path d="M26,30q4,-8 12,-8" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/>`,
   foto: () => `<rect x="24" y="12" width="52" height="72" rx="3" fill="#6b4a2a" stroke="#f0c75e" stroke-width="3"/><rect x="31" y="19" width="38" height="58" fill="#d8c49a"/><circle cx="50" cy="40" r="10" fill="#7a5a3a"/><path d="M33,77Q34,56 50,56Q66,56 67,77Z" fill="#7a5a3a"/><path d="M38,36Q50,24 62,36L60,32Q50,22 40,32Z" fill="#3a2a1a"/>`,
@@ -1156,8 +1222,8 @@ function arrastre(root, intento) {
 /* ---- Fiche « ¿Qué hay que hacer? » : affichée à la première entrée dans une étape, puis via le bouton « ? » ---- */
 const AYUDA = {
   1: [['cementerio', '<b>Mira el vídeo</b>. No hay palabras: mira bien las imágenes.'], ['calav', 'Después, contesta a las preguntas: <b>haz clic en la respuesta correcta</b>.'], ['tumba', 'Al final, <b>ordena la historia</b> del vídeo.']],
-  2: [['velas', 'Haz clic en cada objeto y <b>escucha su nombre</b>.'], ['altarI', 'Después, escucha y <b>haz clic en el objeto correcto</b>: el objeto va al altar.']],
-  3: [['calend', '<b>Lee y escucha</b> el texto, frase por frase.'], ['brillo', 'Contesta a las preguntas: haz clic en la respuesta correcta.'], ['papel', 'Al final, <b>completa el texto</b>: pon cada palabra en su lugar.']],
+  2: [['velas', '<b>Haz clic en cada objeto</b>: escucha su nombre. El objeto va al altar.'], ['brillo', 'Un objeto brilla en el altar: <b>elige su nombre</b>.'], ['papel', 'Mira los números del altar y <b>pon cada palabra</b> al lado de su número.']],
+  3: [['mama', 'En el vídeo, la mamá regresa. <b>¿Por qué?</b> El texto lo explica.'], ['calend', '<b>Lee y escucha</b> cada frase. Después, haz clic en el <b>dibujo correcto</b>.'], ['papel', 'Al final, <b>completa el texto</b>: mira el dibujo y pon la palabra.']],
   4: [['calavera', 'La fiesta está dormida: las 8 cartas están <b>en gris</b>.'], ['musico', 'Haz clic en una carta. <b>Mira el sujeto</b>: ¿una persona o varias personas?'], ['papel', '<b>Elige el verbo correcto</b>. Ejemplo: La chica mira. Los chicos miran.'], ['calav', 'Si es correcto, la carta <b>toma color</b> y la música crece.']],
 };
 function ayuda(n, luego) {
@@ -1199,18 +1265,18 @@ function reiniciar() { const cfg = S.cfg; S = base(); S.cfg = cfg; guardar(); AU
 /* ====== 10. ÉTAPE 1 — El vídeo ======================================= */
 const etq = n => `<span class="etq">Etapa ${n} · ${ETAPAS[n - 1]}</span>`;
 const ayb = n => `<button class="aud ayb" data-ay="${n}" aria-label="Ayuda" title="Ayuda">?</button>`;
-// QCM générique : pose les questions une par une, puis appelle fin(erreurs)
+// QCM générique : une question à la fois, réponses en grandes cartes illustrées ; appelle fin(erreurs) à la fin
 function quiz(lista, n, cab, fin) {
   let qi = 0, err = 0;
   const paso = () => {
     if (etapaVista !== n) return; if (qi >= lista.length) return fin(err);
-    const q = lista[qi]; let ops = q.opciones.map((t, i) => ({ t, ok: i === q.correcta })); if (q.mezclar !== false) ops = baraja(ops);
-    main.innerHTML = `<div class="panel centro"><p style="margin-bottom:.7rem">${etq(n)}</p>${cab ? cab(qi) : ''}<div class="puntos">${lista.map((_, i) => `<i class="${i < qi ? 'ok' : i === qi ? 'ya' : ''}"></i>`).join('')}</div>
+    const q = lista[qi]; let ops = q.opciones.map((t, i) => ({ t, ok: i === q.correcta, ic: q.icos && q.icos[i] })); if (q.mezclar !== false) ops = baraja(ops);
+    main.innerHTML = `<div class="panel centro qz"><p style="margin-bottom:.5rem">${etq(n)}</p>${cab ? cab(qi) : ''}<div class="puntos">${lista.map((_, i) => `<i class="${i < qi ? 'ok' : i === qi ? 'ya' : ''}"></i>`).join('')}</div>
 <p class="preg"><span>${esc(q.pregunta)}</span><button class="aud" id="aq" aria-label="Escuchar la pregunta" title="Escuchar">${UI.alt}</button></p>
-<div class="opcs">${ops.map((o, i) => `<button class="opc" data-ok="${o.ok ? 1 : 0}"><b>${'ABC'[i]}</b><span>${esc(o.t)}</span></button>`).join('')}</div></div>`;
+<div class="opcs ${q.icos ? 'tiles' : ''}">${ops.map((o, i) => `<button class="opc" data-ok="${o.ok ? 1 : 0}">${o.ic ? ico(o.ic) : ''}<span class="tx"><b>${'ABC'[i]}</b><span>${esc(o.t)}</span></span></button>`).join('')}</div></div>`;
     $('#aq').onclick = e => decir(q.pregunta, e.currentTarget);
     $$('.opc').forEach(b => b.onclick = () => {
-      if (b.dataset.ok === '1') { b.classList.add('si', 'bienp'); $$('.opc').forEach(x => x !== b && x.classList.add('no')); sfx('ok'); estallido(b); qi++; setTimeout(paso, 1100); }
+      if (b.dataset.ok === '1') { b.classList.add('si', 'bienp'); $$('.opc').forEach(x => x !== b && x.classList.add('no')); sfx('ok'); estallido(b); decir($('.tx span', b).textContent); qi++; setTimeout(paso, 1500); }
       else { err++; sfx('mal'); b.classList.add('mal'); setTimeout(() => b.classList.add('no'), 450); }
     });
   };
@@ -1220,15 +1286,19 @@ PANTALLAS[1] = function etapa1() {
   info(1); let err = 0;
   limpiar = () => musNivel(1);
   const ver = () => {
-    musNivel(0);
     main.innerHTML = `<div class="panel centro vid5"><p style="margin-bottom:.6rem">${etq(1)}</p><p class="consigna">${UI.casco}<span>Mira el vídeo (3 minutos). No hay palabras: mira bien las imágenes.</span></p>
-<div class="marco"><iframe src="https://www.youtube-nocookie.com/embed/${VIDEO_ID}?start=${VIDEO_INICIO}&end=${VIDEO_FIN}&rel=0&modestbranding=1" title="Vídeo" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<div class="marco"><video id="vid" controls playsinline preload="metadata" src="${URL_VIDEO}#t=${VIDEO_INICIO},${VIDEO_FIN}"></video></div>
 <p class="nota" style="margin:.5rem 0">Puedes ver el vídeo dos veces.</p>
-<p class="fila" style="justify-content:center"><a class="btn sec" href="${URL_VIDEO}" target="_blank" rel="noopener noreferrer">${UI.play}<span>Abrir el vídeo en otra pestaña</span></a><button class="btn grande" id="irq">Ya vi el vídeo</button></p></div>`;
-    $('#irq').onclick = () => { sfx('clic'); musNivel(1); preguntas(); };
+<p class="fila" style="justify-content:center"><button class="btn sec" id="otraV">${UI.play}<span>Ver desde el principio</span></button><button class="btn grande" id="irq">Ya vi el vídeo</button></p></div>`;
+    const v = $('#vid');
+    v.addEventListener('play', () => { musNivel(0); if (v.currentTime >= VIDEO_FIN - .5 || v.currentTime < VIDEO_INICIO - 1) v.currentTime = VIDEO_INICIO; });
+    v.addEventListener('timeupdate', () => { if (v.currentTime >= VIDEO_FIN) { v.pause(); musNivel(1); } });
+    v.addEventListener('pause', () => musNivel(1));
+    $('#otraV').onclick = () => { try { v.currentTime = VIDEO_INICIO; v.play(); } catch (e) {} };
+    $('#irq').onclick = () => { sfx('clic'); try { v.pause(); } catch (e) {} musNivel(1); preguntas(); };
   };
   const preguntas = () => quiz(QUESTIONS_VIDEO.filter(q => q.activa !== false), 1,
-    () => `<p class="fila" style="justify-content:center;margin-bottom:.6rem"><button class="btn sec" id="otra">${UI.play}<span>Ver el vídeo otra vez</span></button></p>`,
+    () => `<p class="fila" style="justify-content:center;margin-bottom:.5rem"><button class="btn sec" id="otra">${UI.play}<span>Ver el vídeo otra vez</span></button></p>`,
     e => { err += e; ordenar(); });
   main.addEventListener('click', function otra(e) { if (etapaVista !== 1) return main.removeEventListener('click', otra); if (e.target.closest('#otra')) ver(); });
   const ordenar = () => {
@@ -1249,53 +1319,84 @@ PANTALLAS[1] = function etapa1() {
   ver(); ayudaAuto(1);
 };
 
-/* ====== 11. ÉTAPE 2 — El altar ======================================= */
+/* ====== 11. ÉTAPE 2 — El altar : descubrir → reconocer → etiquetar ===== */
 PANTALLAS[2] = function etapa2() {
-  info(2); let err = 0, faseB = false, cola = [], actual = null, rep = 0, bloqueo = false; const oidos = {}, puestos = new Set(), N = OBJETOS.length;
-  main.innerHTML = `<div class="consigna panel barra">${etq(2)}${UI.casco}<span id="c2t">En casa, las familias preparan un altar. Haz clic en cada objeto y escucha.</span><span class="cont" id="n2">0 / ${N}</span><button class="btn" id="sig2" disabled>Continuar</button>${ayb(2)}</div>
-<div class="e2"><div class="altarBox" id="altB">${altarSVG(itemsAltar())}<div class="altNom" id="altNom" aria-live="polite">El altar de la familia</div></div><div class="der">
-<div class="pide panel" id="pide" hidden></div>
-<div class="objs o5" id="objs">${baraja(OBJETOS).map(o => `<div class="obj" role="button" tabindex="0" data-id="${o.id}">${ico(o.id)}<span class="nom">${o.n}</span><span class="frase" hidden>${o.f}</span></div>`).join('')}</div></div></div>`;
-  const orden = o => `Pon ${o.n} en el altar.`;
-  const siguiente = () => {
-    actual = cola.shift(); rep = 0; bloqueo = false; const o = OBJETOS.find(x => x.id === actual);
-    $('#pide').innerHTML = `<button class="aud" id="rp" aria-label="Escuchar otra vez" title="Escuchar otra vez">${UI.alt}</button><span>Escucha y haz clic en el objeto correcto.</span><button class="leer" id="lp" hidden>Leer</button><b id="tp" hidden>${orden(o)}</b>`;
-    const di = () => decir(orden(o), $('#rp')).then(ok => { if (!ok && $('#tp')) $('#tp').hidden = false; });
-    $('#rp').onclick = () => { rep++; if (rep >= 2) $('#lp').hidden = false; di(); };
-    $('#lp').onclick = () => { $('#tp').hidden = false; $('#lp').hidden = true; };
-    di();
+  info(2); let err = 0; const N = OBJETOS.length;
+  const barra = (ico2, txt, k) => `<div class="consigna panel barra">${etq(2)}<span class="ronda">${k} / 3</span>${ico2}<span>${txt}</span><span class="cont" id="n2">0 / ${N}</span>${ayb(2)}</div>`;
+  const altar = items => `<div class="altarBox" id="altB"><div class="altW" id="altW">${altarSVG(items)}${OBJETOS.map((o, i) => `<span class="hot" data-id="${o.id}" style="left:${o.xy[0] / 4}%;top:${o.xy[1] / 3.84}%">${i + 1}</span>`).join('')}</div><div class="altNom" id="altNom" aria-live="polite">El altar de la familia</div></div>`;
+  let ro = null;
+  const ajusta = () => { const b = $('#altB'), w = $('#altW'); if (!b || !w) return; const h = b.clientHeight - $('#altNom').offsetHeight - 14, k = Math.min(b.clientWidth / 400, h / 384); if (k > 0) { w.style.width = Math.floor(400 * k) + 'px'; w.style.height = Math.floor(384 * k) + 'px'; } };
+  const montar = html => { main.innerHTML = html; if (ro) ro.disconnect(); try { ro = new ResizeObserver(ajusta); ro.observe($('#altB')); } catch (e) {} ajusta(); };
+  let quitaArr = null; limpiar = () => { if (ro) ro.disconnect(); if (quitaArr) quitaArr(); };
+  const todos = itemsAltar().concat(OBJETOS.map(o => o.id));
+
+  // Ronda 1 : chaque objet cliqué est nommé (écrit + oral) et va se poser sur l'altar
+  const ronda1 = () => {
+    let n = 0;
+    montar(`${barra(UI.casco, 'Como en el vídeo, la familia decora. Haz clic en cada objeto: escucha su nombre.', 1)}
+<div class="e2">${altar(itemsAltar())}<div class="der"><div class="ficha2 panel" id="ficha2"><span class="nota">Haz clic en un objeto.</span></div>
+<div class="objs o5" id="objs">${baraja(OBJETOS).map(o => `<div class="obj" role="button" tabindex="0" data-id="${o.id}">${ico(o.id)}</div>`).join('')}</div>
+<p class="fila" style="justify-content:flex-end;margin-top:.6rem"><button class="btn" id="sig2" hidden>Continuar</button></p></div></div>`);
+    $('#objs').onclick = e => {
+      const el = e.target.closest('.obj'); if (!el) return; const o = OBJETOS.find(x => x.id === el.dataset.id), nuevo = !el.classList.contains('puesto');
+      $('#ficha2').innerHTML = `${ico(o.id)}<div><p class="pal">${o.n}<button class="aud" id="af" aria-label="Escuchar">${UI.alt}</button></p><p class="fr">${o.f}</p></div>`;
+      $('#af').onclick = () => decir(o.n + '. ' + o.f, $('#af')); decir(o.n + '. ' + o.f, $('#af'));
+      if (!nuevo) return;
+      el.classList.add('puesto'); sfx('ok'); n++; $('#n2').textContent = n + ' / ' + N;
+      const al = $('#altB .altar'), gs = $$('.it-' + o.id, al), g = gs[gs.length - 1], nom = $('#altNom');
+      volar(el, g, ico(o.id));
+      setTimeout(() => { if (!document.contains(al)) return; al.classList.add('t-' + o.id); foco(al, g); nom.innerHTML = `En el altar: <b>${o.n}</b>`; nom.classList.remove('pulso'); void nom.offsetWidth; nom.classList.add('pulso'); }, S.cfg.red ? 0 : 750);
+      if (n === N) { $('#sig2').hidden = false; $('#sig2').onclick = () => { callar(); sfx('clic'); ronda2(); }; }
+    };
   };
-  $('#objs').addEventListener('click', e => {
-    const el = e.target.closest('.obj'); if (!el || el.classList.contains('puesto')) return; const o = OBJETOS.find(x => x.id === el.dataset.id);
-    if (!faseB) {
-      oidos[o.id] = 1; el.classList.add('oido'); $('.frase', el).hidden = false; decir(o.n + '. ' + o.f, el);
-      const n = Object.keys(oidos).length; $('#n2').textContent = n + ' / ' + N; if (n === N) $('#sig2').disabled = false; return;
-    }
-    if (bloqueo) return;
-    if (o.id !== actual) { err++; sfx('mal'); el.classList.remove('mal'); void el.offsetWidth; el.classList.add('mal'); return; }
-    bloqueo = true; callar(); puestos.add(o.id); el.classList.add('puesto'); sfx('ok'); estallido(el); $('#n2').textContent = puestos.size + ' / ' + N;
-    const al = $('#altB .altar'), gs = $$('.it-' + o.id, al), g = gs[gs.length - 1], nom = $('#altNom');
-    volar(el, g, ico(o.id));
-    setTimeout(() => { if (!document.contains(al)) return; al.classList.add('t-' + o.id); foco(al, g); nom.innerHTML = `En el altar: <b>${o.n}</b>`; nom.classList.remove('pulso'); void nom.offsetWidth; nom.classList.add('pulso'); estallido(nom, 12); }, S.cfg.red ? 0 : 750);
-    if (puestos.size === N) { $('#pide').innerHTML = `<span>El altar está completo.</span>`; setTimeout(() => etapaVista === 2 && completar(2, err), 3000); }
-    else setTimeout(() => etapaVista === 2 && siguiente(), 1700);
-  });
-  $('#sig2').onclick = () => {
-    faseB = true; callar(); sfx('clic'); $('#sig2').hidden = true; $('#n2').textContent = '0 / ' + N;
-    $('#c2t').textContent = 'Ahora, completa el altar: escucha y haz clic en el objeto correcto.';
-    $$('.obj .frase').forEach(f => f.hidden = true); $('#pide').hidden = false; cola = baraja(OBJETOS.map(o => o.id)); siguiente();
+
+  // Ronda 2 : un objet clignote sur l'altar → choisir son nom parmi trois
+  const ronda2 = () => {
+    const cola = baraja(OBJETOS.map(o => o.id)); let n = 0;
+    montar(`${barra(UI.ojo, 'Mira el objeto que brilla en el altar. ¿Qué es? Elige su nombre.', 2)}
+<div class="e2">${altar(todos)}<div class="der"><div class="que panel" id="que"></div></div></div>`);
+    const sig = () => {
+      if (etapaVista !== 2) return; if (!cola.length) return ronda3();
+      const id = cola.shift(), o = OBJETOS.find(x => x.id === id), ops = baraja([o].concat(baraja(OBJETOS.filter(x => x.id !== id)).slice(0, 2)));
+      $$('.hot').forEach(h => h.classList.toggle('on', h.dataset.id === id));
+      $('#que').innerHTML = `<p class="preg" style="margin:.2rem 0 .6rem">¿Qué es?</p><div class="grande">${ico(id)}</div><div class="opcs">${ops.map(x => `<button class="opc" data-id="${x.id}"><span class="tx"><span>${x.n}</span></span></button>`).join('')}</div>`;
+      $$('#que .opc').forEach(b => b.onclick = () => {
+        if (b.dataset.id === id) { b.classList.add('si', 'bienp'); $$('#que .opc').forEach(x => x !== b && x.classList.add('no')); sfx('ok'); estallido(b); decir(o.n); n++; $('#n2').textContent = n + ' / ' + N; setTimeout(sig, 1500); }
+        else { err++; sfx('mal'); b.classList.add('mal'); setTimeout(() => b.classList.add('no'), 450); }
+      });
+    };
+    sig();
   };
-  ayudaAuto(2);
+
+  // Ronda 3 : la légende de l'altar — chaque mot va à côté de son numéro
+  const ronda3 = () => {
+    let n = 0; const HAY = 'En el altar hay ' + OBJETOS.slice(0, -1).map(o => o.n).join(', ') + ' y ' + OBJETOS[N - 1].n + '.';
+    montar(`${barra(UI.mano, 'Mira los números en el altar. Pon cada palabra al lado de su número.', 3)}
+<div class="e2">${altar(todos)}<div class="der" id="der3"><div class="banco" id="banco2">${baraja(OBJETOS).map(o => `<span class="chip drag" role="button" tabindex="0" data-w="${o.id}">${o.n}</span>`).join('')}</div>
+<div class="leyenda">${OBJETOS.map((o, i) => `<div class="ley"><b>${i + 1}</b><span class="hueco dest" role="button" tabindex="0" data-w="${o.id}" data-sol="${o.n}"></span></div>`).join('')}</div><div id="fin2"></div></div></div>`);
+    $$('.hot').forEach(h => h.classList.add('num'));
+    quitaArr = arrastre($('#der3'), (it, dst) => {
+      if (!dst.classList.contains('hueco') || dst.classList.contains('lleno')) return true;
+      if (dst.dataset.w !== it.dataset.w) { err++; return false; }
+      const o = OBJETOS.find(x => x.id === it.dataset.w); dst.textContent = o.n; dst.classList.add('lleno', 'bienp'); it.remove(); sfx('ok'); estallido(dst, 8); decir(o.n); n++; $('#n2').textContent = n + ' / ' + N;
+      const h = $(`.hot[data-id=${o.id}]`); if (h) h.classList.add('ok');
+      if (n === N) { $('#banco2').remove(); $('#fin2').innerHTML = `<div class="bilan panel"><p class="tit"><b>${HAY}</b></p><p class="fila" style="justify-content:center;margin-top:.6rem"><button class="aud" id="ab" aria-label="Escuchar">${UI.alt}</button><button class="btn" id="s2">Continuar</button></p></div>`;
+        $('#ab').onclick = e => decir(HAY, e.currentTarget); setTimeout(() => decir(HAY, $('#ab')), 900); $('#s2').onclick = () => completar(2, err); $('#s2').focus(); }
+      return true;
+    });
+  };
+  ronda1(); ayudaAuto(2);
 };
 
-/* ====== 12. ÉTAPE 3 — La tradición =================================== */
+/* ====== 12. ÉTAPE 3 — La tradición : comprendre avec des images, puis compléter ===== */
 PANTALLAS[3] = function etapa3() {
   info(3); let err = 0;
+  const marca = x => x.clave ? esc(x.t).replace(esc(x.clave), `<mark>${esc(x.clave)}</mark>`) : esc(x.t);
   const huecos = () => {
-    obs.disconnect(); const partes = HUECOS.split(/\{(.+?)\}/), pal = partes.filter((_, i) => i % 2); let n = 0;
-    main.innerHTML = `<div class="consigna panel barra">${etq(3)}${UI.mano}<span>Completa el texto: pon cada palabra en su lugar.</span><span class="cont" id="n3">0 / ${pal.length}</span>${ayb(3)}</div>
+    const partes = HUECOS.split(/\{(.+?)\}/), pal = partes.filter((_, i) => i % 2); let n = 0;
+    main.innerHTML = `<div class="consigna panel barra">${etq(3)}<span class="ronda">2 / 2</span>${UI.mano}<span>Completa el texto: mira el dibujo y pon la palabra correcta.</span><span class="cont" id="n3">0 / ${pal.length}</span>${ayb(3)}</div>
 <div class="panel txt5" id="txt5"><div class="banco" id="banco5">${baraja(pal.concat(HUECOS_EXTRA)).map(w => `<span class="chip drag" role="button" tabindex="0" data-w="${w}">${w}</span>`).join('')}</div>
-<p class="texto">${partes.map((x, i) => i % 2 ? `<span class="hueco dest" role="button" tabindex="0" data-w="${x}" data-sol="${x}"></span>` : esc(x)).join('')}</p>
+<p class="texto">${partes.map((x, i) => i % 2 ? `<span class="hk">${HUECOS_ICO[x] ? ico(HUECOS_ICO[x]) : ''}<span class="hueco dest" role="button" tabindex="0" data-w="${x}" data-sol="${x}"></span></span>` : esc(x)).join('')}</p>
 <p class="fila" style="justify-content:center" id="fin3"></p></div>`;
     limpiar = arrastre($('#txt5'), (it, dst) => {
       if (!dst.classList.contains('hueco') || dst.classList.contains('lleno')) return true;
@@ -1306,14 +1407,15 @@ PANTALLAS[3] = function etapa3() {
       return true;
     });
   };
-  quiz(TEXTO, 3, qi => `<p class="consigna">${UI.casco}<span>Lee y escucha el texto. Después, contesta.</span><button class="aud" id="at" aria-label="Escuchar el texto" title="Escuchar el texto">${UI.alt}</button></p>
-<div class="leer5">${TEXTO.slice(0, qi + 1).map((x, i) => `<span class="${i === qi ? 'ya' : ''}">${esc(x.t)}</span>`).join(' ')}${TEXTO[qi].nota ? `<small>${esc(TEXTO[qi].nota)}</small>` : ''}</div>`,
-    e => { err += e; huecos(); });
-  // lecture automatique du morceau courant à chaque nouvelle question
-  const obs = new MutationObserver(() => { const b = $('#at'); if (b && !b.dataset.ok) { b.dataset.ok = 1; const i = $$('.leer5 span').length - 1, t = TEXTO[i].t; b.onclick = () => decir(t, b); decir(t, b); } });
-  obs.observe(main, { childList: true }); const l0 = limpiar; limpiar = () => { obs.disconnect(); if (l0) l0(); };
-  { const b = $('#at'); if (b) { b.dataset.ok = 1; b.onclick = () => decir(TEXTO[0].t, b); } }
-  ayudaAuto(3, () => { const b = $('#at'); if (b) decir(TEXTO[0].t, b); });
+  const leer = i => { const b = $('#at'); if (b) decir(TEXTO[i].t, b); };
+  quiz(TEXTO, 3, qi => `<p class="consigna"><span class="ronda">1 / 2</span>${UI.casco}<span>En el vídeo, la mamá regresa. ¿Por qué? Lee y escucha.</span></p>
+<div class="leer5"><button class="aud" id="at" data-i="${qi}" aria-label="Escuchar el texto" title="Escuchar el texto">${UI.alt}</button><p>${TEXTO.slice(0, qi + 1).map((x, i) => `<span class="${i === qi ? 'ya' : ''}">${i === qi ? marca(x) : esc(x.t)}</span>`).join(' ')}</p>${TEXTO[qi].nota ? `<small>${esc(TEXTO[qi].nota)}</small>` : ''}</div>`,
+    e => { err += e; obs.disconnect(); huecos(); });
+  // le morceau courant est lu à voix haute à chaque nouvelle question
+  const obs = new MutationObserver(() => { const b = $('#at'); if (b && !b.dataset.ok) { b.dataset.ok = 1; const i = +b.dataset.i; b.onclick = () => leer(i); setTimeout(() => leer(i), 500); } });
+  obs.observe(main, { childList: true }); limpiar = () => obs.disconnect();
+  { const b = $('#at'); if (b) { b.dataset.ok = 1; b.onclick = () => leer(0); } }
+  ayudaAuto(3, () => leer(0));
 };
 
 /* ====== 13. ÉTAPE 4 — La fiesta (presente de indicativo) ============= */
@@ -1461,6 +1563,7 @@ function aplicarCfg() {
     if (e.key === 'Escape') { if (demoStop) finDemo(); else if ($('#modal [data-cerrar]')) cerrarModal(); }
   });
   if (location.hash === '#profe') setTimeout(pedirCodigo, 400);
+  document.body.classList.add('sinlado');
   etapaVista = 0; PANTALLAS[0](); pintarCamino(); pintarMini(); alba(); FX.alba = FX.albaObj;
   requestAnimationFrame(cuadro);
 })();
