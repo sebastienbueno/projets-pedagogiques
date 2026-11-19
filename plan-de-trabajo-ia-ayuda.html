@@ -162,6 +162,7 @@ table.conj input{width:100%;border:3px solid var(--line);border-radius:12px;padd
 .prev{background:var(--paper);border:3px dashed var(--line);border-radius:16px;padding:10px 14px;margin:0 0 12px}
 .prev .lab{display:block;color:var(--muted);font-size:16px;font-weight:700}
 .prev{font-size:20px;line-height:1.6}
+#accbar{position:sticky;z-index:15;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;background:var(--card);border-bottom:3px solid var(--line);padding:6px 10px}#accbar[hidden]{display:none}#accbar .lab{font-weight:700;color:var(--ink);font-size:16px}#accbar button{min-width:46px;min-height:46px;font-size:24px;font-weight:700;font-family:inherit;border-radius:12px;border:3px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer}#accbar button:active{background:var(--acca)}
 input.gap{max-width:100%}.gapwrap{max-width:100%;display:inline-flex;flex-direction:column}
 @media (prefers-color-scheme:dark){
 :root:not([data-theme="light"]) .choice .meta{color:var(--ink)!important}
@@ -577,10 +578,21 @@ function fin(){setAcc('var(--violet)','#EDE9FE');const a=S.ans,k=S.act,A=ACT[k]|
  $('#cp').onclick=async()=>{try{await navigator.clipboard.writeText(txt);$('#cpmsg').textContent='Respuestas copiadas.'}catch(e){$('#cpmsg').textContent='Selecciona el texto y cópialo.'}};
  $('#rs').onclick=()=>ask('¿Borrar todas tus respuestas y empezar de nuevo?',()=>{S={name:'',act:null,screen:'portada',step:0,ans:{},aid:CFG.aid};save();render()},'Sí, borrar');
  bindPDF();bottom(()=>go('bonus'),()=>go('portada'),'Volver al inicio')}
+let LASTF=null;
+const FIELDS=()=>[...document.querySelectorAll('#app input:not([type=checkbox]):not([type=radio]):not([hidden]),#app textarea')];
+function accentBar(){let b=$('#accbar');
+ if(!b){b=document.createElement('div');b.id='accbar';b.setAttribute('role','group');b.setAttribute('aria-label','Letras con acento');$('#app').parentNode.insertBefore(b,$('#app'));
+  b.innerHTML='<span class="lab">Acentos (= accents):</span>'+['á','é','í','ó','ú','ñ','¿','¡'].map(c=>`<button type="button" data-c="${c}" aria-label="Escribir ${c}">${c}</button>`).join('');
+  b.addEventListener('pointerdown',e=>{if(e.target.closest('button'))e.preventDefault()});
+  b.addEventListener('click',e=>{const bt=e.target.closest('button');if(!bt)return;const f=(LASTF&&document.contains(LASTF))?LASTF:FIELDS()[0];if(!f)return;
+   const s=f.selectionStart==null?f.value.length:f.selectionStart,en=f.selectionEnd==null?s:f.selectionEnd;f.value=f.value.slice(0,s)+bt.dataset.c+f.value.slice(en);f.focus();try{f.setSelectionRange(s+1,s+1)}catch(x){}
+   f.dispatchEvent(new Event('input',{bubbles:true}))});
+  document.addEventListener('focusin',e=>{if(e.target.matches&&e.target.matches('#app input,#app textarea'))LASTF=e.target})}
+ const has=FIELDS().length>0;b.hidden=!has;const tp=document.querySelector('.top');b.style.top=(tp?tp.offsetHeight:0)+'px';LASTF=null}
 function render(){nav();const s=S.screen;
  if(s==='act'&&!S.act)S.screen='portada';
  ({portada,rep:repScreen,ser:PB?sb1:serScreen,yo:PB?sb2:serScreen,act:actScreen,corr,med1,bravo,bonus,bn1,bn2,bn3,bn4,fin}[S.screen]||portada)();
- bindVideos();aidBank();
+ bindVideos();aidBank();accentBar();
  if(S.screen==='portada')bindInputs()}
 $('#logo').src=IC.robot;render();
 if(ADMIN){const b=document.getElementById('adminBadge');if(b){b.style.display='inline-block';b.title='Para volver al modo alumno, abre la página con #alumno';b.onclick=()=>{if(confirm('¿Salir del modo profesor?')){try{localStorage.removeItem('ia-plan-admin')}catch(e){}location.replace(location.pathname)}}}}
