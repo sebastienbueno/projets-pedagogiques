@@ -570,7 +570,7 @@ button.cslot{cursor:pointer}
 .cslot b{font-size:1.5rem;color:#ffd76a;line-height:1}
 .cslot.act{border-style:solid;border-color:#ffd76a;background:rgba(255,154,31,.35);box-shadow:0 0 0 4px rgba(255,215,106,.3)}
 .cslot.lleno{border:0;background:rgba(255,255,255,.14)}
-.cslot svg.ic{width:4.6rem;height:4.6rem}
+.cslot svg.ic{flex:none;width:min(4.6rem,9vh);height:min(4.6rem,9vh)}
 .cpie{flex:none;display:flex;justify-content:center;gap:.3rem}
 .cpie svg{width:3.4rem;height:3.4rem}
 .cnom{flex:none;font-size:.85rem;opacity:.95}
@@ -589,11 +589,14 @@ button.cslot{cursor:pointer}
 .dec5 svg{width:100%;height:100%}
 .dec5.on{border-color:var(--tur);background:rgba(34,199,192,.28)}
 #nom5{width:100%;padding:.45rem .7rem;border-radius:.6rem;border:2px solid var(--oro);background:rgba(0,0,0,.4);font-size:1.1rem;text-align:center;margin:.3rem 0 .8rem}
-.carRes{display:flex;justify-content:center;margin:.4rem 0}.carRes .cartel{height:30rem}
+.carRes{display:flex;justify-content:center;margin:.4rem 0}.carRes .cartel{height:auto;aspect-ratio:auto;width:26rem;min-height:34rem;max-height:none}.carRes .cslot svg.ic{width:4.6rem;height:4.6rem}
 @media (max-width:1000px){.e3c{grid-template-columns:1fr 1fr}.tx3{grid-column:1/-1}}
 @media (max-width:760px){.orden{grid-template-columns:1fr}}
 @media print{.ficha b{color:#7a2d00}}
 
+#lado{display:none!important}
+.esc5 ol{font-size:1.25rem}.esc5 li small{display:block;font-size:1.05rem;font-weight:500;color:var(--tur);margin:.1rem 0 .35rem}
+@media print{.esc5 li small{color:#06605c}}
 html.red *,html.red *::before,html.red *::after{animation:none!important;transition:none!important}
 html.red .nt{opacity:0}
 
@@ -761,6 +764,9 @@ const FICHA = [
   ['Una idea:', 'los difuntos regresan para visitar a la familia. Es una celebración alegre.'],
   ['En el altar:', 'flores de cempasúchil, fotos de los difuntos, velas, pan de muerto, calaveritas de azúcar, copal.'],
 ];
+// Écran final : la consigne d'expression écrite (sur le cahier). Chaque question a son début de phrase.
+const ESCRIBE = { titulo: 'En tu cuaderno, escribe un texto de 30 palabras como mínimo:',
+  preguntas: [['¿Para qué sirve un altar?', 'El altar sirve para…'], ['¿Qué hay en un altar?', 'En el altar hay…'], ['¿Qué piensas tú de esta tradición?', 'Para mí, esta tradición es…']] };
 const VOCAB = [['altarI','el altar'],['flores','las flores de cempasúchil'],['velas','las velas'],['pan','el pan de muerto'],['calav','las calaveritas de azúcar'],['copal','el copal'],['foto','la foto del difunto'],['cementerio','el cementerio']];
 const ETAPAS = ['El vídeo','El altar','La tradición','La fiesta'];
 const HABIL = ['Mira y comprende','Escucha y elige','Lee y completa','Elige el verbo: presente'];
@@ -1002,7 +1008,7 @@ const IC = {
   casa: () => `<rect x="62" y="16" width="10" height="20" fill="#9c4521" stroke="#1a1030"/><path d="M16,92V48H84V92Z" fill="#f6e3b8" stroke="#1a1030" stroke-width="1.500"/><path d="M6,50L50,14L94,50Z" fill="#c2433a" stroke="#1a1030" stroke-width="1.500"/><rect x="42" y="62" width="17" height="30" rx="2" fill="#22808a" stroke="#1a1030"/><circle cx="55" cy="78" r="1.800" fill="#f0c75e"/><rect x="22" y="58" width="14" height="14" fill="#ffd27a" stroke="#1a1030"/><path d="M29,58v14M22,65h14" stroke="#1a1030"/><rect x="66" y="58" width="14" height="14" fill="#ffd27a" stroke="#1a1030"/><path d="M73,58v14M66,65h14" stroke="#1a1030"/>${flor(14, 90, 6)}${flor(88, 90, 6)}`,
   florazul: () => `<path d="M50,96Q48,70 50,52" stroke="#2f8f4e" stroke-width="4" fill="none"/><path d="M50,78q-16,-2 -20,-14q14,0 20,14z" fill="#2f8f4e"/><g transform="translate(50,38)">${[0, 60, 120, 180, 240, 300].map(a => `<path d="M0,0C-14,-10 -12,-30 0,-34C12,-30 14,-10 0,0Z" fill="#2f86ff" stroke="#0b3fa8" transform="rotate(${a})"/>`).join('')}<circle r="7" fill="#ffe08a" stroke="#c98a00"/></g><circle cx="50" cy="38" r="44" fill="url(#gAlma)" opacity=".35"/>`,
   corazon: () => `<circle cx="50" cy="50" r="44" fill="url(#gHalo)" opacity=".5"/><path d="M50,84C20,62 12,46 12,34C12,22 22,14 32,14C40,14 46,18 50,26C54,18 60,14 68,14C78,14 88,22 88,34C88,46 80,62 50,84Z" fill="#e0218a" stroke="#1a1030" stroke-width="1.5"/><path d="M26,30q4,-8 12,-8" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/>`,
-  foto: () => `<rect x="24" y="12" width="52" height="72" rx="3" fill="#6b4a2a" stroke="#f0c75e" stroke-width="3"/><rect x="31" y="19" width="38" height="58" fill="#d8c49a"/><circle cx="50" cy="40" r="10" fill="#7a5a3a"/><path d="M33,77Q34,56 50,56Q66,56 67,77Z" fill="#7a5a3a"/><path d="M38,36Q50,24 62,36L60,32Q50,22 40,32Z" fill="#3a2a1a"/>`,
+  foto: () => `<rect x="24" y="12" width="52" height="72" rx="2.5" fill="#b9b6c6" stroke="#5f5c70" stroke-width="1.5"/><rect x="26.6" y="14.6" width="46.8" height="66.800" fill="none" stroke="#8a8799" stroke-width="2.200" stroke-dasharray="1.600 1.400"/><circle cx="27.500" cy="15.500" r="2.200" fill="#e4e2ee" stroke="#5f5c70" stroke-width=".5"/><circle cx="72.500" cy="15.500" r="2.200" fill="#e4e2ee" stroke="#5f5c70" stroke-width=".5"/><circle cx="27.500" cy="80.500" r="2.200" fill="#e4e2ee" stroke="#5f5c70" stroke-width=".5"/><circle cx="72.500" cy="80.500" r="2.200" fill="#e4e2ee" stroke="#5f5c70" stroke-width=".5"/><rect x="30" y="18" width="40" height="60" fill="#f6f4ef"/><rect x="31.500" y="19.500" width="37" height="57" fill="#928d86"/><rect x="36" y="19.500" width="11" height="57" fill="#a9a49c"/><path d="M48,76.500V54Q48,46.500 56.500,46.500Q65,46.500 65,54V76.500Z" fill="#6b665f"/><path d="M52,47.500Q56.500,51 61,47.500" stroke="#d6d1c8" stroke-width="1.200" fill="none"/><rect x="54.700" y="42" width="3.600" height="5.500" fill="#c4beb4"/><circle cx="56.500" cy="37.500" r="6.300" fill="#cfc9bf"/><path d="M49.600,38C48.400,28.500 65,27.500 64.400,38C65,43 64.300,47 62.400,49.500L61,40C58.500,35.500 53,35 51.500,39.500L51,48.500C49.400,46 49.300,42 49.600,38Z" fill="#2c2927"/><path d="M53,38.200q1.300,1 2.600,0M58,38.200q1.300,1 2.600,0" stroke="#2c2927" stroke-width=".8" fill="none"/><path d="M54.500,41.300q2,1.400 4,0" stroke="#2c2927" stroke-width=".8" fill="none"/><path d="M35.500,76.500V63Q35.500,57.500 41.500,57.500Q47.500,57.500 47.500,63V76.500Z" fill="#dcd7ce"/><circle cx="41.500" cy="50.500" r="5.700" fill="#cfc9bf"/><path d="M35.400,51.500C34.300,42 48.500,42 47.600,50.500C45.800,46.800 40,45.800 37.600,49L37.300,55.500C35.800,54.500 35.300,53 35.400,51.500Z" fill="#2c2927"/><path d="M36.500,46.500Q41.500,43 46.500,46.500" stroke="#e9e5dc" stroke-width="1.300" fill="none"/><circle cx="40" cy="50.800" r=".8" fill="#2c2927"/><circle cx="44" cy="50.300" r=".8" fill="#2c2927"/><path d="M40.300,53.300q1.600,1.200 3.200,0" stroke="#2c2927" stroke-width=".7" fill="none"/><path d="M47,64L52,60M56,62L52,60" stroke="#cfc9bf" stroke-width="2.400" stroke-linecap="round"/><circle cx="50" cy="59" r="2.800" fill="#efebe3" stroke="#928d86" stroke-width=".6"/><circle cx="53.800" cy="61.500" r="2.600" fill="#efebe3" stroke="#928d86" stroke-width=".6"/><circle cx="50.500" cy="63.500" r="2.500" fill="#efebe3" stroke="#928d86" stroke-width=".6"/><circle cx="50" cy="59" r=".9" fill="#928d86"/><circle cx="53.800" cy="61.500" r=".8" fill="#928d86"/><path d="M31.500,19.500h37v57h-37z" fill="none" stroke="#5f5c70" stroke-width=".6"/>`,
   guit: () => `<g transform="translate(40,70) rotate(-62) scale(1.5)"><rect x="14" y="-3" width="46" height="5.5" fill="#3a1d10"/><rect x="58" y="-5.5" width="10" height="10" rx="2" fill="#3a1d10"/><ellipse cx="-8" cy="3" rx="18" ry="15" fill="#c9742c" stroke="#1a1030"/><ellipse cx="10" cy="0" rx="12" ry="11" fill="#c9742c" stroke="#1a1030"/><circle cx="3" cy="1" r="5" fill="#1a1030"/><path d="M-14,0H60" stroke="#f3e9d2" stroke-width=".6"/></g>`,
 };
 const ico = n => svgI(IC[n]());
@@ -1036,7 +1042,7 @@ function altarSVG(items, luz) {
 ${nivel(128, 272, 114, 286, 150, 166, 216)}
 ${nivel(92, 308, 72, 328, 216, 234, 288)}
 ${nivel(52, 348, 26, 374, 288, 308, 372)}
-<g class="it it-foto"><g transform="translate(150,57) scale(1,1.25)">${IC.foto()}</g></g>
+<g class="it it-foto"><g transform="translate(140,61) scale(1.2)">${IC.foto()}</g></g>
 <g class="it it-velas">${vela(126, 164, 38, 9)}${vela(274, 164, 38, 9, 'b')}${vela(84, 232, 44, 10, 'c')}${vela(316, 232, 44, 10)}${vela(40, 306, 50, 11, 'b')}${vela(360, 306, 50, 11, 'c')}</g>
 <g class="it it-flores">${flor(146,165,10)}${flor(254,165,10)}${flor(104,233,12)}${flor(198,238,9)}${flor(62,306,14)}${flor(338,306,14)}${flor(84,313,11)}${flor(318,314,10)}</g>
 <g class="it it-pan"><g transform="translate(104,150) scale(.92)">${IC.pan()}</g></g>
@@ -1558,7 +1564,7 @@ PANTALLAS[7] = function resumen() {
   info(7);
   main.innerHTML = `<div class="res panel"><h1 class="tit">El camino de cempasúchil</h1><p class="nota" style="text-align:center">Mi resumen · Día de muertos</p>
 <h3>Mis estrellas</h3><div class="estr">${ETAPAS.map((e, i) => `<div>${e}<br>${estrellas(S.estrellas[i])}</div>`).join('')}</div>
-${S.cartel ? `<h3>Mi cartel</h3><div class="carRes">${cartelHTML(S.cartel, TEXTO.map((_, i) => i), -1)}</div>` : ''}<div class="copia cuad"><p>Mi ficha para el cartel</p><ul class="ficha">${FICHA.map(([k, v]) => `<li><b>${k}</b> ${v}</li>`).join('')}</ul><p style="margin-top:.6rem">Copia la ficha en tu cuaderno.</p></div>
+${S.cartel ? `<h3>Mi cartel</h3><div class="carRes">${cartelHTML(S.cartel, TEXTO.map((_, i) => i), -1)}</div>` : ''}<div class="copia cuad"><p>Mi ficha para el cartel</p><ul class="ficha">${FICHA.map(([k, v]) => `<li><b>${k}</b> ${v}</li>`).join('')}</ul><p style="margin-top:.6rem">Usa esta ficha para escribir.</p></div><div class="copia cuad esc5"><p>${ESCRIBE.titulo}</p><ol>${ESCRIBE.preguntas.map(([q, a]) => `<li>${q}<small>${a}</small></li>`).join('')}</ol></div>
 <h3>Palabras nuevas</h3><div class="voc">${VOCAB.map(([i, t]) => `<div>${ico(i)}${t}</div>`).join('')}</div>
 <div id="miq"></div>
 <div class="fila noimp" style="justify-content:center;margin-top:1rem"><button class="btn" id="imp">Imprimir</button><button class="btn sec" id="cop">Copiar el resumen</button></div>
@@ -1573,7 +1579,7 @@ ${[0, 1, 2].map(i => `<div class="r"><input type="radio" name="bok" value="${i}"
     S.quiz = { p, r, ok: +c.value }; guardar(); pintaQ(); sfx('ok'); estallido($('#miq')); $('#miq').scrollIntoView({ block: 'center', behavior: S.cfg.red ? 'auto' : 'smooth' }); };
   $('#imp').onclick = () => window.print();
   $('#cop').onclick = () => {
-    let t = `EL CAMINO DE CEMPASÚCHIL — Mi resumen\n\nMis estrellas:\n${ETAPAS.map((e, i) => `  ${i + 1}. ${e}: ${S.estrellas[i]} / 3`).join('\n')}\n\nMi ficha para el cartel:\n${FICHA.map(([k, v]) => `  ${k} ${v}`).join('\n')}\n\nPalabras nuevas: ${VOCAB.map(v => v[1]).join(', ')}.`;
+    let t = `EL CAMINO DE CEMPASÚCHIL — Mi resumen\n\nMis estrellas:\n${ETAPAS.map((e, i) => `  ${i + 1}. ${e}: ${S.estrellas[i]} / 3`).join('\n')}\n\nMi ficha para el cartel:\n${FICHA.map(([k, v]) => `  ${k} ${v}`).join('\n')}\n\n${ESCRIBE.titulo}\n${ESCRIBE.preguntas.map(([q, a], i) => `  ${i + 1}. ${q} (${a})`).join('\n')}\n\nPalabras nuevas: ${VOCAB.map(v => v[1]).join(', ')}.`;
     if (S.quiz) t += `\n\nMi pregunta de quiz: ${S.quiz.p}\n${S.quiz.r.map((r, i) => `  ${'ABC'[i]}. ${r}${i === S.quiz.ok ? ' (correcta)' : ''}`).join('\n')}`;
     const hecho = () => aviso('Resumen copiado.');
     const plan = () => { try { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); hecho(); } catch (e) { aviso('No es posible copiar. Usa «Imprimir».'); } };
