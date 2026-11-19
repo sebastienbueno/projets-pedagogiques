@@ -595,8 +595,8 @@ button.cslot{cursor:pointer}
 @media print{.ficha b{color:#7a2d00}}
 
 #lado{display:none!important}
-.esc5 ol{font-size:1.25rem}.esc5 li small{display:block;font-size:1.05rem;font-weight:500;color:var(--tur);margin:.1rem 0 .35rem}
-@media print{.esc5 li small{color:#06605c}}
+.esc5{margin-top:.8rem;border-width:3px}.esc5>p{display:flex;align-items:center;justify-content:center;gap:.6rem;font-size:1.3rem}.esc5>p svg{width:1.6rem;height:1.6rem;flex:none}.esc5 ol{list-style:none;padding:0;gap:.5rem;margin-top:.6rem}.esc5 li{display:flex;align-items:center;gap:.9rem;padding:.4rem .8rem;border-radius:.8rem;background:rgba(0,0,0,.25)}.esc5 li svg.ic{width:3.6rem;height:3.6rem;flex:none}.esc5 li b{font-size:1.35rem;color:#fff}.esc5 li small{display:block;font-size:1.02rem;font-weight:500;color:var(--tur);margin-top:.1rem}
+@media print{.esc5 li small{color:#06605c}.esc5 li b{color:#000}.esc5 li{background:none}}
 html.red *,html.red *::before,html.red *::after{animation:none!important;transition:none!important}
 html.red .nt{opacity:0}
 
@@ -764,9 +764,12 @@ const FICHA = [
   ['Una idea:', 'los difuntos regresan para visitar a la familia. Es una celebración alegre.'],
   ['En el altar:', 'flores de cempasúchil, fotos de los difuntos, velas, pan de muerto, calaveritas de azúcar, copal.'],
 ];
-// Écran final : la consigne d'expression écrite (sur le cahier). Chaque question a son début de phrase.
-const ESCRIBE = { titulo: 'En tu cuaderno, escribe un texto de 30 palabras como mínimo:',
-  preguntas: [['¿Para qué sirve un altar?', 'El altar sirve para…'], ['¿Qué hay en un altar?', 'En el altar hay…'], ['¿Qué piensas tú de esta tradición?', 'Para mí, esta tradición es…']] };
+// Écran final : la consigne d'expression écrite (sur le cahier).
+// Chaque ligne : [pictogramme, début de phrase à compléter, mots d'aide]
+const ESCRIBE = { titulo: 'En tu cuaderno, completa las tres frases (20 palabras como mínimo):',
+  frases: [['mama', 'En el vídeo, la mamá regresa para…', 'visitar · la familia · la niña'],
+           ['altarI', 'En el altar hay…', 'flores · velas · fotos · pan de muerto · calaveritas'],
+           ['musico', 'En la fiesta, los esqueletos…', 'bailan · cantan · comen · tocan la guitarra']] };
 const VOCAB = [['altarI','el altar'],['flores','las flores de cempasúchil'],['velas','las velas'],['pan','el pan de muerto'],['calav','las calaveritas de azúcar'],['copal','el copal'],['foto','la foto del difunto'],['cementerio','el cementerio']];
 const ETAPAS = ['El vídeo','El altar','La tradición','La fiesta'];
 const HABIL = ['Mira y comprende','Escucha y elige','Lee y completa','Elige el verbo: presente'];
@@ -1554,7 +1557,7 @@ const FRASE_FIN = 'El alma llega al altar de su familia.';
 PANTALLAS[6] = function final() {
   info(6); S.fin = 1; S.hechas[4] = 1; guardar(); FX.lluvia = 1; AU.capas = 8;
   main.innerHTML = `<div id="final"><div class="altarG">${altarSVG(['foto','flores','velas','pan','papel','calav','cruz','copal','humo','guit'])}<div id="almaF"></div></div>
-<p class="msg tit">${FRASE_FIN}</p><button class="btn grande" id="aRes">Ver mi resumen</button></div>`;
+<p class="msg tit">${FRASE_FIN}</p><button class="btn grande" id="aRes">Continuar: mi cuaderno</button></div>`;
   const t1 = setTimeout(() => { const a = $('#final .altar'); if (a) a.classList.add('t-luz'); sfx('fin'); }, 600);
   const t2 = setTimeout(() => decir(FRASE_FIN), 3200);
   limpiar = () => { FX.lluvia = 0; clearTimeout(t1); clearTimeout(t2); };
@@ -1563,8 +1566,9 @@ PANTALLAS[6] = function final() {
 PANTALLAS[7] = function resumen() {
   info(7);
   main.innerHTML = `<div class="res panel"><h1 class="tit">El camino de cempasúchil</h1><p class="nota" style="text-align:center">Mi resumen · Día de muertos</p>
+<div class="copia cuad esc5"><p>${UI.lapiz}${ESCRIBE.titulo}</p><ol>${ESCRIBE.frases.map(([i, f, a]) => `<li>${ico(i)}<span><b>${f}</b><small>Ayuda: ${a}</small></span></li>`).join('')}</ol></div>
 <h3>Mis estrellas</h3><div class="estr">${ETAPAS.map((e, i) => `<div>${e}<br>${estrellas(S.estrellas[i])}</div>`).join('')}</div>
-${S.cartel ? `<h3>Mi cartel</h3><div class="carRes">${cartelHTML(S.cartel, TEXTO.map((_, i) => i), -1)}</div>` : ''}<div class="copia cuad"><p>Mi ficha para el cartel</p><ul class="ficha">${FICHA.map(([k, v]) => `<li><b>${k}</b> ${v}</li>`).join('')}</ul><p style="margin-top:.6rem">Usa esta ficha para escribir.</p></div><div class="copia cuad esc5"><p>${ESCRIBE.titulo}</p><ol>${ESCRIBE.preguntas.map(([q, a]) => `<li>${q}<small>${a}</small></li>`).join('')}</ol></div>
+${S.cartel ? `<h3>Mi cartel</h3><div class="carRes">${cartelHTML(S.cartel, TEXTO.map((_, i) => i), -1)}</div>` : ''}<div class="copia cuad"><p>Mi ficha para el cartel</p><ul class="ficha">${FICHA.map(([k, v]) => `<li><b>${k}</b> ${v}</li>`).join('')}</ul></div>
 <h3>Palabras nuevas</h3><div class="voc">${VOCAB.map(([i, t]) => `<div>${ico(i)}${t}</div>`).join('')}</div>
 <div id="miq"></div>
 <div class="fila noimp" style="justify-content:center;margin-top:1rem"><button class="btn" id="imp">Imprimir</button><button class="btn sec" id="cop">Copiar el resumen</button></div>
@@ -1579,7 +1583,7 @@ ${[0, 1, 2].map(i => `<div class="r"><input type="radio" name="bok" value="${i}"
     S.quiz = { p, r, ok: +c.value }; guardar(); pintaQ(); sfx('ok'); estallido($('#miq')); $('#miq').scrollIntoView({ block: 'center', behavior: S.cfg.red ? 'auto' : 'smooth' }); };
   $('#imp').onclick = () => window.print();
   $('#cop').onclick = () => {
-    let t = `EL CAMINO DE CEMPASÚCHIL — Mi resumen\n\nMis estrellas:\n${ETAPAS.map((e, i) => `  ${i + 1}. ${e}: ${S.estrellas[i]} / 3`).join('\n')}\n\nMi ficha para el cartel:\n${FICHA.map(([k, v]) => `  ${k} ${v}`).join('\n')}\n\n${ESCRIBE.titulo}\n${ESCRIBE.preguntas.map(([q, a], i) => `  ${i + 1}. ${q} (${a})`).join('\n')}\n\nPalabras nuevas: ${VOCAB.map(v => v[1]).join(', ')}.`;
+    let t = `EL CAMINO DE CEMPASÚCHIL — Mi resumen\n\nMis estrellas:\n${ETAPAS.map((e, i) => `  ${i + 1}. ${e}: ${S.estrellas[i]} / 3`).join('\n')}\n\nMi ficha para el cartel:\n${FICHA.map(([k, v]) => `  ${k} ${v}`).join('\n')}\n\n${ESCRIBE.titulo}\n${ESCRIBE.frases.map((x, i) => `  ${i + 1}. ${x[1]}`).join('\n')}\n\nPalabras nuevas: ${VOCAB.map(v => v[1]).join(', ')}.`;
     if (S.quiz) t += `\n\nMi pregunta de quiz: ${S.quiz.p}\n${S.quiz.r.map((r, i) => `  ${'ABC'[i]}. ${r}${i === S.quiz.ok ? ' (correcta)' : ''}`).join('\n')}`;
     const hecho = () => aviso('Resumen copiado.');
     const plan = () => { try { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); hecho(); } catch (e) { aviso('No es posible copiar. Usa «Imprimir».'); } };
