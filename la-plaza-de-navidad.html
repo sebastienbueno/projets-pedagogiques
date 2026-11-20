@@ -642,7 +642,7 @@ function crear3D(cv) {
     R.render(esc, cam);
     const w = cv.clientWidth, h = cv.clientHeight; etqs().forEach(b => { const it = islas[+b.dataset.i]; v3.set(it.g.position.x, ALTO[it.id] + .5, it.g.position.z).project(cam); b.style.transform = `translate(${(v3.x * .5 + .5) * w}px,${(-v3.y * .5 + .5) * h}px) translate(-50%,-100%)`; b.style.zIndex = Math.round((1 - v3.z) * 5000); b.style.visibility = v3.z > 1 ? 'hidden' : ''; });
   })();
-  return { enfocar, estado, vecina, esc, cam };
+  return { enfocar, estado, vecina, esc, cam, kit: { T, M, mat, pon, caja, cil, cono, bola, persona, cara, cartel, modelo, mezcl } };
 }
 function pintarPlaza() {
   const P = $('#plaza');
@@ -753,6 +753,63 @@ function escribir(d, fin) {
     S[d.clave] = ta.value.trim(); guardar(); bien(); $('.hoja', C.tabla).classList.add('va'); C.boton('', null); C.msg(d.adios, 'bien'); setTimeout(() => fin(1, 1), 1100); });
 }
 
+/* ====== MINI-JUEGO EN 3D: MONTAR EL BELÉN ================================
+   Las figuras esperan en primera fila; el alumno lleva cada una hasta su cartel (arrastrando,
+   o con dos clics: figura y después sitio). Los intrusos van a la alfombra roja. */
+function belen3D(fin) {
+  const K = H3.kit, T = K.T, M = K.M;
+  C.consigna('Monta el belén: lleva cada figura hasta su cartel. Las figuras que no son del belén van a la alfombra roja.', 'Monte la crèche : amène chaque figurine jusqu’à son panneau. Les figurines qui ne font pas partie de la crèche vont sur le tapis rouge.');
+  C.glosa('<b>la mula</b> : la mule (orejas largas) · <b>el buey</b> : le bœuf (cuernos) · <b>el establo</b> : l’étable<br>Arrastra una figura, o haz clic en ella y después en su sitio.');
+  C.tabla.innerHTML = '<canvas id="g3" style="position:absolute;inset:0;width:100%;height:100%;border-radius:1.4rem;background:radial-gradient(ellipse at 50% 105%,#f0a04a,#b3182f 42%,#3a0812);touch-action:none;cursor:grab"></canvas>';
+  const cv = $('#g3'); let R; try { R = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { return belen2D(fin); }
+  R.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5)); R.shadowMap.enabled = true; R.shadowMap.type = T.PCFSoftShadowMap; R.outputEncoding = T.sRGBEncoding; R.setClearColor(0, 0);
+  const esc = new T.Scene(), cam = new T.PerspectiveCamera(36, 1, .1, 100); cam.position.set(0, 11, 17); cam.lookAt(0, .9, 2.3);
+  esc.add(new T.HemisphereLight(0xffe2c0, 0x4a2030, .75)); const sol = new T.DirectionalLight(0xfff0dc, .9); sol.position.set(5, 14, 9); sol.castShadow = true; Object.assign(sol.shadow.camera, { left: -11, right: 11, top: 11, bottom: -11, near: 1, far: 50 }); sol.shadow.mapSize.set(1024, 1024); esc.add(sol);
+  const medir = () => { const w = cv.clientWidth || 800, h = cv.clientHeight || 500; R.setSize(w, h, false); cam.aspect = w / h; cam.fov = w / h < 1.5 ? 44 : 36; cam.updateProjectionMatrix(); }; medir(); addEventListener('resize', medir);
+  // decorado: suelo, establo, estrella, alfombra de los intrusos
+  K.cil(esc, 11.5, 11.5, .3, 48, K.mat(0x4a0812), 0, -.16, 1.6); K.caja(esc, 11.6, .1, 3.4, M.paja, 0, .05, -1.2);
+  K.caja(esc, 11.4, 2.8, .16, M.madera, 0, 1.4, -2.9); [-5.6, 5.6].forEach(x => K.cil(esc, .15, .15, 3.6, 6, M.pardo, x, 1.8, -.9)); const tj = K.caja(esc, 12, .18, 2.4, M.pardo, 0, 3.55, -1.9); tj.rotation.x = .32;
+  const es = new T.Group(); es.position.set(0, 5.2, -1.6); esc.add(es); K.pon(es, new T.OctahedronGeometry(.6), M.llama); K.pon(es, new T.OctahedronGeometry(.6), M.llama).rotation.set(.8, .8, 0);
+  const alf = K.caja(esc, 7, .06, 1.9, K.mat(0xd4203a, { flatShading: false }), 0, .04, 5.6); K.caja(esc, 7.2, .04, 2.1, M.oro, 0, .02, 5.6); K.cartel(esc, 'No está en el belén', 0, .45, 6.9, 1.3);
+  // los cinco sitios del belén, cada uno con su cartel
+  const SIT = [['mula', 'la mula', -4.4, -1.1], ['maria', 'María', -2.2, -.7], ['nino', 'el Niño Jesús', 0, -.5], ['jose', 'José', 2.2, -.7], ['buey', 'el buey', 4.4, -1.1]].map(([id, n, x, z]) => {
+    const a = new T.Mesh(new T.RingGeometry(.78, .96, 36), new T.MeshBasicMaterial({ color: 0xffd66b, side: T.DoubleSide })); a.rotation.x = -Math.PI / 2; a.position.set(x, .12, z); esc.add(a); const c = K.cartel(esc, n, x, 3.05, -.55, 1.2); K.cil(esc, .02, .02, .5, 4, M.pardo, x, 3.5, -.55); return { id, x, z, a, c, lleno: false }; });
+  // las ocho figuras
+  const fig = (id, x, intruso, hacer) => { const f = new T.Group(); f.position.set(x, 0, 2.9); f.userData = { fig: 1, id, intruso, casa: new T.Vector3(x, 0, 2.9), dest: new T.Vector3(x, 0, 2.9), fijo: false }; hacer(f); const t = new T.Mesh(new T.CylinderGeometry(.8, .8, 2.6, 10), new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })); t.position.y = 1.3; f.add(t); esc.add(f); return f; };
+  const prov = (f, c, cuernos) => { const g = new T.Group(); f.add(g); const m = K.mat(c); K.caja(g, .7, .7, 1.3, m, 0, .9, 0); K.caja(g, .46, .5, .6, m, 0, 1.5, .8); [-1, 1].forEach(d => { const h = K.cono(g, .08, .5, 5, cuernos ? M.crema : m, d * .2, 1.95, .7); h.rotation.z = cuernos ? -d * 1.1 : -d * .2; }); return g; };
+  const FIG = baraja([
+    ['maria', 0, f => { const q = K.persona(f, M.azul, M.piel, null, 0); q.k.scale.setScalar(1.3); K.pon(q.k, new T.SphereGeometry(.35, 20, 16), new T.MeshStandardMaterial({ color: 0xffffff, roughness: .9 }), 0, 1.64, -.1).scale.set(1, 1.02, .9); K.cono(q.k, .36, .7, 12, M.blanco, 0, 1.25, -.16); }],
+    ['jose', 0, f => { const q = K.persona(f, M.pardo, M.piel, 0x5d3718, 0); q.k.scale.setScalar(1.4); q.bi.rotation.z = -1.1; K.cil(f, .05, .05, 2.9, 5, M.madera, -.95, 1.45, .2); }],
+    ['nino', 0, f => { const cu = new T.Group(); cu.scale.setScalar(1.7); f.add(cu); const mo = K.mat(0x5a3418); K.caja(cu, 1.05, .3, .62, mo, 0, .45, 0); [-1, 1].forEach(d => { const pt = K.caja(cu, .09, .78, .09, mo, d * .44, .32, 0); pt.rotation.z = d * .35; }); K.caja(cu, 1, .16, .58, K.mat(0xf5c832), 0, .66, 0); const nb = K.bola(cu, .2, new T.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: .25 }), .13, .86, 0); nb.scale.set(1.65, .85, 1.1); const bh = K.pon(cu, new T.SphereGeometry(.22, 28, 20), new T.MeshStandardMaterial({ map: K.cara('f3d2b3', 'bebe'), roughness: .6 }), -.36, .97, .03); bh.rotation.x = -.55; K.pon(cu, new T.TorusGeometry(.3, .035, 6, 24), M.llama, -.36, 1.02, -.16); }],
+    ['mula', 0, f => { K.modelo(f, 'modelos/burro.glb', 2.7, 0, 0, 0, 0, [prov(f, 0x9a9aa8, 0)]); }],
+    ['buey', 0, f => { K.modelo(f, 'modelos/vaca.glb', 2.1, 0, 0, 0, -Math.PI / 2, [prov(f, 0x8a5a3c, 1)]); }],
+    ['papa', 1, f => { const q = K.persona(f, M.rojo, M.piel, 0xffffff, 0); q.k.scale.setScalar(1.35); K.cono(q.k, .3, .62, 12, M.rojo, 0, 2.05, 0); K.bola(q.k, .1, M.blanco, 0, 2.38, 0); K.cil(q.k, .33, .33, .12, 14, M.blanco, 0, 1.82, 0); K.caja(q.k, .92, .12, .5, K.mat(0x22190f), 0, .62, .1); }],
+    ['reno', 1, f => { const m = K.mat(0x8a5a2c), g = new T.Group(); f.add(g); K.caja(g, .62, .62, 1.25, m, 0, 1.05, 0); [[-.22, -.45], [.22, -.45], [-.22, .45], [.22, .45]].forEach(([a, b]) => K.caja(g, .13, .75, .13, m, a, .38, b)); K.caja(g, .34, .7, .34, m, 0, 1.55, .6); K.caja(g, .4, .36, .6, m, 0, 1.95, .82); K.bola(g, .1, K.mat(0xff2a2a, { emissive: 0xff0000, emissiveIntensity: .8 }), 0, 1.92, 1.16); [-1, 1].forEach(d => { const a1 = K.cil(g, .035, .035, .7, 5, M.crema, d * .2, 2.45, .7); a1.rotation.z = -d * .45; const a2 = K.cil(g, .03, .03, .36, 5, M.crema, d * .38, 2.6, .7); a2.rotation.z = d * .7; K.bola(g, .035, M.oscuro, d * .14, 2.02, 1.1); }); }],
+    ['nieve', 1, f => { const b = new T.MeshStandardMaterial({ color: 0xffffff, roughness: .9 }); K.pon(f, new T.SphereGeometry(.72, 20, 16), b, 0, .7, 0); K.pon(f, new T.SphereGeometry(.52, 20, 16), b, 0, 1.6, 0); K.pon(f, new T.SphereGeometry(.38, 20, 16), b, 0, 2.3, 0); const z = K.cono(f, .07, .4, 8, K.mat(0xff8a1f), 0, 2.3, .5); z.rotation.x = Math.PI / 2; [-1, 1].forEach(d => K.bola(f, .05, M.oscuro, d * .14, 2.4, .33)); K.cil(f, .3, .3, .42, 14, M.oscuro, 0, 2.82, 0); K.cil(f, .46, .46, .05, 14, M.oscuro, 0, 2.62, 0); K.cil(f, .56, .56, .14, 14, M.rojo, 0, 1.98, 0); }]
+  ]).map(([id, intruso, hacer], k) => fig(id, -6.3 + k * 1.8, intruso, hacer));
+  let sel = null, arr = null, okN = 0, fuera = 0, vivo = true, hecho = false; const fallo = new Set(), rayo = new T.Raycaster(), pt = new T.Vector2(), plano = new T.Plane(new T.Vector3(0, 1, 0), 0), v = new T.Vector3();
+  const apunta = (e) => { const b = cv.getBoundingClientRect(); pt.set((e.clientX - b.left) / b.width * 2 - 1, -(e.clientY - b.top) / b.height * 2 + 1); rayo.setFromCamera(pt, cam); };
+  const figuraEn = (e) => { apunta(e); const h = rayo.intersectObjects(FIG.filter(f => !f.userData.fijo), true)[0]; if (!h) return null; let o = h.object; while (o && !o.userData.fig) o = o.parent; return o; };
+  const suelo = (e) => { apunta(e); return rayo.ray.intersectPlane(plano, v) ? v.clone() : null; };
+  const colocar = (f, q) => {              // q: punto del suelo donde se suelta la figura
+    const u = f.userData, s = SIT.filter(t => !t.lleno).map(t => [Math.hypot(t.x - q.x, t.z - q.z), t]).sort((a, b) => a[0] - b[0])[0], enAlf = Math.abs(q.x) < 3.8 && Math.abs(q.z - 5.6) < 1.3;
+    if (s && s[0] < 1.5) { if (s[1].id === u.id) { u.fijo = true; s[1].lleno = true; u.dest.set(s[1].x, 0, s[1].z); s[1].a.material.color.set(0x5fd39a); if (!fallo.has(f)) okN++; clic(okN); C.msg('¡Muy bien!', 'bien'); }
+      else { fallo.add(f); mal(); u.dest.copy(u.casa); C.msg(u.intruso ? 'Esta figura no está en un belén tradicional.' : 'No es su sitio. Lee otra vez los carteles.', 'mal'); } }
+    else if (enAlf) { if (u.intruso) { u.fijo = true; u.dest.set(-2.4 + fuera * 2.4, 0, 5.6); fuera++; if (!fallo.has(f)) okN++; clic(okN); C.msg('¡Muy bien! No está en el belén.', 'bien'); } else { fallo.add(f); mal(); u.dest.copy(u.casa); C.msg('Esta figura sí está en el belén.', 'mal'); } }
+    else u.dest.copy(u.casa);
+    if (!hecho && FIG.every(x => x.userData.fijo)) { hecho = true; cv.style.cursor = 'default'; seguir(fin, okN, 8, '¡El belén está completo!'); }
+  };
+  cv.addEventListener('pointerdown', e => { if (sel) { const q = suelo(e); if (q && (SIT.some(t => !t.lleno && Math.hypot(t.x - q.x, t.z - q.z) < 1.5) || (Math.abs(q.x) < 3.8 && Math.abs(q.z - 5.6) < 1.3))) { const s2 = sel; sel = null; colocar(s2, q); return; } } const f = figuraEn(e); if (!f) { if (sel) { const q = suelo(e); const s = sel; sel = null; if (q) colocar(s, q); } return; } try { cv.setPointerCapture(e.pointerId); } catch (er) {} arr = { f, x: e.clientX, y: e.clientY, mov: false }; });
+  cv.addEventListener('pointermove', e => { if (!arr) { cv.style.cursor = hecho ? 'default' : figuraEn(e) ? 'grab' : sel ? 'pointer' : 'default'; return; } if (!arr.mov && Math.hypot(e.clientX - arr.x, e.clientY - arr.y) < 6) return; arr.mov = true; sel = null; cv.style.cursor = 'grabbing'; const q = suelo(e); if (q) { arr.f.userData.dest.set(Math.max(-8, Math.min(8, q.x)), 0, Math.max(-2, Math.min(6.6, q.z))); arr.f.position.x = arr.f.userData.dest.x; arr.f.position.z = arr.f.userData.dest.z; } });
+  cv.addEventListener('pointerup', e => { if (!arr) return; const a = arr; arr = null; if (!a.mov) { sel = sel === a.f ? null : a.f; C.msg(sel ? 'Ahora haz clic en su sitio.' : '', ''); return; } const q = suelo(e); if (q) colocar(a.f, q); else a.f.userData.dest.copy(a.f.userData.casa); });
+  C.tabla.__b3 = { FIG, SIT, cam, cv }; C.msg('Lleva cada figura hasta su cartel.', '');
+  const reloj = new T.Clock(); let tA = 0;
+  (function bucle() { if (!vivo) return; requestAnimationFrame(bucle); const t = reloj.getElapsedTime(), dt = Math.min(.05, t - tA); tA = t; K.mezcl.forEach(m => m.update(dt));
+    FIG.forEach(f => { const u = f.userData, alto = (arr && arr.f === f && arr.mov) || sel === f ? .55 : 0; f.position.x += (u.dest.x - f.position.x) * .2; f.position.z += (u.dest.z - f.position.z) * .2; f.position.y += (alto - f.position.y) * .25; const e = sel === f ? 1.1 + Math.sin(t * 6) * .03 : 1; f.scale.setScalar(e); });
+    SIT.forEach((s, k) => { if (!s.lleno) s.a.scale.setScalar(1 + Math.sin(t * 3 + k) * .06); }); es.rotation.y = t * (hecho ? 2.5 : .6); es.scale.setScalar(hecho ? 1.5 + Math.sin(t * 4) * .15 : 1); R.render(esc, cam); })();
+  limpiar.push(() => { vivo = false; removeEventListener('resize', medir); try { R.dispose(); R.forceContextLoss(); } catch (e) {} });
+}
+
 /* ====== 5. LOS SEIS LUGARES ============================================ */
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const CAMPANA = '<svg viewBox="0 0 60 70"><path d="M30 6a5 5 0 0 1 5 5c11 4 14 14 14 26 0 8 3 12 7 16H4c4-4 7-8 7-16 0-12 3-22 14-26a5 5 0 0 1 5-5z"/><circle cx="30" cy="60" r="6"/></svg>';
@@ -813,14 +870,14 @@ const EST = {
         if (malas) { mal(); C.msg(`Hay ${malas} ${malas > 1 ? 'raíces' : 'raíz'} que cambiar. Pista: nosotros y vosotros no cambian.`, 'mal'); }
         else { $$('.pers', C.tabla).forEach(p => { if (p.dataset.r === 'ue') p.classList.add('bota'); }); decir('Suelo, sueles, suele, solemos, soléis, suelen.'); seguir(fin, okT + okR, 12, 'Suelo, sueles, suele, solemos, soléis, suelen.'); } }); } },
     { n: '¿Gusta o gustan?', f(fin) {
-      C.consigna('Elige rápido la forma correcta antes de que se acabe el tiempo. Puedes usar las flechas ← y → del teclado.', 'Choisis vite la bonne forme avant la fin du temps. Tu peux utiliser les flèches ← et → du clavier.');
+      C.consigna('Elige la forma correcta para cada frase. Puedes usar las flechas ← y → del teclado.', 'Choisis la bonne forme pour chaque phrase. Tu peux utiliser les flèches ← et → du clavier.');
       C.glosa('<b>Me gusta</b> + singular o infinitivo<br><b>Me gustan</b> + plural<br><b>compartir</b> : partager');
       let cola = baraja([['A los españoles les ___ reunirse con la familia.', 'gusta', 'gustan', 0], ['Les ___ las recetas navideñas.', 'encanta', 'encantan', 1], ['Los españoles ___ cenar platos típicos, como el pavo.', 'suele', 'suelen', 1], ['De postre, ___ preparar turrones, polvorones y mazapanes.', 'suelen', 'soléis', 0], ['A mí me ___ los polvorones.', 'gusta', 'gustan', 1], ['A mi familia le ___ cenar en casa.', 'encanta', 'encantan', 0], ['Yo ___ cenar con mis abuelos.', 'suelo', 'suele', 0], ['Nosotros ___ comer turrón.', 'solemos', 'suelen', 0], ['A los niños les ___ la Nochebuena.', 'encanta', 'encantan', 0], ['¿Te ___ los mazapanes?', 'gusta', 'gustan', 1]]);
       const tot = cola.length; let ok = 0, hechas = 0, act = null, t0 = 0; const vistos = new Set();
       C.tabla.innerHTML = `<div class="marc"><span>Frases: <b id="mh">0</b> / ${tot}</span></div><div class="tarjeta"><p></p><div class="mecha"><i></i></div><div class="dosb"><button data-k="0"><small>←</small><span></span></button><button data-k="1"><small>→</small><span></span></button></div></div>`;
       const sig = () => { clearInterval(mechaT); if (!cola.length) { $('.tarjeta', C.tabla).style.opacity = .5; return seguir(fin, ok, tot, `${ok} / ${tot} a la primera.`); }
         act = cola.shift(); $('.tarjeta p', C.tabla).innerHTML = act[0].replace('___', '<u>&nbsp;</u>'); $$('.dosb span', C.tabla).forEach((s, i) => s.textContent = act[1 + i]); t0 = Date.now();
-        mechaT = setInterval(() => { const r = 1 - (Date.now() - t0) / 9000; $('.mecha i', C.tabla).style.width = Math.max(0, r * 100) + '%'; if (r <= 0) resp(-1); }, 80); };
+        mechaT = setInterval(() => { const r = 1 - (Date.now() - t0) / 25000; $('.mecha i', C.tabla).style.width = Math.max(0, r * 100) + '%'; if (r <= 0) resp(-1); }, 80); };
       const resp = (k) => { if (!act) return; clearInterval(mechaT); const a = act; act = null; $('.tarjeta p', C.tabla).innerHTML = a[0].replace('___', `<u>${a[1 + a[3]]}</u>`);
         if (k === a[3]) { if (!vistos.has(a[0])) ok++; hechas++; $('#mh').textContent = hechas; clic(hechas); C.msg('', ''); setTimeout(sig, 900); }
         else { vistos.add(a[0]); cola.push(a); mal(); C.msg(k < 0 ? 'Se acabó el tiempo. Mira la respuesta.' : 'No. Mira la respuesta: la frase vuelve después.', 'mal'); setTimeout(sig, 2200); } };
@@ -830,7 +887,7 @@ const EST = {
   ] },
   /* ---------- Navidad ---------- */
   belen: { t: 'El belén y los villancicos', f: '25 de diciembre · Navidad', pasos: [
-    { n: 'El belén', f(fin) {
+    { n: 'El belén', f(fin) { if (H3 && H3.kit) return belen3D(fin);
       C.consigna('Monta el belén: arrastra cada nombre hasta su figura. ¡Cuidado con los intrusos!', 'Monte la crèche : fais glisser chaque nom sur sa figurine. Attention aux intrus !');
       C.glosa('<b>el establo</b> : l’étable · <b>la mula</b> : la mule (orejas largas) · <b>el buey</b> : le bœuf (cuernos)<br>El belén representa a la Sagrada Familia en un establo.');
       const fig = (a, x, n, d) => `<g class="dest" data-a="${a}" transform="translate(${x} 0)"><rect x="-55" y="120" width="110" height="210" fill="transparent"/><g class="fig">${d}</g><text y="352">${n}</text></g>`;
@@ -852,18 +909,6 @@ const EST = {
       arrastre({ total: 10, ok(f, d) { f.style.rotate = ''; f.style.marginTop = ''; d.append(f); d.classList.add('lleno'); const n = $$('.ficha', d).length; d.dataset.a = n < F[d.dataset.k].length ? d.dataset.k + n : 'fin'; },
         pista: (f, d) => d && f.dataset.c[0] === d.dataset.k ? 'Esta pieza va en esta frase, pero más tarde.' : 'Esta pieza no va en esta frase.',
         fin: (a, t) => { decir(F.a.join(' ') + ' ' + F.b.join(' ')); seguir(fin, a, t, '¡Las dos definiciones están completas!'); } }); } },
-    { n: 'El villancico', f(fin) {
-      C.consigna('Toca el villancico: haz clic en la campana que se ilumina. Después, di cómo se llama.', 'Joue le chant de Noël : clique sur la cloche qui s’allume. Ensuite, dis comment il s’appelle.');
-      C.glosa('<b>una campana</b> : une cloche · <b>tocar</b> : jouer (d’un instrument)');
-      const B = [[64, 'mi'], [67, 'sol'], [69, 'la'], [71, 'si'], [72, 'do'], [74, 're']], SEQ = [67, 69, 67, 64, 67, 69, 67, 64, 74, 74, 71, 72, 72, 67]; let i = 0, err = 0, ok = 0;
-      C.tabla.innerHTML = `<div class="pauta">${SEQ.map(() => '<i></i>').join('')}</div><div class="campanas">${B.map(([m, n], k) => `<button class="camp" data-m="${m}" style="scale:${1.12 - k * .05}">${CAMPANA}${n}</button>`).join('')}</div><div id="tit" style="min-height:7rem;width:40rem"></div>`;
-      const luz = () => $$('.camp', C.tabla).forEach(b => b.classList.toggle('luz', i < SEQ.length && +b.dataset.m === SEQ[i]));
-      const preguntar = (m, sig) => { const t = $('#tit'); if (!t) return; t.innerHTML = ''; opciones(t, [{ p: '¿Cómo se llama este villancico?', o: ['Noche de paz', 'Cascabel (Jingle bells)', 'Campana sobre campana'], c: m }], (a) => { ok += a; sig(); }); };
-      $$('.camp', C.tabla).forEach(b => b.onclick = () => { if (i >= SEQ.length) return; b.classList.remove('toca'); void b.offsetWidth; b.classList.add('toca');
-        if (+b.dataset.m === SEQ[i]) { nota(SEQ[i], ahora(), .8); $$('.pauta i', C.tabla)[i].classList.add('ya'); i++; luz();
-          if (i === SEQ.length) { C.msg('Ahora escucha el villancico completo…', ''); const t1 = setTimeout(() => { const d = tocar('paz'); const t2 = setTimeout(() => preguntar(0, () => { C.msg('Escucha otro villancico…', ''); const d2 = tocar('cascabel'); const t3 = setTimeout(() => preguntar(1, () => seguir(fin, ok + (err <= 2 ? 1 : 0), 3)), Math.min(d2, 4000)); limpiar.push(() => clearTimeout(t3)); }), Math.min(d, 3500)); limpiar.push(() => clearTimeout(t2)); }, 700); limpiar.push(() => clearTimeout(t1)); } }
-        else { err++; mal(); } });
-      luz(); C.msg('Sigue la luz: catorce notas.', ''); } }
   ] },
   /* ---------- Nochevieja ---------- */
   reloj: { t: 'El reloj de la plaza', f: '31 de diciembre · Nochevieja', pasos: [
@@ -873,18 +918,6 @@ const EST = {
       const Q = [['¿Quién?', 18, 12, 'q'], ['¿Cuándo?', 82, 12, 'c'], ['¿Qué?', 16, 52, 'k'], ['¿Por qué?', 84, 52, 'p'], ['El origen', 50, 90, 'o']];
       C.tabla.innerHTML = `<div class="esfera"><svg viewBox="0 0 100 100">${ESFERA('<text x="50" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4d3a" font-family="Georgia">12 uvas</text>')}</svg>${Q.map(q => `<div class="q" style="left:${q[1]}%;top:${q[2]}%"><span class="rot">${q[0]}</span><div class="caja dest" data-a="${q[3]}"></div></div>`).join('')}</div><div class="bandeja peq">${fichasHTML([['los españoles', 'q'], ['el 31 de diciembre, a medianoche', 'c'], ['comer 12 uvas al son de las campanadas', 'k'], ['para tener buena suerte', 'p'], ['1909: una buena cosecha de uvas', 'o']])}</div>`;
       arrastre({ total: 5, fin: (a, t) => seguir(fin, a, t) }); } },
-    { n: 'Las campanadas', f(fin) {
-      C.consigna('Es medianoche. Come una uva con cada campanada: ¡son doce! Cada uva es un deseo para un mes del año.', 'Il est minuit. Mange un raisin à chaque coup de cloche : il y en a douze ! Chaque raisin est un vœu pour un mois de l’année.');
-      C.glosa('Necesitas <b>diez uvas</b> para tener buena suerte.<br>También puedes usar la barra de espacio.');
-      C.tabla.innerHTML = `<svg id="reloj" viewBox="0 0 100 100">${ESFERA('<text id="cn" x="50" y="76" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4d3a" font-family="Georgia"></text>')}</svg><div id="uvas">${MESES.map(m => `<div><span></span>${m}</div>`).join('')}</div><button class="btn oro" id="comer" disabled>Como una uva</button>`;
-      let i = -1, comidas = 0, intento = 0; const uv = $$('#uvas div'), bt = $('#comer');
-      const come = () => { if (i < 0 || i > 11) return; const u = uv[i]; if (u.classList.contains('act')) { u.classList.remove('act'); u.classList.add('com'); comidas++; clic(i); } };
-      bt.onclick = come; const tecla = (e) => { if (e.code === 'Space') { e.preventDefault(); come(); } }; addEventListener('keydown', tecla); limpiar.push(() => removeEventListener('keydown', tecla));
-      const empezar = () => { intento++; i = -1; comidas = 0; uv.forEach(u => u.className = ''); bt.disabled = false; $('#cn').textContent = ''; C.msg('Atención… tres, dos, uno…', ''); C.boton('', null);
-        clearInterval(relojT); relojT = setInterval(() => { if (i >= 0 && i < 12 && uv[i].classList.contains('act')) { uv[i].classList.remove('act'); uv[i].classList.add('per'); } i++;
-          if (i > 11) { clearInterval(relojT); bt.disabled = true; if (comidas >= 10) { fuegos(); seguir(fin, intento === 1 ? 1 : 0, 1, `${comidas} uvas: ¡Feliz Año Nuevo!`); } else { mal(); C.msg(`Solo ${comidas} uvas… Necesitas diez.`, 'mal'); C.boton('Otra vez', empezar); } return; }
-          uv[i].classList.add('act'); campana(i === 11 ? 147 : 196); $('#cn').textContent = i + 1; const r = $('#reloj'); r.classList.remove('dong'); void r.offsetWidth; r.classList.add('dong'); }, 1700); };
-      C.msg('Escucha las campanadas y come una uva cada vez.', ''); C.boton('Empezar', empezar); } }
   ] },
   /* ---------- Reyes ---------- */
   reyes: { t: 'La cabalgata de Reyes', f: '5 y 6 de enero', pasos: [
@@ -895,20 +928,6 @@ const EST = {
       const R = baraja([['melchor', '#e9c7a6', '#ffffff', '#a4142c'], ['gaspar', '#e2b48c', '#8a5a2c', '#1d4d3a'], ['baltasar', '#5e3a22', '#17100b', '#5b3a8c']]);
       C.tabla.innerHTML = `<div class="calle">${R.map((r, k) => `<div class="carroza dest" data-a="${r[0]}" style="animation-delay:${-k * 8.7}s">${reyFig(r[1], r[2], r[3])}<div class="caja" style="min-width:8rem"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML([['Melchor', 'melchor'], ['Gaspar', 'gaspar'], ['Baltasar', 'baltasar']])}</div>`;
       arrastre({ total: 3, ok(f, d) { $('.caja', d).append(f); }, pista: () => 'No es este rey. Lee otra vez las pistas.', fin: (a, t) => seguir(fin, a, t, 'Melchor, Gaspar y Baltasar desfilan por las calles.') }); } },
-    { n: 'Los caramelos', f(fin) {
-      C.consigna('Los Reyes reparten caramelos. Atrapa solo los caramelos que hablan del Día de Reyes.', 'Les Rois distribuent des bonbons. Attrape seulement ceux qui parlent du jour des Rois.');
-      C.glosa('<b>repartir</b> : distribuer · <b>desfilar</b> : défiler · <b>una carta</b> : une lettre · <b>un regalo</b> : un cadeau<br>Siete caramelos para ganar; tres errores como máximo.');
-      const buenas = ['los regalos', 'la carta', 'los caramelos', 'Melchor', 'Baltasar', 'Gaspar', 'el 6 de enero', 'desfilar', 'el roscón', 'la noche del 5 de enero'], malas = ['las doce uvas', 'El Gordo', 'el pavo', 'las campanadas', 'el 31 de diciembre', 'el sorteo', 'el belén'];
-      C.tabla.innerHTML = '<div class="marc"><span>Caramelos: <b id="mb">0</b> / 7</span><span>Errores: <b id="mm">0</b> / 3</span></div><div id="lluvia"></div>'; let intento = 0;
-      const empezar = () => { intento++; let b = 0, m = 0, k = 0, f2 = false; const cola = baraja(buenas.map(t => [t, 1]).concat(malas.map(t => [t, 0]))), L = $('#lluvia'); L.innerHTML = ''; $('#mb').textContent = 0; $('#mm').textContent = 0; C.boton('', null); C.msg('', '');
-        const acabar = (gana) => { if (f2) return; f2 = true; clearInterval(lluviaT); if (gana) seguir(fin, intento === 1 ? 1 : 0, 1, '¡Bravo! Tienes muchos caramelos.'); else { mal(); C.msg(m >= 3 ? 'Demasiados errores…' : 'No tienes bastantes caramelos…', 'mal'); C.boton('Otra vez', empezar); } };
-        clearInterval(lluviaT); lluviaT = setInterval(() => { if (k >= cola.length) { if (!$('.car:not(.ok):not(.ko)', L)) acabar(b >= 7); return; } const [t, ok] = cola[k++]; const c = el(`<button class="car" style="left:${6 + Math.random() * 70}%">${t}</button>`);
-          c.onclick = () => { if (f2 || c.classList.contains('ok') || c.classList.contains('ko')) return; if (ok) { c.classList.add('ok'); b++; $('#mb').textContent = b; clic(b); if (b >= 7) acabar(true); } else { c.classList.add('ko'); m++; $('#mm').textContent = m; mal(); if (m >= 3) acabar(false); } }; c.onanimationend = () => c.remove(); L.append(c); }, 1100); };
-      C.boton('Empezar', empezar); } },
-    { n: 'La carta', f(fin) {
-      C.consigna('Escribe tu carta a los Reyes Magos: preséntate y enumera tus deseos.', 'Écris ta lettre aux Rois mages : présente-toi et énumère tes souhaits.');
-      C.glosa('<b>desear</b> : souhaiter · <b>un deseo</b> : un souhait · <b>un regalo</b> : un cadeau<br>Usa «gustar» o «encantar».');
-      escribir({ clave: 'carta', min: 25, inicio: 'Queridos Reyes Magos:\n', ayudas: ['Me llamo…', 'Tengo … años.', 'Me gusta…', 'Me encantan…', 'Este año, deseo recibir…', 'También me gustaría…', 'Suelo…', 'Muchas gracias. Un abrazo,'], pide: [[/gust|encant/i, 'usa «gustar» o «encantar»']], boton: 'Enviar la carta', adios: 'Tu carta vuela hacia Oriente…' }, fin); } }
   ] },
   /* ---------- final ---------- */
   cafe: { t: 'España y Francia', f: 'Comparar · ¿son tan diferentes las fiestas?', pasos: [
@@ -935,6 +954,7 @@ const EST = {
   ] }
 };
 
+const belen2D = (fin) => { const k = H3.kit; H3.kit = null; EST.belen.pasos[0].f(fin); H3.kit = k; };   // versión 2D de reserva
 /* ====== 6. VENTANAS, FINAL, FICHA PDF ================================== */
 function abrirVelo(n) { const v = $('#velo'); v.innerHTML = ''; v.append(n); v.classList.add('on'); }
 function cerrarVelo() { callar(); $('#velo').classList.remove('on'); $('#velo').innerHTML = ''; }
