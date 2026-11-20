@@ -5,6 +5,7 @@ Supports interactifs d'espagnol (collège), conçus avec l'aide de l'intelligenc
 - **Copa del Mundo 2026** — jeu de révision en ligne (5e) → `copa-del-mundo-2026.html`
 - **Coupe du monde 2026 (CM2)** — version française du jeu : conjugaison au présent, imparfait, passé composé, passé simple → `coupe-du-monde-cm2.html`
 - **El camino de cempasúchil** — jeu « Día de muertos » en autonomie (3e, séance 2) → `camino-de-cempasuchil.html` (questions vidéo modifiables : tableau `QUESTIONS_VIDEO` en tête du script ; mode professeur : Ctrl+Maj+A, code `profe`)
+- **La plaza de Navidad** — jeu de révision « fiestas navideñas » (3e, fin de séquence, 1 h, casque) → `la-plaza-de-navidad.html` (vidéos : objet `VIDEOS` en tête du script ; mode professeur : Ctrl+Maj+A ou `#profe`, code `profe`)
 - **¿Qué están haciendo?** — scènes animées pour découvrir ESTAR + gérondif (4e) → `estar-gerundio.html`
 - **¿Humano o IA?** — séquence complète sur l'IA (4e, 6 séances) → `humano-o-ia.html` : fiches `sesion-1.html` … `sesion-6.html`, applications `plan-de-trabajo-ia.html` et `entrenamiento-examen.html`, PDF et pages dans `fichas/`, vidéos dans `videos/`
 
