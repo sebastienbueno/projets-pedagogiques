@@ -1,3 +1,5 @@
 Ressources locales (aucun appel externe, pour les réseaux scolaires filtrés)
 - jspdf.umd.min.js : jsPDF 2.5.1, licence MIT
 - fonts/ : Atkinson Hyperlegible, Audiowide, Permanent Marker, licence SIL Open Font License 1.1
+- three.min.js : three.js r149 (moteur 3D du hub de « La plaza de Navidad »), licence MIT
+- GLTFLoader.js : chargeur de modèles glTF de three.js (r147), licence MIT

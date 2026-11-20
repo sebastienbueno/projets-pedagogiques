@@ -248,6 +248,65 @@ video{width:100%;border-radius:.9rem;background:#000;display:block;box-shadow:0 
 .res b{display:block;font-family:Georgia,serif;font-size:1.3rem;color:var(--rojo)}
 #fuegos{position:fixed;inset:0;pointer-events:none;z-index:30}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s !important}}
+
+/* ---------- mapa 3D: islas flotantes ---------- */
+#plaza{background:radial-gradient(ellipse 110% 85% at 50% 108%,#f6c35a 0%,#e0762f 18%,#b3182f 42%,#7d0f20 66%,#3a0812 100%)}
+#gl{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none;display:block}
+#gl:active{cursor:grabbing}
+.etq{position:absolute;left:0;top:0;background:linear-gradient(var(--crema),var(--crema2));color:var(--tinta);border:0;border-radius:.8rem;padding:.3rem .9rem .35rem;cursor:pointer;box-shadow:0 .4rem 1rem rgba(0,0,0,.45),inset 0 0 0 .12rem var(--oro);text-align:center;white-space:nowrap;will-change:transform;transition:opacity .3s}
+.etq b{display:block;font-family:Georgia,serif;font-size:1.02rem;color:var(--verde2);letter-spacing:.04em}
+.etq span{font-size:.76rem;color:var(--rojo);font-weight:700}
+.etq.hecho{box-shadow:0 0 1.3rem #ffd66b,inset 0 0 0 .14rem var(--oro)}
+.etq.hecho b::after{content:" ✓";color:var(--verde)}
+.etq.tenue{opacity:0;pointer-events:none}
+.etq.sel{opacity:0;pointer-events:none}
+.etq:hover{filter:brightness(1.06)}
+#panel{position:absolute;right:1.8rem;top:5.6rem;width:25rem;display:none;background:linear-gradient(var(--crema),var(--crema2));color:var(--tinta);border-radius:1.2rem;padding:1.3rem 1.4rem 1.1rem;box-shadow:0 1rem 2.4rem rgba(0,0,0,.55),inset 0 0 0 .14rem var(--oro);z-index:6}
+#panel.on{display:block}
+#panel .ver{color:var(--rojo)}
+#panel h2{font-family:Georgia,serif;font-size:1.75rem;line-height:1.15;color:var(--verde2);margin:.1rem 0 .3rem}
+#panel .est{font-size:.92rem;color:#4d5f56;margin-bottom:.6rem}
+#panel .act{display:flex;width:100%;align-items:center;gap:.8rem;background:#fff;border:0;border-radius:.8rem;padding:.65rem .9rem;margin:.5rem 0;cursor:pointer;box-shadow:0 .2rem 0 #c9b07a,inset 0 0 0 .1rem #c9b07a;text-align:left;color:var(--tinta)}
+#panel .act:hover{box-shadow:0 .2rem 0 #c9b07a,inset 0 0 0 .1rem #c9b07a,0 0 0 .2rem rgba(233,185,73,.6)}
+#panel .act i{font-style:normal;width:2.1rem;height:2.1rem;border-radius:50%;background:var(--grojo);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+#panel .act b{flex:1;font-size:1.05rem}
+#panel .act span{font-size:.8rem;color:var(--gris)}
+#panel .act.ya{background:#eaf6ee;box-shadow:0 .2rem 0 #9cc7ad,inset 0 0 0 .1rem #9cc7ad}
+#panel .act.ya i{background:var(--gverde)}
+#panel .act.ya span{color:var(--verde);font-weight:700}
+#panel .mini{background:none;border-color:#b79a5d;color:var(--verde2);margin-top:.5rem}
+#panel .mini:hover{background:var(--goro)}
+#pista{position:absolute;left:50%;bottom:6.4rem;translate:-50% 0;background:rgba(5,12,32,.62);color:var(--crema);padding:.4rem 1.3rem;border-radius:2rem;font-size:.95rem;pointer-events:none}
+.chip{color:var(--crema)}
+.chip.on{color:var(--oro2)}
+.pasos li{cursor:pointer}
+.pasos li:hover{background:rgba(255,255,255,.28)}
+/* sin WebGL: mosaico de tarjetas */
+.plano #etqs{position:absolute;inset:7rem 6rem 11rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+.plano .etq{position:static;transform:none !important;white-space:normal;opacity:1 !important;pointer-events:auto}
+.plano .etq b{font-size:1.6rem}.plano .etq span{font-size:1rem}
+/* viñetas animadas que hay que ordenar */
+.camino{position:relative;width:56rem;height:17.4rem}
+.camino>svg{position:absolute;inset:0;width:100%;height:100%}
+.camino .caja{position:absolute;width:6.5rem;height:7.8rem;min-width:0;flex-direction:column;flex-wrap:nowrap;justify-content:flex-start;gap:.1rem;padding:.25rem;font-family:Georgia,serif;font-size:1.5rem;font-weight:700;color:#b79a5d}
+.camino .caja small{font-family:Atkinson,sans-serif;font-size:.68rem;color:var(--rojo);font-weight:700;line-height:1}
+.ficha.vin{background:linear-gradient(#fff,#f1e6cf);color:var(--tinta);box-shadow:0 .22rem 0 #c9b07a,0 .5rem .8rem rgba(60,20,10,.22);white-space:normal;padding:.25rem .2rem .3rem;font-size:.72rem;line-height:1.15;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.1rem;width:6rem;height:6.1rem}
+.ficha.vin svg{width:3.7rem;height:3.7rem;flex:none}
+.ficha.vin.fija{background:#fff;box-shadow:0 0 0 .18rem var(--verde);height:auto;width:5.7rem;font-size:.66rem;padding:.15rem}
+.ficha.vin.fija svg{width:2.9rem;height:2.9rem}
+.a-gira{animation:agira 3s linear infinite}@keyframes agira{to{transform:rotate(360deg)}}
+.a-late{animation:alate 1.2s ease-in-out infinite}@keyframes alate{50%{transform:scale(1.35)}}
+.a-pend{animation:apend 1.6s ease-in-out infinite alternate}@keyframes apend{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+.a-desl{animation:adesl 2.4s linear infinite}@keyframes adesl{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+.a-salta{animation:asalta .9s ease-in-out infinite alternate}@keyframes asalta{to{transform:translateY(-7px)}}
+.a-parp{animation:aparp .5s ease-in-out infinite alternate}@keyframes aparp{to{opacity:.45}}
+/* rompecabezas de texto */
+.revuelto{display:flex;flex-wrap:wrap;gap:1.3rem 1.8rem;justify-content:center;align-content:center;width:56rem;min-height:11rem}
+.ficha.pz{font-family:Georgia,serif;font-size:1.08rem;border-radius:.4rem;padding:.5rem 1rem;margin-right:.5rem}
+.ficha.pz::after{content:"";position:absolute;right:-.55rem;top:50%;width:1.1rem;height:1.1rem;border-radius:50%;background:inherit;translate:0 -50%;background-attachment:fixed}
+.ficha.pz::before{content:"";position:absolute;left:-.1rem;top:50%;width:.9rem;height:1.1rem;border-radius:0 50% 50% 0;background:#f8efdb;translate:0 -50%}
+.renglon{width:56rem;min-height:3.5rem;justify-content:flex-start;gap:.5rem .15rem;padding:.45rem .8rem}
+.renglon .pz{rotate:0deg !important;margin:0 .5rem 0 0 !important}
 </style>
 </head>
 <body>
@@ -271,6 +330,8 @@ video{width:100%;border-radius:.9rem;background:#000;display:block;box-shadow:0 
 <div id="velo"></div>
 <canvas id="fuegos"></canvas>
 
+<script src="vendor/three.min.js"></script>
+<script src="vendor/GLTFLoader.js"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script>
 /* =====================================================================
@@ -288,10 +349,10 @@ const PREGUNTAS_CABALGATA = [
   { p: '¿Qué reparten a los niños?', o: ['Caramelos', 'Uvas', 'Turrones'], c: 0 }
 ];
 const CODIGO_ADMIN = 'profe';
-const CLAVE = 'plaza-navidad-v2';
+const CLAVE = 'plaza-navidad-v3';
 
 /* ====== 1. ESTADO ==================================================== */
-const base = () => ({ v: 2, nombre: '', hecho: {}, pts: {}, carta: '', comp: '', son: 1 });
+const base = () => ({ v: 2, nombre: '', hecho: {}, act: {}, pts: {}, carta: '', comp: '', son: 1 });
 let S = base();
 try { const r = JSON.parse(localStorage.getItem(CLAVE)); if (r && r.v === 2) S = Object.assign(base(), r); } catch (e) {}
 const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(S)); } catch (e) {} };
@@ -309,7 +370,7 @@ const FECHAS = [
 const LUGARES = [
   { id: 'loteria', x: 150, t: 'LA LOTERÍA', f: '22 de diciembre' }, { id: 'cena', x: 400, t: 'LA CENA', f: 'Nochebuena' },
   { id: 'belen', x: 650, t: 'EL BELÉN', f: 'Navidad' }, { id: 'reloj', x: 900, t: 'EL RELOJ', f: 'Nochevieja' },
-  { id: 'reyes', x: 1160, t: 'LA CABALGATA', f: 'Día de Reyes' }, { id: 'cafe', x: 1420, t: 'EL CAFÉ', f: 'España y Francia' }
+  { id: 'reyes', x: 1160, t: 'LA CABALGATA', f: 'Día de Reyes' }, { id: 'cafe', x: 1420, t: 'ESPAÑA Y FRANCIA', f: 'Comparar' }
 ];
 const cincoHechos = () => ['loteria', 'belen', 'cena', 'reloj', 'reyes'].every(k => S.hecho[k]);
 
@@ -347,82 +408,266 @@ function decir(txt, btn) {
 const callar = () => { try { speechSynthesis.cancel(); } catch (e) {} };
 
 /* ====== 3. LA PLAZA: una sola pantalla, de noche; lo terminado se ilumina */
-/* Dibujo con volumen: fachada con degradado, cara lateral en sombra, nieve, ventanas que se encienden (.v) */
-const PARED = (x, y, w, h, g) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${g})"/><path d="M${x + w} ${y}l24-14v${h + 8}l-24 6z" fill="url(#${g})"/><path d="M${x + w} ${y}l24-14v${h + 8}l-24 6z" fill="#0a1230" opacity=".34"/><rect x="${x}" y="${y}" width="6" height="${h}" fill="#fff" opacity=".22"/>`;
-const VENT = (x, y, w, h, r = 4) => `<rect x="${x - 5}" y="${y - 5}" width="${w + 10}" height="${h + 10}" rx="${r + 3}" fill="#6a5238"/><rect class="v" x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/><path d="M${x + w / 2} ${y}v${h}M${x} ${y + h * .45}h${w}" stroke="#4a3826" stroke-width="3" opacity=".75"/><rect x="${x - 9}" y="${y + h + 3}" width="${w + 18}" height="8" rx="4" fill="url(#gNieve)"/>`;
-const SOMBRA = (rx = 190) => `<ellipse cx="205" cy="490" rx="${rx}" ry="13" fill="#0a1230" opacity=".3"/>`;
-const CORONA = (x, y, e) => `<path transform="translate(${x} ${y}) scale(${e})" d="M-16 0l-4-22 10 10 10-17 10 17 10-10-4 22z" fill="url(#gOro)" stroke="#8a6416" stroke-width="1.2"/>`;
+/* ====== 3. EL MAPA EN 3D: seis islas flotantes alrededor del árbol =======
+   Motor: three.js (vendor/three.min.js). Sin WebGL, el mapa pasa a un mosaico de tarjetas. */
 function estrella(cx, cy, r, n = 5, k = .45) { let d = ''; for (let i = 0; i < n * 2; i++) { const a = Math.PI * i / n - Math.PI / 2, q = i % 2 ? r * k : r; d += (i ? 'L' : 'M') + (cx + Math.cos(a) * q).toFixed(1) + ' ' + (cy + Math.sin(a) * q).toFixed(1); } return d + 'z'; }
-const ROTULO = (x, y, w, t, fs = 25) => `<rect x="${x}" y="${y}" width="${w}" height="42" rx="9" fill="url(#gOro)" stroke="#8a6416" stroke-width="2"/><text x="${x + w / 2}" y="${y + 30}" text-anchor="middle" font-size="${fs}" font-weight="700" letter-spacing="3" fill="#6f0d1e" font-family="Georgia,serif">${t}</text>${[...Array(Math.floor(w / 18))].map((_, k) => `<circle class="b" cx="${x + 12 + k * 18}" cy="${y - 5}" r="4.5"/>`).join('')}`;
-const EDIF = {
-  loteria: () => SOMBRA() + PARED(60, 222, 260, 266, 'gRojo') + `<path d="M40 224L190 118l150 106z" fill="url(#gTeja)"/><path d="M40 224L190 118l150 106h-22L190 138 62 224z" fill="url(#gNieve)"/><circle cx="190" cy="186" r="17" fill="url(#gOro)" stroke="#8a6416" stroke-width="2"/><text x="190" y="194" text-anchor="middle" font-size="20" font-weight="700" fill="#6f0d1e" font-family="Georgia,serif">22</text>`
-    + [78, 150, 208, 280].map(x => `<rect x="${x}" y="284" width="22" height="204" fill="url(#gCrema)"/><rect x="${x - 4}" y="276" width="30" height="10" rx="3" fill="url(#gPiedra)"/>`).join('') + VENT(110, 310, 30, 130) + VENT(240, 310, 30, 130) + `<path d="M172 488v-104a18 18 0 0 1 36 0v104z" fill="#6a5238"/><path class="v" d="M177 488v-103a13 13 0 0 1 26 0v103z"/>` + ROTULO(92, 228, 196, 'LOTERÍA'),
-  cena: () => SOMBRA() + `<rect x="252" y="92" width="32" height="70" fill="url(#gTeja)"/><rect x="246" y="84" width="44" height="13" rx="6" fill="url(#gNieve)"/>` + PARED(70, 184, 250, 304, 'gCrema') + `<path d="M48 188L195 78l147 110z" fill="url(#gTeja)"/><path d="M48 188L195 78l147 110h-24L195 100 72 188z" fill="url(#gNieve)"/>` + VENT(98, 214, 44, 56) + VENT(173, 214, 44, 56) + VENT(248, 214, 44, 56)
-    + `<circle cx="195" cy="312" r="20" fill="none" stroke="url(#gVerde)" stroke-width="11"/><path d="M186 328l-9 16 18-7 18 7-9-16z" fill="url(#gRojo)"/><rect x="90" y="346" width="210" height="120" rx="10" fill="#6a5238"/><rect class="v" x="98" y="354" width="194" height="104" rx="6"/><path d="M118 458v-16h154v16z" fill="#3a2414" opacity=".8"/><path d="M162 442a33 24 0 0 1 66 0z" fill="#3a2414" opacity=".8"/><rect x="244" y="412" width="6" height="30" fill="#3a2414" opacity=".8"/><path d="M247 412q-7-11 0-20q7 9 0 20z" fill="#fffbe0"/><path d="M195 354v104" stroke="#4a3826" stroke-width="4" opacity=".6"/><rect x="84" y="466" width="222" height="9" rx="4.5" fill="url(#gNieve)"/>`,
-  belen: () => SOMBRA() + `<path class="astro" d="${estrella(195, 78, 30, 8, .42)}" fill="url(#gOro)"/><path d="M195 108v40M183 122h24" stroke="url(#gOro)" stroke-width="5"/>` + PARED(80, 244, 230, 244, 'gPiedra') + `<path d="M104 246a91 84 0 0 1 182 0z" fill="url(#gVerde)"/><path d="M136 196a91 84 0 0 1 118 0q-59-26-118 0z" fill="url(#gNieve)"/><rect x="183" y="140" width="24" height="26" fill="url(#gPiedra)"/><rect x="72" y="238" width="246" height="12" rx="6" fill="url(#gNieve)"/><circle cx="195" cy="298" r="27" fill="#6a5238"/><circle class="v" cx="195" cy="298" r="21"/><path d="M195 277v42M174 298h42" stroke="#4a3826" stroke-width="3" opacity=".7"/>` + VENT(100, 392, 24, 62) + VENT(266, 392, 24, 62)
-    + `<path d="M132 488V402a63 63 0 0 1 126 0v86z" fill="#6a5238"/><path class="v" d="M140 488V402a55 55 0 0 1 110 0v86z"/><g fill="#3a2414" opacity=".82"><path d="M156 488l6-56q10-10 20 0l6 56z"/><circle cx="172" cy="424" r="9.5"/><path d="M204 488l5-66q10-10 20 0l5 66z"/><circle cx="219" cy="414" r="9.5"/><path d="M182 488l6-17h22l6 17z"/></g><circle cx="196" cy="466" r="6" fill="#fffbe0"/>`,
-  reloj: () => SOMBRA(120) + PARED(152, 112, 96, 84, 'gCrema') + `<path d="M186 196v-42a14 14 0 0 1 28 0v42z" fill="#6a5238"/><path class="v" d="M190 196v-41a10 10 0 0 1 20 0v41z"/><path d="M193 186q7-22 14 0z" fill="url(#gOro)"/>` + PARED(140, 196, 120, 292, 'gCrema') + `<rect x="130" y="188" width="140" height="13" rx="6" fill="url(#gNieve)"/><path d="M140 116L200 28l60 88z" fill="url(#gTeja)"/><path d="M140 116L200 28l60 88h-18L200 50l-42 66z" fill="url(#gNieve)"/><circle class="astro" cx="200" cy="24" r="10" fill="url(#gOro)"/><circle cx="200" cy="268" r="47" fill="url(#gOro)" stroke="#8a6416" stroke-width="2"/><circle cx="200" cy="268" r="38" fill="#fffaf0"/>${[...Array(12)].map((_, k) => `<path d="M200 234v7" stroke="#6f0d1e" stroke-width="3" transform="rotate(${k * 30} 200 268)"/>`).join('')}<path d="M200 268v-26M200 268l-15-13" stroke="#8f1526" stroke-width="5" stroke-linecap="round"/><circle cx="200" cy="268" r="4" fill="#6f0d1e"/>` + VENT(182, 340, 36, 52) + `<path d="M172 488v-58a28 28 0 0 1 56 0v58z" fill="#6a5238"/><path class="v" d="M178 488v-58a22 22 0 0 1 44 0v58z"/>`,
-  reyes: () => SOMBRA() + `<path class="v" d="M124 488V386a76 76 0 0 1 152 0v102z"/><g fill="#3a2414" opacity=".82">${[160, 200, 240].map(x => `<path d="M${x - 13} 488l4-52q9-9 18 0l4 52z"/><circle cx="${x}" cy="428" r="9"/>`).join('')}</g>${[160, 200, 240].map(x => CORONA(x, 420, .5)).join('')}<path d="M50 488V254h300v234h-74V386a76 76 0 0 0-152 0v102z" fill="url(#gPiedra)"/><path d="M350 254l24-14v242l-24 6z" fill="url(#gPiedra)"/><path d="M350 254l24-14v242l-24 6z" fill="#0a1230" opacity=".34"/><rect x="50" y="254" width="6" height="234" fill="#fff" opacity=".25"/><path d="M124 386a76 76 0 0 1 152 0" fill="none" stroke="#a8977c" stroke-width="5"/><rect x="36" y="236" width="328" height="22" fill="url(#gPiedra)"/><rect x="36" y="252" width="328" height="6" fill="#0a1230" opacity=".18"/><rect x="30" y="228" width="340" height="13" rx="6.5" fill="url(#gNieve)"/>${CORONA(126, 228, 1.35)}${CORONA(200, 228, 1.8)}${CORONA(274, 228, 1.35)}${[68, 300].map(x => `<path d="M${x} 270h32v104l-16-14-16 14z" fill="url(#gRojo)"/><path d="${estrella(x + 16, 310, 10)}" fill="url(#gOro)"/>`).join('')}`,
-  cafe: () => SOMBRA() + `<path d="M96 262v-52" stroke="#6a5238" stroke-width="4"/><g transform="translate(98 212)"><rect width="42" height="9" fill="#c60b1e"/><rect y="9" width="42" height="10" fill="#ffc400"/><rect y="19" width="42" height="9" fill="#c60b1e"/></g><path d="M300 262v-52" stroke="#6a5238" stroke-width="4"/><g transform="translate(258 212)"><rect width="14" height="28" fill="#0055a4"/><rect x="14" width="14" height="28" fill="#fff"/><rect x="28" width="14" height="28" fill="#ef4135"/></g>` + PARED(60, 262, 280, 226, 'gVerde') + `<rect x="52" y="254" width="296" height="13" rx="6.5" fill="url(#gNieve)"/>` + VENT(86, 290, 34, 40) + VENT(150, 290, 34, 40) + VENT(214, 290, 34, 40) + VENT(278, 290, 34, 40)
-    + `<path d="M40 356h320l20 44H20z" fill="url(#gRojo)"/>${[0, 1, 2, 3].map(k => `<path d="M${84 + k * 84} 356h40l${4 + k * 2} 44h-${44 + k * 0}z" fill="#fff8ea"/>`).join('')}${[...Array(12)].map((_, k) => `<circle cx="${35 + k * 30}" cy="400" r="15" fill="${k % 2 ? '#fff8ea' : '#b3182f'}"/>`).join('')}<rect x="20" y="392" width="360" height="9" fill="#0a1230" opacity=".12"/><rect x="80" y="424" width="160" height="56" rx="8" fill="#6a5238"/><rect class="v" x="87" y="431" width="146" height="42" rx="5"/><path d="M134 466h44l-4 6h-36zM140 448h30v16a15 9 0 0 1-30 0z" fill="#3a2414" opacity=".8"/><path d="M262 488v-66h58v66z" fill="#6a5238"/><path class="v" d="M268 488v-60h46v60z"/>` + ROTULO(118, 340, 164, 'CAFÉ', 24)
-};
-const ESP = 27;                 // distancia entre lugares (rem)
-let cur = 0, dest = 0, pintado = -9, placaI = -1, arrastro = false;
-function azar(n) { let x = n; return () => (x = (x * 16807) % 2147483647) / 2147483647; }
-function pintarPlaza() {
-  const r1 = azar(11), r2 = azar(29);
-  let lejos = `<svg viewBox="0 0 2400 320" preserveAspectRatio="none"><g fill="#18245c">`;
-  for (let x = 0; x < 2400;) { const w = 60 + r1() * 90, h = 90 + r1() * 190; lejos += `<rect x="${x}" y="${320 - h}" width="${w}" height="${h}"/>`; if (r1() < .3) lejos += `<path d="M${x + w * .2} ${320 - h}a${w * .3} ${w * .3} 0 0 1 ${w * .6} 0z"/><rect x="${x + w / 2 - 3}" y="${320 - h - w * .55}" width="6" height="${w * .3}"/>`; else if (r1() < .3) lejos += `<path d="M${x} ${320 - h}l${w / 2}-${40 + r1() * 40}l${w / 2} ${40}z"/>`; for (let k = 0; k < 5; k++) if (r1() < .6) lejos += `<rect x="${x + 8 + r1() * (w - 20)}" y="${320 - h + 14 + r1() * (h - 40)}" width="7" height="10" fill="#ffd77a" opacity=".75"/>`; x += w + 4; }
-  lejos += '</g></svg>';
-  let medio = `<svg viewBox="0 0 3200 300" preserveAspectRatio="none">`;
-  for (let x = 0; x < 3200;) { const w = 150 + r2() * 110, h = 110 + r2() * 120, y = 300 - h; medio += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${['#2b3c86', '#33437f', '#3a3078'][Math.floor(r2() * 3)]}"/><rect x="${x + w * .7}" y="${y}" width="${w * .3}" height="${h}" fill="#0a1230" opacity=".25"/><path d="M${x - 8} ${y + 2}L${x + w / 2} ${y - 50 - r2() * 30}L${x + w + 8} ${y + 2}z" fill="#c9d6f2"/><path d="M${x - 8} ${y + 2}L${x + w / 2} ${y - 50}L${x + w / 2} ${y + 2}z" fill="#fff" opacity=".35"/>`; for (let c = 0; c < Math.floor(w / 46); c++) for (let f = 0; f < Math.floor(h / 60); f++) medio += `<rect x="${x + 16 + c * 46}" y="${y + 20 + f * 56}" width="18" height="26" rx="2" fill="${r2() < .55 ? '#ffd77a' : '#16204f'}"/>`; x += w + 12; }
-  medio += '</svg>';
-  let cerca = `<svg viewBox="0 0 3300 70" preserveAspectRatio="none">`;
-  for (let a = 0; a < 3300; a += 300) { cerca += `<path d="M${a} 6Q${a + 150} 78 ${a + 300} 6" fill="none" stroke="#0a1230" stroke-width="2.5"/>`; for (let k = 1; k < 10; k++) { const t = k / 10, x = a + 300 * t, y = 6 + 2 * (1 - t) * t * 72; cerca += `<circle cx="${x}" cy="${y + 7}" r="8" fill="${['#ff5a6e', '#ffd66b', '#5fd39a', '#fff8ea'][k % 4]}" filter="url(#fHalo)"/>`; } }
-  cerca += '</svg>';
-  $('#plaza').innerHTML = `<div id="cielo"></div><div class="capa" id="lejos">${lejos}</div><div class="capa" id="medio">${medio}</div><div id="suelo"></div><div id="fila">`
-    + LUGARES.map((L, i) => `<div class="edif" data-i="${i}" data-id="${L.id}" tabindex="0"><svg viewBox="0 0 400 500">${EDIF[L.id]()}</svg></div>`).join('')
-    + `<div class="edif farol" data-i="2.5" data-id="inocente" style="left:-3rem;width:6rem;height:19rem"><svg viewBox="0 0 100 320"><ellipse cx="50" cy="314" rx="34" ry="6" fill="#0a1230" opacity=".3"/><rect x="45" y="60" width="10" height="254" fill="#2a2f45"/><rect x="38" y="296" width="24" height="18" rx="4" fill="#2a2f45"/><circle cx="50" cy="44" r="38" fill="#ffd66b" opacity=".25"/><rect x="34" y="22" width="32" height="42" rx="8" fill="url(#gLuz)" stroke="#2a2f45" stroke-width="5"/><rect x="28" y="14" width="44" height="10" rx="5" fill="url(#gNieve)"/><g id="mono"><path d="M56 120v16" stroke="#fff" stroke-width="2"/><path transform="translate(56 150) scale(2.2)" d="M0-8a5 5 0 1 1 .1 0M-7 4l7-3 7 3-2 3-3-1v8l4 11h-4l-2-8-2 8h-4l4-11v-8l-3 1z" fill="#fff" stroke="#b9c8e2" stroke-width=".6"/></g></svg></div>`
-    + `</div><div class="capa" id="cerca">${cerca}</div><canvas id="nieve"></canvas>`
-    + `<button class="nav" id="nizq" aria-label="Lugar anterior">‹</button><button class="nav" id="nder" aria-label="Lugar siguiente">›</button>`
-    + `<div id="placa"><div class="tx"><div class="ver"></div><h2></h2><p class="est"></p></div><button class="btn" id="entrar">Entrar</button></div><div id="linea"></div>`;
-  $$('.edif').forEach(e => { e.onclick = () => { if (arrastro) return; const i = +e.dataset.i; if (e.dataset.id === 'inocente') { if (Math.abs(i - cur) < 1.2) inocente(); else mover(Math.round(i)); return; } if (Math.abs(i - cur) < .4) entrar(e.dataset.id); else mover(i); }; });
-  $('#nizq').onclick = () => mover(Math.round(dest) - 1); $('#nder').onclick = () => mover(Math.round(dest) + 1);
-  $('#entrar').onclick = () => entrar(LUGARES[Math.round(cur)].id);
-  // arrastrar la calle, rueda del ratón, teclado
-  const P = $('#plaza'); let x0 = null, d0 = 0;
-  P.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; x0 = e.clientX; d0 = dest; arrastro = false; });
-  addEventListener('pointermove', e => { if (x0 === null) return; const dx = e.clientX - x0; if (Math.abs(dx) > 8) arrastro = true; if (arrastro) dest = Math.max(0, Math.min(LUGARES.length - 1, d0 - dx / (ESP * parseFloat(getComputedStyle(document.documentElement).fontSize) * .8))); });
-  addEventListener('pointerup', () => { if (x0 === null) return; x0 = null; mover(Math.round(dest)); setTimeout(() => arrastro = false, 50); });
-  let rueda = 0; P.addEventListener('wheel', e => { const t = Date.now(); if (t - rueda < 280) return; rueda = t; mover(Math.round(dest) + (e.deltaY + e.deltaX > 0 ? 1 : -1)); }, { passive: true });
-  addEventListener('keydown', e => { if ($('#esc').classList.contains('on') || $('#velo').classList.contains('on')) return; if (e.key === 'ArrowLeft') mover(Math.round(dest) - 1); if (e.key === 'ArrowRight') mover(Math.round(dest) + 1); if (e.key === 'Enter') entrar(LUGARES[Math.round(cur)].id); });
-  // nieve
-  const cv = $('#nieve'), g = cv.getContext('2d'); let copos = [];
-  const medir = () => { cv.width = innerWidth; cv.height = innerHeight; copos = [...Array(70)].map(() => ({ x: Math.random() * cv.width, y: Math.random() * cv.height, r: 1 + Math.random() * 2.6, v: .3 + Math.random() * .9, d: Math.random() * 6.28 })); };
-  medir(); addEventListener('resize', medir);
-  (function bucle() {
-    cur += (dest - cur) * .12; if (Math.abs(dest - cur) < .002) cur = dest;
-    if (cur !== pintado) { pintado = cur;
-      $$('.edif').forEach(e => { const d = +e.dataset.i - cur, a = Math.abs(d); e.style.transform = `translateX(${d * ESP}rem) translateZ(${-Math.min(a, 3) * 9}rem) rotateY(${-Math.max(-2, Math.min(2, d)) * 15}deg)`; e.style.filter = `brightness(${Math.max(.5, 1 - a * .2)})`; e.style.zIndex = 100 - Math.round(a * 10); e.classList.toggle('centro', a < .4); });
-      $('#lejos').style.transform = `translateX(${-cur * 5}rem)`; $('#medio').style.transform = `translateX(${-cur * 12}rem)`; $('#cerca').style.transform = `translateX(${-cur * 36}rem)`;
-      if (Math.round(cur) !== placaI) pintarPlaca();
+let H3 = null, sel = null;
+const ALTO = { loteria: 4.2, cena: 4.9, belen: 5.9, reloj: 8.2, reyes: 5.3, cafe: 6.2 };
+const progreso = (id) => { if (S.hecho[id]) return 1; const n = EST[id].pasos.length; let h = 0; for (let j = 0; j < n; j++) if (S.act[id + ':' + j]) h++; return h / n; };
+function crear3D(cv) {
+  if (!window.THREE) return null;
+  const T = THREE, R = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+  R.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5)); R.shadowMap.enabled = true; R.shadowMap.type = T.PCFSoftShadowMap; R.outputEncoding = T.sRGBEncoding; R.setClearColor(0, 0);
+  const esc = new T.Scene(); esc.fog = new T.FogExp2(0x7d0f20, .0045);
+  const cam = new T.PerspectiveCamera(40, 1, .1, 400), RAD = 13;
+  esc.add(new T.HemisphereLight(0xffe2c0, 0x4a2030, .55)); esc.add(new T.AmbientLight(0xffffff, .14));
+  const luna = new T.DirectionalLight(0xfff0dc, .85); luna.position.set(14, 26, 10); luna.castShadow = true; luna.shadow.mapSize.set(1024, 1024); Object.assign(luna.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 100 }); luna.shadow.mapSize.set(2048, 2048); luna.shadow.bias = -.002; esc.add(luna);
+  const mat = (c, o = {}) => new T.MeshStandardMaterial(Object.assign({ color: c, flatShading: true, roughness: .85, metalness: 0 }, o));
+  const M = { nieve: mat(0xf4f8ff), roca: mat(0x5f5478), rojo: mat(0x9c1226), rojo2: mat(0x650a18), crema: mat(0xe2cc9c), verde: mat(0x105a3a), verde2: mat(0x1a7a4e), piedra: mat(0xcbbfa8), madera: mat(0x8a5a2c), oro: mat(0xe9b949, { metalness: .55, roughness: .35, emissive: 0x7a5200, emissiveIntensity: .6 }), blanco: mat(0xffffff), piel: mat(0xe9c7a6), piel2: mat(0x6b4226), azul: mat(0x3f6fb5), violeta: mat(0x6a45a8) };
+  const pon = (g, geo, m, x = 0, y = 0, z = 0) => { const o = new T.Mesh(geo, m); o.position.set(x, y, z); o.castShadow = o.receiveShadow = true; g.add(o); return o; };
+  const caja = (g, w, h, d, m, x, y, z) => pon(g, new T.BoxGeometry(w, h, d), m, x, y, z);
+  const cil = (g, r1, r2, h, n, m, x, y, z) => pon(g, new T.CylinderGeometry(r1, r2, h, n), m, x, y, z);
+  const cono = (g, r, h, n, m, x, y, z) => pon(g, new T.ConeGeometry(r, h, n), m, x, y, z);
+  const bola = (g, r, m, x, y, z) => pon(g, new T.SphereGeometry(r, 10, 8), m, x, y, z);
+  const prisma = (g, w, h, d, m, x, y, z) => { const f = new T.Shape(); f.moveTo(-w / 2, 0); f.lineTo(w / 2, 0); f.lineTo(0, h); f.closePath(); const geo = new T.ExtrudeGeometry(f, { depth: d, bevelEnabled: false }); geo.translate(0, 0, -d / 2); return pon(g, geo, m, x, y, z); };
+  const rotulo = (g, txt, w, h, x, y, z) => { const c = document.createElement('canvas'); c.width = 512; c.height = 128; const k = c.getContext('2d'); const gr = k.createLinearGradient(0, 0, 0, 128); gr.addColorStop(0, '#fff3c4'); gr.addColorStop(.55, '#e9b949'); gr.addColorStop(1, '#b8862b'); k.fillStyle = gr; k.fillRect(0, 0, 512, 128); k.strokeStyle = '#8a6416'; k.lineWidth = 10; k.strokeRect(5, 5, 502, 118); k.fillStyle = '#6f0d1e'; k.font = 'bold 78px Georgia, serif'; const an = k.measureText(txt).width; if (an > 460) k.font = 'bold ' + Math.floor(78 * 460 / an) + 'px Georgia, serif'; k.textAlign = 'center'; k.textBaseline = 'middle'; k.fillText(txt, 256, 68); const tx = new T.CanvasTexture(c); tx.encoding = T.sRGBEncoding; const o = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tx })); o.position.set(x, y, z); g.add(o); return o; };
+  const humo = (g, x, y, z) => { const ps = [0, 1, 2, 3].map(() => { const o = bola(g, .2, new T.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: .8 }), x, y, z); o.castShadow = false; return o; }); return (t) => ps.forEach((o, k) => { const f = (t * .35 + k / 4) % 1; o.position.set(x + Math.sin(f * 5 + k) * .15, y + f * 1.8, z); o.scale.setScalar(.5 + f * 1.4); o.material.opacity = .75 * (1 - f); }); };
+  const rey = (g, m) => { const k = new T.Group(); cono(k, .26, .8, 8, m, 0, .4, 0); bola(k, .15, M.piel, 0, .9, 0); cil(k, .15, .11, .14, 6, M.oro, 0, 1.08, 0); g.add(k); return k; };
+  /* cada constructor devuelve la función de animación del lugar */
+  Object.assign(M, { ladrillo: mat(0xb03324), ladrillo2: mat(0x8e2519), pizarra: mat(0x47506a), salmon: mat(0xd8a487), gris: mat(0x8d8fa0), pardo: mat(0x6b4a2e), paja: mat(0xd9b25c), oscuro: mat(0x1a1d30), suelo: mat(0x9a8c78), mantel: mat(0xb3182f), uva: mat(0x8fb53c), llama: mat(0xffd66b, { emissive: 0xffb020, emissiveIntensity: 2 }) });
+  const figura = (g, m, x, z, e = 1, piel = M.piel) => { const k = new T.Group(); k.position.set(x, 0, z); k.scale.setScalar(e); cono(k, .3, .95, 8, m, 0, .48, 0); bola(k, .17, piel, 0, 1.06, 0); g.add(k); return k; };
+  /* Modelos 3D externos (carpeta modelos/, ver CREDITOS.txt). Si un archivo no carga, se queda el modelo dibujado a mano (prov). */
+  const cargador = T.GLTFLoader ? new T.GLTFLoader() : null, mezcl = [];
+  const cajaDe = (o) => { o.updateMatrixWorld(true); let sk = null; o.traverse(n => { if (n.isSkinnedMesh) sk = n; }); const b = new T.Box3(); if (sk) { sk.skeleton.bones.forEach(h => b.expandByPoint(h.getWorldPosition(new T.Vector3()))); b.expandByScalar(b.getSize(new T.Vector3()).y * .14); } else b.setFromObject(o); return b; };
+  const modelo = (g, url, alto, x, y, z, ry, prov, fn) => { if (!cargador || location.protocol === 'file:') return; cargador.load(url, (gl) => { const o = gl.scene;
+    o.traverse(n => { if (n.isMesh) { n.castShadow = true; n.frustumCulled = false; (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { m.metalness = 0; m.roughness = Math.max(.65, m.roughness || 0); if (m.name === 'White') m.color.set(0xf4f4f4); }); } });
+    const b = cajaDe(o), tam = b.getSize(new T.Vector3()), e = alto / tam.y, c = new T.Group(), in2 = new T.Group(); in2.add(o); in2.scale.setScalar(e); in2.position.set(-(b.min.x + tam.x / 2) * e, -b.min.y * e, -(b.min.z + tam.z / 2) * e); c.add(in2); c.position.set(x, y, z); c.rotation.y = ry; c.userData.url = url; g.add(c);
+    (prov || []).forEach(q => { q.visible = false; }); const an = gl.animations.find(a => /(^|\|)idle$/i.test(a.name)); if (an) { const mx = new T.AnimationMixer(o); const ac = mx.clipAction(an); ac.time = Math.random() * 3; ac.play(); mezcl.push(mx); } if (fn) fn(c, o); }, undefined, () => {}); };
+  /* Caras pintadas: se dibujan en un lienzo y se aplican sobre una cabeza lisa. tipo: 'abiertos', 'cerrados' (parpadeo) o 'bebe' */
+  const cara = (hex, tipo) => { const c = document.createElement('canvas'); c.width = 512; c.height = 256; const k = c.getContext('2d'); k.fillStyle = '#' + hex; k.fillRect(0, 0, 512, 256); k.translate(128, 124); k.scale(1.75, 1.75); k.lineCap = 'round';
+    k.fillStyle = 'rgba(232,96,96,.4)'; [-1, 1].forEach(d => { k.beginPath(); k.arc(d * 30, 14, 9, 0, 6.3); k.fill(); });
+    [-1, 1].forEach(d => { const x = d * 17, y = -6; k.strokeStyle = '#33201a'; k.lineWidth = 3;
+      if (tipo !== 'abiertos') { k.beginPath(); k.arc(x, y + 5, 8, Math.PI * 1.15, Math.PI * 1.85); k.stroke(); }
+      else { k.fillStyle = '#fff'; k.beginPath(); k.ellipse(x, y, 7.5, 9, 0, 0, 6.3); k.fill(); k.fillStyle = '#2a1a12'; k.beginPath(); k.arc(x, y + 1, 5, 0, 6.3); k.fill(); k.fillStyle = '#fff'; k.beginPath(); k.arc(x + 1.8, y - 1.6, 1.7, 0, 6.3); k.fill(); }
+      if (tipo !== 'bebe') { k.lineWidth = 3.2; k.beginPath(); k.moveTo(x - 8, y - 15); k.quadraticCurveTo(x, y - 20, x + 8, y - 15); k.stroke(); } });
+    k.strokeStyle = 'rgba(110,60,40,.65)'; k.lineWidth = 2.4; k.beginPath(); k.arc(0, 5, 3.6, .25, Math.PI - .25); k.stroke();
+    k.strokeStyle = '#a01428'; k.lineWidth = 3.2; k.beginPath(); k.arc(0, tipo === 'bebe' ? 13 : 12, tipo === 'bebe' ? 6 : 11, .14 * Math.PI, .86 * Math.PI); k.stroke();
+    if (tipo === 'bebe') { k.strokeStyle = '#9a6a34'; k.lineWidth = 3; k.beginPath(); k.arc(2, -36, 6, .2, Math.PI * 1.6); k.stroke(); }
+    const t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; return t; };
+  const caras = [];
+  const cartel = (g, txt, x, y, z, e = 1) => { const c = document.createElement('canvas'); c.width = 256; c.height = 80; const k = c.getContext('2d'); k.fillStyle = '#fff8ea'; k.strokeStyle = '#b3182f'; k.lineWidth = 6; k.beginPath(); if (k.roundRect) k.roundRect(4, 4, 248, 72, 18); else k.rect(4, 4, 248, 72); k.fill(); k.stroke(); k.fillStyle = '#6f0d1e'; k.font = 'bold 40px Georgia, serif'; const an = k.measureText(txt).width; if (an > 220) k.font = 'bold ' + Math.floor(40 * 220 / an) + 'px Georgia, serif'; k.textAlign = 'center'; k.textBaseline = 'middle'; k.fillText(txt, 128, 42);
+    const t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; const sp = new T.Sprite(new T.SpriteMaterial({ map: t })); sp.scale.set(1.55 * e, .485 * e, 1); sp.position.set(x, y, z); g.add(sp); return sp; };
+  const persona = (g, capa, piel, barba, corona) => {
+    const k = new T.Group(); g.add(k); cono(k, .44, 1.35, 10, capa, 0, .68, 0); cil(k, .24, .3, .14, 10, M.blanco, 0, 1.3, 0); const hx = piel.color.getHexString(), ta = cara(hx, 'abiertos'), tc = cara(hx, 'cerrados'), hm = new T.MeshStandardMaterial({ map: ta, roughness: .6 }); pon(k, new T.SphereGeometry(.31, 28, 20), hm, 0, 1.6, 0); caras.push({ m: hm, a: ta, c: tc, off: caras.length * 1.37 });
+    if (barba !== null) { const bm = new T.MeshStandardMaterial({ color: barba, roughness: .9 }); const b = pon(k, new T.SphereGeometry(.26, 18, 14), bm, 0, 1.36, .12); b.scale.set(1.05, 1.05, .7); pon(k, new T.SphereGeometry(.32, 18, 14), bm, 0, 1.66, -.08).scale.set(1.02, .95, .92); }
+    if (corona) { cil(k, .27, .23, .2, 8, M.oro, 0, 1.94, 0); for (let q = 0; q < 6; q++) cono(k, .06, .18, 4, M.oro, Math.sin(q * 1.047) * .23, 2.12, Math.cos(q * 1.047) * .23); bola(k, .05, M.rojo, 0, 1.94, .26); }
+    const brazo = (d) => { const b = new T.Group(); b.position.set(d * .3, 1.2, 0); k.add(b); cil(b, .075, .075, .62, 6, capa, 0, -.31, 0); bola(b, .09, piel, 0, -.66, 0); b.rotation.z = d * .25; return b; };
+    return { k, bi: brazo(-1), bd: brazo(1) };
+  };
+  /* Seis bloques 3D separados; cada constructor devuelve la animación del bloque. Frente del bloque: +z */
+  const CONSTR = {
+    loteria(g, luz) {            // el gran bombo dorado de la lotería y su caseta
+      caja(g, 2.3, 1.9, 1.5, M.rojo, -1.35, .95, -.7); caja(g, 2.6, .16, 1.8, M.oro, -1.35, 1.98, -.7); caja(g, 1.5, .85, .06, luz, -1.35, 1.1, .06); caja(g, 1.8, .12, .35, M.crema, -1.35, .62, .2);
+      caja(g, 2.4, .62, .1, M.pardo, -1.35, 2.42, -.2); rotulo(g, 'LOTERÍA', 2.3, .56, -1.35, 2.42, -.14);
+      cil(g, .9, 1.05, .25, 12, M.rojo2, 1.25, .12, .5); caja(g, .14, 2.3, .14, M.oro, .15, 1.25, .5); caja(g, .14, 2.3, .14, M.oro, 2.35, 1.25, .5); const eje = cil(g, .05, .05, 2.5, 6, M.oro, 1.25, 2.3, .5); eje.rotation.z = Math.PI / 2;
+      const b = new T.Group(); b.position.set(1.25, 2.3, .5); g.add(b); const jaula = new T.Mesh(new T.IcosahedronGeometry(1.05, 1), new T.MeshBasicMaterial({ color: 0xf2c75c, wireframe: true })); b.add(jaula); const j2 = new T.Mesh(new T.IcosahedronGeometry(1.03, 2), new T.MeshBasicMaterial({ color: 0xb8862b, wireframe: true })); b.add(j2);
+      const bolas = [...Array(9)].map(() => bola(b, .17, M.crema, 0, 0, 0)); rotulo(g, 'EL GORDO', 1.9, .44, 1.25, .5, 1.62).rotation.x = -.35;
+      return (t) => { jaula.rotation.x = j2.rotation.x = t * .8; bolas.forEach((o, k) => { const a = t * .8 + k * .7 + Math.sin(t * .5 + k) * .25, r = .3 + (k % 3) * .2; o.position.set(((k % 5) - 2) * .22 + Math.sin(t * .4 + k * 2) * .06, -Math.cos(a) * r - .06, Math.sin(a) * r); o.rotation.x = a; }); };
+    },
+    cena(g, luz) {               // la gran mesa de Nochebuena: pavo, turrones, polvorones, mazapanes, velas
+      cil(g, 2.75, 2.95, .95, 28, M.mantel, 0, .48, 0); cil(g, 2.8, 2.8, .1, 28, M.blanco, 0, 1, 0); cil(g, 2.86, 2.86, .05, 28, M.oro, 0, .93, 0);
+      for (let k = 0; k < 10; k++) caja(g, .26, .3, .1, luz, Math.sin(k * .628) * 2.9, .5, Math.cos(k * .628) * 2.9).rotation.y = k * .628;
+      const br = (c, o = {}) => new T.MeshStandardMaterial(Object.assign({ color: c, roughness: .35 }, o));
+      // el pavo asado, en su fuente dorada
+      cil(g, 1.3, 1.3, .08, 24, M.oro, 0, 1.09, -.35); const tk = new T.Group(); g.add(tk); modelo(g, 'modelos/pavo.glb', .8, 0, 1.13, -.45, -Math.PI / 2, [tk]); const tor = br(0xc7772c), pv = bola(tk, .78, tor, 0, 1.68, -.35); pv.scale.set(1.3, .82, 1.02); bola(tk, .36, br(0xd98a3a), 0, 2.2, -.5).scale.set(1.3, .6, 1);
+      [-1, 1].forEach(d => { const m = cono(tk, .27, .95, 10, tor, d * .98, 1.62, .2); m.rotation.set(1.25, 0, -d * .55); cil(tk, .12, .12, .2, 8, M.blanco, d * 1.3, 1.83, .62).rotation.set(1.25, 0, -d * .55); bola(tk, .08, M.blanco, d * 1.4, 1.9, .76); });
+      for (let k = 0; k < 10; k++) bola(g, .13, k % 2 ? br(0x2f9a4e) : br(0xd4203a), Math.sin(k * .628) * 1.16, 1.2, -.35 + Math.cos(k * .628) * 1.16);
+      // los turrones (barras con almendras)
+      const tu = br(0xf0dcae), al = br(0xb9823e); cil(g, .78, .78, .04, 18, M.rojo, -1.62, 1.07, .9); [[0, 0, .25], [.08, .26, -.2]].forEach(([dx, dy, ry]) => { const b = caja(g, 1.25, .25, .52, tu, -1.62 + dx, 1.22 + dy, .9); b.rotation.y = ry; [-.42, -.14, .14, .42].forEach(x => bola(b, .07, al, x, .13, (x > 0 ? .1 : -.1))); });
+      // los polvorones, envueltos en papel de colores
+      cil(g, .78, .78, .04, 18, M.rojo, 1.62, 1.07, .9); [[-.3, .2, 0xffffff, 0xd4203a], [.3, .15, 0xffffff, 0x2f9a4e], [0, -.3, 0xffffff, 0xe9b949]].forEach(([x, z, c1, c2], k) => { const pg = new T.Group(); pg.position.set(1.62 + x, 1.27, .9 + z); pg.rotation.y = k * 1.1; g.add(pg); const c = cil(pg, .19, .19, .3, 12, br(c1), 0, 0, 0); c.rotation.z = Math.PI / 2; [-1, 1].forEach(d => { const t2 = cono(pg, .17, .26, 8, br(c2), d * .27, 0, 0); t2.rotation.z = d * Math.PI / 2; }); caja(pg, .1, .4, .4, br(c2), 0, 0, 0); });
+      // los mazapanes (figuritas doradas)
+      cil(g, .7, .7, .04, 18, M.rojo, 0, 1.07, 1.8); [[-.3, .05], [0, .22], [.3, .05], [-.15, -.25], [.15, -.25]].forEach(([x, z], k) => { const m = bola(g, .17, br(0xf4d48c), x, 1.2, 1.8 + z); m.scale.set(k % 2 ? 1.25 : 1, .7, 1); bola(g, .09, br(0xc98a3a), x, 1.3, 1.8 + z).scale.y = .4; });
+      cartel(g, 'el pavo', 0, 2.5, -.45); cartel(g, 'los turrones', -1.9, 2.05, .9, .9); cartel(g, 'los polvorones', 1.9, 2.05, .9, .9); cartel(g, 'los mazapanes', 0, 1.5, 2.75, .9);
+      const ll = [-.9, .9].map(x => { cil(g, .16, .2, .08, 10, M.oro, x * 2, 1.09, -1.5); cil(g, .08, .08, 1.1, 8, M.rojo, x * 2, 1.66, -1.5); const f = cono(g, .11, .32, 6, M.llama, x * 2, 2.36, -1.5); f.castShadow = false; return f; });
+      
+      [-1.75, 1.75].forEach(x => cil(g, .07, .07, 4, 6, M.oro, x, 2, -2.9)); caja(g, 3.9, .7, .1, M.rojo2, 0, 3.9, -2.9); rotulo(g, 'NOCHEBUENA', 3.7, .6, 0, 3.9, -2.84);
+      return (t) => ll.forEach((f, k) => f.scale.y = 1 + Math.sin(t * 9 + k * 2) * .25);
+    },
+    belen(g, luz) {              // el belén, abierto y bien visible: María, José, el Niño, la mula, el buey, la estrella
+      caja(g, 5, .1, 3.4, M.paja, 0, .05, -.1); caja(g, 4.8, 2.3, .16, M.madera, 0, 1.2, -1.7); [-2.3, 2.3].forEach(x => cil(g, .13, .13, 3, 6, M.pardo, x, 1.5, -.3));
+      const tj = caja(g, 5.2, .16, 1.9, M.pardo, 0, 2.95, -.95); tj.rotation.x = .3; caja(g, 1.9, .6, .1, M.rojo2, 0, 2.2, -1.6); rotulo(g, 'BELÉN', 1.8, .5, 0, 2.2, -1.54); caja(g, .24, .3, .24, luz, -1.6, 1.9, -1.5); caja(g, .24, .3, .24, luz, 1.6, 1.9, -1.5);
+      const ma = persona(g, M.azul, M.piel, null, 0); ma.k.position.set(-1.6, .1, .35); ma.k.rotation.y = .75; ma.k.scale.setScalar(1.15); pon(ma.k, new T.SphereGeometry(.35, 20, 16), new T.MeshStandardMaterial({ color: 0xffffff, roughness: .9 }), 0, 1.64, -.1).scale.set(1, 1.02, .9); cono(ma.k, .36, .7, 12, M.blanco, 0, 1.25, -.16); ma.bi.rotation.z = -.5; ma.bd.rotation.z = .9;
+      const jo = persona(g, M.pardo, M.piel, 0x5d3718, 0); jo.k.position.set(1.6, .1, .35); jo.k.rotation.y = -.75; jo.k.scale.setScalar(1.25); jo.bi.rotation.z = -1.2; cil(g, .04, .04, 2.3, 5, M.madera, 2.35, 1.2, .6);
+      const cu = new T.Group(); cu.position.set(0, .1, 1.15); cu.scale.setScalar(1.8); g.add(cu); const mo = mat(0x5a3418); caja(cu, 1.05, .3, .62, mo, 0, .45, 0); [-1, 1].forEach(d => { const pt = caja(cu, .09, .78, .09, mo, d * .44, .32, 0); pt.rotation.z = d * .35; }); caja(cu, 1, .16, .58, mat(0xf5c832), 0, .66, 0);
+      const nb = bola(cu, .2, M.blanco, .13, .86, 0); nb.scale.set(1.65, .85, 1.1); nb.material = new T.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: .25 }); const bh = pon(cu, new T.SphereGeometry(.22, 28, 20), new T.MeshStandardMaterial({ map: cara('f3d2b3', 'bebe'), roughness: .6 }), -.36, .97, .03); bh.rotation.x = -.55;
+      const halo = pon(cu, new T.TorusGeometry(.3, .035, 6, 24), M.llama, -.36, 1.02, -.16); halo.castShadow = false; const lb = new T.PointLight(0xffe08a, 1.6, 8, 2); lb.position.set(0, 1.9, 1.6); g.add(lb);
+      const animal = (c, x, tipo) => { const a = new T.Group(); a.position.set(x, .1, -.85); a.rotation.y = x < 0 ? .5 : -.5; g.add(a); const m = mat(c); caja(a, .7, .65, 1.3, m, 0, .85, 0); [[-.25, -.5], [.25, -.5], [-.25, .5], [.25, .5]].forEach(([px, pz]) => caja(a, .16, .6, .16, m, px, .3, pz)); caja(a, .42, .55, .4, m, 0, 1.3, .65); caja(a, .46, .42, .62, m, 0, 1.5, 1.02); [-1, 1].forEach(d => { bola(a, .05, M.oscuro, d * .15, 1.6, 1.3); if (tipo) { const h = cono(a, .07, .5, 5, M.crema, d * .32, 1.82, .9); h.rotation.z = -d * 1.1; } else { const o = cono(a, .09, .6, 5, m, d * .17, 2, .82); o.rotation.z = -d * .2; } }); return a; };
+      const mu = animal(0x9a9aa8, -1.9, 0), bu = animal(0x8a5a3c, 1.9, 1); modelo(g, 'modelos/burro.glb', 2.5, -3, .1, .1, .75, [mu]); modelo(g, 'modelos/vaca.glb', 2.3, 3, .1, .1, -.75 - Math.PI / 2, [bu]);
+      const lana = new T.MeshStandardMaterial({ color: 0xffffff, roughness: 1 }), cneg = new T.MeshStandardMaterial({ color: 0x2b2430, roughness: .8 });
+      [[-1.7, 2.6, .9], [1.75, 2.65, 2.3]].forEach(([x, z, ry]) => { const o = new T.Group(); o.position.set(x, .1, z); o.rotation.y = ry; o.scale.setScalar(1.25); g.add(o); modelo(g, 'modelos/oveja.glb', 1.05, x, .1, z, ry + Math.PI / 2, [o]);
+        [[0, .5, 0, .3], [.22, .57, .11, .22], [-.22, .57, .09, .22], [.2, .5, -.13, .22], [-.2, .5, -.15, .22], [0, .7, 0, .22], [.36, .54, 0, .18], [-.36, .5, 0, .2]].forEach(([a, b, c, r]) => pon(o, new T.SphereGeometry(r, 12, 10), lana, a, b, c));
+        [[-.2, -.12], [.2, -.12], [-.2, .12], [.2, .12]].forEach(([a, c]) => cil(o, .045, .045, .34, 6, cneg, a, .17, c)); pon(o, new T.SphereGeometry(.15, 14, 10), cneg, .54, .64, 0).scale.set(1.25, 1, .9); pon(o, new T.SphereGeometry(.1, 10, 8), lana, .45, .79, 0);
+        [-1, 1].forEach(d => { pon(o, new T.SphereGeometry(.06, 8, 6), cneg, .46, .72, d * .16).scale.set(.6, .5, 1.3); pon(o, new T.SphereGeometry(.03, 8, 6), M.blanco, .65, .68, d * .08).castShadow = false; }); });
+      const e = new T.Group(); e.position.set(0, 4.9, -.4); g.add(e); pon(e, new T.OctahedronGeometry(.6), M.llama); const e2 = pon(e, new T.OctahedronGeometry(.6), M.llama); e2.rotation.set(.8, .8, 0);
+      const rayo = new T.Mesh(new T.ConeGeometry(1.2, 3.9, 16, 1, true), new T.MeshBasicMaterial({ color: 0xffe08a, transparent: true, opacity: .16, side: T.DoubleSide, depthWrite: false })); rayo.position.set(0, 2.95, .9); rayo.rotation.x = .3; g.add(rayo);
+      return (t) => { e.rotation.y = t * .7; e.scale.setScalar(1 + Math.sin(t * 3) * .1); rayo.material.opacity = .13 + Math.sin(t * 2) * .05; mu.rotation.x = Math.sin(t * 1.3) * .03; bu.rotation.x = Math.sin(t * 1.1 + 1) * .03; };
+    },
+    reloj(g, luz) {              // el reloj de la Puerta del Sol: gran esfera, bola dorada y doce uvas
+      caja(g, 2.9, 1.3, 2.4, M.salmon, 0, .65, -.3); caja(g, 3.1, .16, 2.6, M.crema, 0, 1.36, -.3); caja(g, .7, .95, .06, luz, -.85, .55, .92); caja(g, .7, .95, .06, luz, .85, .55, .92);
+      caja(g, 2.4, 3.1, 2, M.crema, 0, 2.95, -.3); caja(g, 2.7, .2, 2.3, M.salmon, 0, 4.58, -.3);
+      const dc = document.createElement('canvas'); dc.width = dc.height = 256; const q = dc.getContext('2d'); q.fillStyle = '#fffaf0'; q.beginPath(); q.arc(128, 128, 126, 0, 6.3); q.fill(); q.fillStyle = '#6f0d1e'; q.font = 'bold 34px Georgia, serif'; q.textAlign = 'center'; q.textBaseline = 'middle'; for (let h = 1; h <= 12; h++) q.fillText(h, 128 + Math.sin(h * .5236) * 98, 128 - Math.cos(h * .5236) * 98);
+      const dt = new T.CanvasTexture(dc); dt.encoding = T.sRGBEncoding; const aro = cil(g, 1.22, 1.22, .1, 32, M.oro, 0, 3, .72); aro.rotation.x = Math.PI / 2; const es = new T.Mesh(new T.CircleGeometry(1.08, 32), new T.MeshBasicMaterial({ map: dt })); es.position.set(0, 3, .78); g.add(es);
+      const mn = new T.Group(), hr = new T.Group(); mn.position.set(0, 3, .82); hr.position.set(0, 3, .81); g.add(mn, hr); caja(mn, .08, .86, .03, M.rojo2, 0, .4, 0); caja(hr, .11, .56, .03, M.oscuro, 0, .26, 0); bola(g, .09, M.oro, 0, 3, .84);
+      [[-.6, .3], [.6, .3], [-.6, -.9], [.6, -.9]].forEach(([x, z]) => cil(g, .07, .07, 1.1, 6, M.crema, x, 5.2, z)); const cu = bola(g, .85, M.pizarra, 0, 5.8, -.3); cu.scale.y = .55; cil(g, .035, .035, 1.7, 5, M.oro, 0, 6.9, -.3); const bl = bola(g, .26, M.llama, 0, 7.6, -.3);
+      const cp = new T.Group(); cp.position.set(0, 5.6, -.3); g.add(cp); cono(cp, .26, .42, 8, M.oro, 0, -.3, 0); bola(cp, .08, M.oro, 0, -.55, 0);
+      const ug = new T.Group(); ug.position.set(2.55, 0, 1.25); g.add(ug); cil(ug, .9, 1, .1, 18, M.oro, 0, .05, 0); cil(ug, .07, .09, 3.7, 6, M.oro, -.85, 1.9, 0); caja(ug, 1, .09, .09, M.oro, -.36, 3.72, 0); cil(ug, .035, .035, .4, 5, M.pardo, 0, 3.5, 0); const hoja = caja(ug, .7, .05, .5, M.verde2, .34, 3.34, 0); hoja.rotation.z = -.45;
+      const um = new T.MeshStandardMaterial({ color: 0xa9d93f, roughness: .22, emissive: 0x3f6d00, emissiveIntensity: .5 });
+      const uvas = [[-.51, 0], [-.17, 0], [.17, 0], [.51, 0], [-.34, 1], [0, 1], [.34, 1], [-.17, 2], [.17, 2], [-.17, 3], [.17, 3], [0, 4]].map(([x, f], k) => { const u = bola(ug, .27, um, x, 3.05 - f * .47, (k % 2) * .18 - .09); u.scale.y = 1.22; return u; });
+      caja(g, 1.9, .5, .1, M.rojo2, -.3, .62, .92); rotulo(g, '12 UVAS', 1.8, .44, -.3, .62, .98);
+      return (t) => { mn.rotation.z = -t * 1.2; hr.rotation.z = -t * .1; const f = (t * .12) % 1; bl.position.y = f < .8 ? 7.6 : 7.6 - (f - .8) * 5 * 1.2; cp.rotation.z = Math.sin(t * 3.2) * .5; const ph = (t / .65) % 16, n = Math.floor(ph); uvas.forEach((u, k) => { const o = 11 - k, e = o === n && n < 12 ? 1 + (ph - n) * .9 : 1; u.visible = n >= 13 || o >= n; u.scale.set(e, 1.22 * e, e); }); };
+    },
+    reyes(g, luz) {              // los tres Reyes Magos en un escenario: saludan y lanzan caramelos
+      caja(g, 5.6, .7, 2.9, M.pardo, 0, .35, -.4); caja(g, 5.66, .7, .08, M.rojo, 0, .35, 1.08); caja(g, 5.7, .12, 3, M.oro, 0, .72, -.4); caja(g, 1.6, .24, .5, M.pardo, 0, .12, 1.4); caja(g, 1.6, .46, .3, M.pardo, 0, .23, 1.2);
+      caja(g, 5.6, 3.6, .16, M.rojo2, 0, 2.5, -1.75); [-2.65, 2.65].forEach(x => cil(g, .3, .36, 3.6, 10, M.rojo, x, 2.5, -1.55)); caja(g, 6, .6, .5, M.oro, 0, 4.5, -1.6); rotulo(g, 'REYES MAGOS', 3.9, .52, 0, 4.5, -1.33);
+      const es = new T.Group(); es.position.set(0, 3.55, -1.6); g.add(es); pon(es, new T.OctahedronGeometry(.42), M.llama); const e2 = pon(es, new T.OctahedronGeometry(.42), M.llama); e2.rotation.set(.8, .8, 0);
+      [-2.3, 2.3].forEach(x => { caja(g, .3, .3, .3, luz, x, .9, .8); cil(g, .05, .05, .2, 5, M.oscuro, x, .76, .8); });
+      const rs = [[M.rojo, M.piel, 0xffffff, -1.6], [M.verde, M.piel, 0x8a5a2c, 0], [M.violeta, M.piel2, 0x17100b, 1.6]].map(([m, pl, barba, x]) => { const r = persona(g, m, pl, barba, 1); r.k.position.set(x, .78, -.3); r.k.scale.setScalar(1.3); caja(r.k, .22, .22, .22, M.oro, -.42, .55, .25); return r; });
+      const car = [...Array(12)].map((_, k) => { const c = caja(g, .16, .1, .1, mat(colB[k % 3], { emissive: colB[k % 3], emissiveIntensity: .4 }), 0, 0, 0); c.castShadow = false; return c; });
+      return (t) => { rs.forEach((r, i) => { r.bd.rotation.z = 2.5 + Math.sin(t * 4 + i * 2) * .45; r.bi.rotation.z = -.3 - Math.abs(Math.sin(t * 2 + i)) * .4; r.k.rotation.y = Math.sin(t * 1.2 + i * 1.7) * .3; r.k.position.y = .78 + Math.abs(Math.sin(t * 2.4 + i)) * .06; }); es.rotation.y = t;
+        car.forEach((c, k) => { const f = (t * .55 + k / 12) % 1, x0 = (k % 3 - 1) * 1.6; c.position.set(x0 + (((k * 7) % 5) - 2) * .5 * f, 2.7 + f * 1.2 - f * f * 3.6, .1 + f * 3.4); c.rotation.set(t * 3 + k, t * 2, 0); c.visible = f < .97; }); };
+    },
+    cafe(g, luz) {               // España y Francia en la balanza: comparar las fiestas de los dos países
+      const br = (c, o = {}) => new T.MeshStandardMaterial(Object.assign({ color: c, roughness: .35 }, o));
+      cil(g, 1.1, 1.35, .36, 18, M.oro, 0, .18, 0); cil(g, .15, .22, 4.6, 10, M.oro, 0, 2.5, 0); [0, 1, 2, 3].forEach(k => caja(g, .22, .26, .22, luz, Math.sin(k * 1.57 + .78) * 1.25, .5, Math.cos(k * 1.57 + .78) * 1.25));
+      const es = new T.Group(); es.position.set(0, 5.4, 0); g.add(es); pon(es, new T.OctahedronGeometry(.34), M.llama);
+      const viga = new T.Group(); viga.position.set(0, 4.8, 0); g.add(viga); caja(viga, 6, .16, .16, M.oro, 0, 0, 0); bola(viga, .2, M.oro, 0, 0, 0);
+      const plato = (x) => { const pg = new T.Group(); pg.position.set(x, 0, 0); viga.add(pg); [-1, 1].forEach(d => { const c = cil(pg, .025, .025, 2.6, 4, M.oro, d * .72, -1.25, -.3); c.rotation.z = d * .55; }); cil(pg, 1.5, 1.2, .18, 24, M.crema, 0, -2.55, 0); pon(pg, new T.TorusGeometry(1.5, .06, 6, 28), M.oro, 0, -2.46, 0).rotation.x = Math.PI / 2; return pg; };
+      const pe = plato(-2.75), pf = plato(2.75);
+      const bandera = (pg, cs, v) => { cil(pg, .05, .05, 2.9, 6, M.oscuro, -.95, -1.1, -.75); const b = new T.Group(); b.position.set(-.95, -.1, -.75); pg.add(b); cs.forEach((c, k) => { const m = br(c, { emissive: c, emissiveIntensity: .3 }); const o = v ? caja(b, .56, 1.1, .04, m, .3 + k * .56, 0, 0) : caja(b, 1.68, k === 1 ? .55 : .275, .04, m, .86, [.412, 0, -.412][k], 0); o.castShadow = false; }); return b; };
+      const b1 = bandera(pe, [0xc60b1e, 0xffc400, 0xc60b1e], 0), b2 = bandera(pf, [0x0055a4, 0xffffff, 0xef4135], 1);
+      // España: un gran racimo de uvas y la corona de los Reyes
+      const um = br(0xa9d93f, { roughness: .22, emissive: 0x3f6d00, emissiveIntensity: .5 }); const uvE = [[-.3, 0], [0, 0], [.3, 0], [-.15, 1], [.15, 1], [0, 2]].map(([x, f]) => { const u = bola(pe, .2, um, .55 + x, -1.55 - f * .34, .55); u.scale.y = 1.2; return u; }); uvE.push(cil(pe, .03, .03, .3, 5, M.pardo, .55, -1.3, .55)); modelo(pe, 'modelos/uvas.glb', 1.25, .6, -2.46, .55, 0, uvE, (c, o) => o.traverse(n => { if (n.isMesh) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { if (m.name === '673AB7') { m.color.set(0x9ccc3c); m.roughness = .3; } }); }));
+      const cg = new T.Group(); cg.position.set(-.45, -2.12, .7); pe.add(cg); cil(cg, .46, .38, .36, 10, M.oro, 0, 0, 0); for (let q = 0; q < 6; q++) { cono(cg, .09, .28, 4, M.oro, Math.sin(q * 1.047) * .4, .3, Math.cos(q * 1.047) * .4); bola(cg, .06, q % 2 ? br(0xd4203a) : br(0x2f9a4e), Math.sin(q * 1.047 + .52) * .44, 0, Math.cos(q * 1.047 + .52) * .44); }
+      // Francia: la torre Eiffel y el tronco de Navidad («bûche»)
+      const fe = br(0x3b2f3a, { metalness: .3 }), te = new T.Group(); te.position.set(.5, -2.46, .5); pf.add(te); const sf = new T.Shape();
+      sf.moveTo(-.66, 0); sf.quadraticCurveTo(-.32, .5, -.23, 1); sf.lineTo(-.3, 1); sf.lineTo(-.3, 1.1); sf.lineTo(-.2, 1.1); sf.quadraticCurveTo(-.11, 1.5, -.1, 1.75); sf.lineTo(-.16, 1.75); sf.lineTo(-.16, 1.84); sf.lineTo(-.08, 1.84); sf.lineTo(-.02, 3); sf.lineTo(.02, 3); sf.lineTo(.08, 1.84); sf.lineTo(.16, 1.84); sf.lineTo(.16, 1.75); sf.lineTo(.1, 1.75); sf.quadraticCurveTo(.11, 1.5, .2, 1.1); sf.lineTo(.3, 1.1); sf.lineTo(.3, 1); sf.lineTo(.23, 1); sf.quadraticCurveTo(.32, .5, .66, 0); sf.lineTo(.42, 0); sf.quadraticCurveTo(0, 1.1, -.42, 0); sf.closePath();
+      const sg2 = new T.ExtrudeGeometry(sf, { depth: .12, bevelEnabled: false }); sg2.translate(0, 0, -.06); [0, 1].forEach(q => { pon(te, sg2, fe).rotation.y = q * Math.PI / 2; }); bola(te, .07, M.llama, 0, 3.05, 0); modelo(pf, 'modelos/torre-eiffel.glb', 3.1, .5, -2.46, .5, .4, [te]);
+      const tr = new T.Group(); tr.position.set(-.6, -2.2, .95); tr.rotation.y = .3; pf.add(tr); const lg = cil(tr, .26, .26, 1, 12, br(0x5a3418), 0, 0, 0); lg.rotation.z = Math.PI / 2; [-1, 1].forEach(d => { const c = cil(tr, .22, .22, .03, 12, br(0xf3e3c3), d * .51, 0, 0); c.rotation.z = Math.PI / 2; }); bola(tr, .09, br(0xd4203a), 0, .3, 0); caja(tr, .3, .04, .16, br(0x2f9a4e), .14, .27, 0).rotation.y = .5; caja(tr, .3, .04, .16, br(0x2f9a4e), -.14, .27, 0).rotation.y = -.5;
+      caja(g, 2.3, .58, .1, M.rojo2, -2.2, .32, 2.9); rotulo(g, 'ESPAÑA', 2.2, .52, -2.2, .32, 2.96); caja(g, 2.3, .58, .1, M.rojo2, 2.2, .32, 2.9); rotulo(g, 'FRANCIA', 2.2, .52, 2.2, .32, 2.96);
+      return (t) => { const a = Math.sin(t * .55) * .08; viga.rotation.z = a; pe.rotation.z = pf.rotation.z = -a; b1.rotation.y = Math.sin(t * 2) * .25; b2.rotation.y = Math.sin(t * 2 + 1) * .25; es.rotation.y = t; };
     }
-    if (!$('#esc').classList.contains('on')) { g.clearRect(0, 0, cv.width, cv.height); g.fillStyle = 'rgba(255,255,255,.85)'; copos.forEach(c => { c.y += c.v; c.d += .01; c.x += Math.sin(c.d) * .4; if (c.y > cv.height) { c.y = -4; c.x = Math.random() * cv.width; } g.beginPath(); g.arc(c.x, c.y, c.r, 0, 6.28); g.fill(); }); }
-    requestAnimationFrame(bucle);
+  };
+  const colB = [0xff4d63, 0xffd66b, 0x5fd39a, 0xffffff];
+  const islas = LUGARES.map((L, i) => {
+    const g = new T.Group(), a = i / 6 * Math.PI * 2; g.position.set(Math.sin(a) * RAD, 0, Math.cos(a) * RAD); g.rotation.y = a; g.userData.i = i;
+    cil(g, 4.1, 4.1, .3, 28, M.rojo2, 0, -.15, 0); cil(g, 4.3, 4.3, .14, 28, M.oro, 0, -.26, 0);
+    const luz = mat(0x1a2646, { emissive: 0xffc45a, emissiveIntensity: 0, flatShading: false }), bomb = [];
+    for (let k = 0; k < 18; k++) { const b = bola(g, .12, mat(0x5a6078, { emissive: colB[k % 4], emissiveIntensity: 0 }), Math.sin(k / 18 * 6.283) * 3.95, .1, Math.cos(k / 18 * 6.283) * 3.95); b.castShadow = false; bomb.push(b); }
+    const foco = new T.PointLight(0xffc45a, 0, 11, 2); foco.position.set(0, 2.6, 2.4); g.add(foco);
+    const anim = CONSTR[L.id](g, luz); esc.add(g);
+    const p0 = new T.Vector3(0, 5.4, 0), p2 = new T.Vector3(Math.sin(a) * (RAD - 4.2), .5, Math.cos(a) * (RAD - 4.2)), p1 = p0.clone().lerp(p2, .55); p1.y = 1.2;
+    const curva = new T.QuadraticBezierCurve3(p0, p1, p2); esc.add(new T.Line(new T.BufferGeometry().setFromPoints(curva.getPoints(20)), new T.LineBasicMaterial({ color: 0x2a3a66 })));
+    const gui = []; for (let k = 1; k < 9; k++) { const q = curva.getPoint(k / 9), b = bola(esc, .13, mat(0x5a6078, { emissive: colB[k % 4], emissiveIntensity: 0 }), q.x, q.y - .12, q.z); b.castShadow = false; gui.push(b); }
+    return { g, luz, bomb, gui, foco, anim, a, nivel: 0, meta: 0, id: L.id };
+  });
+  // el suelo de la plaza (adoquines) y el gran árbol del centro
+  const lc = document.createElement('canvas'); lc.width = lc.height = 256; const lk = lc.getContext('2d'); lk.fillStyle = '#a6957d'; lk.fillRect(0, 0, 256, 256); for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) { lk.fillStyle = ['#b3a188', '#9c8b74', '#a99880', '#bba88e'][(x * 3 + y * 5) % 4]; lk.fillRect(x * 64 + (y % 2) * 32 - 32 + 2, y * 64 + 2, 60, 60); lk.fillRect(x * 64 + (y % 2) * 32 + 224 + 2, y * 64 + 2, 60, 60); }
+  const lt = new T.CanvasTexture(lc); lt.wrapS = lt.wrapT = T.RepeatWrapping; lt.repeat.set(14, 14); lt.encoding = T.sRGBEncoding;
+  const piso = new T.Mesh(new T.PlaneGeometry(50, 50), new T.MeshStandardMaterial({ map: lt, roughness: .95, color: 0xb9ad9c })); piso.rotation.x = -Math.PI / 2; piso.position.y = -.33; piso.receiveShadow = true; esc.add(piso);
+  const c0 = new T.Group(); esc.add(c0); const la = new T.PointLight(0xffc070, 1.7, 46, 1.6); la.position.set(0, 7.5, 0); esc.add(la); cil(c0, 3, 3, .3, 24, M.rojo2, 0, -.15, 0); cil(c0, 3.2, 3.2, .14, 24, M.oro, 0, -.26, 0);
+  cil(c0, .35, .42, 1, 7, M.pardo, 0, .5, 0); [[2.5, 1.9, 1.8], [2.05, 1.8, 2.9], [1.6, 1.7, 3.9], [1.15, 1.6, 4.8], [.7, 1.4, 5.6]].forEach(([r, h, y], k) => cono(c0, r, h, 10, k % 2 ? M.verde2 : M.verde, 0, y, 0));
+  const punta = pon(c0, new T.OctahedronGeometry(.5), M.oro, 0, 6.75, 0);
+  const luces = []; for (let k = 0; k < 44; k++) { const f = k / 44, rr = 2.45 - f * 2, an = f * 22; const b = bola(c0, .11, mat(0xffffff, { emissive: colB[k % 4], emissiveIntensity: 1.6 }), Math.sin(an) * rr, 1.15 + f * 4.9, Math.cos(an) * rr); b.castShadow = false; luces.push(b); }
+  [[1.9, .3, 1.5, 0xc0203a], [-2, .24, 1.2, 0xe9b949], [.5, .26, -2.1, 0x1a7a4e], [-1.4, .3, -1.7, 0x6a45a8]].forEach(([x, hh, z, c]) => { caja(c0, hh * 2, hh * 2, hh * 2, mat(c), x, hh, z); caja(c0, hh * 2.05, hh * .5, hh * 2.05, M.oro, x, hh, z); });
+  // el monigote de papel (Santos Inocentes), colgado del árbol
+  const mono = new T.Group(); mono.position.set(2.55, 2.5, 1.6); mono.userData.id = 'inocente'; c0.add(mono); const mm = new T.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: .25 });
+  [[0, -.2, .07, .2, 1], [0, -.42, .14, .14, 0], [0, -.66, .16, .32, 1], [0, -.6, .46, .07, 1], [-.06, -.95, .07, .3, 1], [.06, -.95, .07, .3, 1]].forEach(([x, y, w, h], k) => { const o = k === 1 ? bola(mono, .09, mm, x, y, 0) : caja(mono, w, h, .02, mm, x, y, 0); o.castShadow = false; o.userData.id = 'inocente'; if (k === 0) o.scale.x = .15; });
+  const toca = new T.Mesh(new T.SphereGeometry(.75), new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })); toca.position.y = -.6; toca.userData.id = 'inocente'; mono.add(toca);
+  // las cuatro fachadas de la plaza (estilo Plaza Mayor de Madrid): ladrillo rojo, balcones, soportales, tejados de pizarra
+  const LADO = 25, vOn = mat(0x3a2a14, { emissive: 0xffc45a, emissiveIntensity: 1.5, flatShading: false }), vOff = mat(0x1a2646);
+  const muros = [0, 1, 2, 3].map(k => {
+    const w = new T.Group(); w.rotation.y = k * Math.PI / 2; esc.add(w); const z = -LADO - .8;
+    caja(w, LADO * 2 + 3, 7.4, 1.6, M.ladrillo, 0, 3.4, z); caja(w, LADO * 2 + 3, 1.9, 1.7, M.piedra, 0, .62, z + .05); caja(w, LADO * 2 + 3.2, .9, 2, M.pizarra, 0, 7.5, z); caja(w, LADO * 2 + 3.2, .2, 2.1, M.crema, 0, 7.02, z);
+    const n = 22, on = new T.InstancedMesh(new T.BoxGeometry(.6, 1, .1), vOn, n * 3), off = new T.InstancedMesh(new T.BoxGeometry(.6, 1, .1), vOff, n * 3), arc = new T.InstancedMesh(new T.BoxGeometry(1.25, 1.5, .1), M.oscuro, n), d = new T.Object3D(); let a = 0, b = 0;
+    for (let c = 0; c < n; c++) { const x = -LADO + 1.4 + c * (LADO * 2 - 2.8) / (n - 1); d.position.set(x, .55, z + .92); d.updateMatrix(); arc.setMatrixAt(c, d.matrix); for (let f = 0; f < 3; f++) { d.position.set(x, 2.75 + f * 1.5, z + .84); d.updateMatrix(); ((c * 7 + f * 5 + k * 3) % 5 < 3) ? on.setMatrixAt(a++, d.matrix) : off.setMatrixAt(b++, d.matrix); } }
+    on.count = a; off.count = b; w.add(on, off, arc); [2.1, 3.6, 5.1].forEach(y => caja(w, LADO * 2 + 3, .07, .3, M.oscuro, 0, y, z + .95));
+    for (let c = 0; c < 8; c++) caja(w, .7, .6, .7, M.pizarra, -LADO + 3.5 + c * 6.2, 8.1, z + .2);
+    // decoración navideña de la fachada: pendones rojos con estrella, coronas con lazo, guirnalda de luces en la cornisa
+    for (let c = 0; c < 7; c++) { const x = -LADO + 4.2 + c * 6.95; caja(w, 1.1, 3.6, .08, mat(0xc0203a, { emissive: 0x7d0f20, emissiveIntensity: .5 }), x, 4.3, z + 1); caja(w, 1.2, .16, .1, M.oro, x, 6.1, z + 1.02); caja(w, 1.2, .16, .1, M.oro, x, 2.5, z + 1.02); const st = pon(w, new T.OctahedronGeometry(.3), M.llama, x, 4.4, z + 1.12); st.castShadow = false; }
+    const cor = new T.InstancedMesh(new T.TorusGeometry(.42, .13, 6, 14), M.verde2, 11), lazo = new T.InstancedMesh(new T.BoxGeometry(.34, .2, .12), mat(0xd4364a, { emissive: 0xb3182f, emissiveIntensity: .5 }), 11), gl = new T.InstancedMesh(new T.SphereGeometry(.2, 8, 6), M.verde2, 44), bl2 = new T.InstancedMesh(new T.SphereGeometry(.13, 8, 6), mat(0xffffff, { emissive: 0xffd66b, emissiveIntensity: 2 }), 22), br = new T.InstancedMesh(new T.SphereGeometry(.13, 8, 6), mat(0xffffff, { emissive: 0xff4d63, emissiveIntensity: 2 }), 22);
+    for (let c = 0; c < 11; c++) { d.position.set(-LADO + 2.6 + c * 4.6, 1.72, z + 1); d.updateMatrix(); cor.setMatrixAt(c, d.matrix); d.position.y = 1.3; d.position.z = z + 1.1; d.updateMatrix(); lazo.setMatrixAt(c, d.matrix); }
+    for (let c = 0; c < 44; c++) { const x = -LADO + .8 + c * 1.14; d.position.set(x, 6.82 - Math.abs(Math.sin(c * .785)) * .35, z + 1.05); d.updateMatrix(); gl.setMatrixAt(c, d.matrix); d.position.y -= .22; d.updateMatrix(); (c % 2 ? bl2 : br).setMatrixAt(c >> 1, d.matrix); }
+    w.add(cor, lazo, gl, bl2, br);
+    if (k % 2 === 0) [-9, 9].forEach(x => { caja(w, 3.4, 10.5, 2.4, M.ladrillo2, x, 5, z + .1); const sp = cono(w, 2.2, 4, 4, M.pizarra, x, 12.2, z + .1); sp.rotation.y = Math.PI / 4; bola(w, .22, M.oro, x, 14.4, z + .1); caja(w, .8, 1.2, .1, vOn, x, 8.6, z + 1.32); caja(w, .8, 1.2, .1, vOn, x, 6.4, z + 1.32); });
+    return w;
+  });
+  // alfombras rojas del árbol a cada bloque y grandes bolas de Navidad colgadas sobre la plaza
+  islas.forEach(it => { const al = new T.Mesh(new T.PlaneGeometry(2.4, RAD - 7), mat(0x9c1226, { flatShading: false })); al.rotation.x = -Math.PI / 2; al.rotation.z = it.a; al.position.set(Math.sin(it.a) * (RAD / 2 - .5), -.315, Math.cos(it.a) * (RAD / 2 - .5)); al.receiveShadow = true; esc.add(al); });
+  const bolasN = [...Array(18)].map((_, k) => { const a = k / 18 * 6.283 + .17, r = 20 + (k % 3) * 2.6, c = [0xd4203a, 0xe9b949, 0x1f9a66][k % 3], gb = new T.Group(); gb.position.set(Math.sin(a) * r, 11.5 + (k % 4) * 1.3, Math.cos(a) * r); esc.add(gb); const b = bola(gb, .6 + (k % 2) * .25, mat(c, { metalness: .5, roughness: .25, emissive: c, emissiveIntensity: .35, flatShading: false }), 0, 0, 0); b.castShadow = false; cil(gb, .16, .2, .22, 8, M.oro, 0, .95 + (k % 2) * .3, 0).castShadow = false; cil(gb, .02, .02, 9, 4, M.oro, 0, 5.5, 0).castShadow = false; return gb; });
+  // farolas de cuatro brazos en las esquinas y guirnaldas de luces hasta las fachadas
+  [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(([sx, sz]) => { const f = new T.Group(); f.position.set(sx * 17.5, -.3, sz * 17.5); esc.add(f); const lf = new T.PointLight(0xffb860, 1.1, 26, 1.8); lf.position.set(0, 4.6, 0); f.add(lf); cil(f, .12, .2, 4.2, 6, M.oscuro, 0, 2.1, 0); caja(f, 1.6, .08, .08, M.oscuro, 0, 3.9, 0); caja(f, .08, .08, 1.6, M.oscuro, 0, 3.9, 0); [[.8, 0], [-.8, 0], [0, .8], [0, -.8], [0, 0]].forEach(([x, z], q) => { const b = bola(f, .2, mat(0xfff3c4, { emissive: 0xffd66b, emissiveIntensity: 2 }), x, q === 4 ? 4.5 : 3.7, z); b.castShadow = false; }); });
+  const tiras = []; for (let k = 0; k < 8; k++) { const a = k / 8 * 6.283 + .39, q0 = new T.Vector3(0, 7.2, 0), q2 = new T.Vector3(Math.sin(a) * (LADO + .2), 7.6, Math.cos(a) * (LADO + .2)), q1 = q0.clone().lerp(q2, .5); q1.y = 6.2; const cu = new T.QuadraticBezierCurve3(q0, q1, q2); esc.add(new T.Line(new T.BufferGeometry().setFromPoints(cu.getPoints(24)), new T.LineBasicMaterial({ color: 0x1a2646 }))); for (let j = 1; j < 14; j++) { const q = cu.getPoint(j / 14), b = bola(esc, .1, mat(0xffffff, { emissive: colB[(j + k) % 4], emissiveIntensity: 1.6 }), q.x, q.y - .1, q.z); b.castShadow = false; tiras.push(b); } }
+  // nieve y estrellas
+  const N = 500, np = new Float32Array(N * 3); for (let k = 0; k < N; k++) { np[k * 3] = (Math.random() - .5) * 60; np[k * 3 + 1] = Math.random() * 30 - 6; np[k * 3 + 2] = (Math.random() - .5) * 60; }
+  const ng = new T.BufferGeometry(); ng.setAttribute('position', new T.BufferAttribute(np, 3)); esc.add(new T.Points(ng, new T.PointsMaterial({ color: 0xffffff, size: .2, transparent: true, opacity: .9 })));
+  const sp = new Float32Array(900); for (let k = 0; k < 300; k++) { const u = Math.random() * 6.283, v = Math.random() * 1.2 + .1; sp[k * 3] = Math.cos(u) * Math.cos(v) * 150; sp[k * 3 + 1] = Math.sin(v) * 150; sp[k * 3 + 2] = Math.sin(u) * Math.cos(v) * 150; }
+  const sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(sp, 3)); esc.add(new T.Points(sg, new T.PointsMaterial({ color: 0xffe08a, size: 1.3, fog: false })));
+  // cámara: vista general que gira despacio, o primer plano de una isla
+  let th = .5, thD = .5, rad = 40, radD = 40, alt = 21, altD = 21, arr = false, quieto = 0; const tgt = new T.Vector3(0, 1.6, 0), tgtD = new T.Vector3(0, 1.6, 0);
+  const enfocar = (i) => { if (i === null) { radD = 40; altD = 21; tgtD.set(0, 1.2, 0); return; } const a = islas[i].a; thD = a + Math.round((thD - a) / 6.283) * 6.283; radD = RAD + 13; altD = 6.4; const lado = innerWidth > innerHeight * 1.2 ? 1.9 : 0; tgtD.set(Math.sin(a) * RAD + Math.cos(a) * lado, ALTO[islas[i].id] * .42, Math.cos(a) * RAD - Math.sin(a) * lado); };
+  const estado = () => islas.forEach(it => it.meta = progreso(it.id));
+  let x0 = 0, y0 = 0, th0 = 0, abajo = false; const rayo = new T.Raycaster(), pt = new T.Vector2();
+  cv.addEventListener('pointerdown', e => { abajo = true; arr = false; x0 = e.clientX; y0 = e.clientY; th0 = thD; try { cv.setPointerCapture(e.pointerId); } catch (er) {} });
+  cv.addEventListener('pointermove', e => { if (!abajo) return; const dx = e.clientX - x0; if (!arr && Math.hypot(dx, e.clientY - y0) > 7) { arr = true; if (sel !== null) elegir(null); } if (arr) { thD = th0 - dx * .006; quieto = 0; } });
+  cv.addEventListener('pointerup', e => { abajo = false; if (arr) return; const b = cv.getBoundingClientRect(); pt.set((e.clientX - b.left) / b.width * 2 - 1, -(e.clientY - b.top) / b.height * 2 + 1); rayo.setFromCamera(pt, cam);
+    const hit = rayo.intersectObjects(esc.children, true).find(h => h.object.type === 'Mesh'); if (!hit) return elegir(null); let o = hit.object; while (o) { if (o.userData.id === 'inocente') return inocente(); if (o.userData.i !== undefined) return elegir(o.userData.i); o = o.parent; } elegir(null); });
+  cv.addEventListener('wheel', e => { const t = Date.now(); if (t - quieto < 300 && quieto > 1e6) return; quieto = t; vecina(e.deltaY + e.deltaX > 0 ? 1 : -1); }, { passive: true });
+  const cerca = () => ((Math.round(thD / (Math.PI / 3)) % 6) + 6) % 6;
+  const vecina = (d) => elegir((((sel === null ? cerca() - (d > 0 ? 1 : -1) * 0 : sel) + d) % 6 + 6) % 6);
+  const medir = () => { const w = cv.clientWidth || innerWidth, h = cv.clientHeight || innerHeight; R.setSize(w, h, false); cam.aspect = w / h; cam.fov = w / h < 1.5 ? 48 : 40; cam.updateProjectionMatrix(); };
+  medir(); addEventListener('resize', medir);
+  const etqs = () => $$('.etq'), v3 = new T.Vector3(), reloj = new T.Clock(); let tAnt = 0, tCam = 0;
+  (function bucle() {
+    requestAnimationFrame(bucle); if ($('#esc').classList.contains('on') || document.hidden) return;
+    const t = reloj.getElapsedTime(), dt = Math.min(.05, t - tAnt); tAnt = t;
+    if (sel === null && !abajo && !$('#velo').classList.contains('on')) thD += dt * .045;
+    const kc = 1 - Math.exp(-Math.min(.25, t - tCam) * 3.2); tCam = t; th += (thD - th) * kc; rad += (radD - rad) * kc; alt += (altD - alt) * kc; tgt.lerp(tgtD, kc);
+    cam.position.set(Math.sin(th) * rad, alt, Math.cos(th) * rad); cam.lookAt(tgt);
+    muros.forEach((w, k) => { const nx = -Math.sin(k * Math.PI / 2), nz = -Math.cos(k * Math.PI / 2); w.visible = (cam.position.x * nx + cam.position.z * nz) < LADO - 2; });
+    tiras.forEach((b, k) => b.material.emissiveIntensity = 1.2 + Math.sin(t * 2 + k * 1.3) * .6); bolasN.forEach((b, k) => { b.rotation.z = Math.sin(t * .7 + k) * .06; b.rotation.y = t * .3 + k; b.visible = (b.position.x * Math.sin(th) + b.position.z * Math.cos(th)) < 4; });
+    islas.forEach((it, i) => { it.anim(t); it.nivel += (it.meta - it.nivel) * .04; const n = it.nivel, lleno = n > .97 ? 1 : 0; it.luz.emissiveIntensity = n * 2.4; it.foco.intensity = n * 2.6; it.bomb.forEach((b, k) => b.material.emissiveIntensity = lleno * (1.3 + Math.sin(t * 3 + k) * .5)); it.gui.forEach((b, k) => b.material.emissiveIntensity = lleno * (1.3 + Math.sin(t * 2.5 + k * 2) * .5)); });
+    mezcl.forEach(m => m.update(dt)); punta.rotation.y = t; caras.forEach(q => { const cl = ((t + q.off) % 3.7) < .16; if (q.m.map !== (cl ? q.c : q.a)) { q.m.map = cl ? q.c : q.a; q.m.needsUpdate = true; } }); luces.forEach((b, k) => b.material.emissiveIntensity = 1.1 + Math.sin(t * 2.2 + k * 1.7) * .7); mono.rotation.z = Math.sin(t * 1.8) * .35;
+    const pos = ng.attributes.position; for (let k = 0; k < N; k++) { let y = pos.getY(k) - dt * (1.1 + (k % 5) * .25); if (y < -6) y = 24; pos.setY(k, y); } pos.needsUpdate = true;
+    R.render(esc, cam);
+    const w = cv.clientWidth, h = cv.clientHeight; etqs().forEach(b => { const it = islas[+b.dataset.i]; v3.set(it.g.position.x, ALTO[it.id] + .5, it.g.position.z).project(cam); b.style.transform = `translate(${(v3.x * .5 + .5) * w}px,${(-v3.y * .5 + .5) * h}px) translate(-50%,-100%)`; b.style.zIndex = Math.round((1 - v3.z) * 5000); b.style.visibility = v3.z > 1 ? 'hidden' : ''; });
   })();
+  return { enfocar, estado, vecina, esc, cam };
 }
-function mover(i) { dest = Math.max(0, Math.min(LUGARES.length - 1, i)); }
-function pintarPlaca() {
-  placaI = Math.round(cur); const L = LUGARES[placaI], cerrado = L.id === 'cafe' && !cincoHechos() && !S.profe;
-  $('#placa .ver').textContent = EST[L.id].f; $('#placa h2').textContent = EST[L.id].t;
-  $('#placa .est').textContent = S.hecho[L.id] ? 'Terminado: el lugar está iluminado. Puedes volver a entrar.' : cerrado ? 'Cerrado: visita primero los otros cinco lugares.' : `${EST[L.id].pasos.length} actividades: ${EST[L.id].pasos.map(p => p.n.toLowerCase()).join(', ')}.`;
-  $('#entrar').disabled = cerrado; $('#nizq').disabled = placaI === 0; $('#nder').disabled = placaI === LUGARES.length - 1;
+function pintarPlaza() {
+  const P = $('#plaza');
+  P.innerHTML = '<canvas id="gl"></canvas><div id="etqs"></div><div id="panel"></div><div id="pista">Gira la plaza con el ratón y haz clic en un lugar</div><div id="linea"></div>';
+  try { H3 = crear3D($('#gl')); } catch (e) { H3 = null; }
+  if (!H3) { P.classList.add('plano'); $('#gl').remove(); $('#pista').textContent = 'Elige un lugar'; }
+  $('#etqs').innerHTML = LUGARES.map((L, i) => `<button class="etq" data-i="${i}"><b>${L.t}</b><span>${L.f}</span></button>`).join('');
+  $$('.etq').forEach(b => b.onclick = () => elegir(+b.dataset.i));
+  addEventListener('keydown', e => { if ($('#esc').classList.contains('on') || $('#velo').classList.contains('on')) return;
+    if (e.key === 'ArrowRight') H3 ? H3.vecina(1) : elegir(((sel === null ? -1 : sel) + 1) % 6); if (e.key === 'ArrowLeft') H3 ? H3.vecina(-1) : elegir(((sel === null ? 0 : sel) + 5) % 6);
+    if (e.key === 'Escape') elegir(null); if (e.key === 'Enter' && sel !== null) entrar(LUGARES[sel].id); });
+}
+function elegir(i) { sel = i; if (H3) H3.enfocar(i); pintarPanel(); }
+function pintarPanel() {
+  const p = $('#panel'); if (!p) return; $('#pista').style.display = sel === null ? '' : 'none'; p.classList.toggle('on', sel !== null);
+  $$('.etq').forEach(b => { b.classList.toggle('sel', H3 && +b.dataset.i === sel); b.classList.toggle('tenue', sel !== null && +b.dataset.i !== sel); });
+  if (sel === null) return; const L = LUGARES[sel], E = EST[L.id];
+  p.innerHTML = `<div class="ver">${E.f}</div><h2>${E.t}</h2><p class="est">${S.hecho[L.id] ? 'Lugar completo e iluminado. Puedes repetir una actividad.' : 'Elige una actividad, en el orden que quieras.'}</p>${E.pasos.map((x, j) => { const r = S.act[L.id + ':' + j]; return `<button class="act ${r ? 'ya' : ''}" data-k="${j}"><i>${r ? '✓' : j + 1}</i><b>${x.n}</b><span>${r ? r[0] + ' / ' + r[1] : 'por hacer'}</span></button>`; }).join('')}<button class="mini" id="pvolver">Ver toda la plaza</button>`;
+  $$('.act', p).forEach(b => b.onclick = () => entrar(L.id, +b.dataset.k)); $('#pvolver', p).onclick = () => elegir(null);
 }
 function pintarHud() {
-  $$('.edif').forEach(e => { e.classList.toggle('hecho', !!S.hecho[e.dataset.id]); e.classList.toggle('cerrado', e.dataset.id === 'cafe' && !cincoHechos() && !S.profe); });
+  $$('.etq').forEach(b => b.classList.toggle('hecho', !!S.hecho[LUGARES[b.dataset.i].id]));
   $('#linea').innerHTML = FECHAS.map((f, i) => `<button class="chip ${S.hecho[f.est] ? 'on' : ''}" data-i="${i}"><i>${f.n}</i>${S.hecho[f.est] ? f.t : f.m + '.'}</button>`).join('');
-  $$('.chip').forEach(c => c.onclick = () => { const f = FECHAS[c.dataset.i]; mover(f.est === 'inocente' ? 2 : LUGARES.findIndex(L => L.id === f.est)); });
-  pintarPlaca();
+  $$('.chip').forEach(c => c.onclick = () => { const f = FECHAS[c.dataset.i]; if (f.est === 'inocente') { elegir(null); $('#pista').textContent = 'El 28 de diciembre se esconde cerca del árbol…'; } else elegir(LUGARES.findIndex(L => L.id === f.est)); });
+  pintarPanel(); if (H3) H3.estado();
   $('#quien').textContent = S.nombre ? S.nombre + ' · ' + FECHAS.filter(f => S.hecho[f.est]).length + ' / 8 fechas' : '';
   $('#bson').textContent = S.son ? 'Sonido: sí' : 'Sonido: no';
 }
@@ -438,15 +683,23 @@ const C = {
 };
 function parar() { callar(); $$('video').forEach(v => v.pause()); clearInterval(relojT); clearInterval(lluviaT); clearInterval(mechaT); limpiar.forEach(f => f()); limpiar = []; }
 function salir() { parar(); $('#esc').classList.remove('on'); C.tabla.innerHTML = ''; }
-function entrar(id) {
-  ac();
-  if (id === 'cafe' && !cincoHechos() && !S.profe) return aviso('El café está cerrado', '<p>El café abre al final. Visita primero los otros cinco lugares de la plaza.</p>');
-  const E = EST[id]; let k = 0, ok = 0, tot = 0;
-  $('#efec').textContent = E.f; $('#etit').textContent = E.t; $('#epasos').innerHTML = E.pasos.map(p => `<li>${p.n}</li>`).join(''); $('#esalir').onclick = salir; $('#esc').classList.add('on');
-  const paso = () => { parar(); C.tabla.innerHTML = ''; C.msg('', ''); C.boton('', null); C.glosa('');
-    $$('#epasos li').forEach((p, j) => p.className = j < k ? 'ya' : j === k ? 'act' : '');
-    E.pasos[k].f((a, t) => { ok += a; tot += t; k++; if (k < E.pasos.length) paso(); else { salir(); terminar(id, ok, tot); } }); };
-  paso();
+function entrar(id, k) {     // abre UNA actividad; el alumno elige el orden (panel de la isla o pestañas de arriba)
+  ac(); const E = EST[id];
+  if (k === undefined) { k = E.pasos.findIndex((x, j) => !S.act[id + ':' + j]); if (k < 0) k = 0; }
+  $('#efec').textContent = E.f; $('#etit').textContent = E.t; $('#esalir').textContent = 'Volver a la plaza'; $('#esalir').onclick = salir; $('#esc').classList.add('on');
+  $('#epasos').innerHTML = E.pasos.map((x, j) => `<li class="${j === k ? 'act' : S.act[id + ':' + j] ? 'ya' : ''}" data-k="${j}">${x.n}</li>`).join('');
+  $$('#epasos li').forEach(li => li.onclick = () => entrar(id, +li.dataset.k));
+  parar(); C.tabla.innerHTML = ''; C.msg('', ''); C.boton('', null); C.glosa('');
+  E.pasos[k].f((a, t) => terminarAct(id, k, a, t));
+}
+function terminarAct(id, k, a, t) {
+  const E = EST[id], clave = id + ':' + k, ant = S.act[clave]; if (!ant || a > ant[0]) S.act[clave] = [a, t];
+  let A = 0, T = 0; E.pasos.forEach((x, j) => { const r = S.act[id + ':' + j]; if (r) { A += r[0]; T += r[1]; } }); S.pts[id] = [A, T];
+  const antes = S.hecho[id], completa = E.pasos.every((x, j) => S.act[id + ':' + j]); if (completa) S.hecho[id] = 1;
+  guardar(); salir(); pintarHud(); const i = LUGARES.findIndex(L => L.id === id); elegir(i);
+  if (completa && !antes) { fuegos(); if (LUGARES.every(L => S.hecho[L.id])) return final();
+    const fs = FECHAS.filter(f => f.est === id).map(f => `<b>${f.n} de ${f.m === 'dic' ? 'diciembre' : 'enero'}</b>`);
+    aviso(E.t, `<p>Lugar completo: ${A} / ${T} a la primera.</p><div class="filete"></div><p>El lugar se ilumina${fs.length ? ' y enciende en el calendario: ' + fs.join(' y ') : ''}.</p>`, 'Volver a la plaza', () => elegir(null)); }
 }
 const seguir = (fin, a, t, texto = '¡Muy bien!') => { bien(); C.msg(texto, 'bien'); C.boton('Continuar', () => fin(a, t)); };
 
@@ -522,12 +775,23 @@ const EST = {
         primera = false;
         if (malas) { mal(); C.msg(`Revisa ${malas === 1 ? 'el dato' : 'los ' + malas + ' datos'} en rojo. Puedes ver el vídeo otra vez.`, 'mal'); }
         else { $$('video').forEach(v => v.pause()); decir('Setenta y nueve mil cuatrocientos treinta y dos. Cuatro millones de euros.'); seguir(fin, ok, 4, '79.432: ¡cuatro millones de euros!'); } }); } },
-    { n: 'El calendario', f(fin) {
-      C.consigna('Cuelga cada fiesta en su fecha para encender el calendario navideño.', 'Accroche chaque fête à sa date pour allumer le calendrier des fêtes.');
-      C.glosa('<b>una broma</b> : une blague<br>El 28 de diciembre es un día de bromas.');
-      const F = [['22', 'dic', 'El sorteo del Gordo'], ['24', 'dic', 'Nochebuena'], ['25', 'dic', 'Navidad'], ['28', 'dic', 'Santos Inocentes'], ['31', 'dic', 'Nochevieja'], ['1', 'ene', 'Año Nuevo'], ['5', 'ene', 'La cabalgata de Reyes'], ['6', 'ene', 'Día de Reyes']];
-      C.tabla.innerHTML = `<div class="hilo">${F.map((f, i) => `<div class="pos"><div class="bu"></div><div class="dia serif">${f[0]}<small>${f[1]}.</small></div><div class="caja dest" data-a="${i}"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML(F.map((f, i) => [f[2], i]))}</div>`;
-      arrastre({ total: 8, ok(f, d) { d.append(f); d.classList.add('lleno'); d.parentNode.classList.add('on'); }, fin: (a, t) => seguir(fin, a, t, '¡Calendario encendido!') }); } }
+    { n: 'Las viñetas', f(fin) {
+      C.consigna('Ocho escenas animadas, ocho fiestas. Colócalas en el camino en orden cronológico: de la primera a la última.', 'Huit scènes animées, huit fêtes. Place-les sur le chemin dans l’ordre chronologique, de la première à la dernière.');
+      C.glosa('<b>una broma</b> : une blague<br>Cada escena bien colocada descubre su fecha.');
+      const cor = (x) => `<path transform="translate(${x} 34)" d="M-8 0l-2-11 5 5 5-9 5 9 5-5-2 11z" fill="url(#gOro)" stroke="#8a6416"/>`;
+      const V = [
+        ['El sorteo del Gordo', '22 de diciembre', '<g class="a-gira" style="transform-origin:30px 30px"><circle cx="30" cy="30" r="22" fill="none" stroke="url(#gOro)" stroke-width="4"/><path d="M8 30h44M30 8v44" stroke="url(#gOro)" stroke-width="2"/><circle cx="21" cy="21" r="5.5" fill="#fff8ea" stroke="#b8862b"/><circle cx="39" cy="37" r="5.5" fill="#fff8ea" stroke="#b8862b"/><circle cx="38" cy="20" r="4" fill="#fff8ea" stroke="#b8862b"/></g>'],
+        ['Nochebuena', '24 de diciembre', '<ellipse cx="28" cy="47" rx="23" ry="6" fill="#fff" stroke="#c9b07a"/><path d="M13 45a15 12 0 0 1 30 0z" fill="#b9772f"/><rect x="47" y="24" width="5" height="22" fill="url(#gRojo)"/><path class="a-parp" d="M49.5 24q-6-9 0-15q6 6 0 15z" fill="#ffc21f"/>'],
+        ['Navidad', '25 de diciembre', `<path d="M7 36L30 20l23 16v4H7z" fill="url(#gTeja)"/><rect x="12" y="40" width="36" height="14" fill="#8a5a2c"/><circle cx="30" cy="48" r="4" fill="#ffe9a6"/><path class="a-late" style="transform-origin:30px 10px" d="${estrella(30, 10, 8, 8, .45)}" fill="url(#gOro)"/>`],
+        ['Santos Inocentes', '28 de diciembre', '<g class="a-pend" style="transform-origin:30px 4px"><path d="M30 4v11" stroke="#777"/><circle cx="30" cy="20" r="6" fill="#fff" stroke="#888"/><path d="M19 30l11-3 11 3-2 4-6-2v10l5 13h-5l-3-10-3 10h-5l5-13V32l-6 2z" fill="#fff" stroke="#888"/></g>'],
+        ['Nochevieja', '31 de diciembre', '<circle cx="24" cy="27" r="18" fill="#fffaf0" stroke="url(#gOro)" stroke-width="4"/><path d="M24 27V13M24 27l-1-12" stroke="#8f1526" stroke-width="3" stroke-linecap="round"/><g class="a-salta"><circle cx="46" cy="46" r="5.5" fill="#8fb53c"/><circle cx="52" cy="37" r="5.5" fill="#8fb53c"/><circle cx="42" cy="36" r="5.5" fill="#a5c94e"/></g>'],
+        ['Año Nuevo', '1 de enero', `<g class="a-late" style="transform-origin:30px 30px">${[...Array(10)].map((_, k) => `<path d="M30 30L30 8" stroke="${['#d4364a', '#e9b949', '#2f8f68'][k % 3]}" stroke-width="3.5" stroke-linecap="round" transform="rotate(${k * 36} 30 30)"/>`).join('')}</g><circle cx="30" cy="30" r="5" fill="#fff3c4"/>`],
+        ['La cabalgata de Reyes', '5 de enero', `<path d="M3 46h54" stroke="#c9b07a" stroke-width="4" stroke-linecap="round"/><g class="a-desl">${cor(14)}${cor(30)}${cor(46)}</g>`],
+        ['Día de Reyes', '6 de enero', '<rect x="13" y="31" width="34" height="22" fill="url(#gRojo)"/><rect x="27" y="31" width="6" height="22" fill="url(#gOro)"/><g class="a-salta"><rect x="10" y="23" width="40" height="9" rx="2" fill="#d4364a"/><path d="M30 23q-11-13-15-4q2 7 15 4q13 3 15-4q-4-9-15 4z" fill="url(#gOro)"/></g>']
+      ];
+      const Y = [8.6, 3.2, .4, 3.2, 8.6, 3.2, .4, 3.2];
+      C.tabla.innerHTML = `<div class="camino"><svg viewBox="0 0 560 174" preserveAspectRatio="none"><polyline points="${Y.map((y, i) => `${37 + i * 69.5},${y * 10 + 39}`).join(' ')}" fill="none" stroke="#b79a5d" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/></svg>${Y.map((y, i) => `<div class="caja dest" data-a="${i}" style="left:${.45 + i * 6.95}rem;top:${y}rem">${i + 1}</div>`).join('')}</div><div class="bandeja">${baraja(V.map((v, i) => `<div class="ficha vin" data-c="${i}"><svg viewBox="0 0 60 60">${v[2]}</svg>${v[0]}</div>`)).join('')}</div>`;
+      arrastre({ total: 8, ok(f, d) { d.textContent = ''; d.append(f); d.insertAdjacentHTML('beforeend', `<small>${V[+f.dataset.c][1]}</small>`); d.classList.add('lleno'); }, pista: () => 'Esta fiesta no va en este lugar del camino.', fin: (a, t) => seguir(fin, a, t, '¡Calendario completo!') }); } }
   ] },
   /* ---------- Nochebuena ---------- */
   cena: { t: 'La cena de Nochebuena', f: '24 de diciembre', pasos: [
@@ -579,11 +843,15 @@ const EST = {
         <div class="bandeja">${fichasHTML([['María', 'maria'], ['José', 'jose'], ['el Niño Jesús', 'nino'], ['la mula', 'mula'], ['el buey', 'buey'], ['Papá Noel', 'x'], ['un reno', 'x'], ['un muñeco de nieve', 'x']])}</div><div class="caja dest fuera" data-a="x" data-multi="1">No está en el belén</div>`;
       arrastre({ total: 8, ok(f, d) { if (d.dataset.a === 'x') { d.append(f); d.classList.add('lleno'); } else { d.classList.add('on'); f.remove(); } }, pista: (f) => f.dataset.c === 'x' ? 'Esta figura no está en un belén tradicional.' : null,
         fin: (a, t) => { $('#establo').classList.add('fin'); seguir(fin, a, t, '¡El belén está completo!'); } }); } },
-    { n: 'Las definiciones', f(fin) {
-      C.consigna('Completa las dos definiciones que conoces de memoria.', 'Complète les deux définitions que tu connais par cœur.');
-      const h = (w) => `<span class="dest" data-a="${w}"></span>`;
-      C.tabla.innerHTML = `<p class="def">El belén es una ${h('representación')} del ${h('nacimiento')} de Jesús.</p><p class="def">El villancico es una ${h('composición')} musical popular y ${h('tradicional')} de significado ${h('religioso')} que se ${h('canta')} durante las festividades navideñas.</p><div class="bandeja">${fichasHTML([['representación', 'representación'], ['nacimiento', 'nacimiento'], ['composición', 'composición'], ['tradicional', 'tradicional'], ['religioso', 'religioso'], ['canta', 'canta'], ['cena', '-'], ['moderna', '-'], ['come', '-']])}</div>`;
-      arrastre({ total: 6, fin: (a, t) => { decir($$('.def', C.tabla).map(p => p.textContent).join(' ')); seguir(fin, a, t); } }); } },
+    { n: 'El rompecabezas', f(fin) {
+      C.consigna('Las dos definiciones están rotas en piezas. Reconstruye cada frase, pieza a pieza, de izquierda a derecha.', 'Les deux définitions sont cassées en morceaux. Reconstruis chaque phrase, pièce par pièce, de gauche à droite.');
+      C.glosa('Arriba: la definición del <b>belén</b>.<br>Abajo: la definición del <b>villancico</b>.');
+      const F = { a: ['El belén', 'es una representación', 'del nacimiento', 'de Jesús.'], b: ['El villancico', 'es una composición musical', 'popular y tradicional', 'de significado religioso', 'que se canta', 'durante las festividades navideñas.'] };
+      const piezas = baraja(Object.keys(F).flatMap(k => F[k].map((t, i) => `<div class="ficha pz" data-c="${k}${i}" style="rotate:${(Math.random() * 14 - 7).toFixed(1)}deg;margin-top:${(Math.random() * 1.2).toFixed(2)}rem">${t}</div>`)));
+      C.tabla.innerHTML = `<div class="revuelto">${piezas.join('')}</div><div class="caja dest renglon" data-a="a0" data-k="a" data-multi="1"></div><div class="caja dest renglon" data-a="b0" data-k="b" data-multi="1"></div>`;
+      arrastre({ total: 10, ok(f, d) { f.style.rotate = ''; f.style.marginTop = ''; d.append(f); d.classList.add('lleno'); const n = $$('.ficha', d).length; d.dataset.a = n < F[d.dataset.k].length ? d.dataset.k + n : 'fin'; },
+        pista: (f, d) => d && f.dataset.c[0] === d.dataset.k ? 'Esta pieza va en esta frase, pero más tarde.' : 'Esta pieza no va en esta frase.',
+        fin: (a, t) => { decir(F.a.join(' ') + ' ' + F.b.join(' ')); seguir(fin, a, t, '¡Las dos definiciones están completas!'); } }); } },
     { n: 'El villancico', f(fin) {
       C.consigna('Toca el villancico: haz clic en la campana que se ilumina. Después, di cómo se llama.', 'Joue le chant de Noël : clique sur la cloche qui s’allume. Ensuite, dis comment il s’appelle.');
       C.glosa('<b>una campana</b> : une cloche · <b>tocar</b> : jouer (d’un instrument)');
@@ -643,9 +911,9 @@ const EST = {
       escribir({ clave: 'carta', min: 25, inicio: 'Queridos Reyes Magos:\n', ayudas: ['Me llamo…', 'Tengo … años.', 'Me gusta…', 'Me encantan…', 'Este año, deseo recibir…', 'También me gustaría…', 'Suelo…', 'Muchas gracias. Un abrazo,'], pide: [[/gust|encant/i, 'usa «gustar» o «encantar»']], boton: 'Enviar la carta', adios: 'Tu carta vuela hacia Oriente…' }, fin); } }
   ] },
   /* ---------- final ---------- */
-  cafe: { t: 'El café España · Francia', f: '¿Son tan diferentes las fiestas?', pasos: [
+  cafe: { t: 'España y Francia', f: 'Comparar · ¿son tan diferentes las fiestas?', pasos: [
     { n: 'El vídeo', f(fin) {
-      C.consigna('En el café, una profesora española explica la Navidad. Mira el vídeo y contesta.', 'Au café, une professeure espagnole explique Noël. Regarde la vidéo et réponds.');
+      C.consigna('Una profesora española explica la Navidad en España. Mira el vídeo y contesta.', 'Une professeure espagnole explique Noël en Espagne. Regarde la vidéo et réponds.');
       C.glosa('<b>traer</b> : apporter · <b>el árbol</b> : le sapin · <b>el calcetín</b> : la chaussette · <b>las chucherías</b> : les friandises');
       C.tabla.innerHTML = `<div class="duo">${videoHTML(VIDEOS.tradiciones)}<div id="qq"></div></div>`;
       opciones($('#qq'), [{ p: '¿Cuándo suele venir Papá Noel?', o: ['El 24 de diciembre por la noche', 'El 31 de diciembre', 'El 5 de enero por la noche'], c: 0 }, { p: '¿Dónde aparecen los regalos?', o: ['Debajo del árbol', 'En la plaza', 'En el belén'], c: 0 }, { p: '¿Qué día vienen los Reyes Magos?', o: ['El 6 de enero', 'El 25 de diciembre', 'El 22 de diciembre'], c: 0 }, { p: '¿Qué les suele gustar a los niños?', o: ['Los caramelos y las chucherías', 'Las uvas', 'El pavo'], c: 0 }], (a, t) => { $$('video').forEach(v => v.pause()); seguir(fin, a, t); }); } },
@@ -671,20 +939,14 @@ const EST = {
 function abrirVelo(n) { const v = $('#velo'); v.innerHTML = ''; v.append(n); v.classList.add('on'); }
 function cerrarVelo() { callar(); $('#velo').classList.remove('on'); $('#velo').innerHTML = ''; }
 function aviso(tit, html, boton = 'Vale', fn) { const n = el(`<div class="vent"><h2>${tit}</h2>${html}<p><button class="btn">${boton}</button></p></div>`); $('.btn', n).onclick = () => { cerrarVelo(); fn && fn(); }; abrirVelo(n); }
-function terminar(id, ok, tot) {
-  const nuevo = !S.hecho[id]; S.hecho[id] = 1; if (nuevo || ok > (S.pts[id] || [0])[0]) S.pts[id] = [ok, tot]; guardar(); pintarHud(); fuegos();
-  if (id === 'cafe') return final();
-  const fs = FECHAS.filter(f => f.est === id).map(f => `<b>${f.n} de ${f.m === 'dic' ? 'diciembre' : 'enero'}</b>`);
-  aviso(EST[id].t, `<p>${ok} / ${tot} a la primera.</p><div class="filete"></div><p>Se enciende en el calendario: ${fs.join(' y ')}.</p>${cincoHechos() ? '<p><b>El café España · Francia está abierto</b>: es el último lugar.</p>' : ''}`, 'Volver a la plaza');
-}
 function inocente() {
   if (S.hecho.inocente) return aviso('¡Inocente, inocente!', '<p>Ya conoces la broma del 28 de diciembre.</p>');
   const n = el(`<div class="vent"><div class="ver">28 de diciembre</div><h2>¡Inocente, inocente!</h2><p>Has encontrado la broma: un muñeco de papel. El 28 de diciembre es el Día de los Santos Inocentes: es un día de bromas.</p><p class="fr">Tu as trouvé la blague : un bonhomme en papier. Le 28 décembre est un jour de farces, comme le 1er avril en France.</p><div class="filete"></div><div id="qi" style="text-align:left"></div></div>`); abrirVelo(n);
   opciones($('#qi', n), [{ p: '«Una broma» significa…', o: ['une blague', 'un cadeau', 'une cloche'], c: 0 }, { p: '¿Qué día se celebra Santos Inocentes?', o: ['El 28 de diciembre', 'El 1 de abril', 'El 31 de diciembre'], c: 0 }], (a, t) => { S.hecho.inocente = 1; S.pts.inocente = [a, t]; guardar(); pintarHud(); setTimeout(() => { cerrarVelo(); fuegos(); }, 700); });
 }
 function portada() {
-  const n = el(`<div class="vent"><div class="ver">Fiestas navideñas de España</div><h1>La plaza <em>de Navidad</em></h1><div class="filete"></div><p>Es de noche en la plaza. Entra en los seis lugares, en el orden que quieras: cada lugar terminado se ilumina y enciende una fecha del calendario.</p><p class="fr">Il fait nuit sur la place. Entre dans les six lieux, dans l’ordre que tu veux : chaque lieu terminé s’illumine et allume une date du calendrier. Mets ton casque.</p><p><input id="nom" maxlength="30" placeholder="Tu nombre" value="${S.nombre.replace(/"/g, '')}"></p><p><button class="btn" id="ir">${Object.keys(S.hecho).length ? 'Continuar' : 'Entrar en la plaza'}</button></p></div>`);
-  const ir = () => { const v = $('#nom', n).value.trim(); if (!v) return $('#nom', n).focus(); S.nombre = v; guardar(); ac(); cerrarVelo(); pintarHud(); campana(196, .2); const k = LUGARES.findIndex(L => !S.hecho[L.id]); mover(k < 0 ? 0 : k); };
+  const n = el(`<div class="vent"><div class="ver">Fiestas navideñas de España</div><h1>La plaza <em>de Navidad</em></h1><div class="filete"></div><p>Es Navidad en una plaza de Madrid. Gira la plaza, elige uno de los seis lugares y haz sus actividades en el orden que quieras: cada lugar terminado se ilumina y enciende una fecha del calendario.</p><p class="fr">C’est Noël sur une place de Madrid. Fais tourner la place, choisis l’un des six lieux et fais ses activités dans l’ordre que tu veux : chaque lieu terminé s’illumine et allume une date du calendrier. Mets ton casque.</p><p><input id="nom" maxlength="30" placeholder="Tu nombre" value="${S.nombre.replace(/"/g, '')}"></p><p><button class="btn" id="ir">${Object.keys(S.hecho).length ? 'Continuar' : 'Entrar en la plaza'}</button></p></div>`);
+  const ir = () => { const v = $('#nom', n).value.trim(); if (!v) return $('#nom', n).focus(); S.nombre = v; guardar(); ac(); cerrarVelo(); pintarHud(); campana(196, .2); };
   $('#ir', n).onclick = ir; $('#nom', n).onkeydown = (e) => { if (e.key === 'Enter') ir(); }; abrirVelo(n); setTimeout(() => $('#nom', n).focus(), 50);
 }
 function total() { let a = 0, t = 0; Object.values(S.pts).forEach(([x, y]) => { a += x; t += y; }); return [a, t]; }
@@ -718,9 +980,8 @@ function fuegos() {
   (function f() { g.clearRect(0, 0, c.width, c.height); let viva = false; ps.forEach(p => { p.t++; if (p.t > 70) return; viva = true; p.x += p.vx; p.y += p.vy; p.vy += .08; g.globalAlpha = 1 - p.t / 70; g.fillStyle = p.col; g.beginPath(); g.arc(p.x, p.y, 4, 0, 6.28); g.fill(); }); g.globalAlpha = 1; if (viva) requestAnimationFrame(f); else g.clearRect(0, 0, c.width, c.height); })();
 }
 function profe() {
-  const n = el(`<div class="vent"><h2>Modo profesor</h2><p><input type="password" id="cod" placeholder="Código"></p><div id="pp" style="display:none"><p class="fr">Alumno: <b>${S.nombre || '—'}</b> · puntos: ${total().join(' / ')}</p><p><button class="btn sec" id="p1">Abrir el café</button><button class="btn sec" id="p2">Marcar todo como hecho</button><button class="btn sec" id="p4">Pantalla final</button><button class="btn" id="p3">Borrar la partida</button></p></div><p><button class="btn sec" id="p0">Cerrar</button></p></div>`);
+  const n = el(`<div class="vent"><h2>Modo profesor</h2><p><input type="password" id="cod" placeholder="Código"></p><div id="pp" style="display:none"><p class="fr">Alumno: <b>${S.nombre || '—'}</b> · puntos: ${total().join(' / ')}</p><p><button class="btn sec" id="p2">Marcar todo como hecho</button><button class="btn sec" id="p4">Pantalla final</button><button class="btn" id="p3">Borrar la partida</button></p></div><p><button class="btn sec" id="p0">Cerrar</button></p></div>`);
   $('#p0', n).onclick = cerrarVelo; $('#cod', n).oninput = (e) => { if (e.target.value === CODIGO_ADMIN) { e.target.style.display = 'none'; $('#pp', n).style.display = ''; } };
-  $('#p1', n).onclick = () => { S.profe = 1; pintarHud(); cerrarVelo(); };
   $('#p2', n).onclick = () => { LUGARES.forEach(L => { S.hecho[L.id] = 1; S.pts[L.id] = S.pts[L.id] || [0, 0]; }); S.hecho.inocente = 1; guardar(); pintarHud(); cerrarVelo(); };
   $('#p4', n).onclick = () => final();
   $('#p3', n).onclick = () => { if (confirm('¿Borrar la partida de este ordenador?')) { try { localStorage.removeItem(CLAVE); } catch (e) {} location.hash = ''; location.reload(); } };
@@ -733,11 +994,11 @@ $('#bson').onclick = () => { S.son = S.son ? 0 : 1; guardar(); pintarHud(); if (
 function reiniciar() {
   const n = el(`<div class="vent"><h2>¿Empezar de nuevo?</h2><p>Vas a borrar toda tu partida: los lugares terminados, tus puntos, tu carta y tu comparación.</p><p class="fr">Tu vas effacer toute ta partie : les lieux terminés, tes points, ta lettre et ta comparaison. C’est définitif.</p><p><button class="btn" id="rs">Sí, borrar todo</button><button class="btn sec" id="rn">No, continuar mi partida</button></p></div>`);
   $('#rn', n).onclick = cerrarVelo;
-  $('#rs', n).onclick = () => { try { localStorage.removeItem(CLAVE); } catch (e) {} S = base(); cerrarVelo(); pintarHud(); portada(); };
+  $('#rs', n).onclick = () => { try { localStorage.removeItem(CLAVE); } catch (e) {} S = base(); cerrarVelo(); elegir(null); pintarHud(); portada(); };
   abrirVelo(n);
 }
 $('#bnuevo').onclick = reiniciar;
-$('#bayuda').onclick = () => aviso('¿Cómo se juega?', '<p>Haz clic en un lugar de la plaza para entrar.</p><p>Cada lugar terminado se ilumina y enciende una o dos fechas del calendario.</p><p class="fr">Dans chaque exercice : « Escuchar » lit la consigne, « En français » la traduit. Tu peux quitter un lieu et y revenir plus tard. Une date ne s’allume qu’en cherchant bien sur la place…</p>');
+$('#bayuda').onclick = () => aviso('¿Cómo se juega?', '<p>Arrastra la plaza para girarla. Haz clic en un lugar para acercarte y elegir una actividad.</p><p>Puedes hacer los lugares y las actividades en el orden que quieras.</p><p class="fr">Fais glisser la place pour la faire tourner, clique sur un lieu pour t’en approcher et choisir une activité. Dans chaque activité : « Escuchar » lit la consigne, « En français » la traduit. Une date ne s’allume qu’en cherchant bien près du sapin…</p><p class="fr" style="font-size:.78rem">Modelos 3D: Kenney, Quaternius, jeremy y Scott Marshall (poly.pizza). Motor: three.js.</p>');
 addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); profe(); } });
 portada();
 if (location.hash === '#profe') setTimeout(profe, 300);
