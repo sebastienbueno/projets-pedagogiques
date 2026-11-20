@@ -246,7 +246,7 @@ video{width:100%;border:.3rem solid var(--verde);border-radius:.2rem;background:
 <body>
 <svg width="0" height="0" style="position:absolute"><defs><filter id="ru2" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4"/></filter></defs></svg>
 <div id="plaza"></div>
-<div id="cab"><h1 class="serif">La plaza de Navidad</h1><span class="ver" id="quien"></span><span class="sp"></span><button id="bson"></button><button id="bayuda">Ayuda</button></div>
+<div id="cab"><h1 class="serif">La plaza de Navidad</h1><span class="ver" id="quien"></span><span class="sp"></span><button id="bson"></button><button id="bayuda">Ayuda</button><button id="bnuevo">Empezar de nuevo</button></div>
 <div id="esc"><header><div><div class="ver" id="efec"></div><h2 class="serif" id="etit"></h2></div><ol class="pasos" id="epasos"></ol><button class="salir" id="esalir">Volver a la plaza</button></header>
 <aside><div class="cons" id="econs"></div><div class="ut"><button class="mini" id="evoz">Escuchar</button><button class="mini" id="efr">En français</button></div><div class="glos" id="eglos"></div><div class="msg" id="emsg"></div><div id="ebt"></div></aside>
 <main id="tabla"></main></div>
@@ -633,8 +633,8 @@ function portada() {
 function total() { let a = 0, t = 0; Object.values(S.pts).forEach(([x, y]) => { a += x; t += y; }); return [a, t]; }
 function final() {
   const [a, t] = total(), falta = !S.hecho.inocente;
-  const n = el(`<div class="vent" style="width:min(50rem,94vw)"><div class="ver">La plaza está iluminada</div><h1>¡Felices <em>fiestas</em>, ${S.nombre}!</h1><div class="filete"></div><p>Total: <b>${a} / ${t}</b> respuestas correctas a la primera.</p><div class="res">${LUGARES.map(L => `<div>${EST[L.id].t}<b>${(S.pts[L.id] || ['–', '–']).join(' / ')}</b></div>`).join('')}</div>${falta ? '<p class="fr">Falta una fecha: el 28 de diciembre. Una broma se esconde en la plaza… Búscala.</p>' : '<p><b>Las ocho fechas del calendario están encendidas.</b></p>'}<p>Descarga tu ficha: te ayuda a preparar tu presentación oral.</p><p><button class="btn" id="pdf">Mi ficha de Navidad (PDF)</button><button class="btn sec" id="vol">Volver a la plaza</button></p></div>`);
-  $('#pdf', n).onclick = ficha; $('#vol', n).onclick = cerrarVelo; abrirVelo(n); fuegos(); setTimeout(fuegos, 900);
+  const n = el(`<div class="vent" style="width:min(50rem,94vw)"><div class="ver">La plaza está iluminada</div><h1>¡Felices <em>fiestas</em>, ${S.nombre}!</h1><div class="filete"></div><p>Total: <b>${a} / ${t}</b> respuestas correctas a la primera.</p><div class="res">${LUGARES.map(L => `<div>${EST[L.id].t}<b>${(S.pts[L.id] || ['–', '–']).join(' / ')}</b></div>`).join('')}</div>${falta ? '<p class="fr">Falta una fecha: el 28 de diciembre. Una broma se esconde en la plaza… Búscala.</p>' : '<p><b>Las ocho fechas del calendario están encendidas.</b></p>'}<p>Descarga tu ficha: te ayuda a preparar tu presentación oral.</p><p><button class="btn" id="pdf">Mi ficha de Navidad (PDF)</button><button class="btn sec" id="vol">Volver a la plaza</button><button class="btn sec" id="otra">Empezar de nuevo</button></p></div>`);
+  $('#otra', n).onclick = reiniciar; $('#pdf', n).onclick = ficha; $('#vol', n).onclick = cerrarVelo; abrirVelo(n); fuegos(); setTimeout(fuegos, 900);
 }
 function ficha() {
   if (!window.jspdf) return alert('PDF no disponible.');
@@ -673,6 +673,13 @@ function profe() {
 /* ====== 7. INICIO ====================================================== */
 pintarPlaza(); pintarHud();
 $('#bson').onclick = () => { S.son = S.son ? 0 : 1; guardar(); pintarHud(); if (S.son) campana(294, .15); else callar(); };
+function reiniciar() {
+  const n = el(`<div class="vent"><h2>¿Empezar de nuevo?</h2><p>Vas a borrar toda tu partida: los lugares terminados, tus puntos, tu carta y tu comparación.</p><p class="fr">Tu vas effacer toute ta partie : les lieux terminés, tes points, ta lettre et ta comparaison. C’est définitif.</p><p><button class="btn" id="rs">Sí, borrar todo</button><button class="btn sec" id="rn">No, continuar mi partida</button></p></div>`);
+  $('#rn', n).onclick = cerrarVelo;
+  $('#rs', n).onclick = () => { try { localStorage.removeItem(CLAVE); } catch (e) {} S = base(); cerrarVelo(); pintarHud(); portada(); };
+  abrirVelo(n);
+}
+$('#bnuevo').onclick = reiniciar;
 $('#bayuda').onclick = () => aviso('¿Cómo se juega?', '<p>Haz clic en un lugar de la plaza para entrar.</p><p>Cada lugar terminado se ilumina y enciende una o dos fechas del calendario.</p><p class="fr">Dans chaque exercice : « Escuchar » lit la consigne, « En français » la traduit. Tu peux quitter un lieu et y revenir plus tard. Une date ne s’allume qu’en cherchant bien sur la place…</p>');
 addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); profe(); } });
 portada();
