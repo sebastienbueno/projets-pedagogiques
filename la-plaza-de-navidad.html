@@ -7,183 +7,249 @@
 <style>
 @font-face{font-family:Atkinson;src:url(vendor/fonts/AtkinsonHyperlegible-Regular.ttf);font-weight:400;font-display:swap}
 @font-face{font-family:Atkinson;src:url(vendor/fonts/AtkinsonHyperlegible-Bold.ttf);font-weight:700;font-display:swap}
-:root{--crema:#fdf6e9;--papel:#fffaf0;--rojo:#b3122d;--rojo2:#d7263d;--oro:#e8b23a;--oro2:#f7d774;--verde:#1f6b4a;--verde2:#2e8b62;--noche:#1b2a55;--tinta:#3a2318;--gris:#8a7768;--s:1}
+/* Linogravure : papier crème, trois encres (rouge carmin, vert sapin, jaune moutarde) */
+:root{--papel:#f2e8d5;--papel2:#e9dcc3;--rojo:#a4142c;--rojo2:#7f0f22;--verde:#1d4d3a;--oro:#d49a1e;--tinta:#17362a;--gris:#6f8376;
+--grano:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .18 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
 *{box-sizing:border-box}
-html{font-size:clamp(15px,.62vw + .75vh,21px)}
-body{margin:0;height:100vh;overflow:hidden;font-family:Atkinson,"Segoe UI",system-ui,Arial,sans-serif;color:var(--tinta);line-height:1.45;background:linear-gradient(#16224a 0%,#2b3f7c 38%,#6f7fb6 62%,#f0b48a 80%,#f6cfa0 100%);user-select:none}
-button,input,textarea,select{font:inherit;color:inherit}
-h1,h2,h3,p{margin:0}
-.script{font-family:"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery",cursive;font-weight:700}
+html{font-size:clamp(10px,min(1.14vw,2.03vh),24px)}
+body{margin:0;height:100vh;overflow:hidden;background:var(--papel) var(--grano);color:var(--tinta);font-family:Atkinson,"Segoe UI",system-ui,Arial,sans-serif;line-height:1.4;user-select:none}
+button,input,textarea{font:inherit;color:inherit}
+h1,h2,h3,p,ol,ul{margin:0;padding:0}
+.serif{font-family:Georgia,"Times New Roman",serif}
+.ver{font-variant:small-caps;letter-spacing:.14em;font-size:.85rem;color:var(--rojo);font-weight:700}
+/* bords irréguliers, comme une estampe */
+.ficha,.btn,.op,.mini,.salir,.raiz,.rueda span,.plato,.mesa,.hilo .bu,#uvas span,.car,.dosb button,#cab button,.chips button{filter:url(#ru2)}
 
-/* ---------- escena ---------- */
-#cielo{position:fixed;inset:0;pointer-events:none}
-.estrella{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;animation:tit 3s infinite}
-@keyframes tit{50%{opacity:.2}}
-#lejos,#mundo{position:fixed;left:0;top:0;height:100vh;will-change:transform}
-#lejos svg,#mundo svg{display:block;height:100vh}
-#mundo{cursor:grab}
-#mundo.arr{cursor:grabbing}
-.bomb{animation:tit 2.4s infinite}
-.bomb:nth-child(3n){animation-delay:.8s}.bomb:nth-child(3n+1){animation-delay:1.6s}
-.cartel{position:absolute;transform:translate(-50%,0);background:var(--papel);border:.22rem solid var(--rojo);border-radius:1rem;padding:.45rem .8rem .5rem;text-align:center;cursor:pointer;box-shadow:0 .4rem 0 rgba(0,0,0,.25);min-width:9.5rem;transition:transform .2s}
-.cartel:hover,.cartel.cerca{transform:translate(-50%,-.35rem) scale(1.06)}
-.cartel b{display:block;text-transform:uppercase;letter-spacing:.06em;font-size:.95rem}
-.cartel small{color:var(--rojo);font-weight:700}
-.cartel .ico{font-size:1.9rem;line-height:1.1;display:block}
-.cartel.hecho{border-color:var(--verde);background:#eef8ee}
-.cartel.hecho::after{content:"✓";position:absolute;right:-.7rem;top:-.7rem;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--verde);color:#fff;font-weight:700;line-height:1.7rem}
-.cartel.cerrado{filter:grayscale(.8);opacity:.85}
-.cartel.cerca:not(.hecho){animation:lat 1.2s infinite}
-@keyframes lat{50%{box-shadow:0 .4rem 0 rgba(0,0,0,.25),0 0 0 .5rem rgba(232,178,58,.55)}}
-#inocente{position:absolute;cursor:pointer;background:none;border:0;padding:0}
-#avatar{position:fixed;left:50%;width:calc(70px*var(--s));transform:translateX(-50%);pointer-events:none}
-#avatar.anda svg{animation:paso .35s infinite alternate}
-@keyframes paso{to{transform:translateY(-4%) rotate(2deg)}}
-#avatar.izq svg{scale:-1 1}
-.flecha{position:fixed;top:50%;width:3.2rem;height:3.2rem;border-radius:50%;border:.2rem solid var(--rojo);background:var(--papel);font-size:1.4rem;font-weight:700;color:var(--rojo);cursor:pointer;z-index:5;box-shadow:0 .3rem 0 rgba(0,0,0,.25)}
-#fi{left:.8rem}#fd{right:.8rem}
+/* ---------- la plaza ---------- */
+#plaza{position:fixed;inset:0}
+#plaza svg{width:100%;height:100%;display:block}
+#plaza text{font-family:Georgia,"Times New Roman",serif}
+.lugar{cursor:pointer;outline:none}
+.lugar .m{fill:var(--c);fill-opacity:.2;transition:fill-opacity .5s}
+.lugar .v{fill:var(--papel);transition:fill .8s}
+.lugar .l{stroke:var(--papel);stroke-width:3;fill:none}
+.lugar .h{opacity:0;transition:opacity .5s}
+.lugar:hover .m,.lugar:focus .m{fill-opacity:.5}
+.lugar.hecho .m{fill-opacity:1}
+.lugar.hecho .h{opacity:.45}
+.lugar.hecho .v{fill:var(--oro)}
+.lugar .nom{fill:var(--verde);font-size:22px;font-weight:700;letter-spacing:.08em;text-anchor:middle}
+.lugar .fec{fill:var(--rojo);font-size:16px;font-style:italic;text-anchor:middle}
+.lugar.cerrado{opacity:.5}
+.lugar .foco{fill:none;stroke:var(--rojo);stroke-width:3;stroke-dasharray:10 8;opacity:0}
+.lugar:hover .foco{opacity:1}
+.bomb{fill:var(--papel);stroke:var(--verde);stroke-width:2;transition:fill .8s}
+.nodo circle{fill:var(--papel);stroke:var(--verde);stroke-width:3;transition:fill .8s}
+.nodo text{fill:var(--verde);text-anchor:middle}
+.nodo .n{font-size:21px;font-weight:700}
+.nodo .t{font-size:14px;font-style:italic}
+.nodo.on circle{fill:var(--oro)}
+.nodo.on .n{fill:var(--rojo)}
+.nodo.on .t{fill:var(--rojo);font-weight:700}
+#mono{cursor:pointer;transform-origin:775px 590px;animation:pend 4s ease-in-out infinite}
+@keyframes pend{50%{transform:rotate(6deg)}}
+#cab{position:fixed;top:2.6rem;left:3.4rem;right:3.4rem;display:flex;align-items:baseline;gap:1.2rem;pointer-events:none}
+#cab h1{display:none}
+#cab .sp{flex:1}
+#cab button{pointer-events:auto;background:var(--papel);border:.14rem solid var(--verde);color:var(--verde);border-radius:.2rem;padding:.25rem .8rem;cursor:pointer;font-size:.85rem;font-weight:700}
+#cab button:hover{background:var(--oro)}
 
-/* ---------- calendario ---------- */
-#hud{position:fixed;top:.6rem;left:50%;transform:translateX(-50%);display:flex;gap:.4rem;z-index:6;align-items:stretch}
-.dia{width:5.2rem;background:#d9cdbb;border:.18rem solid #a8957f;border-radius:.7rem;text-align:center;padding:.15rem .2rem .25rem;color:#7c6a5a;transition:all .5s}
-.dia .n{font-size:1.45rem;font-weight:700;line-height:1.1}
-.dia .m{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
-.dia .t{font-size:.68rem;font-weight:700;line-height:1.1;min-height:1.5em;display:block}
-.dia.on{background:var(--papel);border-color:var(--rojo);color:var(--tinta);box-shadow:0 0 1rem var(--oro2)}
-.dia.on .n{color:var(--rojo)}
-.dia.on .t{color:var(--verde)}
-#util{position:fixed;top:.6rem;right:.8rem;z-index:6;display:flex;gap:.4rem}
-#util button,#quien{background:var(--papel);border:.15rem solid var(--rojo);border-radius:2rem;padding:.25rem .8rem;cursor:pointer;font-weight:700}
-#quien{position:fixed;top:.6rem;left:.8rem;z-index:6;cursor:default}
-#mapa{position:fixed;bottom:.6rem;left:50%;transform:translateX(-50%);z-index:6;background:rgba(253,246,233,.92);border:.15rem solid var(--rojo);border-radius:2rem;padding:.3rem .9rem;display:flex;gap:.9rem;align-items:center;font-size:.8rem}
-#mapa button{border:0;background:none;cursor:pointer;font-size:1.25rem;padding:0;filter:grayscale(1);opacity:.6}
-#mapa button.hecho{filter:none;opacity:1}
-#mapa button.aqui{filter:none;opacity:1;transform:scale(1.35)}
-
-/* ---------- ventanas ---------- */
-#velo{position:fixed;inset:0;background:rgba(22,34,74,.72);z-index:20;display:none;align-items:center;justify-content:center;padding:1rem}
-#velo.on{display:flex}
-.sala{background:var(--crema);border:.3rem solid var(--rojo);border-radius:1.4rem;width:min(62rem,100%);max-height:96vh;display:flex;flex-direction:column;box-shadow:0 1rem 3rem rgba(0,0,0,.5);user-select:text}
-.sala header{display:flex;align-items:center;gap:.8rem;padding:.7rem 1.2rem;border-bottom:.15rem dashed var(--oro)}
-.sala header .ico{font-size:2.2rem}
-.sala header h2{font-size:1.5rem;color:var(--rojo);flex:1}
-.sala header small{display:block;color:var(--verde);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-family:Atkinson,sans-serif}
-.puntos{display:flex;gap:.3rem}
-.puntos i{width:.8rem;height:.8rem;border-radius:50%;background:#e2d3bd}
-.puntos i.ya{background:var(--verde)}.puntos i.act{background:var(--oro)}
-.cerrar{border:0;background:none;font-size:1.5rem;cursor:pointer;color:var(--gris)}
-.cuerpo{padding:1rem 1.4rem;overflow:auto;flex:1}
-.pie{padding:.7rem 1.4rem;border-top:.15rem dashed var(--oro);display:flex;align-items:center;gap:1rem;min-height:3.8rem}
-.pie .msg{flex:1;font-weight:700}
+/* ---------- escena de ejercicio ---------- */
+#esc{position:fixed;inset:0;z-index:10;display:none;grid-template:4.4rem 1fr/25rem 1fr;background:var(--papel) var(--grano)}
+#esc.on{display:grid}
+#esc>header{grid-column:1/-1;display:flex;align-items:center;gap:1.6rem;padding:0 1.6rem;background:var(--rojo) var(--grano);color:var(--papel)}
+#esc>header .ver{color:#f3d9a4}
+#esc>header h2{font-size:1.6rem;font-weight:700}
+.pasos{display:flex;gap:.5rem;list-style:none;flex:1}
+.pasos li{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,213,.6);padding:.2rem .7rem;border-radius:.2rem;font-weight:700}
+.pasos li.act{background:var(--papel);color:var(--rojo)}
+.pasos li.ya{color:var(--papel)}
+.pasos li.ya::before{content:"✓ "}
+.salir{background:none;border:.14rem solid var(--papel);color:var(--papel);border-radius:.2rem;padding:.3rem .9rem;cursor:pointer;font-size:.85rem;font-weight:700}
+.salir:hover{background:var(--papel);color:var(--rojo)}
+#esc aside{background:var(--papel2) var(--grano);padding:1.4rem 1.4rem 1.2rem;display:flex;flex-direction:column;gap:.8rem;border-right:.4rem solid var(--verde);overflow:hidden}
+.cons{font-size:1.12rem;font-weight:700;line-height:1.35}
+.cons .fr{display:none;font-weight:400;font-style:italic;color:#3d5a4c;font-size:.95rem;margin-top:.5rem}
+.cons.ver2 .fr{display:block}
+.ut{display:flex;gap:.5rem}
+.mini{background:none;border:.12rem solid var(--verde);border-radius:.2rem;padding:.15rem .6rem;cursor:pointer;font-size:.82rem;color:var(--verde);font-weight:700}
+.mini:hover,.mini.habla{background:var(--oro)}
+.glos{font-size:.9rem;color:#3d5a4c;border-top:.14rem dashed var(--verde);padding-top:.7rem}
+.glos b{color:var(--rojo)}
+.glos li{margin-left:1.1rem;margin-bottom:.25rem}
+.msg{margin-top:auto;font-weight:700;min-height:2.8em;font-size:1rem}
 .msg.bien{color:var(--verde)}.msg.mal{color:var(--rojo)}
-.btn{background:var(--rojo);color:#fff;border:0;border-radius:2rem;padding:.55rem 1.4rem;font-weight:700;cursor:pointer;box-shadow:0 .25rem 0 #7a0c1e}
-.btn:active{transform:translateY(.15rem);box-shadow:0 .1rem 0 #7a0c1e}
-.btn[disabled]{opacity:.4;cursor:default}
-.btn.sec{background:var(--papel);color:var(--rojo);border:.15rem solid var(--rojo);box-shadow:none}
-.btn.verde{background:var(--verde);box-shadow:0 .25rem 0 #124030}
-.consigna{background:var(--papel);border-left:.4rem solid var(--oro);border-radius:.5rem;padding:.6rem .9rem;margin-bottom:.9rem;display:flex;gap:.6rem;align-items:flex-start}
-.consigna p{flex:1;font-weight:700}
-.consigna .fr{display:none;font-weight:400;font-style:italic;color:var(--gris);margin-top:.2rem}
-.consigna.ver .fr{display:block}
-.mini{border:.12rem solid var(--oro);background:#fff;border-radius:2rem;padding:.1rem .6rem;cursor:pointer;font-size:.85rem;white-space:nowrap}
-.mini.habla{background:var(--oro2)}
-.voc{font-size:.85rem;color:var(--gris);margin:.4rem 0 .8rem}
-.voc b{color:var(--tinta)}
-.preg{margin:.9rem 0}
-.preg>p{font-weight:700;margin-bottom:.4rem}
-.ops{display:flex;flex-wrap:wrap;gap:.5rem}
-.op,.ficha{background:#fff;border:.15rem solid #d6c4a8;border-radius:.8rem;padding:.4rem .9rem;cursor:pointer;font-weight:700}
-.op:hover,.ficha:hover{border-color:var(--oro)}
-.op.ok,.ficha.ok,.zona .ficha.ok{background:#dff3e2;border-color:var(--verde);color:#124030;cursor:default}
-.op.ko{background:#f8dcdc;border-color:var(--rojo);color:#7a0c1e;opacity:.6;text-decoration:line-through;cursor:default}
-.ficha.sel{border-color:var(--rojo);background:#fff1c9;transform:scale(1.06)}
-.ficha.ko{animation:tiembla .4s}
-@keyframes tiembla{25%{transform:translateX(-.3rem)}75%{transform:translateX(.3rem)}}
-.banco{display:flex;flex-wrap:wrap;gap:.5rem;padding:.7rem;background:#f3e6cf;border-radius:.8rem;min-height:3.2rem;margin:.6rem 0}
-.frase{font-size:1.1rem;line-height:2.3;margin:.3rem 0}
-.hueco{display:inline-block;min-width:7rem;border:0;border-bottom:.2rem solid var(--rojo);background:#fff1c9;border-radius:.4rem .4rem 0 0;padding:0 .5rem;font-weight:700;cursor:pointer;line-height:1.7;text-align:center}
-.hueco.ok{background:#dff3e2;border-color:var(--verde);cursor:default}
-select.sel{border:.15rem solid var(--rojo);border-radius:.5rem;background:#fff1c9;font-weight:700;padding:.1rem .3rem}
-select.sel.ok{background:#dff3e2;border-color:var(--verde)}
-select.sel.ko,input.ko{background:#f8dcdc}
-.cols{display:grid;gap:.6rem;grid-template-columns:repeat(var(--n),1fr)}
-.cols.filas{grid-template-columns:1fr}
-.zona{background:#fff;border:.15rem dashed var(--oro);border-radius:.8rem;padding:.5rem;min-height:5.5rem;cursor:pointer}
-.zona h3{font-size:.9rem;color:var(--rojo);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem}
-.zona .in{display:flex;flex-wrap:wrap;gap:.4rem}
-.cols.filas .zona{display:flex;align-items:center;gap:.8rem;min-height:3.2rem}
-.cols.filas .zona h3{width:9rem;margin:0;flex:none}
-.zona:hover{background:#fffbe9}
-.serie{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0;counter-reset:c}
-.serie .casilla{counter-increment:c;min-width:8.5rem;min-height:3.4rem;border:.15rem dashed var(--rojo);border-radius:.8rem;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:.2rem .4rem;cursor:pointer;font-weight:700;text-align:center;font-size:.9rem}
-.serie .casilla::before{content:counter(c);font-size:.7rem;color:var(--gris)}
-.serie .casilla.ok{background:#dff3e2;border:.15rem solid var(--verde);cursor:default}
-.serie .casilla small{color:var(--rojo)}
-table.conj{border-collapse:collapse;margin:.5rem auto}
-table.conj td{padding:.3rem .8rem;border-bottom:.1rem solid #e2d3bd}
-table.conj input{border:.15rem solid var(--rojo);border-radius:.5rem;padding:.2rem .5rem;width:9rem;background:#fff;font-weight:700}
-table.conj input.ok{background:#dff3e2;border-color:var(--verde)}
-video{display:block;width:min(100%,40rem);margin:0 auto .6rem;border-radius:.8rem;border:.2rem solid var(--rojo);background:#000}
-.convideo{display:grid;grid-template-columns:1.15fr 1fr;column-gap:1.2rem;align-content:start}
-.convideo>.consigna,.convideo>.voc{grid-column:1/-1}
-.convideo>video{grid-column:1;grid-row:3/span 12;width:100%;align-self:start}
-.convideo>.preg{grid-column:2;margin:.2rem 0 .7rem}
-textarea{width:100%;min-height:9rem;border:.15rem solid var(--rojo);border-radius:.8rem;padding:.7rem;background:#fff;resize:vertical;font-size:1.05rem;user-select:text}
-.acentos{display:flex;gap:.3rem;margin:.4rem 0}
-.acentos button{width:2.2rem;height:2.2rem;border-radius:.5rem;border:.12rem solid var(--oro);background:#fff;cursor:pointer;font-weight:700}
-.ayudas{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
-.ayudas span{background:#f3e6cf;border-radius:1rem;padding:.1rem .7rem;font-size:.9rem}
-.carta{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='32'%3E%3Cpath d='M0 31h10' stroke='%23e8d9bf'/%3E%3C/svg%3E");line-height:32px !important}
-/* reyes */
-.reyes{display:flex;justify-content:space-around;align-items:flex-end;margin:.5rem 0}
-.reyes figure{margin:0;text-align:center}
-.reyes svg{height:11rem}
-/* campanadas */
-#uvas{display:grid;grid-template-columns:repeat(12,1fr);gap:.3rem;margin:.8rem 0}
-#uvas div{text-align:center;font-size:.7rem;color:var(--gris)}
-#uvas span{display:block;font-size:2rem;transition:all .3s}
-#uvas .act span{transform:scale(1.5);filter:drop-shadow(0 0 .5rem gold)}
-#uvas .com span{opacity:.15;transform:scale(.6)}
-#uvas .per span{filter:grayscale(1)}
-#reloj{width:9rem;height:9rem;margin:0 auto;display:block}
+.btn{background:var(--rojo);color:var(--papel);border:0;border-radius:.2rem;padding:.7rem 1.4rem;font-weight:700;cursor:pointer;letter-spacing:.04em;width:100%}
+.btn:hover{background:var(--rojo2)}
+.btn[disabled]{opacity:.35;cursor:default}
+.btn.oro{background:var(--verde)}
+#tabla{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='240' opacity='.13'%3E%3Ctext x='30' y='70' font-size='44' fill='%23a4142c'%3E%E2%9C%B6%3C/text%3E%3Ctext x='190' y='180' font-size='32' fill='%231d4d3a'%3E%E2%9C%B7%3C/text%3E%3Ccircle cx='140' cy='40' r='5' fill='%231d4d3a'/%3E%3Ccircle cx='250' cy='90' r='5' fill='%23a4142c'/%3E%3Ccircle cx='70' cy='170' r='5' fill='%231d4d3a'/%3E%3Ccircle cx='120' cy='215' r='4' fill='%23a4142c'/%3E%3C/svg%3E");position:relative;padding:2.4rem 2.6rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;overflow:hidden}
+#tabla::before{content:"";position:absolute;inset:.9rem;border:.3rem solid var(--rojo);outline:.12rem solid var(--verde);outline-offset:-.85rem;filter:url(#ru2);pointer-events:none}
+
+.ficha{background:var(--rojo);color:var(--papel);border:0;border-radius:.2rem;padding:.4rem .9rem;font-weight:700;cursor:grab;touch-action:none;position:relative;transition:box-shadow .2s;white-space:nowrap}
+.ficha:hover,.ficha.sel{box-shadow:0 0 0 .2rem var(--oro)}
+.ficha.vuela{z-index:50;cursor:grabbing;box-shadow:.3rem .5rem 0 rgba(23,54,42,.35);transition:none}
+.ficha.no{animation:no .35s}
+@keyframes no{25%{translate:-.4rem 0}75%{translate:.4rem 0}}
+.ficha.fija{cursor:default;background:var(--verde);box-shadow:none;animation:pop .35s}
+@keyframes pop{50%{scale:1.12}}
+.bandeja{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;min-height:2.6rem;max-width:56rem}
+.dest{transition:all .2s}
+.dest.sobre{outline:.2rem dashed var(--oro);outline-offset:.15rem}
+.caja{border:.14rem dashed var(--verde);border-radius:.3rem;min-height:2.8rem;min-width:9rem;display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;padding:.3rem;color:var(--gris);font-size:.85rem}
+.caja.lleno{border-style:solid;background:rgba(29,77,58,.08)}
+.rot{font-variant:small-caps;letter-spacing:.12em;color:var(--rojo);font-size:1rem;font-weight:700}
+
+.duo{display:grid;grid-template-columns:33rem 1fr;gap:2rem;align-items:center;width:100%}
+video{width:100%;border:.3rem solid var(--verde);border-radius:.2rem;background:#000;display:block}
+.bombo{display:flex;flex-direction:column;gap:1.1rem}
+.ruedas{display:flex;gap:.35rem;align-items:center}
+.rueda{display:flex;flex-direction:column;align-items:center}
+.rueda button{background:none;border:0;color:var(--rojo);cursor:pointer;font-size:1rem;padding:.1rem .6rem}
+.rueda span{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--papel);border:.22rem solid var(--verde);color:var(--rojo);display:flex;align-items:center;justify-content:center;font-size:1.7rem;font-weight:700;font-family:Georgia,serif;transition:transform .25s}
+.rueda span.gira{transform:rotateX(360deg)}
+.ruedas i{font-size:2rem;color:var(--verde);font-style:normal}
+.elige{display:flex;flex-wrap:wrap;gap:.5rem}
+.op{background:none;border:.14rem solid var(--verde);color:var(--verde);border-radius:.2rem;padding:.4rem .9rem;cursor:pointer;font-weight:700}
+.op:hover{background:rgba(212,154,30,.3)}
+.op.sel{background:var(--verde);color:var(--papel)}
+.op.ok{background:var(--oro);color:var(--tinta);border-color:var(--oro)}
+.op.ko{opacity:.35;text-decoration:line-through;cursor:default}
+.grupo.mal{outline:.16rem dashed var(--rojo);outline-offset:.35rem}
+.preg{margin-bottom:1rem}
+.preg p{font-weight:700;margin-bottom:.4rem}
+.hilo{display:grid;grid-template-columns:repeat(8,6.6rem);gap:.5rem;position:relative;padding-top:1.4rem}
+.hilo::before{content:"";position:absolute;left:1rem;right:1rem;top:1.95rem;border-top:.2rem solid var(--verde)}
+.hilo .pos{display:flex;flex-direction:column;align-items:center;gap:.5rem;position:relative}
+.hilo .bu{width:1.4rem;height:1.4rem;border-radius:50%;background:var(--papel);border:.2rem solid var(--verde);transition:all .5s}
+.hilo .pos.on .bu{background:var(--oro);scale:1.25}
+.hilo .dia{font-family:Georgia,serif;font-size:1.6rem;text-align:center;color:var(--rojo);font-weight:700}
+.hilo .dia small{display:block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--verde);font-family:Atkinson,sans-serif}
+.hilo .caja{min-width:0;width:100%;min-height:4.2rem}
+.hilo .ficha,.bandeja.peq .ficha{white-space:normal;text-align:center;font-size:.85rem;padding:.3rem .5rem}
+#establo{width:44rem;height:25rem;filter:url(#ru2)}
+#establo .fig{fill:var(--verde);fill-opacity:.22;stroke:var(--verde);stroke-width:0;transition:all .6s}
+#establo .dest.on .fig{fill-opacity:1}
+#establo .dest.sobre .fig{fill-opacity:.5}
+#establo .dest text{fill:var(--rojo);font-size:16px;text-anchor:middle;opacity:0;transition:opacity .6s;font-weight:700;font-family:Georgia,serif}
+#establo .dest.on text{opacity:1}
+#establo .astro{fill:var(--oro);opacity:.25;transition:all 1s;transform-origin:350px 40px}
+#establo.fin .astro{opacity:1;scale:1.35}
+.fuera{min-width:14rem}
+.def{font-family:Georgia,serif;font-size:1.45rem;line-height:2.5;max-width:52rem;text-align:center}
+.def .dest{display:inline-flex;min-width:9rem;min-height:2.3rem;border-bottom:.18rem solid var(--rojo);vertical-align:middle;justify-content:center;align-items:center;margin:0 .2rem}
+.def .ficha{font-family:Atkinson,sans-serif;font-size:1rem;line-height:1.3}
+.campanas{display:flex;gap:1.1rem;align-items:flex-end}
+.camp{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.3rem;color:var(--verde);font-size:.9rem;font-weight:700}
+.camp svg{width:5.2rem;height:6rem;fill:var(--verde);fill-opacity:.25;transition:all .15s;filter:url(#ru2)}
+.camp.luz svg{fill:var(--oro);fill-opacity:1}
+.camp.luz{color:var(--rojo)}
+.camp.toca svg{animation:bal .4s}
+@keyframes bal{30%{transform:rotate(-9deg)}70%{transform:rotate(7deg)}}
+.pauta{display:flex;gap:.3rem}
+.pauta i{width:.8rem;height:.8rem;border-radius:50%;background:#d6ccb4}
+.pauta i.ya{background:var(--rojo)}
+.mesa{position:relative;width:50rem;height:15rem;border-radius:50%;background:var(--verde) var(--grano);border:.35rem solid var(--rojo)}
+.mesa .plato{position:absolute;width:8.6rem;height:8.6rem;border-radius:50%;background:radial-gradient(circle,var(--papel) 57%,var(--rojo) 58% 62%,var(--papel) 63%);translate:-50% -50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;color:var(--gris);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.mesa .plato .ficha{white-space:normal;font-size:.85rem;text-transform:none;letter-spacing:0;background:none;color:var(--rojo);padding:0 1.3rem;filter:none}
+.mesa .plato.lleno{box-shadow:0 0 0 .3rem var(--oro)}
+.verbo{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 2.4rem}
+.pers{display:flex;align-items:center;gap:.5rem;border:.16rem solid transparent;border-radius:.3rem;padding:.45rem .9rem;transition:all .6s}
+.pers .pr{width:10.5rem;color:var(--verde);font-size:.95rem;font-weight:700}
+.pers .fo{font-family:Georgia,serif;font-size:1.9rem;display:flex;align-items:center;font-weight:700}
+.raiz{background:var(--papel);border:.18rem solid var(--rojo);color:var(--rojo);border-radius:.2rem;cursor:pointer;font-family:Georgia,serif;font-size:1.7rem;font-weight:700;min-width:3.4rem;margin:0 .15rem;padding:0 .3rem;transition:scale .15s}
+.raiz:active{scale:.85}
+.pers .caja{min-width:5rem;min-height:2.5rem;margin-left:.2rem}
+.pers .caja .ficha{font-family:Georgia,serif;font-size:1.3rem;padding:.1rem .5rem}
+.pers.bota{border-color:var(--oro);background:rgba(212,154,30,.22)}
+.pers.mal .raiz{background:var(--rojo);color:var(--papel)}
+.tarjeta{width:44rem;background:#fbf5e6;border:.25rem solid var(--verde);border-top:.6rem solid var(--rojo);border-radius:.2rem;padding:2rem 2rem 1.6rem;text-align:center}
+.tarjeta p{font-family:Georgia,serif;font-size:1.7rem;min-height:4.6rem}
+.tarjeta u{text-decoration:none;border-bottom:.18rem solid var(--rojo);padding:0 1.6rem;color:var(--rojo);font-weight:700}
+.mecha{height:.45rem;background:#d6ccb4;margin:1.2rem 0;overflow:hidden}
+.mecha i{display:block;height:100%;background:var(--rojo);width:100%}
+.dosb{display:flex;gap:1.2rem;justify-content:center}
+.dosb button{flex:1;max-width:14rem;font-family:Georgia,serif;font-size:1.5rem;font-weight:700;padding:.7rem;border:.18rem solid var(--verde);background:var(--papel);border-radius:.2rem;cursor:pointer;color:var(--verde)}
+.dosb button:hover{background:var(--oro)}
+.dosb small{display:block;font-family:Atkinson,sans-serif;font-size:.7rem;color:var(--gris)}
+.esfera{position:relative;width:50rem;height:27rem}
+.esfera svg{position:absolute;left:50%;top:46%;translate:-50% -50%;width:14rem;height:14rem;filter:url(#ru2)}
+.esfera .q{position:absolute;translate:-50% -50%;display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.esfera .q .caja{min-width:16.5rem}
+#reloj{width:11rem;height:11rem;filter:url(#ru2)}
 #reloj.dong{animation:dong .5s}
-@keyframes dong{20%{transform:scale(1.12) rotate(-3deg)}60%{transform:rotate(3deg)}}
-#comer{font-size:1.4rem;padding:.9rem 2.4rem;display:block;margin:.6rem auto}
-/* caramelos */
-#lluvia{position:relative;height:21rem;background:linear-gradient(#22346e,#56689f);border-radius:1rem;overflow:hidden;border:.2rem solid var(--rojo)}
-#lluvia .car{position:absolute;top:-3rem;background:#fff;border-radius:2rem;border:.2rem solid var(--rojo2);padding:.3rem .9rem;font-weight:700;cursor:pointer;animation:cae 6.5s linear forwards;white-space:nowrap}
-#lluvia .car::before,#lluvia .car::after{content:"";position:absolute;top:50%;border:.5rem solid transparent;transform:translateY(-50%)}
-#lluvia .car::before{right:100%;border-right-color:var(--rojo2)}
-#lluvia .car::after{left:100%;border-left-color:var(--rojo2)}
-@keyframes cae{to{top:110%}}
-#lluvia .car.ok{background:#dff3e2;animation-play-state:paused;opacity:0;transition:opacity .5s}
-#lluvia .car.ko{background:#f8dcdc;animation-play-state:paused;opacity:0;transition:opacity .8s}
-#marc{display:flex;justify-content:space-between;font-weight:700;margin:.4rem 0}
-/* portada y final */
-.portada{text-align:center;padding:1.2rem 2rem 1.6rem}
-.portada h1{font-size:3.4rem;color:var(--rojo);line-height:1.15}
-.portada h1 span{color:var(--verde)}
-.portada p{margin:.6rem auto;max-width:40rem}
-.portada input{border:.18rem solid var(--rojo);border-radius:2rem;padding:.5rem 1.2rem;text-align:center;background:#fff;width:18rem;user-select:text}
-.guirnalda{height:1.6rem;background:radial-gradient(circle at .8rem .5rem,var(--rojo2) .38rem,transparent .42rem) 0 0/3.2rem 1.6rem,radial-gradient(circle at 2.4rem .9rem,var(--oro) .38rem,transparent .42rem) 0 0/3.2rem 1.6rem,radial-gradient(circle at 1.6rem .3rem,var(--verde2) .3rem,transparent .34rem) 0 0/3.2rem 1.6rem;border-radius:1.2rem 1.2rem 0 0}
+@keyframes dong{20%{transform:scale(1.1) rotate(-3deg)}60%{transform:rotate(3deg)}}
+#uvas{display:grid;grid-template-columns:repeat(12,4.2rem);gap:.3rem}
+#uvas div{text-align:center;font-size:.72rem;color:var(--verde);font-weight:700}
+#uvas span{display:block;width:2.4rem;height:2.7rem;margin:0 auto .4rem;border-radius:50%;background:var(--verde);transition:all .3s}
+#uvas .act span{transform:scale(1.35);background:var(--oro)}
+#uvas .act{color:var(--rojo)}
+#uvas .com span{transform:scale(.25)}
+#uvas .com{color:var(--rojo)}
+#uvas .per span{background:#cfc5ad}
+#comer{width:22rem;font-size:1.2rem;padding:1rem}
+.calle{position:relative;width:100%;height:24rem;border-bottom:.45rem solid var(--verde);overflow:hidden}
+.carroza{position:absolute;bottom:0;width:15rem;animation:pasa 26s linear infinite}
+.carroza svg{width:100%;display:block;filter:url(#ru2)}
+.carroza .caja{position:absolute;left:50%;bottom:1.1rem;translate:-50% 0;background:var(--papel)}
+@keyframes pasa{from{left:100%}to{left:-16rem}}
+.calle:hover .carroza{animation-play-state:paused}
+#lluvia{position:relative;width:100%;height:26rem;border:.2rem solid var(--verde);border-radius:.3rem;overflow:hidden}
+#lluvia .car{position:absolute;top:-3rem;background:var(--papel);color:var(--tinta);border:.18rem solid var(--rojo);border-radius:.2rem;padding:.3rem 1rem;font-weight:700;cursor:pointer;animation:cae 6.5s linear forwards;white-space:nowrap}
+#lluvia .car::before,#lluvia .car::after{content:"";position:absolute;top:50%;border:.6rem solid transparent;translate:0 -50%}
+#lluvia .car::before{right:100%;border-right-color:var(--rojo)}
+#lluvia .car::after{left:100%;border-left-color:var(--rojo)}
+@keyframes cae{to{top:105%}}
+#lluvia .car.ok{background:var(--oro);animation-play-state:paused;opacity:0;transition:opacity .5s}
+#lluvia .car.ko{background:var(--rojo);color:var(--papel);animation-play-state:paused;opacity:0;transition:opacity .8s}
+.marc{display:flex;gap:3rem;font-size:1.1rem;font-weight:700}
+.marc b{color:var(--rojo);font-family:Georgia,serif;font-size:1.5rem}
+.hoja{width:44rem;background:#fbf5e6;border:.25rem solid var(--verde);border-radius:.2rem;padding:1.2rem 1.6rem;transition:all .9s}
+.hoja.va{transform:translate(30rem,-30rem) rotate(25deg) scale(.1);opacity:0}
+.hoja textarea{width:100%;height:12.5rem;border:0;background:repeating-linear-gradient(transparent 0 1.95rem,#cfc5ad 1.95rem 2rem);line-height:2rem;font-family:Georgia,serif;font-size:1.15rem;resize:none;outline:none;user-select:text;color:var(--tinta)}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem}
+.chips button{background:none;border:.12rem solid var(--verde);border-radius:.2rem;padding:.1rem .5rem;cursor:pointer;font-size:.85rem;color:var(--verde)}
+.chips button:hover{background:var(--oro)}
+.chips .ac{font-weight:700;min-width:1.8rem}
+.cuenta{font-size:.8rem;color:var(--gris);text-align:right}
+.venn{position:relative;width:52rem;height:21rem}
+.venn .c{position:absolute;top:0;width:31rem;height:21rem;border-radius:50%;filter:url(#ru2)}
+.venn .c.e{left:0;background:rgba(164,20,44,.18);border:.25rem solid var(--rojo)}
+.venn .c.f{right:0;background:rgba(29,77,58,.18);border:.25rem solid var(--verde)}
+.venn .z{position:absolute;top:1.6rem;bottom:1.6rem;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:center;justify-content:flex-start;gap:.35rem;border:0;min-width:0}
+.venn .z.lleno{background:none}
+.venn .z .ficha{font-size:.82rem;padding:.25rem .5rem;white-space:normal;text-align:center}
+.frases{font-family:Georgia,serif;font-size:1.2rem;line-height:2.5;max-width:54rem}
+.frases .dest{display:inline-flex;min-width:8.5rem;min-height:2.1rem;border-bottom:.18rem solid var(--rojo);vertical-align:middle;justify-content:center;margin:0 .2rem}
+.frases .ficha{font-family:Atkinson,sans-serif;font-size:.95rem;line-height:1.3}
+
+#velo{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;background:rgba(29,77,58,.82)}
+#velo.on{display:flex}
+.vent{background:#fbf5e6 var(--grano);border:.35rem solid var(--rojo);outline:.14rem solid var(--verde);outline-offset:-.9rem;border-radius:.2rem;padding:2.4rem 2.8rem;width:min(44rem,92vw);text-align:center;user-select:text}
+.vent h1{font-family:Georgia,serif;font-weight:700;font-size:3.2rem;line-height:1.15;color:var(--rojo)}
+.vent h1 em{color:var(--verde);font-style:normal}
+.vent h2{font-family:Georgia,serif;font-weight:700;font-size:1.9rem;margin-bottom:.8rem;color:var(--rojo)}
+.vent p{margin:.8rem auto;max-width:34rem}
+.vent .fr{color:#3d5a4c;font-style:italic;font-size:.92rem}
+.vent input{border:0;border-bottom:.18rem solid var(--verde);background:none;text-align:center;font-family:Georgia,serif;font-size:1.3rem;padding:.3rem;width:16rem;outline:none;user-select:text}
+.vent .btn{width:auto;min-width:11rem;margin:.2rem}
+.vent .btn.sec{background:none;color:var(--verde);border:.14rem solid var(--verde)}
+.filete{color:var(--verde);letter-spacing:.6em;margin:.6rem 0;font-size:1.2rem}
+.filete::before{content:"✶ ✷ ✶";color:var(--rojo)}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:1rem 0}
+.res div{border:.14rem solid var(--verde);border-radius:.2rem;padding:.4rem;font-size:.85rem}
+.res b{display:block;font-family:Georgia,serif;font-size:1.3rem;color:var(--rojo)}
 #fuegos{position:fixed;inset:0;pointer-events:none;z-index:30}
-.resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:.8rem 0}
-.resumen div{background:#fff;border-radius:.8rem;border:.12rem solid var(--oro);padding:.4rem;text-align:center}
-.resumen b{display:block;color:var(--rojo);font-size:1.3rem}
-@media (prefers-reduced-motion:reduce){*{animation:none !important}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s !important}}
 </style>
 </head>
 <body>
-<div id="cielo"></div>
-<div id="lejos"></div>
-<div id="mundo"></div>
-<div id="avatar"></div>
-<button class="flecha" id="fi" aria-label="Ir a la izquierda">◀</button>
-<button class="flecha" id="fd" aria-label="Ir a la derecha">▶</button>
-<div id="quien"></div>
-<div id="hud" aria-label="Calendario navideño"></div>
-<div id="util"><button id="bson" title="Sonido">🔔</button><button id="bayuda" title="Ayuda">?</button></div>
-<div id="mapa"></div>
+<svg width="0" height="0" style="position:absolute"><defs><filter id="ru2" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4"/></filter></defs></svg>
+<div id="plaza"></div>
+<div id="cab"><h1 class="serif">La plaza de Navidad</h1><span class="ver" id="quien"></span><span class="sp"></span><button id="bson"></button><button id="bayuda">Ayuda</button></div>
+<div id="esc"><header><div><div class="ver" id="efec"></div><h2 class="serif" id="etit"></h2></div><ol class="pasos" id="epasos"></ol><button class="salir" id="esalir">Volver a la plaza</button></header>
+<aside><div class="cons" id="econs"></div><div class="ut"><button class="mini" id="evoz">Escuchar</button><button class="mini" id="efr">En français</button></div><div class="glos" id="eglos"></div><div class="msg" id="emsg"></div><div id="ebt"></div></aside>
+<main id="tabla"></main></div>
 <div id="velo"></div>
 <canvas id="fuegos"></canvas>
 
@@ -193,56 +259,43 @@ textarea{width:100%;min-height:9rem;border:.15rem solid var(--rojo);border-radiu
    LA PLAZA DE NAVIDAD — juego de repaso (3e, A1+)
    ---------------------------------------------------------------------
    RÉGLAGES PROFESSEUR
-   - VIDEOS : chemins des vidéos. Mettre null pour retirer une vidéo.
-     cabalgata : null pour l'instant ; indiquer un fichier (ex.
-     'videos/navidad-cabalgata.mp4') pour ajouter la vidéo du défilé
-     au début de l'étape « La cabalgata de Reyes ».
+   - VIDEOS : chemins des vidéos. cabalgata : null pour l'instant ;
+     indiquer un fichier (ex. 'videos/navidad-cabalgata.mp4') pour
+     ajouter une étape vidéo au début de « La cabalgata de Reyes ».
    - CODIGO_ADMIN : code du mode professeur (Ctrl+Maj+A ou #profe).
    ===================================================================== */
-const VIDEOS = {
-  gordo: 'videos/navidad-gordo-2025.mp4',
-  tradiciones: 'videos/navidad-tradiciones.mp4',
-  cabalgata: null
-};
-const PREGUNTAS_CABALGATA = [   // utilisées seulement si VIDEOS.cabalgata est renseigné
+const VIDEOS = { gordo: 'videos/navidad-gordo-2025.mp4', tradiciones: 'videos/navidad-tradiciones.mp4', cabalgata: null };
+const PREGUNTAS_CABALGATA = [
   { p: '¿Quiénes desfilan?', o: ['Los Reyes Magos', 'Papá Noel y sus renos', 'Los niños de San Ildefonso'], c: 0 },
   { p: '¿Qué reparten a los niños?', o: ['Caramelos', 'Uvas', 'Turrones'], c: 0 }
 ];
 const CODIGO_ADMIN = 'profe';
-const CLAVE = 'plaza-navidad-v1';
+const CLAVE = 'plaza-navidad-v2';
 
 /* ====== 1. ESTADO ==================================================== */
-const base = () => ({ v: 1, nombre: '', hecho: {}, pts: {}, carta: '', comp: '', son: 1 });
+const base = () => ({ v: 2, nombre: '', hecho: {}, pts: {}, carta: '', comp: '', son: 1 });
 let S = base();
-try { const r = JSON.parse(localStorage.getItem(CLAVE)); if (r && r.v === 1) S = Object.assign(base(), r); } catch (e) {}
+try { const r = JSON.parse(localStorage.getItem(CLAVE)); if (r && r.v === 2) S = Object.assign(base(), r); } catch (e) {}
 const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(S)); } catch (e) {} };
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const el = (h) => { const t = document.createElement('template'); t.innerHTML = h.trim(); return t.content.firstChild; };
 const baraja = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-const norm = (s) => s.toLowerCase().trim().replace(/\s+/g, ' ');
 
 const FECHAS = [
-  { id: 'd22', n: '22', m: 'dic', t: 'El Gordo', est: 'loteria' },
-  { id: 'd24', n: '24', m: 'dic', t: 'Nochebuena', est: 'cena' },
-  { id: 'd25', n: '25', m: 'dic', t: 'Navidad', est: 'belen' },
-  { id: 'd28', n: '28', m: 'dic', t: 'Santos Inocentes', est: 'inocente' },
-  { id: 'd31', n: '31', m: 'dic', t: 'Nochevieja', est: 'reloj' },
-  { id: 'd01', n: '1', m: 'ene', t: 'Año Nuevo', est: 'reloj' },
-  { id: 'd05', n: '5', m: 'ene', t: 'La cabalgata', est: 'reyes' },
-  { id: 'd06', n: '6', m: 'ene', t: 'Día de Reyes', est: 'reyes' }
+  { n: '22', m: 'dic', t: 'El Gordo', est: 'loteria', x: 150 }, { n: '24', m: 'dic', t: 'Nochebuena', est: 'cena', x: 400 },
+  { n: '25', m: 'dic', t: 'Navidad', est: 'belen', x: 650 }, { n: '28', m: 'dic', t: 'Inocentes', est: 'inocente', x: 775 },
+  { n: '31', m: 'dic', t: 'Nochevieja', est: 'reloj', x: 862 }, { n: '1', m: 'ene', t: 'Año Nuevo', est: 'reloj', x: 948 },
+  { n: '5', m: 'ene', t: 'Cabalgata', est: 'reyes', x: 1112 }, { n: '6', m: 'ene', t: 'Reyes', est: 'reyes', x: 1208 }
 ];
 const LUGARES = [
-  { id: 'loteria', x: 430, y: 300, ico: '🎱', t: 'La lotería', f: '22 de diciembre' },
-  { id: 'belen', x: 1010, y: 250, ico: '⭐', t: 'El belén', f: 'Navidad' },
-  { id: 'cena', x: 1560, y: 215, ico: '🍽️', t: 'La cena', f: 'Nochebuena' },
-  { id: 'reloj', x: 2120, y: 395, ico: '🕛', t: 'El reloj', f: 'Nochevieja' },
-  { id: 'reyes', x: 2660, y: 150, ico: '👑', t: 'La cabalgata', f: 'Día de Reyes' },
-  { id: 'cafe', x: 3200, y: 270, ico: '☕', t: 'El café', f: 'España y Francia' }
+  { id: 'loteria', x: 150, t: 'LA LOTERÍA', f: '22 de diciembre' }, { id: 'cena', x: 400, t: 'LA CENA', f: 'Nochebuena' },
+  { id: 'belen', x: 650, t: 'EL BELÉN', f: 'Navidad' }, { id: 'reloj', x: 900, t: 'EL RELOJ', f: 'Nochevieja' },
+  { id: 'reyes', x: 1160, t: 'LA CABALGATA', f: 'Día de Reyes' }, { id: 'cafe', x: 1420, t: 'EL CAFÉ', f: 'España y Francia' }
 ];
 const cincoHechos = () => ['loteria', 'belen', 'cena', 'reloj', 'reyes'].every(k => S.hecho[k]);
 
-/* ====== 2. SONIDO (todo sintetizado: sin archivos) ==================== */
+/* ====== 2. SONIDO (todo sintetizado, sin archivos) ==================== */
 let AC = null;
 function ac() { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (AC && AC.state === 'suspended') AC.resume(); return AC; }
 function tono(f, t, d, tipo = 'sine', v = .2) {
@@ -251,403 +304,346 @@ function tono(f, t, d, tipo = 'sine', v = .2) {
   o.type = tipo; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .015); g.gain.exponentialRampToValueAtTime(.0008, t + d);
   o.connect(g).connect(a.destination); o.start(t); o.stop(t + d + .05);
 }
-function campana(f = 196, v = .28) {   // campana grande: parciales inarmónicos
-  const a = ac(); if (!a) return; const t = a.currentTime;
-  [[.5, 1, 3.2], [1, .9, 2.6], [1.19, .55, 2], [1.5, .4, 1.6], [2, .5, 1.3], [2.51, .3, 1], [3.01, .2, .8], [4.1, .12, .5]].forEach(([m, g, d]) => tono(f * m, t, d, 'sine', v * g));
-}
-function nota(midi, t, d) {              // caja de música
-  const f = 440 * Math.pow(2, (midi - 69) / 12);
-  tono(f, t, Math.max(.5, d * 1.6), 'sine', .22); tono(f * 2, t, d * .9, 'sine', .07); tono(f * 3, t, d * .5, 'triangle', .03);
-}
-const bien = () => { const a = ac(); if (!a) return; const t = a.currentTime; tono(784, t, .18, 'triangle', .15); tono(1175, t + .1, .3, 'triangle', .15); };
-const mal = () => { const a = ac(); if (!a) return; tono(160, a.currentTime, .3, 'sawtooth', .08); };
-/* Villancicos: melodías tradicionales (dominio público), en do mayor. [nota MIDI, tiempos] */
+function campana(f = 196, v = .28) { const a = ac(); if (!a) return; const t = a.currentTime; [[.5, 1, 3.2], [1, .9, 2.6], [1.19, .55, 2], [1.5, .4, 1.6], [2, .5, 1.3], [2.51, .3, 1], [3.01, .2, .8], [4.1, .12, .5]].forEach(([m, g, d]) => tono(f * m, t, d, 'sine', v * g)); }
+const hz = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
+function nota(midi, t, d) { const f = hz(midi); tono(f, t, Math.max(.6, d * 1.7), 'sine', .22); tono(f * 2, t, d * .9, 'sine', .07); tono(f * 3.01, t, d * .5, 'sine', .04); }
+const ahora = () => { const a = ac(); return a ? a.currentTime : 0; };
+const bien = () => { const t = ahora(); tono(784, t, .18, 'triangle', .13); tono(1175, t + .1, .3, 'triangle', .13); };
+const mal = () => tono(150, ahora(), .28, 'sawtooth', .07);
+const clic = (k = 0) => tono(520 + (k % 12) * 40, ahora(), .12, 'triangle', .12);
+/* Villancicos tradicionales (dominio público), en do mayor: [nota MIDI, tiempos] */
 const MELODIAS = {
-  paz: { bpm: 104, n: [[67,1.5],[69,.5],[67,1],[64,3],[67,1.5],[69,.5],[67,1],[64,3],[74,2],[74,1],[71,3],[72,2],[72,1],[67,3],[69,2],[69,1],[72,1.5],[71,.5],[69,1],[67,1.5],[69,.5],[67,1],[64,3]] },
+  paz: { bpm: 104, n: [[67,1.5],[69,.5],[67,1],[64,3],[67,1.5],[69,.5],[67,1],[64,3],[74,2],[74,1],[71,3],[72,2],[72,1],[67,3]] },
   cascabel: { bpm: 176, n: [[64,1],[64,1],[64,2],[64,1],[64,1],[64,2],[64,1],[67,1],[60,1.5],[62,.5],[64,4],[65,1],[65,1],[65,1.5],[65,.5],[65,1],[64,1],[64,1],[64,.5],[64,.5],[67,1],[67,1],[65,1],[62,1],[60,4]] }
 };
 let melodiaFin = 0;
-function tocar(id) {
-  const a = ac(); if (!a) return 0; const m = MELODIAS[id], b = 60 / m.bpm; let t = Math.max(a.currentTime + .05, melodiaFin + .2);
-  m.n.forEach(([n, d]) => { nota(n, t, d * b); t += d * b; }); melodiaFin = t; return (t - a.currentTime) * 1000;
-}
-/* Voz: síntesis del navegador */
+function tocar(id) { const a = ac(); if (!a) return 0; const m = MELODIAS[id], b = 60 / m.bpm; let t = Math.max(a.currentTime + .05, melodiaFin + .2); m.n.forEach(([n, d]) => { nota(n, t, d * b); t += d * b; }); melodiaFin = t; return (t - a.currentTime) * 1000; }
 let VOCES = [];
 function cargarVoces() { try { VOCES = speechSynthesis.getVoices().filter(v => /^es([-_]|$)/i.test(v.lang)); VOCES.sort((a, b) => (/es[-_]ES/i.test(b.lang) - /es[-_]ES/i.test(a.lang))); } catch (e) {} }
 if ('speechSynthesis' in window) { cargarVoces(); speechSynthesis.addEventListener && speechSynthesis.addEventListener('voiceschanged', cargarVoces); }
 function decir(txt, btn) {
-  if (!('speechSynthesis' in window)) return;
-  try {
-    speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(txt.replace(/<[^>]+>/g, ' ').replace(/_+/g, '...'));
-    u.lang = 'es-ES'; if (VOCES[0]) u.voice = VOCES[0]; u.rate = .85;
-    if (btn) { btn.classList.add('habla'); u.onend = u.onerror = () => btn.classList.remove('habla'); }
-    speechSynthesis.speak(u);
-  } catch (e) {}
+  if (!('speechSynthesis' in window) || !S.son) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(txt.replace(/<[^>]+>/g, ' ').replace(/_+/g, '...')); u.lang = 'es-ES'; if (VOCES[0]) u.voice = VOCES[0]; u.rate = .85;
+    if (btn) { btn.classList.add('habla'); u.onend = u.onerror = () => btn.classList.remove('habla'); } speechSynthesis.speak(u); } catch (e) {}
 }
 const callar = () => { try { speechSynthesis.cancel(); } catch (e) {} };
 
-/* ====== 3. LA PLAZA (decorado SVG) ==================================== */
-const ANCHO = 3600, ALTO = 900, SUELO = 760;
-let semilla = 7; const az = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
-function edificio(x, w, h, col, tej) {
-  const y = SUELO - h; let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${col}"/><rect x="${x - 6}" y="${y - 16}" width="${w + 12}" height="20" fill="${tej}"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#somb)"/>`;
-  const nc = Math.max(2, Math.floor(w / 78)), nf = Math.floor((h - 130) / 96), dx = w / nc;
-  for (let f = 0; f < nf; f++) for (let c = 0; c < nc; c++) {
-    const wx = x + dx * c + dx / 2 - 18, wy = y + 34 + f * 96, luz = az() < .55;
-    s += `<rect x="${wx - 4}" y="${wy - 4}" width="44" height="66" fill="#fff6e0" opacity=".55"/><rect x="${wx}" y="${wy}" width="36" height="58" fill="${luz ? '#ffd873' : '#31406b'}"/><path d="M${wx + 18} ${wy}v58M${wx} ${wy + 26}h36" stroke="${tej}" stroke-width="2.5"/><rect x="${wx - 9}" y="${wy + 56}" width="54" height="7" fill="${tej}"/>`;
-    if (f === 0 && az() < .6) s += `<path d="M${wx - 9} ${wy + 62}h54v14h-54z" fill="none" stroke="#3a2318" stroke-width="2.5"/><path d="M${wx} ${wy + 62}v14m9-14v14m9-14v14m9-14v14m9-14v14" stroke="#3a2318" stroke-width="1.5"/>`;
-  }
-  for (let c = 0; c < nc; c++) { const ax = x + dx * c + dx / 2; s += `<path d="M${ax - 24} ${SUELO}v-62a24 24 0 0 1 48 0v62z" fill="#4a2c1c"/><path d="M${ax - 24} ${SUELO - 62}a24 24 0 0 1 48 0" fill="none" stroke="#fff6e0" stroke-width="5" opacity=".7"/>`; }
-  return s;
-}
-function guirnalda(x1, x2, y) {
-  const mx = (x1 + x2) / 2, cols = ['#d7263d', '#f7d774', '#2e8b62', '#fff']; let s = `<path d="M${x1} ${y}Q${mx} ${y + 70} ${x2} ${y}" fill="none" stroke="#2b1a10" stroke-width="2"/>`;
-  for (let i = 1; i < 12; i++) { const t = i / 12, bx = (1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * mx + t * t * x2, by = (1 - t) * (1 - t) * y + 2 * (1 - t) * t * (y + 70) + t * t * y; s += `<circle class="bomb" cx="${bx}" cy="${by + 7}" r="7" fill="${cols[i % 4]}"/>`; }
-  return s;
-}
-function rey(x, y, e, piel, pelo, ropa, don) {   // rey mago, e = escala
-  return `<g transform="translate(${x} ${y}) scale(${e})"><path d="M-46 0L-34-92Q0-116 34-92L46 0z" fill="${ropa}"/><path d="M-34-92Q0-116 34-92L28-70Q0-88-28-70z" fill="#fff" opacity=".85"/><path d="M-10-62h20v62h-20z" fill="#f7d774" opacity=".8"/><circle cx="0" cy="-112" r="25" fill="${piel}"/><path d="M-25-112q25 62 50 0q-8 16-25 16t-25-16z" fill="${pelo}"/><path d="M-27-122q27-30 54 0l-4-12q-23-14-46 0z" fill="${pelo}"/><path d="M-25-128l4-28 10 16 11-22 11 22 10-16 4 28z" fill="#e8b23a" stroke="#a87412" stroke-width="2"/><circle cx="0" cy="-134" r="3.5" fill="#d7263d"/><circle cx="-9" cy="-114" r="2.6" fill="#2b1a10"/><circle cx="9" cy="-114" r="2.6" fill="#2b1a10"/><rect x="22" y="-64" width="26" height="24" rx="3" fill="${don}" stroke="#a87412" stroke-width="2"/><path d="M35-64v24M22-52h26" stroke="#fff" stroke-width="2.5"/></g>`;
-}
-const REYES = { melchor: ['#f1c9a5', '#f4f4f4', '#b3122d', '#e8b23a'], gaspar: ['#eab890', '#a8612a', '#1f6b4a', '#d7263d'], baltasar: ['#6b4226', '#1c120c', '#5b3a8c', '#2e8b62'] };
+/* ====== 3. LA PLAZA: una sola pantalla, de noche; lo terminado se ilumina */
+function ventanas(x, y, cols, filas, w, h, dx, dy) { let s = ''; for (let f = 0; f < filas; f++) for (let c = 0; c < cols; c++) s += `<rect class="v" x="${x + c * dx}" y="${y + f * dy}" width="${w}" height="${h}"/>`; return s; }
+const corona = (x, y, e = 1) => `<path class="v" transform="translate(${x} ${y}) scale(${e})" d="M-14 0l-3-20 9 9 8-15 8 15 9-9-3 20z"/>`;
+const EDIF = {
+  loteria: `<path class="m" d="M60 700V470l90-60 90 60v230z"/><path class="l" d="M60 470h180M60 690h180"/><rect class="m" x="92" y="478" width="116" height="28"/><text x="150" y="498" text-anchor="middle" font-size="15" letter-spacing="3" font-weight="700" fill="#f2e8d5">LOTERÍA</text>${ventanas(86, 530, 4, 1, 24, 120, 35, 0)}<circle class="v" cx="150" cy="445" r="11"/>`,
+  cena: `<path class="m" d="M320 700V385l80-62 80 62v315z"/><rect class="m" x="438" y="320" width="18" height="46"/>${ventanas(345, 410, 3, 2, 26, 44, 42, 72)}<rect class="v" x="345" y="570" width="110" height="92"/><path class="l" d="M400 570v92M345 616h110M320 385h160"/>`,
+  belen: `<path class="m" d="M580 700V470h20a50 50 0 0 1 100 0h20v230z"/><rect class="m" x="643" y="392" width="14" height="30"/><path class="l" d="M650 392v-26M641 376h18M580 470h140"/><circle class="v" cx="650" cy="530" r="20"/><path class="v" d="M628 700v-70a22 22 0 0 1 44 0v70z"/>${ventanas(596, 590, 1, 1, 16, 50, 0, 0)}${ventanas(688, 590, 1, 1, 16, 50, 0, 0)}<path class="v" d="M650 300l7 19 20 1-16 13 6 20-17-12-17 12 6-20-16-13 20-1z"/>`,
+  reloj: `<path class="m" d="M850 700V300h100v400z"/><rect class="m" x="862" y="228" width="76" height="72"/><path class="m" d="M855 228l45-78 45 78z"/><circle class="v" cx="900" cy="140" r="8"/><circle class="v" cx="900" cy="362" r="36"/><path d="M900 362v-24M900 362l-13-15" stroke="#a4142c" stroke-width="5" stroke-linecap="round"/><path class="v" d="M886 290v-34a14 14 0 0 1 28 0v34z"/>${ventanas(872, 440, 2, 2, 18, 42, 38, 80)}<path class="v" d="M882 700v-52a18 18 0 0 1 36 0v52z"/><path class="l" d="M850 420h100"/>`,
+  reyes: `<path class="m" d="M1070 700V482h180v218h-50V600a40 40 0 0 0-80 0v100z"/><rect class="m" x="1058" y="464" width="204" height="20"/><path class="l" d="M1070 520h180"/>${corona(1110, 458)}${corona(1160, 452, 1.25)}${corona(1210, 458)}`,
+  cafe: `<path class="m" d="M1330 700V520h180v180z"/><path class="m" d="M1318 596h204l14 34h-232z"/><path class="l" d="M1344 596l-8 34M1388 596l-4 34M1432 596v34M1476 596l4 34M1330 520h180"/><text x="1420" y="562" text-anchor="middle" font-size="19" letter-spacing="5" font-weight="700" fill="#f2e8d5">CAFÉ</text><rect class="v" x="1346" y="642" width="76" height="44"/><path class="v" d="M1448 700v-50a18 18 0 0 1 36 0v50z"/>${ventanas(1350, 470, 4, 1, 20, 32, 40, 0)}`
+};
+const ROJO = '#a4142c', VERDE = '#1d4d3a', PAPEL = '#f2e8d5', ORO = '#d49a1e';
+function estrella(cx, cy, r, n = 8, k = .45) { let d = ''; for (let i = 0; i < n * 2; i++) { const a = Math.PI * i / n - Math.PI / 2, q = i % 2 ? r * k : r; d += (i ? 'L' : 'M') + (cx + Math.cos(a) * q).toFixed(1) + ' ' + (cy + Math.sin(a) * q).toFixed(1); } return d + 'z'; }
+const RAYAS = { loteria: [185, 470, 55, 230], cena: [420, 385, 60, 315], belen: [665, 470, 55, 230], reloj: [912, 300, 38, 400], reyes: [1200, 484, 50, 216], cafe: [1440, 520, 70, 180] };
 function pintarPlaza() {
-  semilla = 7; let s = `<svg viewBox="0 0 ${ANCHO} ${ALTO}" preserveAspectRatio="xMinYMax meet" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="somb" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient><radialGradient id="halo"><stop offset="0" stop-color="#ffe9a6" stop-opacity=".9"/><stop offset="1" stop-color="#ffe9a6" stop-opacity="0"/></radialGradient><pattern id="ado" width="120" height="46" patternUnits="userSpaceOnUse"><path d="M0 0h120M0 23h120M0 46h120M30 0v23M90 0v23M0 23v23M60 23v23" stroke="#cdb48c" stroke-width="2" fill="none"/></pattern><pattern id="toldo" width="44" height="10" patternUnits="userSpaceOnUse"><rect width="22" height="10" fill="#b3122d"/><rect x="22" width="22" height="10" fill="#fdf6e9"/></pattern></defs>`;
-  const col = ['#f3dfb8', '#e9b98a', '#f6ead2', '#dfa27a', '#f0d2a0', '#e6c7a0'], tej = ['#9a3b26', '#7b2d1e', '#a8502e'];
-  // fila de edificios (con huecos para la calle de la cabalgata)
-  let x = -40, i = 0;
-  while (x < ANCHO + 40) {
-    const w = 210 + Math.floor(az() * 150), h = 360 + Math.floor(az() * 170);
-    if (x + w > 2500 && x < 2820) { x = 2820; continue; }
-    if (x + w > 1990 && x < 2250) { x = 2250; continue; }
-    s += edificio(x, Math.min(w, x < 1990 && x + w > 1990 ? 1990 - x : x < 2500 && x + w > 2500 ? 2500 - x : w), h, col[i % 6], tej[i % 3]); x += w + 4; i++;
-  }
-  // calle de la cabalgata (perspectiva)
-  s += `<rect x="2500" y="330" width="320" height="430" fill="#33457f"/><path d="M2500 760L2630 520h60l130 240z" fill="#d9c39a"/><path d="M2500 330h60v430h-60zM2760 330h60v430h-60z" fill="#e6c7a0"/><path d="M2500 330h320v-46h-320z" fill="#b3122d"/><path d="M2560 330q100 110 200 0" fill="none" stroke="#2b1a10" stroke-width="2"/>${[0,1,2,3,4,5,6].map(k => `<circle class="bomb" cx="${2580 + k * 27}" cy="${345 + Math.sin((k + .5) / 7 * Math.PI) * 44}" r="6" fill="${['#f7d774', '#fff', '#d7263d'][k % 3]}"/>`).join('')}<text x="2660" y="316" text-anchor="middle" font-size="26" font-weight="700" fill="#fdf6e9" font-family="Atkinson,Arial">CALLE DE LOS REYES</text><circle cx="2660" cy="600" r="150" fill="url(#halo)" opacity=".5"/>${rey(2590, 700, .62, ...REYES.melchor)}${rey(2660, 690, .7, ...REYES.gaspar)}${rey(2730, 700, .62, ...REYES.baltasar)}`;
-  // torre del reloj
-  s += `<rect x="2030" y="250" width="180" height="510" fill="#efd9ae"/><rect x="2030" y="250" width="180" height="510" fill="url(#somb)"/><rect x="2015" y="236" width="210" height="22" fill="#7b2d1e"/><rect x="2055" y="150" width="130" height="90" fill="#efd9ae"/><path d="M2085 240v-56a35 35 0 0 1 70 0v56z" fill="#31406b"/><path d="M2104 196q16-34 32 0v18h-32z" fill="#e8b23a"/><circle cx="2120" cy="220" r="6" fill="#a87412"/><path d="M2045 150h150l-75-90z" fill="#7b2d1e"/><circle cx="2120" cy="52" r="10" fill="#e8b23a"/><circle cx="2120" cy="330" r="62" fill="#fffaf0" stroke="#3a2318" stroke-width="8"/>${[...Array(12)].map((_, k) => { const a = k * Math.PI / 6; return `<path d="M${2120 + Math.sin(a) * 46} ${330 - Math.cos(a) * 46}L${2120 + Math.sin(a) * 54} ${330 - Math.cos(a) * 54}" stroke="#3a2318" stroke-width="4"/>`; }).join('')}<path d="M2120 330v-34" stroke="#3a2318" stroke-width="7" stroke-linecap="round"/><path d="M2120 330L2099 287" stroke="#b3122d" stroke-width="5" stroke-linecap="round"/><circle cx="2120" cy="330" r="6" fill="#3a2318"/><path d="M2090 760v-90a30 30 0 0 1 60 0v90z" fill="#4a2c1c"/><text x="2120" y="560" text-anchor="middle" font-size="62">🍇</text>`;
-  // quiosco de lotería
-  s += `<g transform="translate(300 0)"><path d="M0 500h260l-24-60h-212z" fill="#b3122d"/><path d="M0 500h260v18h-260z" fill="url(#toldo)"/><rect x="18" y="518" width="224" height="242" fill="#8e1024"/><rect x="40" y="540" width="180" height="96" fill="#ffd873"/><rect x="40" y="636" width="180" height="12" fill="#3a2318"/><text x="130" y="476" text-anchor="middle" font-size="27" font-weight="700" fill="#fdf6e9" font-family="Atkinson,Arial">LOTERÍA</text><circle cx="88" cy="592" r="26" fill="#f6ead2" stroke="#a87412" stroke-width="3"/><text x="88" y="601" text-anchor="middle" font-size="24" font-weight="700" fill="#3a2318" font-family="Arial">79</text><circle cx="150" cy="598" r="22" fill="#f6ead2" stroke="#a87412" stroke-width="3"/><text x="150" y="606" text-anchor="middle" font-size="20" font-weight="700" fill="#3a2318" font-family="Arial">4</text><circle cx="196" cy="584" r="17" fill="#f6ead2" stroke="#a87412" stroke-width="3"/><text x="130" y="716" text-anchor="middle" font-size="30" font-weight="700" fill="#f7d774" font-family="Atkinson,Arial">EL GORDO</text></g>`;
-  // belén y coro
-  s += `<g transform="translate(860 0)"><circle cx="150" cy="430" r="120" fill="url(#halo)" opacity=".7"/><path d="M150 380l10 26 28 2-22 18 8 28-24-16-24 16 8-28-22-18 28-2z" fill="#f7d774"/><path d="M-10 560L150 470l160 90v20h-320z" fill="#7a4a24"/><rect x="14" y="580" width="16" height="180" fill="#5d3718"/><rect x="270" y="580" width="16" height="180" fill="#5d3718"/><rect x="30" y="580" width="240" height="180" fill="#2c1c10"/><rect x="30" y="700" width="240" height="60" fill="#d9b25c"/><path d="M92 740L104 650q14-22 28 0l12 90z" fill="#3f6fb5"/><circle cx="118" cy="636" r="16" fill="#f1c9a5"/><path d="M100 636q18-34 36 0v18q-18-12-36 0z" fill="#fff"/><path d="M176 740l10-100q14-22 28 0l10 100z" fill="#8a5a2c"/><circle cx="200" cy="626" r="16" fill="#eab890"/><path d="M186 636q14 20 28 0" fill="#5d3718"/><path d="M134 742h40l6-22h-52z" fill="#a8742c"/><circle cx="154" cy="714" r="10" fill="#f1c9a5"/><ellipse cx="154" cy="722" rx="16" ry="7" fill="#fff"/></g>`;
-  s += `<g transform="translate(1215 0)">${[['#b3122d', '#f1c9a5'], ['#1f6b4a', '#c98f62'], ['#e8b23a', '#eab890']].map(([c, p], k) => `<g transform="translate(${k * 52} 0)"><path d="M-20 760l6-78q14-16 28 0l6 78z" fill="${c}"/><circle cx="0" cy="666" r="15" fill="${p}"/><ellipse cx="0" cy="671" rx="5" ry="7" fill="#3a2318"/><path d="M-15 664q15-26 30 0" fill="#3a2318"/></g>`).join('')}<text x="52" y="632" text-anchor="middle" font-size="30">🎶</text></g>`;
-  // casa de la cena (ventana grande iluminada)
-  s += `<g transform="translate(1425 0)"><rect x="0" y="520" width="270" height="240" fill="#f6ead2"/><rect x="18" y="548" width="234" height="150" fill="#ffd873"/><rect x="18" y="548" width="234" height="150" fill="none" stroke="#7b2d1e" stroke-width="10"/><path d="M135 548v150" stroke="#7b2d1e" stroke-width="6"/><path d="M18 548q60 50 0 90M252 548q-60 50 0 90" fill="#b3122d"/><rect x="50" y="664" width="170" height="10" fill="#fff"/><text x="92" y="662" font-size="34">🦃</text><text x="150" y="660" font-size="26">🕯️</text><circle cx="70" cy="632" r="14" fill="#3a2318" opacity=".55"/><circle cx="205" cy="630" r="14" fill="#3a2318" opacity=".55"/><rect x="-6" y="504" width="282" height="18" fill="#7b2d1e"/></g>`;
+  let s = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"><defs><filter id="ru" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7"/></filter><pattern id="ha" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><rect width="3" height="9" fill="${PAPEL}"/></pattern></defs>`;
+  s += `<g filter="url(#ru)"><rect x="22" y="22" width="1556" height="856" fill="none" stroke="${ROJO}" stroke-width="10"/><rect x="42" y="42" width="1516" height="816" fill="none" stroke="${VERDE}" stroke-width="3"/>`;
+  [[150, 150, 30, ROJO], [300, 250, 14, VERDE], [420, 170, 18, VERDE], [1010, 210, 16, VERDE], [1300, 160, 30, ROJO], [1470, 250, 18, VERDE], [1180, 300, 12, ROJO], [230, 330, 12, ROJO], [760, 240, 14, ROJO], [1420, 380, 12, ROJO]].forEach(([x, y, r, c]) => { s += `<path d="${estrella(x, y, r)}" fill="${c}"/>`; });
+  for (let k = 0; k < 46; k++) s += `<circle cx="${80 + (k * 211) % 1440}" cy="${150 + (k * 89) % 300}" r="4" fill="${k % 2 ? ROJO : VERDE}"/>`;
+  s += `<text x="800" y="118" text-anchor="middle" font-size="60" font-weight="700" fill="${ROJO}">La plaza de Navidad</text>`;
   // árbol de Navidad
-  s += `<g transform="translate(1840 0)"><rect x="-14" y="700" width="28" height="60" fill="#5d3718"/>${[0, 1, 2, 3].map(k => `<path d="M0 ${330 + k * 80}L${-70 - k * 28} ${470 + k * 80}h${140 + k * 56}z" fill="${k % 2 ? '#1f6b4a' : '#2e8b62'}"/>`).join('')}<path d="M0 290l10 26 28 2-22 18 8 28-24-16-24 16 8-28-22-18 28-2z" fill="#f7d774"/>${[[-30, 450, '#d7263d'], [24, 480, '#f7d774'], [-58, 540, '#f7d774'], [8, 560, '#d7263d'], [60, 620, '#fff'], [-80, 640, '#d7263d'], [-10, 660, '#f7d774'], [90, 700, '#d7263d'], [-110, 706, '#fff']].map(([a, b, c]) => `<circle class="bomb" cx="${a}" cy="${b}" r="11" fill="${c}"/>`).join('')}</g>`;
-  // café España · Francia
-  s += `<g transform="translate(3040 0)"><rect x="0" y="470" width="330" height="290" fill="#f6ead2"/><rect x="0" y="470" width="330" height="50" fill="#1f6b4a"/><text x="165" y="505" text-anchor="middle" font-size="27" font-weight="700" fill="#fdf6e9" font-family="Atkinson,Arial">CAFÉ ESPAÑA · FRANCIA</text><path d="M-14 520h358l22 56h-402z" fill="url(#toldo)"/><rect x="24" y="596" width="120" height="110" fill="#ffd873" stroke="#7b2d1e" stroke-width="6"/><path d="M196 760v-140a36 36 0 0 1 72 0v140z" fill="#4a2c1c"/><g transform="translate(40 620)"><rect width="42" height="9" fill="#c60b1e"/><rect y="9" width="42" height="10" fill="#ffc400"/><rect y="19" width="42" height="9" fill="#c60b1e"/></g><g transform="translate(90 620)"><rect width="14" height="28" fill="#0055a4"/><rect x="14" width="14" height="28" fill="#fff"/><rect x="28" width="14" height="28" fill="#ef4135"/></g><g transform="translate(-60 0)"><rect x="-2" y="700" width="4" height="60" fill="#3a2318"/><ellipse cx="0" cy="700" rx="34" ry="8" fill="#b3122d"/></g><g transform="translate(410 0)"><rect x="-2" y="700" width="4" height="60" fill="#3a2318"/><ellipse cx="0" cy="700" rx="34" ry="8" fill="#b3122d"/><text x="-14" y="696" font-size="24">☕</text></g></g>`;
-  // farolas y guirnaldas
-  const FAR = [-60, 220, 640, 1200, 1715, 1990, 2440, 2860, 3420, 3700];
-  FAR.forEach((fx, k) => s += `<rect x="${fx - 4}" y="430" width="8" height="330" fill="#2b1a10"/><circle cx="${fx}" cy="424" r="50" fill="url(#halo)"/><rect x="${fx - 13}" y="402" width="26" height="34" rx="5" fill="#ffe9a6" stroke="#2b1a10" stroke-width="4"/>${FAR[k + 1] ? guirnalda(fx, FAR[k + 1], 406) : ''}`);
-  // suelo
-  s += `<rect x="0" y="${SUELO}" width="${ANCHO}" height="${ALTO - SUELO}" fill="#e3cda3"/><rect x="0" y="${SUELO}" width="${ANCHO}" height="${ALTO - SUELO}" fill="url(#ado)"/><rect x="0" y="${SUELO}" width="${ANCHO}" height="10" fill="#000" opacity=".12"/>`;
-  // paseante con el monigote (Santos Inocentes)
-  s += `<g transform="translate(2385 0)"><path d="M-22 760l6-96q16-18 32 0l6 96z" fill="#31406b"/><circle cx="0" cy="646" r="17" fill="#eab890"/><path d="M-17 642q17-30 34 0q-17-10-34 0z" fill="#5d3718"/><g transform="translate(4 676) rotate(8)"><path d="M0-12a6 6 0 1 1 .1 0M-3-6h6l9 5-2 4-6-3v8l5 12h-5l-4-10-4 10h-5l5-12v-8l-6 3-2-4z" fill="#fff" stroke="#3a2318" stroke-width="1.2"/></g></g>`;
-  s += '</svg>';
-  $('#mundo').innerHTML = s;
-  // fondo lejano: silueta de cúpulas (guiño a El Escorial)
-  let l = `<svg viewBox="0 0 2000 900" preserveAspectRatio="xMinYMax meet"><g fill="#2a3a70">`;
-  for (let k = 0; k < 12; k++) { const bx = k * 170 + 20; l += k % 3 === 1 ? `<rect x="${bx}" y="330" width="120" height="500"/><path d="M${bx + 10} 330a50 46 0 0 1 100 0z"/><rect x="${bx + 54}" y="230" width="12" height="60"/><path d="M${bx + 40} 290h40l-20-40z"/>` : `<rect x="${bx}" y="${380 + (k % 4) * 30}" width="150" height="500"/><path d="M${bx + 100} ${380 + (k % 4) * 30}h30v-90l-15-40-15 40z"/>`; }
-  l += '</g></svg>'; $('#lejos').innerHTML = l;
-  let c = ''; for (let k = 0; k < 70; k++) c += `<i class="estrella" style="left:${Math.random() * 100}%;top:${Math.random() * 45}%;animation-delay:${Math.random() * 3}s"></i>`; $('#cielo').innerHTML = c;
-  $('#avatar').innerHTML = `<svg viewBox="0 0 70 150"><path d="M14 150l6-78q15-16 30 0l6 78z" fill="#1f6b4a"/><path d="M18 78q17 12 34 0v12q-17 10-34 0z" fill="#d7263d"/><path d="M44 86v34h10V90z" fill="#d7263d"/><circle cx="35" cy="54" r="19" fill="#f1c9a5"/><path d="M15 50q20-40 40 0z" fill="#b3122d"/><circle cx="35" cy="22" r="6" fill="#fff"/><rect x="14" y="46" width="42" height="8" rx="4" fill="#fff"/><circle cx="29" cy="58" r="2.4" fill="#2b1a10"/><circle cx="42" cy="58" r="2.4" fill="#2b1a10"/></svg>`;
-  // carteles
-  LUGARES.forEach(L => { const b = el(`<button class="cartel" data-id="${L.id}" style="left:calc(${L.x}px*var(--s));top:calc(${L.y}px*var(--s))"><span class="ico">${L.ico}</span><b>${L.t}</b><small>${L.f}</small></button>`); b.onclick = (e) => { e.stopPropagation(); irA(L, true); }; $('#mundo').append(b); });
-  const ino = el(`<button id="inocente" aria-label="Un paseante" style="left:calc(2355px*var(--s));top:calc(620px*var(--s));width:calc(60px*var(--s));height:calc(140px*var(--s))"></button>`); ino.onclick = (e) => { e.stopPropagation(); inocente(); }; $('#mundo').append(ino);
+  s += `<rect x="522" y="672" width="16" height="28" fill="${ROJO}"/>${[0, 1, 2, 3].map(k => `<path d="M530 ${480 + k * 42}L${530 - 26 - k * 12} ${560 + k * 42}H${530 + 26 + k * 12}z" fill="${VERDE}"/>`).join('')}<path d="${estrella(530, 468, 18)}" fill="${ROJO}"/>${[[-12, 560], [14, 600], [-26, 640], [8, 650], [30, 676]].map(([a, b]) => `<circle cx="${530 + a}" cy="${b}" r="6" fill="${PAPEL}"/>`).join('')}`;
+  s += `<path d="M60 700h1480" stroke="${VERDE}" stroke-width="8"/><path d="M60 716h1480" stroke="${ROJO}" stroke-width="3" stroke-dasharray="18 10"/></g>`;
+  // guirnalda de un lugar a otro
+  LUGARES.slice(0, -1).forEach((L, i) => { const a = L.x, b = LUGARES[i + 1].x, m = (a + b) / 2; s += `<path d="M${a} 255Q${m} 325 ${b} 255" fill="none" stroke="${VERDE}" stroke-width="2.5" filter="url(#ru)"/>`; for (let k = 1; k < 8; k++) { const t = k / 8, x = (1 - t) * (1 - t) * a + 2 * (1 - t) * t * m + t * t * b, y = 255 + 2 * (1 - t) * t * 70; s += `<circle class="bomb" data-g="${L.id}" data-c="${[ROJO, ORO, VERDE][k % 3]}" cx="${x}" cy="${y + 8}" r="7"/>`; } });
+  // farola con el monigote (Santos Inocentes)
+  s += `<g filter="url(#ru)"><path d="M775 700V560" stroke="${VERDE}" stroke-width="5"/><circle cx="775" cy="552" r="10" fill="${ORO}"/></g><g id="mono"><path d="M775 588v12" stroke="${ROJO}" stroke-width="2"/><path transform="translate(775 600) scale(1.5) translate(-775 -600)" d="M775 600a5 5 0 1 1 .1 0M768 612l7-3 7 3-2 3-3-1v8l4 11h-4l-2-8-2 8h-4l4-11v-8l-3 1z" fill="${ROJO}"/><rect x="750" y="580" width="50" height="80" fill="transparent"/></g>`;
+  LUGARES.forEach((L, i) => { const r = RAYAS[L.id]; s += `<g class="lugar" data-id="${L.id}" tabindex="0" style="--c:${i % 2 ? VERDE : ROJO}"><rect x="${L.x - 115}" y="140" width="230" height="650" fill="transparent"/><rect class="foco" x="${L.x - 112}" y="285" width="224" height="500" rx="4"/><g filter="url(#ru)">${EDIF[L.id]}<rect class="h" x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" fill="url(#ha)"/><text class="nom" x="${L.x}" y="752">${L.t}</text><text class="fec" x="${L.x}" y="776">${L.f}</text></g></g>`; });
+  s += `<path d="M110 826h1140" stroke="${VERDE}" stroke-width="3" filter="url(#ru)"/>`;
+  FECHAS.forEach((f, i) => { s += `<g class="nodo" data-i="${i}"><circle cx="${f.x}" cy="826" r="19" filter="url(#ru)"/><text class="n" x="${f.x}" y="833">${f.n}</text><text class="t" x="${f.x}" y="${f.est === 'reloj' || f.est === 'reyes' ? (f.n === '31' || f.n === '5' ? 804 : 804) : 804}">${f.m}.</text></g>`; });
+  s += '</svg>'; $('#plaza').innerHTML = s;
+  $$('.lugar').forEach(g => { g.onclick = () => entrar(g.dataset.id); g.onkeydown = (e) => { if (e.key === 'Enter') entrar(g.dataset.id); }; });
+  $('#mono').onclick = inocente;
 }
-
-/* ====== 4. CÁMARA Y DESPLAZAMIENTO ==================================== */
-let esc = 1, cam = 0, meta = 0, vel = 0, pend = null;
-const maxCam = () => Math.max(0, ANCHO * esc - innerWidth);
-function medir() { esc = innerHeight / ALTO; document.documentElement.style.setProperty('--s', esc); $('#mundo').style.width = ANCHO * esc + 'px'; $('#avatar').style.top = (SUELO - 148) * esc + 'px'; meta = Math.min(meta, maxCam()); }
-function irA(L, abrir) { meta = Math.max(0, Math.min(maxCam(), L.x * esc - innerWidth / 2)); pend = abrir ? L.id : null; }
-function bucle() {
-  meta = Math.max(0, Math.min(maxCam(), meta + vel));
-  const d = meta - cam; cam += Math.abs(d) < .5 ? d : d * .12;
-  $('#mundo').style.transform = `translateX(${-cam}px)`; $('#lejos').style.transform = `translateX(${-cam * .25}px)`;
-  const av = $('#avatar'); av.classList.toggle('anda', Math.abs(d) > 2); if (Math.abs(d) > 2) av.classList.toggle('izq', d < 0);
-  const cx = (cam + innerWidth / 2) / esc; let cerca = null;
-  LUGARES.forEach(L => { if (Math.abs(L.x - cx) < 170) cerca = L.id; });
-  $$('.cartel').forEach(b => b.classList.toggle('cerca', b.dataset.id === cerca));
-  $$('#mapa button').forEach(b => b.classList.toggle('aqui', b.dataset.id === cerca));
-  if (pend && Math.abs(d) < 3) { const p = pend; pend = null; entrar(p); }
-  requestAnimationFrame(bucle);
-}
-function controles() {
-  const m = $('#mundo'); let x0 = null, c0 = 0;
-  m.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; x0 = e.clientX; c0 = meta; m.classList.add('arr'); pend = null; });
-  addEventListener('pointermove', e => { if (x0 !== null) { meta = Math.max(0, Math.min(maxCam(), c0 - (e.clientX - x0))); cam = meta; } });
-  addEventListener('pointerup', () => { x0 = null; m.classList.remove('arr'); });
-  addEventListener('wheel', e => { if (!$('#velo').classList.contains('on')) { meta += (e.deltaY + e.deltaX) * 1.2; pend = null; } }, { passive: true });
-  const pul = (b, v) => { b.onpointerdown = () => { vel = v; pend = null; }; b.onpointerup = b.onpointerleave = () => vel = 0; };
-  pul($('#fi'), -16); pul($('#fd'), 16);
-  addEventListener('keydown', e => {
-    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); profe(); return; }
-    if ($('#velo').classList.contains('on')) return;
-    if (e.key === 'ArrowLeft') { vel = -16; pend = null; } if (e.key === 'ArrowRight') { vel = 16; pend = null; }
-    if (e.key === 'Enter') { const c = $('.cartel.cerca'); if (c) entrar(c.dataset.id); }
-  });
-  addEventListener('keyup', e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') vel = 0; });
-  addEventListener('resize', medir);
-}
-
-/* ====== 5. CALENDARIO, MAPA, VENTANAS ================================= */
 function pintarHud() {
-  $('#hud').innerHTML = FECHAS.map(f => `<div class="dia ${S.hecho[f.est] ? 'on' : ''}" title="${S.hecho[f.est] ? f.t : (f.est === 'inocente' ? 'Una broma se esconde en la plaza…' : '¿?')}"><div class="n">${f.n}</div><div class="m">${f.m}</div><span class="t">${S.hecho[f.est] ? f.t : '¿?'}</span></div>`).join('');
-  $('#mapa').innerHTML = '<span>La plaza:</span>' + LUGARES.map(L => `<button data-id="${L.id}" class="${S.hecho[L.id] ? 'hecho' : ''}" title="${L.t}">${L.ico}</button>`).join('');
-  $$('#mapa button').forEach(b => b.onclick = () => irA(LUGARES.find(L => L.id === b.dataset.id), false));
-  $$('.cartel').forEach(b => { b.classList.toggle('hecho', !!S.hecho[b.dataset.id]); b.classList.toggle('cerrado', b.dataset.id === 'cafe' && !cincoHechos()); });
-  $('#quien').textContent = S.nombre ? '🎄 ' + S.nombre : '';
-  $('#bson').textContent = S.son ? '🔔' : '🔕';
-}
-function abrirVelo(nodo) { const v = $('#velo'); v.innerHTML = ''; v.append(nodo); v.classList.add('on'); }
-function cerrarVelo() { callar(); document.querySelectorAll('video').forEach(v => v.pause()); clearInterval(relojT); clearInterval(lluviaT); $('#velo').classList.remove('on'); $('#velo').innerHTML = ''; }
-function aviso(ico, tit, html, boton = 'Vale', fn) {
-  const n = el(`<div class="sala" style="width:min(34rem,100%)"><header><span class="ico">${ico}</span><h2 class="script">${tit}</h2></header><div class="cuerpo">${html}</div><div class="pie"><span class="msg"></span><button class="btn">${boton}</button></div></div>`);
-  $('.btn', n).onclick = () => { cerrarVelo(); fn && fn(); }; abrirVelo(n);
+  $$('.lugar').forEach(g => { g.classList.toggle('hecho', !!S.hecho[g.dataset.id]); g.classList.toggle('cerrado', g.dataset.id === 'cafe' && !cincoHechos() && !S.profe); });
+  $$('.bomb').forEach(b => { const on = !!S.hecho[b.dataset.g]; b.classList.toggle('on', on); b.style.fill = on ? b.dataset.c : ''; });
+  $$('.nodo').forEach(n => { const f = FECHAS[n.dataset.i], on = !!S.hecho[f.est]; n.classList.toggle('on', on); $('.t', n).textContent = on ? f.t : f.m + '.'; });
+  $('#quien').textContent = S.nombre ? S.nombre + ' · ' + FECHAS.filter(f => S.hecho[f.est]).length + ' / 8 fechas' : '';
+  $('#bson').textContent = S.son ? 'Sonido: sí' : 'Sonido: no';
 }
 
-/* ====== 6. COMPONENTES DE EJERCICIO ===================================
-   Cada componente recibe (C, datos, fin) y llama fin(aciertos, total).
-   C = { cuerpo, msg(texto, tipo), boton(texto, fn) }                     */
-function consigna(C, es, fr) {
-  const n = el(`<div class="consigna"><p>${es}<span class="fr">${fr || ''}</span></p><button class="mini voz">🔊 Escuchar</button>${fr ? '<button class="mini ay">🇫🇷 Ayuda</button>' : ''}</div>`);
-  $('.voz', n).onclick = (e) => decir(es, e.target); if (fr) $('.ay', n).onclick = () => n.classList.toggle('ver');
-  C.cuerpo.append(n);
+/* ====== 4. ESCENA DE EJERCICIO ======================================== */
+let relojT = 0, lluviaT = 0, mechaT = 0, limpiar = [];
+const C = {
+  tabla: $('#tabla'),
+  consigna(es, fr) { const c = $('#econs'); c.className = 'cons'; c.innerHTML = `${es}<span class="fr">${fr}</span>`; $('#evoz').onclick = (e) => decir(es, e.target); $('#efr').onclick = () => c.classList.toggle('ver2'); },
+  glosa(h) { $('#eglos').innerHTML = h || ''; $('#eglos').style.display = h ? '' : 'none'; },
+  msg(t, c) { const m = $('#emsg'); m.textContent = t; m.className = 'msg ' + (c || ''); },
+  boton(t, fn) { const z = $('#ebt'); z.innerHTML = ''; if (!t) return; const b = el(`<button class="btn" ${fn ? '' : 'disabled'}>${t}</button>`); if (fn) b.onclick = fn; z.append(b); }
+};
+function parar() { callar(); $$('video').forEach(v => v.pause()); clearInterval(relojT); clearInterval(lluviaT); clearInterval(mechaT); limpiar.forEach(f => f()); limpiar = []; }
+function salir() { parar(); $('#esc').classList.remove('on'); C.tabla.innerHTML = ''; }
+function entrar(id) {
+  ac();
+  if (id === 'cafe' && !cincoHechos() && !S.profe) return aviso('El café está cerrado', '<p>El café abre al final. Visita primero los otros cinco lugares de la plaza.</p>');
+  const E = EST[id]; let k = 0, ok = 0, tot = 0;
+  $('#efec').textContent = E.f; $('#etit').textContent = E.t; $('#epasos').innerHTML = E.pasos.map(p => `<li>${p.n}</li>`).join(''); $('#esalir').onclick = salir; $('#esc').classList.add('on');
+  const paso = () => { parar(); C.tabla.innerHTML = ''; C.msg('', ''); C.boton('', null); C.glosa('');
+    $$('#epasos li').forEach((p, j) => p.className = j < k ? 'ya' : j === k ? 'act' : '');
+    E.pasos[k].f((a, t) => { ok += a; tot += t; k++; if (k < E.pasos.length) paso(); else { salir(); terminar(id, ok, tot); } }); };
+  paso();
 }
-function qcm(C, pregs, fin) {
+const seguir = (fin, a, t, texto = '¡Muy bien!') => { bien(); C.msg(texto, 'bien'); C.boton('Continuar', () => fin(a, t)); };
+
+/* Arrastrar y soltar con respuesta inmediata.
+   .ficha[data-c] se suelta en .dest[data-a]; data-c="-" = intrusa (no va en ningún sitio).
+   También funciona con dos clics (ficha, luego destino). */
+function arrastre(o) {
+  let sel = null, okN = 0; const fallo = new Set(), T = C.tabla;
+  const fichas = () => $$('.ficha:not(.fija)', T), pend = () => fichas().filter(f => f.dataset.c !== '-');
+  const libre = (x) => x.dataset.multi || !(x.querySelector('.ficha') || x.classList.contains('on'));
+  const soltar = (f, d) => {
+    if (!d) return;
+    if (d.dataset.a === f.dataset.c && !libre(d)) d = $$('.dest', T).find(x => x.dataset.a === f.dataset.c && libre(x)) || d;
+    if (d.dataset.a === f.dataset.c && libre(d)) {
+      f.classList.remove('sel'); f.classList.add('fija'); if (!fallo.has(f)) okN++; clic(okN); C.msg('', '');
+      if (o.ok) o.ok(f, d); else { d.append(f); d.classList.add('lleno'); }
+      if (!pend().length) { fichas().forEach(x => x.style.visibility = 'hidden'); o.fin(okN, o.total); }
+    } else { fallo.add(f); mal(); f.classList.remove('no'); void f.offsetWidth; f.classList.add('no'); C.msg((o.pista && o.pista(f, d)) || 'No es aquí. Prueba otra vez.', 'mal'); }
+  };
+  $$('.ficha', T).forEach(f => {
+    f.onpointerdown = (e) => { if (f.classList.contains('fija')) return; e.preventDefault(); const x0 = e.clientX, y0 = e.clientY; let mov = false; try { f.setPointerCapture(e.pointerId); } catch (er) {}
+      const bajo = (ev) => { f.style.pointerEvents = 'none'; const d = document.elementFromPoint(ev.clientX, ev.clientY); f.style.pointerEvents = ''; return d && d.closest('.dest'); };
+      const mueve = (ev) => { const dx = ev.clientX - x0, dy = ev.clientY - y0; if (!mov && Math.hypot(dx, dy) < 6) return; mov = true; f.classList.add('vuela'); f.style.transform = `translate(${dx}px,${dy}px)`; $$('.dest.sobre', T).forEach(x => x.classList.remove('sobre')); const dd = bajo(ev); if (dd) dd.classList.add('sobre'); };
+      const suelta = (ev) => { f.removeEventListener('pointermove', mueve); f.removeEventListener('pointerup', suelta); f.removeEventListener('pointercancel', suelta); $$('.dest.sobre', T).forEach(x => x.classList.remove('sobre'));
+        if (!mov) { if (sel) sel.classList.remove('sel'); sel = sel === f ? null : f; if (sel) f.classList.add('sel'); return; }
+        const d = bajo(ev); f.classList.remove('vuela'); f.style.transform = ''; soltar(f, d); };
+      f.addEventListener('pointermove', mueve); f.addEventListener('pointerup', suelta); f.addEventListener('pointercancel', suelta); };
+  });
+  $$('.dest', T).forEach(d => d.addEventListener('click', () => { if (sel && !sel.classList.contains('fija')) { const f = sel; sel = null; f.classList.remove('sel'); soltar(f, d); } }));
+  C.msg('Arrastra cada ficha a su sitio.', '');
+}
+const fichasHTML = (items) => baraja(items).map(([t, c]) => `<div class="ficha" data-c="${c}">${t}</div>`).join('');
+function opciones(cont, pregs, fin) {    // preguntas de elección; fin(aciertos a la primera, total)
   let ok = 0, hechas = 0;
-  pregs.forEach(q => {
-    const n = el(`<div class="preg"><p>${q.p}</p><div class="ops"></div></div>`); let fallo = false;
-    baraja(q.o.map((t, i) => ({ t, i }))).forEach(o => {
-      const b = el(`<button class="op">${o.t}</button>`);
-      b.onclick = () => {
-        if (b.classList.contains('ko') || n.dataset.fin) return;
-        if (o.i === q.c) { b.classList.add('ok'); n.dataset.fin = 1; bien(); hechas++; if (!fallo) ok++; $$('.op', n).forEach(x => x !== b && x.classList.add('ko')); if (hechas === pregs.length) { C.msg(ok === pregs.length ? '¡Perfecto!' : '¡Muy bien!', 'bien'); C.boton('Continuar', () => fin(ok, pregs.length)); } }
-        else { b.classList.add('ko'); fallo = true; mal(); }
-      };
-      $('.ops', n).append(b);
-    });
-    C.cuerpo.append(n);
-  });
+  pregs.forEach(q => { const n = el(`<div class="preg"><p>${q.p}</p><div class="elige"></div></div>`); let fallo = false;
+    baraja(q.o.map((t, i) => ({ t, i }))).forEach(o => { const b = el(`<button class="op">${o.t}</button>`); b.onclick = () => { if (b.classList.contains('ko') || n.dataset.fin) return;
+      if (o.i === q.c) { b.classList.add('ok'); n.dataset.fin = 1; clic(hechas); hechas++; if (!fallo) ok++; $$('.op', n).forEach(x => x !== b && x.classList.add('ko')); if (hechas === pregs.length) fin(ok, pregs.length); } else { b.classList.add('ko'); fallo = true; mal(); } };
+      $('.elige', n).append(b); }); cont.append(n); });
 }
-/* frases con huecos: "El belén es una [representación] del [nacimiento] de Jesús." + distractores */
-function huecos(C, d, fin) {
-  const sol = []; let primera = true, ok = 0;
-  d.frases.forEach(f => C.cuerpo.append(el(`<p class="frase">${f.replace(/\[([^\]]+)\]/g, (_, w) => { sol.push(w); return `<button class="hueco" data-i="${sol.length - 1}">&nbsp;</button>`; })}</p>`)));
-  const banco = el('<div class="banco"></div>'); C.cuerpo.append(banco);
-  baraja(sol.concat(d.extra || [])).forEach(w => { const b = el(`<button class="ficha">${w}</button>`); b.onclick = () => { const h = $$('.hueco', C.cuerpo).find(x => !x.dataset.w); if (!h) return; h.textContent = w; h.dataset.w = w; b.style.visibility = 'hidden'; h._f = b; }; banco.append(b); });
-  $$('.hueco', C.cuerpo).forEach(h => h.onclick = () => { if (h.classList.contains('ok') || !h.dataset.w) return; h._f.style.visibility = ''; delete h.dataset.w; h.innerHTML = '&nbsp;'; });
-  C.boton('Comprobar', function comp() {
-    const hs = $$('.hueco', C.cuerpo); if (hs.some(h => !h.dataset.w)) return C.msg('Completa todos los huecos.', 'mal');
-    let malas = 0; hs.forEach(h => { if (h.classList.contains('ok')) return; if (h.dataset.w === sol[h.dataset.i]) { h.classList.add('ok'); if (primera) ok++; } else { malas++; h._f.style.visibility = ''; delete h.dataset.w; h.innerHTML = '&nbsp;'; } });
-    primera = false;
-    if (malas) { mal(); C.msg(`Hay ${malas} error${malas > 1 ? 'es' : ''}. Inténtalo otra vez.`, 'mal'); C.boton('Comprobar', comp); }
-    else { bien(); C.msg('¡Muy bien!', 'bien'); if (d.leer) decir($$('.frase', C.cuerpo).map(p => p.textContent).join(' ')); C.boton('Continuar', () => fin(ok, sol.length)); }
-  });
-}
-/* frases con menús: "A los españoles les {gustan|*gusta|gusto} reunirse." */
-function menus(C, frases, fin) {
-  let primera = true, ok = 0, tot = 0;
-  frases.forEach(f => C.cuerpo.append(el(`<p class="frase">${f.replace(/\{([^}]+)\}/g, (_, o) => { tot++; const ops = o.split('|'); return `<select class="sel" data-c="${ops.find(x => x[0] === '*').slice(1)}"><option value="">…</option>${baraja(ops).map(x => `<option>${x.replace('*', '')}</option>`).join('')}</select>`; })}</p>`)));
-  C.boton('Comprobar', function comp() {
-    const ss = $$('select.sel', C.cuerpo); if (ss.some(s => !s.value)) return C.msg('Elige una opción en cada frase.', 'mal');
-    let malas = 0; ss.forEach(s => { s.classList.remove('ko'); if (s.disabled) return; if (s.value === s.dataset.c) { s.classList.add('ok'); s.disabled = true; if (primera) ok++; } else { s.classList.add('ko'); malas++; } });
-    primera = false;
-    if (malas) { mal(); C.msg(`Hay ${malas} error${malas > 1 ? 'es' : ''} (en rojo).`, 'mal'); C.boton('Comprobar', comp); }
-    else { bien(); C.msg('¡Muy bien!', 'bien'); C.boton('Continuar', () => fin(ok, tot)); }
-  });
-}
-/* clasificar fichas en columnas (o relacionar en filas) */
-function clasificar(C, d, fin) {
-  let sel = null, primera = true, ok = 0; const tot = d.items.length;
-  const banco = el('<div class="banco"></div>'), cols = el(`<div class="cols ${d.filas ? 'filas' : ''}" style="--n:${d.cols.length}"></div>`);
-  d.cols.forEach((c, i) => { const z = el(`<div class="zona" data-i="${i}"><h3>${c}</h3><div class="in"></div></div>`); z.onclick = () => { if (!sel) return; if (d.filas && $('.ficha', z)) { const v = $('.ficha', z); if (v.classList.contains('ok')) return; banco.append(v); } $('.in', z).append(sel); sel.classList.remove('sel'); sel = null; }; cols.append(z); });
-  baraja(d.items).forEach(([t, c]) => { const b = el(`<button class="ficha" data-c="${c}">${t}</button>`); b.onclick = (e) => { e.stopPropagation(); if (b.classList.contains('ok')) return; if (sel === b) { b.classList.remove('sel'); sel = null; if (b.parentNode !== banco) banco.append(b); return; } if (sel) sel.classList.remove('sel'); sel = b; b.classList.add('sel'); }; banco.append(b); });
-  if (d.filas) C.cuerpo.append(cols, banco); else C.cuerpo.append(banco, cols);
-  C.msg('Haz clic en una ficha y después en su casilla.', '');
-  C.boton('Comprobar', function comp() {
-    if ($('.ficha', banco)) return C.msg('Coloca todas las fichas.', 'mal');
-    let malas = 0; $$('.zona .ficha', cols).forEach(b => { if (b.classList.contains('ok')) return; if (b.dataset.c === b.closest('.zona').dataset.i) { b.classList.add('ok'); if (primera) ok++; } else { malas++; b.classList.add('ko'); setTimeout(() => { b.classList.remove('ko'); banco.append(b); }, 450); } });
-    primera = false;
-    if (malas) { mal(); C.msg(`${malas} ficha${malas > 1 ? 's' : ''} mal colocada${malas > 1 ? 's' : ''}. Inténtalo otra vez.`, 'mal'); C.boton('Comprobar', comp); }
-    else { bien(); C.msg('¡Muy bien!', 'bien'); C.boton('Continuar', () => fin(ok, tot)); }
-  });
-}
-/* ordenar: items = [[texto, detalle]] en el orden correcto */
-function ordenar(C, items, fin) {
-  let primera = true, ok = 0; const banco = el('<div class="banco"></div>'), serie = el('<div class="serie"></div>');
-  items.forEach(() => { const c = el('<div class="casilla"></div>'); c.onclick = () => { if (c.classList.contains('ok') || !c._f) return; c._f.style.display = ''; c._f = null; c.innerHTML = ''; }; serie.append(c); });
-  baraja(items.map((x, i) => i)).forEach(i => { const b = el(`<button class="ficha">${items[i][0]}</button>`); b.dataset.i = i; b.onclick = () => { const c = $$('.casilla', serie).find(x => !x._f); if (!c) return; c._f = b; c.innerHTML = `<span>${items[i][0]}</span>`; b.style.display = 'none'; }; banco.append(b); });
-  C.cuerpo.append(banco, serie);
-  C.boton('Comprobar', function comp() {
-    const cs = $$('.casilla', serie); if (cs.some(c => !c._f)) return C.msg('Coloca todas las fiestas.', 'mal');
-    let malas = 0; cs.forEach((c, k) => { if (c.classList.contains('ok')) return; if (+c._f.dataset.i === k) { c.classList.add('ok'); c.innerHTML += `<small>${items[k][1]}</small>`; if (primera) ok++; } else { malas++; c._f.style.display = ''; c._f = null; c.innerHTML = ''; } });
-    primera = false;
-    if (malas) { mal(); C.msg(`${malas} fiesta${malas > 1 ? 's' : ''} no está${malas > 1 ? 'n' : ''} en su sitio.`, 'mal'); C.boton('Comprobar', comp); }
-    else { bien(); C.msg('¡Calendario completo!', 'bien'); C.boton('Continuar', () => fin(ok, items.length)); }
-  });
-}
-function conjugar(C, filas, fin) {
-  let primera = true, ok = 0; const t = el(`<table class="conj">${filas.map(([p, s]) => `<tr><td>${p}</td><td><input data-c="${s}" autocomplete="off" spellcheck="false"></td></tr>`).join('')}</table>`); C.cuerpo.append(t);
-  C.boton('Comprobar', function comp() {
-    let malas = 0; $$('input', t).forEach(i => { i.classList.remove('ko'); if (i.disabled) return; if (norm(i.value) === i.dataset.c) { i.classList.add('ok'); i.disabled = true; if (primera) ok++; } else { malas++; i.classList.add('ko'); if (!primera) i.placeholder = i.dataset.c[0] + '…' + i.dataset.c.slice(-2); } });
-    primera = false;
-    if (malas) { mal(); C.msg(`Hay ${malas} forma${malas > 1 ? 's' : ''} que corregir. Recuerda: o → ue (menos nosotros y vosotros).`, 'mal'); C.boton('Comprobar', comp); }
-    else { bien(); C.msg('¡Muy bien!', 'bien'); C.boton('Continuar', () => fin(ok, filas.length)); }
-  });
-}
-function video(C, src) {
-  if (!src) return;
-  const v = el(`<video src="${src}" controls controlslist="nofullscreen nodownload noplaybackrate" disablepictureinpicture preload="metadata"></video>`);
-  v.onerror = () => v.replaceWith(el('<p class="voc">⚠️ El vídeo no está disponible. Pregunta a tu profesor.</p>'));
-  C.cuerpo.classList.add('convideo'); C.cuerpo.append(v);
-}
-function escribir(C, d, fin) {
-  const n = el(`<div><div class="ayudas">${d.ayudas.map(a => `<span>${a}</span>`).join('')}</div><div class="acentos">${'áéíóúñ¿¡'.split('').map(c => `<button type="button">${c}</button>`).join('')}</div><textarea class="${d.carta ? 'carta' : ''}" spellcheck="false" placeholder="${d.inicio || ''}"></textarea><p class="voc"><span id="np">0</span> palabras (mínimo ${d.min})</p></div>`);
-  const ta = $('textarea', n); ta.value = S[d.clave] || d.inicio || '';
-  const cuenta = () => { const k = (ta.value.match(/[\wáéíóúñü]+/gi) || []).length; $('#np', n).textContent = k; return k; };
+function videoHTML(src) { return `<video src="${src}" controls controlslist="nofullscreen nodownload noplaybackrate" disablepictureinpicture preload="metadata" onerror="this.outerHTML='<p>El vídeo no está disponible. Pregunta a tu profesor.</p>'"></video>`; }
+function escribir(d, fin) {
+  C.tabla.innerHTML = `<div class="hoja"><div class="chips">${d.ayudas.map(a => `<button data-t="${a}">${a}</button>`).join('')}${'áéíóúñ¿¡'.split('').map(c => `<button class="ac" data-t="${c}">${c}</button>`).join('')}</div><textarea spellcheck="false"></textarea><div class="cuenta"><span id="np">0</span> palabras · mínimo ${d.min}</div></div>`;
+  const ta = $('textarea', C.tabla); ta.value = S[d.clave] || d.inicio || '';
+  const cuenta = () => { const k = (ta.value.match(/[\wáéíóúñü]+/gi) || []).length; $('#np').textContent = k; return k; };
   ta.oninput = () => { cuenta(); S[d.clave] = ta.value; guardar(); };
-  $$('.acentos button', n).forEach(b => b.onclick = () => { const a = ta.selectionStart; ta.setRangeText(b.textContent, a, ta.selectionEnd, 'end'); ta.focus(); ta.oninput(); });
-  C.cuerpo.append(n); cuenta();
-  C.boton(d.boton || 'Terminar', function comp() {
-    const falta = (d.pide || []).filter(([re]) => !re.test(ta.value)).map(x => x[1]);
-    if (cuenta() < d.min) { C.msg(`Escribe un poco más: mínimo ${d.min} palabras.`, 'mal'); return C.boton(d.boton || 'Terminar', comp); }
-    if (falta.length) { C.msg('Falta: ' + falta.join(' · '), 'mal'); return C.boton(d.boton || 'Terminar', comp); }
-    S[d.clave] = ta.value.trim(); guardar(); bien(); fin(1, 1);
-  });
+  $$('.chips button', C.tabla).forEach(b => b.onclick = () => { const t = b.dataset.t.replace(/…/g, ''), a = ta.selectionStart; ta.setRangeText(b.classList.contains('ac') ? t : (a && !/\s$/.test(ta.value.slice(0, a)) ? ' ' : '') + t, a, ta.selectionEnd, 'end'); ta.focus(); ta.oninput(); });
+  cuenta(); C.msg('Haz clic en una ayuda para empezar una frase.', '');
+  C.boton(d.boton, () => { const falta = (d.pide || []).filter(([re]) => !re.test(ta.value)).map(x => x[1]);
+    if (cuenta() < d.min) return C.msg(`Escribe un poco más: mínimo ${d.min} palabras.`, 'mal');
+    if (falta.length) return C.msg('Falta: ' + falta.join(' · '), 'mal');
+    S[d.clave] = ta.value.trim(); guardar(); bien(); $('.hoja', C.tabla).classList.add('va'); C.boton('', null); C.msg(d.adios, 'bien'); setTimeout(() => fin(1, 1), 1100); });
 }
 
-/* ====== 7. LOS LUGARES ================================================= */
+/* ====== 5. LOS SEIS LUGARES ============================================ */
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-let relojT = 0, lluviaT = 0;
+const CAMPANA = '<svg viewBox="0 0 60 70"><path d="M30 6a5 5 0 0 1 5 5c11 4 14 14 14 26 0 8 3 12 7 16H4c4-4 7-8 7-16 0-12 3-22 14-26a5 5 0 0 1 5-5z"/><circle cx="30" cy="60" r="6"/></svg>';
+function reyFig(piel, pelo, capa) { return `<svg viewBox="0 0 150 190"><circle cx="75" cy="52" r="15" fill="${piel}"/><path d="M60 52q15 40 30 0q-5 9-15 9t-15-9z" fill="${pelo}" stroke="#17362a" stroke-width="1.5"/><path d="M59 44l-3-20 9 9 10-15 10 15 9-9-3 20z" fill="#d49a1e"/><path d="M47 150l10-76q18-12 36 0l10 76z" fill="${capa}"/><path d="M68 76h14v74h-14z" fill="#f2e8d5" opacity=".85"/><path d="M14 150h122l-8 22h-106z" fill="#1d4d3a"/><circle cx="42" cy="176" r="10" fill="#f2e8d5" stroke="#1d4d3a" stroke-width="4"/><circle cx="108" cy="176" r="10" fill="#f2e8d5" stroke="#1d4d3a" stroke-width="4"/>${[24, 44, 64, 86, 106, 126].map((x, i) => `<circle cx="${x}" cy="160" r="4" fill="${i % 2 ? '#d49a1e' : '#f2e8d5'}"/>`).join('')}</svg>`; }
+const ESFERA = (extra) => `<circle cx="50" cy="50" r="45" fill="#f2e8d5" stroke="#1d4d3a" stroke-width="5"/>${[...Array(12)].map((_, k) => `<path d="M50 10v7" stroke="#1d4d3a" stroke-width="3" transform="rotate(${k * 30} 50 50)"/>`).join('')}<path d="M50 50V26M50 50V17" stroke="#a4142c" stroke-width="4" stroke-linecap="round"/>${extra}`;
 const EST = {
-  loteria: { ico: '🎱', t: 'El quiosco de la lotería', f: '22 de diciembre', pasos: [
-    (C, fin) => { consigna(C, 'Mira el vídeo del sorteo de la lotería de Navidad. Después, contesta.', 'Regarde la vidéo du tirage de la loterie de Noël, puis réponds.'); C.cuerpo.append(el('<p class="voc"><b>el sorteo</b> : le tirage · <b>el premio</b> : le lot · <b>cantar</b> : chanter</p>')); video(C, VIDEOS.gordo);
-      qcm(C, [{ p: '¿Qué número gana?', o: ['79.432', '97.432', '79.342'], c: 0 }, { p: '¿Cuánto dinero es el premio?', o: ['Cuatro millones de euros', 'Cuatro mil euros', 'Cuarenta millones de euros'], c: 0 }, { p: '¿Quiénes cantan los números?', o: ['Unas niñas de un colegio', 'Unas cantantes famosas', 'Los Reyes Magos'], c: 0 }, { p: '¿Cómo se llama el primer premio de la lotería de Navidad?', o: ['El Gordo', 'El Grande', 'El Rey'], c: 0 }], fin); },
-    (C, fin) => { consigna(C, 'Ordena cronológicamente las fiestas navideñas de España.', 'Remets les fêtes de fin d’année espagnoles dans l’ordre chronologique.');
-      ordenar(C, [['El Gordo (la lotería)', '22 de diciembre'], ['Nochebuena', '24 de diciembre'], ['Navidad', '25 de diciembre'], ['Santos Inocentes', '28 de diciembre'], ['Nochevieja', '31 de diciembre'], ['Año Nuevo', '1 de enero'], ['La cabalgata de Reyes', '5 de enero'], ['Día de Reyes', '6 de enero']], fin); }
+  /* ---------- 22 de diciembre ---------- */
+  loteria: { t: 'El sorteo de la lotería', f: '22 de diciembre', pasos: [
+    { n: 'El sorteo', f(fin) {
+      C.consigna('Mira el sorteo. Después, compón el número premiado con las bolas y completa los datos.', 'Regarde le tirage. Ensuite, compose le numéro gagnant avec les boules et complète les informations.');
+      C.glosa('<b>el sorteo</b> : le tirage · <b>el premio</b> : le lot · <b>cantar</b> : chanter<br>Las flechas ▲ ▼ cambian cada cifra.');
+      const grupo = (id, rot, ops) => `<div class="grupo" id="${id}"><div class="rot">${rot}</div><div class="elige">${baraja(ops).map(t => `<button class="op">${t}</button>`).join('')}</div></div>`;
+      C.tabla.innerHTML = `<div class="duo">${videoHTML(VIDEOS.gordo)}<div class="bombo"><div class="grupo" id="g1"><div class="rot">El número premiado</div><div class="ruedas">${[0, 1, 2, 3, 4].map(i => `<div class="rueda"><button data-d="1">▲</button><span>0</span><button data-d="-1">▼</button></div>${i === 1 ? '<i>.</i>' : ''}`).join('')}</div></div>${grupo('g2', 'El premio', ['4.000 €', '400.000 €', '4.000.000 €'])}${grupo('g3', '¿Quiénes cantan los números?', ['unas niñas de un colegio', 'unas cantantes famosas', 'los Reyes Magos'])}${grupo('g4', 'El primer premio se llama…', ['El Gordo', 'El Grande', 'El Rey'])}</div></div>`;
+      $$('.rueda', C.tabla).forEach(r => $$('button', r).forEach(b => b.onclick = () => { const s = $('span', r); s.textContent = (+s.textContent + +b.dataset.d + 10) % 10; s.classList.toggle('gira'); clic(+s.textContent); }));
+      $$('.elige', C.tabla).forEach(g => $$('.op', g).forEach(b => b.onclick = () => { if (g.dataset.fin || b.classList.contains('ko')) return; $$('.op', g).forEach(x => x.classList.remove('sel')); b.classList.add('sel'); }));
+      let primera = true, ok = 0; const sol = { g2: '4.000.000 €', g3: 'unas niñas de un colegio', g4: 'El Gordo' };
+      C.boton('Comprobar', () => { let malas = 0; const num = $$('.rueda span', C.tabla).map(s => s.textContent).join('');
+        const g1 = $('#g1'); if (!g1.dataset.fin) { if (num === '79432') { g1.dataset.fin = 1; g1.classList.remove('mal'); if (primera) ok++; } else { g1.classList.add('mal'); malas++; } }
+        Object.keys(sol).forEach(k => { const g = $('#' + k), e = $('.elige', g); if (e.dataset.fin) return; const s = $('.op.sel', g); if (s && s.textContent === sol[k]) { e.dataset.fin = 1; s.classList.replace('sel', 'ok'); g.classList.remove('mal'); if (primera) ok++; } else { g.classList.add('mal'); if (s) { s.classList.remove('sel'); s.classList.add('ko'); } malas++; } });
+        primera = false;
+        if (malas) { mal(); C.msg(`Revisa ${malas === 1 ? 'el dato' : 'los ' + malas + ' datos'} en rojo. Puedes ver el vídeo otra vez.`, 'mal'); }
+        else { $$('video').forEach(v => v.pause()); decir('Setenta y nueve mil cuatrocientos treinta y dos. Cuatro millones de euros.'); seguir(fin, ok, 4, '79.432: ¡cuatro millones de euros!'); } }); } },
+    { n: 'El calendario', f(fin) {
+      C.consigna('Cuelga cada fiesta en su fecha para encender el calendario navideño.', 'Accroche chaque fête à sa date pour allumer le calendrier des fêtes.');
+      C.glosa('<b>una broma</b> : une blague<br>El 28 de diciembre es un día de bromas.');
+      const F = [['22', 'dic', 'El sorteo del Gordo'], ['24', 'dic', 'Nochebuena'], ['25', 'dic', 'Navidad'], ['28', 'dic', 'Santos Inocentes'], ['31', 'dic', 'Nochevieja'], ['1', 'ene', 'Año Nuevo'], ['5', 'ene', 'La cabalgata de Reyes'], ['6', 'ene', 'Día de Reyes']];
+      C.tabla.innerHTML = `<div class="hilo">${F.map((f, i) => `<div class="pos"><div class="bu"></div><div class="dia serif">${f[0]}<small>${f[1]}.</small></div><div class="caja dest" data-a="${i}"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML(F.map((f, i) => [f[2], i]))}</div>`;
+      arrastre({ total: 8, ok(f, d) { d.append(f); d.classList.add('lleno'); d.parentNode.classList.add('on'); }, fin: (a, t) => seguir(fin, a, t, '¡Calendario encendido!') }); } }
   ] },
-  belen: { ico: '⭐', t: 'El belén y los villancicos', f: 'Navidad · 25 de diciembre', pasos: [
-    (C, fin) => { consigna(C, 'Completa las dos definiciones con las palabras.', 'Complète les deux définitions avec les mots proposés.');
-      huecos(C, { frases: ['El belén es una [representación] del [nacimiento] de Jesús.', 'El villancico es una [composición] musical popular y [tradicional] de significado [religioso] que se [canta] durante las festividades navideñas.'], extra: ['cena', 'moderna', 'come'], leer: true }, fin); },
-    (C, fin) => { consigna(C, 'Monta el belén: ¿qué hay en un belén tradicional?', 'Monte la crèche : que trouve-t-on dans une crèche traditionnelle ?'); C.cuerpo.append(el('<p class="voc"><b>el establo</b> : l’étable · <b>el buey</b> : le bœuf · <b>la mula</b> : la mule</p>'));
-      clasificar(C, { cols: ['⭐ En el belén', '✖ No está en el belén'], items: [['María', 0], ['José', 0], ['el Niño Jesús', 0], ['el establo', 0], ['la mula y el buey', 0], ['Papá Noel', 1], ['un reno', 1], ['un muñeco de nieve', 1]] }, fin); },
-    (C, fin) => { consigna(C, 'Escucha los dos villancicos del coro. ¿Cómo se llaman?', 'Écoute les deux chants de Noël de la chorale. Comment s’appellent-ils ?');
-      const ord = baraja(['paz', 'cascabel']), tit = { paz: 'Noche de paz', cascabel: 'Cascabel (Jingle bells)' };
-      const n = el(`<div>${ord.map((id, k) => `<p class="frase"><button class="btn sec" data-m="${id}">🎶 Villancico ${k + 1}</button> &nbsp;se llama&nbsp; <select class="sel" data-c="${tit[id]}"><option value="">…</option><option>Noche de paz</option><option>Campana sobre campana</option><option>Cascabel (Jingle bells)</option></select></p>`).join('')}<p class="voc">Letra de otro villancico famoso: «<b>Campana sobre campana</b>, y sobre campana una; asómate a la ventana, verás al Niño en la cuna.» <button class="mini" id="lv">🔊 Escuchar</button></p></div>`);
-      $$('[data-m]', n).forEach(b => b.onclick = () => { callar(); tocar(b.dataset.m); }); $('#lv', n).onclick = (e) => decir('Campana sobre campana, y sobre campana una; asómate a la ventana, verás al Niño en la cuna.', e.target); C.cuerpo.append(n);
-      let primera = true, ok = 0;
-      C.boton('Comprobar', function comp() { const ss = $$('select', n); if (ss.some(s => !s.value)) return C.msg('Elige un título para cada villancico.', 'mal'); let malas = 0; ss.forEach(s => { s.classList.remove('ko'); if (s.value === s.dataset.c) { s.classList.add('ok'); s.disabled = true; if (primera) ok++; } else { s.classList.add('ko'); malas++; } }); primera = false; if (malas) { mal(); C.msg('Escucha otra vez.', 'mal'); C.boton('Comprobar', comp); } else { bien(); C.msg('¡Muy bien!', 'bien'); C.boton('Continuar', () => fin(ok, 2)); } }); }
+  /* ---------- Nochebuena ---------- */
+  cena: { t: 'La cena de Nochebuena', f: '24 de diciembre', pasos: [
+    { n: 'La mesa', f(fin) {
+      C.consigna('Pon la mesa de Nochebuena: sirve cada plato en su sitio y retira lo que no es de esta cena.', 'Dresse la table du réveillon : sers chaque plat à sa place et retire ce qui n’est pas de ce repas.');
+      C.glosa('<b>un postre</b> : un dessert · <b>el cochinillo</b> : le cochon de lait · <b>el pavo</b> : la dinde<br>Los turrones, los polvorones y los mazapanes son dulces.');
+      C.tabla.innerHTML = `<div class="mesa">${[[13, 50, 'p'], [31.5, 50, 'p'], [50, 50, 'd'], [68.5, 50, 'd'], [87, 50, 'd']].map(([x, y, a]) => `<div class="plato dest" data-a="${a}" style="left:${x}%;top:${y}%">${a === 'p' ? 'plato principal' : 'postre'}</div>`).join('')}</div><div class="bandeja">${fichasHTML([['el cochinillo asado', 'p'], ['el pavo', 'p'], ['los turrones', 'd'], ['los polvorones', 'd'], ['los mazapanes', 'd'], ['las doce uvas', 'x'], ['la pizza', 'x']])}</div><div class="caja dest fuera" data-a="x" data-multi="1">No es de Nochebuena</div>`;
+      arrastre({ total: 7, ok(f, d) { if (d.dataset.a !== 'x') d.textContent = ''; d.append(f); d.classList.add('lleno'); }, pista: (f) => f.textContent === 'las doce uvas' ? 'Las uvas son para otra noche…' : null, fin: (a, t) => seguir(fin, a, t, '¡La mesa está lista!') }); } },
+    { n: 'Soler', f(fin) {
+      C.consigna('SOLER es un verbo con diptongo. Haz clic en la raíz para cambiar «o» por «ue» y arrastra cada terminación.', 'SOLER est un verbe à diphtongue. Clique sur le radical pour changer « o » en « ue » et fais glisser chaque terminaison.');
+      C.glosa('<b>soler</b> + infinitivo : avoir l’habitude de<br>Suelo cenar en familia.');
+      const P = [['yo', 'ue', 'o'], ['nosotros/as', 'o', 'emos'], ['tú', 'ue', 'es'], ['vosotros/as', 'o', 'éis'], ['él / ella / usted', 'ue', 'e'], ['ellos / ellas / ustedes', 'ue', 'en']];
+      C.tabla.innerHTML = `<div class="verbo">${P.map(p => `<div class="pers" data-r="${p[1]}"><span class="pr">${p[0]}</span><span class="fo">s<button class="raiz">o</button>l</span><div class="caja dest" data-a="${p[2]}"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML(P.map(p => ['-' + p[2], p[2]]))}</div>`;
+      $$('.raiz', C.tabla).forEach(b => b.onclick = () => { if (b.disabled) return; b.textContent = b.textContent === 'o' ? 'ue' : 'o'; b.closest('.pers').classList.remove('mal'); clic(); });
+      let okT = 0, primera = true, okR = 0, term = false;
+      arrastre({ total: 6, fin: (a) => { okT = a; term = true; C.msg('Ahora comprueba las raíces: ¿«o» o «ue»?', ''); } });
+      C.boton('Comprobar', () => { if (!term) return C.msg('Coloca primero todas las terminaciones.', 'mal'); let malas = 0;
+        $$('.pers', C.tabla).forEach(p => { const b = $('.raiz', p); if (b.disabled) return; if (b.textContent === p.dataset.r) { b.disabled = true; if (primera) okR++; } else { p.classList.add('mal'); malas++; } }); primera = false;
+        if (malas) { mal(); C.msg(`Hay ${malas} ${malas > 1 ? 'raíces' : 'raíz'} que cambiar. Pista: nosotros y vosotros no cambian.`, 'mal'); }
+        else { $$('.pers', C.tabla).forEach(p => { if (p.dataset.r === 'ue') p.classList.add('bota'); }); decir('Suelo, sueles, suele, solemos, soléis, suelen.'); seguir(fin, okT + okR, 12, 'Suelo, sueles, suele, solemos, soléis, suelen.'); } }); } },
+    { n: '¿Gusta o gustan?', f(fin) {
+      C.consigna('Elige rápido la forma correcta antes de que se acabe el tiempo. Puedes usar las flechas ← y → del teclado.', 'Choisis vite la bonne forme avant la fin du temps. Tu peux utiliser les flèches ← et → du clavier.');
+      C.glosa('<b>Me gusta</b> + singular o infinitivo<br><b>Me gustan</b> + plural<br><b>compartir</b> : partager');
+      let cola = baraja([['A los españoles les ___ reunirse con la familia.', 'gusta', 'gustan', 0], ['Les ___ las recetas navideñas.', 'encanta', 'encantan', 1], ['Los españoles ___ cenar platos típicos, como el pavo.', 'suele', 'suelen', 1], ['De postre, ___ preparar turrones, polvorones y mazapanes.', 'suelen', 'soléis', 0], ['A mí me ___ los polvorones.', 'gusta', 'gustan', 1], ['A mi familia le ___ cenar en casa.', 'encanta', 'encantan', 0], ['Yo ___ cenar con mis abuelos.', 'suelo', 'suele', 0], ['Nosotros ___ comer turrón.', 'solemos', 'suelen', 0], ['A los niños les ___ la Nochebuena.', 'encanta', 'encantan', 0], ['¿Te ___ los mazapanes?', 'gusta', 'gustan', 1]]);
+      const tot = cola.length; let ok = 0, hechas = 0, act = null, t0 = 0; const vistos = new Set();
+      C.tabla.innerHTML = `<div class="marc"><span>Frases: <b id="mh">0</b> / ${tot}</span></div><div class="tarjeta"><p></p><div class="mecha"><i></i></div><div class="dosb"><button data-k="0"><small>←</small><span></span></button><button data-k="1"><small>→</small><span></span></button></div></div>`;
+      const sig = () => { clearInterval(mechaT); if (!cola.length) { $('.tarjeta', C.tabla).style.opacity = .5; return seguir(fin, ok, tot, `${ok} / ${tot} a la primera.`); }
+        act = cola.shift(); $('.tarjeta p', C.tabla).innerHTML = act[0].replace('___', '<u>&nbsp;</u>'); $$('.dosb span', C.tabla).forEach((s, i) => s.textContent = act[1 + i]); t0 = Date.now();
+        mechaT = setInterval(() => { const r = 1 - (Date.now() - t0) / 9000; $('.mecha i', C.tabla).style.width = Math.max(0, r * 100) + '%'; if (r <= 0) resp(-1); }, 80); };
+      const resp = (k) => { if (!act) return; clearInterval(mechaT); const a = act; act = null; $('.tarjeta p', C.tabla).innerHTML = a[0].replace('___', `<u>${a[1 + a[3]]}</u>`);
+        if (k === a[3]) { if (!vistos.has(a[0])) ok++; hechas++; $('#mh').textContent = hechas; clic(hechas); C.msg('', ''); setTimeout(sig, 900); }
+        else { vistos.add(a[0]); cola.push(a); mal(); C.msg(k < 0 ? 'Se acabó el tiempo. Mira la respuesta.' : 'No. Mira la respuesta: la frase vuelve después.', 'mal'); setTimeout(sig, 2200); } };
+      $$('.dosb button', C.tabla).forEach(b => b.onclick = () => resp(+b.dataset.k));
+      const tecla = (e) => { if (e.key === 'ArrowLeft') resp(0); if (e.key === 'ArrowRight') resp(1); }; addEventListener('keydown', tecla); limpiar.push(() => removeEventListener('keydown', tecla));
+      $('.tarjeta', C.tabla).style.visibility = 'hidden'; C.boton('Empezar', () => { C.boton('', null); $('.tarjeta', C.tabla).style.visibility = ''; sig(); }); } }
   ] },
-  cena: { ico: '🍽️', t: 'La cena de Nochebuena', f: 'Nochebuena · 24 de diciembre', pasos: [
-    (C, fin) => { consigna(C, 'Pon la mesa de Nochebuena: clasifica los platos.', 'Mets la table du réveillon : classe les plats.'); C.cuerpo.append(el('<p class="voc"><b>un postre</b> : un dessert · <b>compartir</b> : partager · <b>inolvidable</b> : inoubliable</p>'));
-      clasificar(C, { cols: ['🍖 Plato principal', '🍬 Postre', '✖ No es de Nochebuena'], items: [['🐖 el cochinillo asado', 0], ['🦃 el pavo', 0], ['los turrones', 1], ['los polvorones', 1], ['los mazapanes', 1], ['🍇 las doce uvas', 2], ['🍕 la pizza', 2]] }, fin); },
-    (C, fin) => { consigna(C, 'Conjuga el verbo SOLER en presente.', 'Conjugue le verbe SOLER (avoir l’habitude de) au présent.');
-      conjugar(C, [['yo', 'suelo'], ['tú', 'sueles'], ['él / ella / usted', 'suele'], ['nosotros/as', 'solemos'], ['vosotros/as', 'soléis'], ['ellos / ellas / ustedes', 'suelen']], fin); },
-    (C, fin) => { consigna(C, 'Elige la forma correcta para describir la Nochebuena en España.', 'Choisis la bonne forme pour décrire le réveillon en Espagne.');
-      menus(C, ['Para Nochebuena, a los españoles les {*gusta|gustan|gusto} reunirse con la familia.', 'Les {*encantan|encanta|encantamos} las recetas navideñas.', '{*Suelen|Suele|Soléis} cenar platos típicos, como el pavo.', 'De postre, {*suelen|sueles|solemos} preparar o comprar turrones, polvorones y mazapanes.', 'Y yo, en Francia, {*suelo|suele|suelen} cenar con mi familia.', 'A mí me {*encanta|encantan|encanto} la Nochebuena.'], fin); }
+  /* ---------- Navidad ---------- */
+  belen: { t: 'El belén y los villancicos', f: '25 de diciembre · Navidad', pasos: [
+    { n: 'El belén', f(fin) {
+      C.consigna('Monta el belén: arrastra cada nombre hasta su figura. ¡Cuidado con los intrusos!', 'Monte la crèche : fais glisser chaque nom sur sa figurine. Attention aux intrus !');
+      C.glosa('<b>el establo</b> : l’étable · <b>la mula</b> : la mule (orejas largas) · <b>el buey</b> : le bœuf (cuernos)<br>El belén representa a la Sagrada Familia en un establo.');
+      const fig = (a, x, n, d) => `<g class="dest" data-a="${a}" transform="translate(${x} 0)"><rect x="-55" y="120" width="110" height="210" fill="transparent"/><g class="fig">${d}</g><text y="352">${n}</text></g>`;
+      C.tabla.innerHTML = `<svg id="establo" viewBox="0 0 700 400"><path class="astro" d="M350 8L356 26 372 18 366 34 384 40 366 46 372 62 356 54 350 72 344 54 328 62 334 46 316 40 334 34 328 18 344 26z"/><path d="M60 150L350 60l290 90v14H60z" fill="#a4142c"/><path d="M90 164v166M610 164v166" stroke="#a4142c" stroke-width="14"/><path d="M40 330h620" stroke="#1d4d3a" stroke-width="6"/>
+        ${fig('mula', 150, 'la mula', '<path d="M-28 320v-80q0-34 28-34t28 34v80z"/><ellipse cx="0" cy="196" rx="20" ry="26"/><path d="M-14 178l-10-46 18 36zM14 178l10-46-18 36z"/>')}
+        ${fig('maria', 260, 'María', '<path d="M-34 320l10-104q24-22 48 0l10 104z"/><circle cx="0" cy="200" r="18"/><path d="M-22 204q22-52 44 0l4 40q-26-18-52 0z"/>')}
+        ${fig('nino', 350, 'el Niño Jesús', '<path d="M-36 320l20-44M36 320l-20-44M-40 276h80l-8-22h-64z"/><ellipse cx="4" cy="246" rx="26" ry="10"/><circle cx="-22" cy="240" r="11"/>')}
+        ${fig('jose', 440, 'José', '<path d="M-30 320l8-124q22-20 44 0l8 124z"/><circle cx="0" cy="176" r="18"/><path d="M32 320V168h6v152z"/>')}
+        ${fig('buey', 550, 'el buey', '<path d="M-32 320v-74q0-34 32-34t32 34v74z"/><ellipse cx="0" cy="208" rx="26" ry="22"/><path d="M-22 196q-22-8-18-32q8 18 24 20zM22 196q22-8 18-32q-8 18-24 20z"/>')}</svg>
+        <div class="bandeja">${fichasHTML([['María', 'maria'], ['José', 'jose'], ['el Niño Jesús', 'nino'], ['la mula', 'mula'], ['el buey', 'buey'], ['Papá Noel', 'x'], ['un reno', 'x'], ['un muñeco de nieve', 'x']])}</div><div class="caja dest fuera" data-a="x" data-multi="1">No está en el belén</div>`;
+      arrastre({ total: 8, ok(f, d) { if (d.dataset.a === 'x') { d.append(f); d.classList.add('lleno'); } else { d.classList.add('on'); f.remove(); } }, pista: (f) => f.dataset.c === 'x' ? 'Esta figura no está en un belén tradicional.' : null,
+        fin: (a, t) => { $('#establo').classList.add('fin'); seguir(fin, a, t, '¡El belén está completo!'); } }); } },
+    { n: 'Las definiciones', f(fin) {
+      C.consigna('Completa las dos definiciones que conoces de memoria.', 'Complète les deux définitions que tu connais par cœur.');
+      const h = (w) => `<span class="dest" data-a="${w}"></span>`;
+      C.tabla.innerHTML = `<p class="def">El belén es una ${h('representación')} del ${h('nacimiento')} de Jesús.</p><p class="def">El villancico es una ${h('composición')} musical popular y ${h('tradicional')} de significado ${h('religioso')} que se ${h('canta')} durante las festividades navideñas.</p><div class="bandeja">${fichasHTML([['representación', 'representación'], ['nacimiento', 'nacimiento'], ['composición', 'composición'], ['tradicional', 'tradicional'], ['religioso', 'religioso'], ['canta', 'canta'], ['cena', '-'], ['moderna', '-'], ['come', '-']])}</div>`;
+      arrastre({ total: 6, fin: (a, t) => { decir($$('.def', C.tabla).map(p => p.textContent).join(' ')); seguir(fin, a, t); } }); } },
+    { n: 'El villancico', f(fin) {
+      C.consigna('Toca el villancico: haz clic en la campana que se ilumina. Después, di cómo se llama.', 'Joue le chant de Noël : clique sur la cloche qui s’allume. Ensuite, dis comment il s’appelle.');
+      C.glosa('<b>una campana</b> : une cloche · <b>tocar</b> : jouer (d’un instrument)');
+      const B = [[64, 'mi'], [67, 'sol'], [69, 'la'], [71, 'si'], [72, 'do'], [74, 're']], SEQ = [67, 69, 67, 64, 67, 69, 67, 64, 74, 74, 71, 72, 72, 67]; let i = 0, err = 0, ok = 0;
+      C.tabla.innerHTML = `<div class="pauta">${SEQ.map(() => '<i></i>').join('')}</div><div class="campanas">${B.map(([m, n], k) => `<button class="camp" data-m="${m}" style="scale:${1.12 - k * .05}">${CAMPANA}${n}</button>`).join('')}</div><div id="tit" style="min-height:7rem;width:40rem"></div>`;
+      const luz = () => $$('.camp', C.tabla).forEach(b => b.classList.toggle('luz', i < SEQ.length && +b.dataset.m === SEQ[i]));
+      const preguntar = (m, sig) => { const t = $('#tit'); if (!t) return; t.innerHTML = ''; opciones(t, [{ p: '¿Cómo se llama este villancico?', o: ['Noche de paz', 'Cascabel (Jingle bells)', 'Campana sobre campana'], c: m }], (a) => { ok += a; sig(); }); };
+      $$('.camp', C.tabla).forEach(b => b.onclick = () => { if (i >= SEQ.length) return; b.classList.remove('toca'); void b.offsetWidth; b.classList.add('toca');
+        if (+b.dataset.m === SEQ[i]) { nota(SEQ[i], ahora(), .8); $$('.pauta i', C.tabla)[i].classList.add('ya'); i++; luz();
+          if (i === SEQ.length) { C.msg('Ahora escucha el villancico completo…', ''); const t1 = setTimeout(() => { const d = tocar('paz'); const t2 = setTimeout(() => preguntar(0, () => { C.msg('Escucha otro villancico…', ''); const d2 = tocar('cascabel'); const t3 = setTimeout(() => preguntar(1, () => seguir(fin, ok + (err <= 2 ? 1 : 0), 3)), Math.min(d2, 4000)); limpiar.push(() => clearTimeout(t3)); }), Math.min(d, 3500)); limpiar.push(() => clearTimeout(t2)); }, 700); limpiar.push(() => clearTimeout(t1)); } }
+        else { err++; mal(); } });
+      luz(); C.msg('Sigue la luz: catorce notas.', ''); } }
   ] },
-  reloj: { ico: '🕛', t: 'El reloj de la plaza', f: 'Nochevieja · 31 de diciembre', pasos: [
-    (C, fin) => { consigna(C, 'La tradición de las doce uvas: relaciona cada pregunta con su respuesta.', 'La tradition des douze raisins : associe chaque question à sa réponse.');
-      clasificar(C, { filas: true, cols: ['¿Quién?', '¿Cuándo?', '¿Qué?', '¿Por qué?', 'El origen'], items: [['los españoles', 0], ['el 31 de diciembre, a medianoche', 1], ['comer 12 uvas al son de las campanadas', 2], ['para tener buena suerte', 3], ['1909: una buena cosecha de uvas', 4]] }, fin); },
-    (C, fin) => { consigna(C, 'Relaciona cada palabra con su traducción.', 'Associe chaque mot à sa traduction.');
-      clasificar(C, { filas: true, cols: ['la uva', 'las campanadas', 'la buena suerte', 'un deseo', 'la cosecha'], items: [['le raisin', 0], ['les coups de cloche', 1], ['la chance', 2], ['un vœu', 3], ['la récolte', 4]] }, fin); },
-    (C, fin) => { consigna(C, 'Es medianoche. Come una uva con cada campanada: ¡son doce! Cada uva es un deseo para un mes del año.', 'Il est minuit. Mange un raisin à chaque coup de cloche : il y en a douze ! Chaque raisin est un vœu pour un mois de l’année.');
-      const n = el(`<div><svg id="reloj" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#fffaf0" stroke="#3a2318" stroke-width="6"/>${[...Array(12)].map((_, k) => `<path d="M50 10v7" stroke="#3a2318" stroke-width="3" transform="rotate(${k * 30} 50 50)"/>`).join('')}<path d="M50 50V22" stroke="#3a2318" stroke-width="5" stroke-linecap="round"/><path d="M50 50V14" stroke="#b3122d" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="50" r="4"/></svg><div id="uvas">${MESES.map(m => `<div><span>🍇</span>${m}</div>`).join('')}</div><button class="btn verde" id="comer" disabled>¡Como una uva! 🍇</button><p class="voc" style="text-align:center">También puedes usar la barra de espacio.</p></div>`);
-      C.cuerpo.append(n); let i = -1, comidas = 0, intento = 0; const uv = $$('#uvas div', n), bt = $('#comer', n);
-      const come = () => { if (i < 0 || i > 11) return; const u = uv[i]; if (u.classList.contains('act')) { u.classList.remove('act'); u.classList.add('com'); comidas++; tono(660 + i * 30, ac().currentTime, .12, 'triangle', .15); } };
-      bt.onclick = come; const tecla = (e) => { if (e.code === 'Space' && document.body.contains(bt)) { e.preventDefault(); come(); } }; addEventListener('keydown', tecla);
-      const empezar = () => { intento++; i = -1; comidas = 0; uv.forEach(u => u.className = ''); bt.disabled = false; C.msg('¡Atención! Tres, dos, uno…', ''); C.boton('…', null);
-        clearInterval(relojT); relojT = setInterval(() => {
-          if (i >= 0 && i < 12 && uv[i].classList.contains('act')) { uv[i].classList.remove('act'); uv[i].classList.add('per'); }
-          i++;
-          if (i > 11) { clearInterval(relojT); bt.disabled = true; removeEventListener('keydown', tecla);
-            if (comidas >= 10) { bien(); fuegos(); C.msg(`¡${comidas} uvas! ¡Feliz Año Nuevo! 🎆`, 'bien'); C.boton('Continuar', () => fin(intento === 1 ? 1 : 0, 1)); }
-            else { mal(); C.msg(`Solo ${comidas} uvas… Necesitas 10 para tener buena suerte.`, 'mal'); addEventListener('keydown', tecla); C.boton('Otra vez', empezar); }
-            return; }
-          uv[i].classList.add('act'); campana(i === 11 ? 147 : 196); const r = $('#reloj', n); r.classList.remove('dong'); void r.offsetWidth; r.classList.add('dong'); C.msg(`Campanada ${i + 1}`, '');
-        }, 1700); };
-      C.msg('Escucha las campanadas y haz clic en el botón verde.', ''); C.boton('Empezar', empezar); }
+  /* ---------- Nochevieja ---------- */
+  reloj: { t: 'El reloj de la plaza', f: '31 de diciembre · Nochevieja', pasos: [
+    { n: 'La tradición', f(fin) {
+      C.consigna('La tradición de las doce uvas: arrastra cada respuesta hasta su pregunta, alrededor del reloj.', 'La tradition des douze raisins : fais glisser chaque réponse vers sa question, autour de l’horloge.');
+      C.glosa('<b>la uva</b> : le raisin · <b>las campanadas</b> : les coups de cloche · <b>la buena suerte</b> : la chance · <b>la cosecha</b> : la récolte · <b>un deseo</b> : un vœu');
+      const Q = [['¿Quién?', 18, 12, 'q'], ['¿Cuándo?', 82, 12, 'c'], ['¿Qué?', 16, 52, 'k'], ['¿Por qué?', 84, 52, 'p'], ['El origen', 50, 90, 'o']];
+      C.tabla.innerHTML = `<div class="esfera"><svg viewBox="0 0 100 100">${ESFERA('<text x="50" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4d3a" font-family="Georgia">12 uvas</text>')}</svg>${Q.map(q => `<div class="q" style="left:${q[1]}%;top:${q[2]}%"><span class="rot">${q[0]}</span><div class="caja dest" data-a="${q[3]}"></div></div>`).join('')}</div><div class="bandeja peq">${fichasHTML([['los españoles', 'q'], ['el 31 de diciembre, a medianoche', 'c'], ['comer 12 uvas al son de las campanadas', 'k'], ['para tener buena suerte', 'p'], ['1909: una buena cosecha de uvas', 'o']])}</div>`;
+      arrastre({ total: 5, fin: (a, t) => seguir(fin, a, t) }); } },
+    { n: 'Las campanadas', f(fin) {
+      C.consigna('Es medianoche. Come una uva con cada campanada: ¡son doce! Cada uva es un deseo para un mes del año.', 'Il est minuit. Mange un raisin à chaque coup de cloche : il y en a douze ! Chaque raisin est un vœu pour un mois de l’année.');
+      C.glosa('Necesitas <b>diez uvas</b> para tener buena suerte.<br>También puedes usar la barra de espacio.');
+      C.tabla.innerHTML = `<svg id="reloj" viewBox="0 0 100 100">${ESFERA('<text id="cn" x="50" y="76" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4d3a" font-family="Georgia"></text>')}</svg><div id="uvas">${MESES.map(m => `<div><span></span>${m}</div>`).join('')}</div><button class="btn oro" id="comer" disabled>Como una uva</button>`;
+      let i = -1, comidas = 0, intento = 0; const uv = $$('#uvas div'), bt = $('#comer');
+      const come = () => { if (i < 0 || i > 11) return; const u = uv[i]; if (u.classList.contains('act')) { u.classList.remove('act'); u.classList.add('com'); comidas++; clic(i); } };
+      bt.onclick = come; const tecla = (e) => { if (e.code === 'Space') { e.preventDefault(); come(); } }; addEventListener('keydown', tecla); limpiar.push(() => removeEventListener('keydown', tecla));
+      const empezar = () => { intento++; i = -1; comidas = 0; uv.forEach(u => u.className = ''); bt.disabled = false; $('#cn').textContent = ''; C.msg('Atención… tres, dos, uno…', ''); C.boton('', null);
+        clearInterval(relojT); relojT = setInterval(() => { if (i >= 0 && i < 12 && uv[i].classList.contains('act')) { uv[i].classList.remove('act'); uv[i].classList.add('per'); } i++;
+          if (i > 11) { clearInterval(relojT); bt.disabled = true; if (comidas >= 10) { fuegos(); seguir(fin, intento === 1 ? 1 : 0, 1, `${comidas} uvas: ¡Feliz Año Nuevo!`); } else { mal(); C.msg(`Solo ${comidas} uvas… Necesitas diez.`, 'mal'); C.boton('Otra vez', empezar); } return; }
+          uv[i].classList.add('act'); campana(i === 11 ? 147 : 196); $('#cn').textContent = i + 1; const r = $('#reloj'); r.classList.remove('dong'); void r.offsetWidth; r.classList.add('dong'); }, 1700); };
+      C.msg('Escucha las campanadas y come una uva cada vez.', ''); C.boton('Empezar', empezar); } }
   ] },
-  reyes: { ico: '👑', t: 'La cabalgata de Reyes', f: '5 y 6 de enero', pasos: [
-    (C, fin) => { if (VIDEOS.cabalgata) { consigna(C, 'Mira el vídeo de la cabalgata. Después, contesta.', 'Regarde la vidéo du défilé, puis réponds.'); video(C, VIDEOS.cabalgata); return qcm(C, PREGUNTAS_CABALGATA, fin); }
-      consigna(C, 'Llegan los tres Reyes Magos. Lee las pistas y escribe el nombre de cada rey.', 'Les trois Rois mages arrivent. Lis les indices et donne son nom à chaque roi.');
-      const ord = baraja(['melchor', 'gaspar', 'baltasar']), nom = { melchor: 'Melchor', gaspar: 'Gaspar', baltasar: 'Baltasar' };
-      const n = el(`<div><p class="voc"><b>la barba</b> : la barbe · <b>el pelo</b> : les cheveux · <b>lleva</b> : il porte</p><ul><li><b>Melchor</b> tiene la barba blanca y lleva ropa roja.</li><li><b>Gaspar</b> tiene el pelo castaño y lleva ropa verde.</li><li><b>Baltasar</b> tiene el pelo negro y lleva ropa violeta.</li></ul><div class="reyes">${ord.map(r => `<figure><svg viewBox="-60 -165 120 170">${rey(0, 0, 1, ...REYES[r])}</svg><figcaption><select class="sel" data-c="${nom[r]}"><option value="">¿Quién es?</option><option>Melchor</option><option>Gaspar</option><option>Baltasar</option></select></figcaption></figure>`).join('')}</div></div>`);
-      C.cuerpo.append(n); let primera = true, ok = 0;
-      C.boton('Comprobar', function comp() { const ss = $$('select', n); if (ss.some(s => !s.value)) return C.msg('Elige un nombre para cada rey.', 'mal'); let malas = 0; ss.forEach(s => { s.classList.remove('ko'); if (s.value === s.dataset.c) { s.classList.add('ok'); s.disabled = true; if (primera) ok++; } else { s.classList.add('ko'); malas++; } }); primera = false; if (malas) { mal(); C.msg('Lee las pistas otra vez.', 'mal'); C.boton('Comprobar', comp); } else { bien(); C.msg('¡Muy bien!', 'bien'); C.boton('Continuar', () => fin(ok, 3)); } }); },
-    (C, fin) => { consigna(C, 'La tradición del Día de Reyes: clasifica las informaciones.', 'La tradition du jour des Rois : classe les informations.'); C.cuerpo.append(el('<p class="voc"><b>desfilar</b> : défiler · <b>repartir</b> : distribuer · <b>una carta</b> : une lettre · <b>un regalo</b> : un cadeau</p>'));
-      clasificar(C, { cols: ['¿Quién?', '¿Cuándo?', '¿Dónde?', '¿Qué?'], items: [['Melchor, Gaspar y Baltasar', 0], ['los niños', 0], ['la noche del 5 al 6 de enero', 1], ['por las calles de España', 2], ['desfilar', 3], ['repartir caramelos', 3], ['escribir una carta para recibir regalos', 3]] }, fin); },
-    (C, fin) => { consigna(C, 'Los Reyes reparten caramelos. Atrapa solo los caramelos del Día de Reyes.', 'Les Rois distribuent des bonbons. Attrape seulement ceux qui parlent du jour des Rois.');
-      const buenas = ['los regalos', 'la carta', 'los caramelos', 'Melchor', 'Baltasar', 'Gaspar', 'el 6 de enero', 'desfilar', 'el roscón', 'los Reyes Magos'], malas = ['las doce uvas', 'El Gordo', 'el pavo', 'las campanadas', 'el 31 de diciembre', 'el sorteo'];
-      const n = el('<div><div id="marc"><span>Caramelos: <b id="mb">0</b> / 7</span><span>Errores: <b id="mm">0</b> / 3</span></div><div id="lluvia"></div></div>'); C.cuerpo.append(n); let intento = 0;
-      const empezar = () => { intento++; let b = 0, m = 0, k = 0, fin2 = false; const cola = baraja(buenas.map(t => [t, 1]).concat(malas.map(t => [t, 0]))), L = $('#lluvia', n); L.innerHTML = ''; $('#mb', n).textContent = 0; $('#mm', n).textContent = 0; C.boton('…', null); C.msg('¡Atrapa los caramelos de Reyes!', '');
-        const acabar = (gana) => { if (fin2) return; fin2 = true; clearInterval(lluviaT); if (gana) { bien(); C.msg('¡Bravo! Tienes muchos caramelos.', 'bien'); C.boton('Continuar', () => fin(intento === 1 ? 1 : 0, 1)); } else { mal(); C.msg(m >= 3 ? 'Demasiados errores…' : 'No tienes bastantes caramelos…', 'mal'); C.boton('Otra vez', empezar); } };
-        clearInterval(lluviaT); lluviaT = setInterval(() => { if (k >= cola.length) { if (!$('.car:not(.ok):not(.ko)', L)) acabar(b >= 7); return; } const [t, ok] = cola[k++]; const c = el(`<button class="car" style="left:${8 + Math.random() * 68}%">${t}</button>`); c.onclick = () => { if (fin2 || c.classList.contains('ok') || c.classList.contains('ko')) return; if (ok) { c.classList.add('ok'); b++; $('#mb', n).textContent = b; tono(880, ac().currentTime, .12, 'triangle', .15); if (b >= 7) acabar(true); } else { c.classList.add('ko'); m++; $('#mm', n).textContent = m; mal(); if (m >= 3) acabar(false); } }; c.onanimationend = () => c.remove(); L.append(c); }, 1100); };
-      C.msg('Haz clic en los caramelos correctos antes de que caigan.', ''); C.boton('Empezar', empezar); },
-    (C, fin) => { consigna(C, 'Escribe tu carta a los Reyes Magos: preséntate y enumera tus deseos.', 'Écris ta lettre aux Rois mages : présente-toi et énumère tes souhaits.');
-      escribir(C, { clave: 'carta', carta: true, min: 25, inicio: 'Queridos Reyes Magos:\n', ayudas: ['Me llamo…', 'Tengo … años.', 'Me gusta… / Me encanta…', 'Este año, deseo recibir…', 'También me gustaría…', 'Suelo…', 'Muchas gracias. Un abrazo,'], pide: [[/gust|encant/i, 'usa «gustar» o «encantar»']], boton: 'Enviar la carta ✉️' }, fin); }
+  /* ---------- Reyes ---------- */
+  reyes: { t: 'La cabalgata de Reyes', f: '5 y 6 de enero', pasos: [
+    ...(VIDEOS.cabalgata ? [{ n: 'El vídeo', f(fin) { C.consigna('Mira el vídeo de la cabalgata. Después, contesta.', 'Regarde la vidéo du défilé, puis réponds.'); C.tabla.innerHTML = `<div class="duo">${videoHTML(VIDEOS.cabalgata)}<div id="qq"></div></div>`; opciones($('#qq'), PREGUNTAS_CABALGATA, (a, t) => seguir(fin, a, t)); } }] : []),
+    { n: 'La cabalgata', f(fin) {
+      C.consigna('Pasa la cabalgata. Lee las pistas y arrastra cada nombre hasta la carroza de su rey.', 'Le défilé passe. Lis les indices et fais glisser chaque nom sur le char de son roi.');
+      C.glosa('<ul><li><b>Melchor</b> tiene la barba blanca y lleva una capa roja.</li><li><b>Gaspar</b> tiene la barba castaña y lleva una capa verde.</li><li><b>Baltasar</b> tiene la barba negra y lleva una capa amarilla.</li></ul><b>la carroza</b> : le char · <b>la barba</b> : la barbe · <b>lleva</b> : il porte<br>Pasa el ratón por la calle para parar la cabalgata.');
+      const R = baraja([['melchor', '#e9c7a6', '#ffffff', '#a4142c'], ['gaspar', '#e2b48c', '#8a5a2c', '#1d4d3a'], ['baltasar', '#5e3a22', '#17100b', '#d49a1e']]);
+      C.tabla.innerHTML = `<div class="calle">${R.map((r, k) => `<div class="carroza dest" data-a="${r[0]}" style="animation-delay:${-k * 8.7}s">${reyFig(r[1], r[2], r[3])}<div class="caja" style="min-width:8rem"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML([['Melchor', 'melchor'], ['Gaspar', 'gaspar'], ['Baltasar', 'baltasar']])}</div>`;
+      arrastre({ total: 3, ok(f, d) { $('.caja', d).append(f); }, pista: () => 'No es este rey. Lee otra vez las pistas.', fin: (a, t) => seguir(fin, a, t, 'Melchor, Gaspar y Baltasar desfilan por las calles.') }); } },
+    { n: 'Los caramelos', f(fin) {
+      C.consigna('Los Reyes reparten caramelos. Atrapa solo los caramelos que hablan del Día de Reyes.', 'Les Rois distribuent des bonbons. Attrape seulement ceux qui parlent du jour des Rois.');
+      C.glosa('<b>repartir</b> : distribuer · <b>desfilar</b> : défiler · <b>una carta</b> : une lettre · <b>un regalo</b> : un cadeau<br>Siete caramelos para ganar; tres errores como máximo.');
+      const buenas = ['los regalos', 'la carta', 'los caramelos', 'Melchor', 'Baltasar', 'Gaspar', 'el 6 de enero', 'desfilar', 'el roscón', 'la noche del 5 de enero'], malas = ['las doce uvas', 'El Gordo', 'el pavo', 'las campanadas', 'el 31 de diciembre', 'el sorteo', 'el belén'];
+      C.tabla.innerHTML = '<div class="marc"><span>Caramelos: <b id="mb">0</b> / 7</span><span>Errores: <b id="mm">0</b> / 3</span></div><div id="lluvia"></div>'; let intento = 0;
+      const empezar = () => { intento++; let b = 0, m = 0, k = 0, f2 = false; const cola = baraja(buenas.map(t => [t, 1]).concat(malas.map(t => [t, 0]))), L = $('#lluvia'); L.innerHTML = ''; $('#mb').textContent = 0; $('#mm').textContent = 0; C.boton('', null); C.msg('', '');
+        const acabar = (gana) => { if (f2) return; f2 = true; clearInterval(lluviaT); if (gana) seguir(fin, intento === 1 ? 1 : 0, 1, '¡Bravo! Tienes muchos caramelos.'); else { mal(); C.msg(m >= 3 ? 'Demasiados errores…' : 'No tienes bastantes caramelos…', 'mal'); C.boton('Otra vez', empezar); } };
+        clearInterval(lluviaT); lluviaT = setInterval(() => { if (k >= cola.length) { if (!$('.car:not(.ok):not(.ko)', L)) acabar(b >= 7); return; } const [t, ok] = cola[k++]; const c = el(`<button class="car" style="left:${6 + Math.random() * 70}%">${t}</button>`);
+          c.onclick = () => { if (f2 || c.classList.contains('ok') || c.classList.contains('ko')) return; if (ok) { c.classList.add('ok'); b++; $('#mb').textContent = b; clic(b); if (b >= 7) acabar(true); } else { c.classList.add('ko'); m++; $('#mm').textContent = m; mal(); if (m >= 3) acabar(false); } }; c.onanimationend = () => c.remove(); L.append(c); }, 1100); };
+      C.boton('Empezar', empezar); } },
+    { n: 'La carta', f(fin) {
+      C.consigna('Escribe tu carta a los Reyes Magos: preséntate y enumera tus deseos.', 'Écris ta lettre aux Rois mages : présente-toi et énumère tes souhaits.');
+      C.glosa('<b>desear</b> : souhaiter · <b>un deseo</b> : un souhait · <b>un regalo</b> : un cadeau<br>Usa «gustar» o «encantar».');
+      escribir({ clave: 'carta', min: 25, inicio: 'Queridos Reyes Magos:\n', ayudas: ['Me llamo…', 'Tengo … años.', 'Me gusta…', 'Me encantan…', 'Este año, deseo recibir…', 'También me gustaría…', 'Suelo…', 'Muchas gracias. Un abrazo,'], pide: [[/gust|encant/i, 'usa «gustar» o «encantar»']], boton: 'Enviar la carta', adios: 'Tu carta vuela hacia Oriente…' }, fin); } }
   ] },
-  cafe: { ico: '☕', t: 'El café España · Francia', f: '¿Son tan diferentes las fiestas?', pasos: [
-    (C, fin) => { consigna(C, 'En el café, una profesora española explica la Navidad. Mira el vídeo y contesta.', 'Au café, une professeure espagnole explique Noël. Regarde la vidéo et réponds.'); C.cuerpo.append(el('<p class="voc"><b>traer</b> : apporter · <b>el árbol</b> : le sapin · <b>el calcetín</b> : la chaussette · <b>las chucherías</b> : les friandises</p>')); video(C, VIDEOS.tradiciones);
-      qcm(C, [{ p: '¿Cuándo suele venir Papá Noel?', o: ['El 24 de diciembre por la noche', 'El 31 de diciembre', 'El 5 de enero por la noche'], c: 0 }, { p: '¿Dónde aparecen los regalos?', o: ['Debajo del árbol', 'En la plaza', 'En el belén'], c: 0 }, { p: '¿Qué día vienen los Reyes Magos?', o: ['El 6 de enero', 'El 25 de diciembre', 'El 22 de diciembre'], c: 0 }, { p: '¿Qué les suele gustar a los niños?', o: ['Los caramelos y las chucherías', 'Las uvas', 'El pavo'], c: 0 }], fin); },
-    (C, fin) => { consigna(C, '¿España, Francia o los dos países? Clasifica las tradiciones.', 'Espagne, France ou les deux pays ? Classe les traditions.');
-      clasificar(C, { cols: ['🇪🇸 España', '🇪🇸🇫🇷 Los dos', '🇫🇷 Francia'], items: [['las doce uvas de Nochevieja', 0], ['la cabalgata de Reyes', 0], ['El Gordo del 22 de diciembre', 0], ['los regalos del 6 de enero', 0], ['la cena en familia el 24', 1], ['el árbol de Navidad', 1], ['el roscón (la galette) de Reyes', 1], ['la «bûche» de postre', 2]] }, fin); },
-    (C, fin) => { consigna(C, 'Compara las fiestas: elige la palabra correcta.', 'Compare les fêtes : choisis le bon mot.'); C.cuerpo.append(el('<p class="voc"><b>más… que</b> : plus… que · <b>menos… que</b> : moins… que · <b>mientras que</b> : tandis que · <b>en cambio</b> : en revanche</p>'));
-      menus(C, ['En España, el Día de Reyes es {*más|menos|mientras} importante que en Francia.', 'En Francia, la cabalgata de Reyes es {*menos|más|en cambio} famosa que en España.', 'Los niños españoles suelen recibir regalos el 6 de enero, {*mientras que|más|menos} los niños franceses los reciben el 25 de diciembre.', 'En Francia, solo solemos comer roscón de Reyes. {*En cambio|Mientras que|Menos}, en España, los Reyes Magos desfilan por las calles.', 'En Nochevieja, los españoles suelen comer doce uvas, {*mientras que|más que|menos que} los franceses no comemos uvas.'], fin); },
-    (C, fin) => { consigna(C, 'Ahora tú: escribe tres frases para comparar las fiestas de fin de año en España y en Francia.', 'À toi : écris trois phrases pour comparer les fêtes de fin d’année en Espagne et en France. Ce texte t’aidera pour ton oral.');
-      escribir(C, { clave: 'comp', min: 30, ayudas: ['En España… mientras que en Francia…', '… más / menos … que …', 'En cambio, …', 'Los españoles suelen…', 'A los franceses les gusta…', 'Nos encanta…'], pide: [[/m[aá]s|menos|mientras que|en cambio/i, 'usa una palabra para comparar (más, menos, mientras que, en cambio)'], [/suel|sol[eé]/i, 'usa el verbo «soler»']], boton: 'Terminar ✨' }, fin); }
+  /* ---------- final ---------- */
+  cafe: { t: 'El café España · Francia', f: '¿Son tan diferentes las fiestas?', pasos: [
+    { n: 'El vídeo', f(fin) {
+      C.consigna('En el café, una profesora española explica la Navidad. Mira el vídeo y contesta.', 'Au café, une professeure espagnole explique Noël. Regarde la vidéo et réponds.');
+      C.glosa('<b>traer</b> : apporter · <b>el árbol</b> : le sapin · <b>el calcetín</b> : la chaussette · <b>las chucherías</b> : les friandises');
+      C.tabla.innerHTML = `<div class="duo">${videoHTML(VIDEOS.tradiciones)}<div id="qq"></div></div>`;
+      opciones($('#qq'), [{ p: '¿Cuándo suele venir Papá Noel?', o: ['El 24 de diciembre por la noche', 'El 31 de diciembre', 'El 5 de enero por la noche'], c: 0 }, { p: '¿Dónde aparecen los regalos?', o: ['Debajo del árbol', 'En la plaza', 'En el belén'], c: 0 }, { p: '¿Qué día vienen los Reyes Magos?', o: ['El 6 de enero', 'El 25 de diciembre', 'El 22 de diciembre'], c: 0 }, { p: '¿Qué les suele gustar a los niños?', o: ['Los caramelos y las chucherías', 'Las uvas', 'El pavo'], c: 0 }], (a, t) => { $$('video').forEach(v => v.pause()); seguir(fin, a, t); }); } },
+    { n: '¿España o Francia?', f(fin) {
+      C.consigna('¿España, Francia o los dos países? Arrastra cada tradición a su zona del diagrama.', 'Espagne, France ou les deux pays ? Fais glisser chaque tradition dans sa zone du diagramme.');
+      C.glosa('<b>el roscón de Reyes</b> : la galette des Rois<br>La zona central es para los dos países.');
+      C.tabla.innerHTML = `<div class="venn"><div class="c e"></div><div class="c f"></div><div class="z caja dest" data-a="e" data-multi="1" style="left:2rem;width:18rem"><span class="rot">España</span></div><div class="z caja dest" data-a="d" data-multi="1" style="left:21.5rem;width:11rem"><span class="rot">Los dos</span></div><div class="z caja dest" data-a="f" data-multi="1" style="right:2rem;width:18rem"><span class="rot">Francia</span></div></div><div class="bandeja peq">${fichasHTML([['las doce uvas de Nochevieja', 'e'], ['la cabalgata de Reyes', 'e'], ['El Gordo del 22 de diciembre', 'e'], ['los regalos del 6 de enero', 'e'], ['la cena en familia el 24', 'd'], ['el árbol de Navidad', 'd'], ['el roscón de Reyes', 'd'], ['la «bûche» de postre', 'f']])}</div>`;
+      arrastre({ total: 8, fin: (a, t) => seguir(fin, a, t) }); } },
+    { n: 'Comparar', f(fin) {
+      C.consigna('Compara las fiestas: arrastra la palabra correcta a cada frase.', 'Compare les fêtes : fais glisser le bon mot dans chaque phrase.');
+      C.glosa('<b>más… que</b> : plus… que · <b>menos… que</b> : moins… que · <b>mientras que</b> : tandis que · <b>en cambio</b> : en revanche');
+      const h = (w) => `<span class="dest" data-a="${w}"></span>`;
+      C.tabla.innerHTML = `<div class="frases"><p>En España, el Día de Reyes es ${h('más')} importante que en Francia.</p><p>En Francia, la cabalgata de Reyes es ${h('menos')} famosa que en España.</p><p>Los niños españoles suelen recibir regalos el 6 de enero, ${h('mientras que')} los niños franceses los reciben el 25 de diciembre.</p><p>En Francia, solo solemos comer roscón de Reyes. ${h('En cambio')}, en España, los Reyes Magos desfilan por las calles.</p><p>En Nochevieja, los españoles suelen comer doce uvas, ${h('mientras que')} los franceses no comemos uvas.</p></div><div class="bandeja">${fichasHTML([['más', 'más'], ['menos', 'menos'], ['mientras que', 'mientras que'], ['mientras que', 'mientras que'], ['En cambio', 'En cambio']])}</div>`;
+      arrastre({ total: 5, fin: (a, t) => seguir(fin, a, t) }); } },
+    { n: 'Tu comparación', f(fin) {
+      C.consigna('Ahora tú: escribe tres frases para comparar las fiestas de fin de año en España y en Francia.', 'À toi : écris trois phrases pour comparer les fêtes de fin d’année en Espagne et en France. Ce texte t’aidera pour ton oral.');
+      C.glosa('Usa una palabra para comparar y el verbo <b>soler</b>.');
+      escribir({ clave: 'comp', min: 30, ayudas: ['En España…', 'mientras que en Francia…', 'más … que', 'menos … que', 'En cambio,', 'Los españoles suelen…', 'A los franceses les gusta…', 'Nos encanta…'], pide: [[/m[aá]s|menos|mientras que|en cambio/i, 'una palabra para comparar'], [/suel|sol[eé]/i, 'el verbo «soler»']], boton: 'Terminar', adios: '¡Texto guardado en tu ficha!' }, fin); } }
   ] }
 };
 
-function entrar(id) {
-  ac();
-  if (id === 'cafe' && !cincoHechos() && !S.profe) return aviso('☕', 'El café está cerrado', '<p>El café abre al final. Visita primero los otros cinco lugares de la plaza.</p>');
-  const E = EST[id]; let k = 0, ok = 0, tot = 0;
-  const n = el(`<div class="sala"><div class="guirnalda"></div><header><span class="ico">${E.ico}</span><h2 class="script"><small>${E.f}</small>${E.t}</h2><div class="puntos">${E.pasos.map(() => '<i></i>').join('')}</div><button class="cerrar" title="Volver a la plaza">✕</button></header><div class="cuerpo"></div><div class="pie"><span class="msg"></span><span class="bt"></span></div></div>`);
-  $('.cerrar', n).onclick = cerrarVelo; abrirVelo(n);
-  const C = { cuerpo: $('.cuerpo', n), msg: (t, c) => { const m = $('.msg', n); m.textContent = t; m.className = 'msg ' + (c || ''); }, boton: (t, fn) => { const z = $('.bt', n); z.innerHTML = ''; if (!fn && t !== '…') return; const b = el(`<button class="btn" ${fn ? '' : 'disabled'}>${t}</button>`); if (fn) b.onclick = fn; z.append(b); } };
-  const paso = () => {
-    callar(); C.cuerpo.innerHTML = ''; C.cuerpo.className = 'cuerpo'; C.cuerpo.scrollTop = 0; C.msg('', ''); C.boton('', null);
-    $$('.puntos i', n).forEach((p, j) => p.className = j < k ? 'ya' : j === k ? 'act' : '');
-    E.pasos[k](C, (a, t) => { ok += a; tot += t; k++; if (k < E.pasos.length) paso(); else terminar(id, ok, tot); });
-  };
-  paso();
-}
+/* ====== 6. VENTANAS, FINAL, FICHA PDF ================================== */
+function abrirVelo(n) { const v = $('#velo'); v.innerHTML = ''; v.append(n); v.classList.add('on'); }
+function cerrarVelo() { callar(); $('#velo').classList.remove('on'); $('#velo').innerHTML = ''; }
+function aviso(tit, html, boton = 'Vale', fn) { const n = el(`<div class="vent"><h2>${tit}</h2>${html}<p><button class="btn">${boton}</button></p></div>`); $('.btn', n).onclick = () => { cerrarVelo(); fn && fn(); }; abrirVelo(n); }
 function terminar(id, ok, tot) {
   const nuevo = !S.hecho[id]; S.hecho[id] = 1; if (nuevo || ok > (S.pts[id] || [0])[0]) S.pts[id] = [ok, tot]; guardar(); pintarHud(); fuegos();
-  const fs = FECHAS.filter(f => f.est === id).map(f => `<b>${f.n} de ${f.m === 'dic' ? 'diciembre' : 'enero'}: ${f.t}</b>`);
   if (id === 'cafe') return final();
-  aviso('🎉', '¡Muy bien!', `<p>Has terminado: <b>${EST[id].t}</b> (${ok} / ${tot} a la primera).</p><p style="margin-top:.6rem">Se enciende en el calendario: ${fs.join(' y ')}.</p>${cincoHechos() ? '<p style="margin-top:.6rem">☕ <b>El café España · Francia está abierto</b>: es el último lugar.</p>' : ''}`, 'Volver a la plaza');
+  const fs = FECHAS.filter(f => f.est === id).map(f => `<b>${f.n} de ${f.m === 'dic' ? 'diciembre' : 'enero'}</b>`);
+  aviso(EST[id].t, `<p>${ok} / ${tot} a la primera.</p><div class="filete"></div><p>Se enciende en el calendario: ${fs.join(' y ')}.</p>${cincoHechos() ? '<p><b>El café España · Francia está abierto</b>: es el último lugar.</p>' : ''}`, 'Volver a la plaza');
 }
 function inocente() {
-  if (S.hecho.inocente) return aviso('🤭', '¡Inocente, inocente!', '<p>Ya conoces la broma del 28 de diciembre.</p>');
-  const n = el(`<div class="sala" style="width:min(40rem,100%)"><header><span class="ico">🤭</span><h2 class="script"><small>28 de diciembre</small>¡Inocente, inocente!</h2></header><div class="cuerpo"></div><div class="pie"><span class="msg"></span><span class="bt"></span></div></div>`); abrirVelo(n);
-  const C = { cuerpo: $('.cuerpo', n), msg: (t, c) => { const m = $('.msg', n); m.textContent = t; m.className = 'msg ' + (c || ''); }, boton: (t, fn) => { const z = $('.bt', n); z.innerHTML = ''; if (!fn) return; const b = el(`<button class="btn">${t}</button>`); b.onclick = fn; z.append(b); } };
-  consigna(C, '¡Has encontrado la broma! Este señor lleva un muñeco de papel pegado en la ropa. El 28 de diciembre es el Día de los Santos Inocentes: es un día de bromas.', 'Tu as trouvé la blague ! Ce monsieur a un bonhomme en papier collé sur ses vêtements. Le 28 décembre, c’est le jour des Saints Innocents : un jour de farces, comme le 1er avril en France.');
-  qcm(C, [{ p: '«Una broma» significa…', o: ['une blague', 'un cadeau', 'une cloche'], c: 0 }, { p: '¿Qué día se celebra Santos Inocentes?', o: ['El 28 de diciembre', 'El 1 de abril', 'El 31 de diciembre'], c: 0 }], (a, t) => { S.hecho.inocente = 1; S.pts.inocente = [a, t]; guardar(); pintarHud(); cerrarVelo(); fuegos(); });
+  if (S.hecho.inocente) return aviso('¡Inocente, inocente!', '<p>Ya conoces la broma del 28 de diciembre.</p>');
+  const n = el(`<div class="vent"><div class="ver">28 de diciembre</div><h2>¡Inocente, inocente!</h2><p>Has encontrado la broma: un muñeco de papel. El 28 de diciembre es el Día de los Santos Inocentes: es un día de bromas.</p><p class="fr">Tu as trouvé la blague : un bonhomme en papier. Le 28 décembre est un jour de farces, comme le 1er avril en France.</p><div class="filete"></div><div id="qi" style="text-align:left"></div></div>`); abrirVelo(n);
+  opciones($('#qi', n), [{ p: '«Una broma» significa…', o: ['une blague', 'un cadeau', 'une cloche'], c: 0 }, { p: '¿Qué día se celebra Santos Inocentes?', o: ['El 28 de diciembre', 'El 1 de abril', 'El 31 de diciembre'], c: 0 }], (a, t) => { S.hecho.inocente = 1; S.pts.inocente = [a, t]; guardar(); pintarHud(); setTimeout(() => { cerrarVelo(); fuegos(); }, 700); });
 }
-
-/* ====== 8. PORTADA, FINAL, FICHA PDF =================================== */
 function portada() {
-  const n = el(`<div class="sala" style="width:min(46rem,100%)"><div class="guirnalda"></div><div class="portada"><h1 class="script">La plaza <span>de Navidad</span></h1><p><b>Es Navidad en España.</b> Pasea por la plaza, visita los seis lugares y enciende las ocho fechas del calendario navideño.</p><p class="voc">Promène-toi sur la place (flèches du clavier, souris ou boutons ◀ ▶), entre dans les six lieux et allume les huit dates du calendrier. Mets ton casque : il y a des vidéos et des sons.</p><p><input id="nom" maxlength="30" placeholder="Tu nombre" value="${S.nombre.replace(/"/g, '')}"></p><p><button class="btn" id="ir">${Object.keys(S.hecho).length ? 'Continuar' : '¡Vamos!'} 🎄</button></p></div></div>`);
-  const ir = () => { const v = $('#nom', n).value.trim(); if (!v) return $('#nom', n).focus(); S.nombre = v; guardar(); ac(); cerrarVelo(); pintarHud(); if (!Object.keys(S.hecho).length) { campana(196); irA(LUGARES[0], false); } };
+  const n = el(`<div class="vent"><div class="ver">Fiestas navideñas de España</div><h1>La plaza <em>de Navidad</em></h1><div class="filete"></div><p>Es de noche en la plaza. Entra en los seis lugares, en el orden que quieras: cada lugar terminado se ilumina y enciende una fecha del calendario.</p><p class="fr">Il fait nuit sur la place. Entre dans les six lieux, dans l’ordre que tu veux : chaque lieu terminé s’illumine et allume une date du calendrier. Mets ton casque.</p><p><input id="nom" maxlength="30" placeholder="Tu nombre" value="${S.nombre.replace(/"/g, '')}"></p><p><button class="btn" id="ir">${Object.keys(S.hecho).length ? 'Continuar' : 'Entrar en la plaza'}</button></p></div>`);
+  const ir = () => { const v = $('#nom', n).value.trim(); if (!v) return $('#nom', n).focus(); S.nombre = v; guardar(); ac(); cerrarVelo(); pintarHud(); campana(196, .2); };
   $('#ir', n).onclick = ir; $('#nom', n).onkeydown = (e) => { if (e.key === 'Enter') ir(); }; abrirVelo(n); setTimeout(() => $('#nom', n).focus(), 50);
 }
 function total() { let a = 0, t = 0; Object.values(S.pts).forEach(([x, y]) => { a += x; t += y; }); return [a, t]; }
 function final() {
   const [a, t] = total(), falta = !S.hecho.inocente;
-  const n = el(`<div class="sala" style="width:min(48rem,100%)"><div class="guirnalda"></div><div class="portada"><h1 class="script">¡Felices <span>fiestas</span>, ${S.nombre}!</h1><p>Has visitado toda la plaza. Total: <b>${a} / ${t}</b> respuestas correctas a la primera.</p><div class="resumen">${LUGARES.map(L => `<div>${L.ico} ${L.t}<b>${(S.pts[L.id] || ['–', '–']).join(' / ')}</b></div>`).join('')}</div>${falta ? '<p class="voc">Falta una fecha en el calendario: el <b>28 de diciembre</b>. Una broma se esconde en la plaza… ¡Búscala!</p>' : '<p><b>¡Las ocho fechas del calendario están encendidas!</b></p>'}<p>Descarga tu ficha: te ayuda a preparar tu presentación oral.</p><p><button class="btn verde" id="pdf">📄 Mi ficha de Navidad (PDF)</button> <button class="btn sec" id="vol">Volver a la plaza</button></p></div></div>`);
+  const n = el(`<div class="vent" style="width:min(50rem,94vw)"><div class="ver">La plaza está iluminada</div><h1>¡Felices <em>fiestas</em>, ${S.nombre}!</h1><div class="filete"></div><p>Total: <b>${a} / ${t}</b> respuestas correctas a la primera.</p><div class="res">${LUGARES.map(L => `<div>${EST[L.id].t}<b>${(S.pts[L.id] || ['–', '–']).join(' / ')}</b></div>`).join('')}</div>${falta ? '<p class="fr">Falta una fecha: el 28 de diciembre. Una broma se esconde en la plaza… Búscala.</p>' : '<p><b>Las ocho fechas del calendario están encendidas.</b></p>'}<p>Descarga tu ficha: te ayuda a preparar tu presentación oral.</p><p><button class="btn" id="pdf">Mi ficha de Navidad (PDF)</button><button class="btn sec" id="vol">Volver a la plaza</button></p></div>`);
   $('#pdf', n).onclick = ficha; $('#vol', n).onclick = cerrarVelo; abrirVelo(n); fuegos(); setTimeout(fuegos, 900);
 }
 function ficha() {
   if (!window.jspdf) return alert('PDF no disponible.');
   const d = new jspdf.jsPDF({ unit: 'mm', format: 'a4' }), M = 18, W = 210 - 2 * M; let y = 20;
-  const limpio = (s) => s.replace(/[^\x20-\x7E\xA1-\xFF\n]/g, '').replace(/[«»]/g, '"');
-  const tit = (s) => { if (y > 262) { d.addPage(); y = 20; } d.setFont('helvetica', 'bold'); d.setFontSize(13); d.setTextColor(179, 18, 45); d.text(limpio(s), M, y); y += 2; d.setDrawColor(232, 178, 58); d.line(M, y, M + W, y); y += 6; };
-  const txt = (s, b) => { d.setFont('helvetica', b ? 'bold' : 'normal'); d.setFontSize(11); d.setTextColor(40, 30, 25); d.splitTextToSize(limpio(s), W).forEach(l => { if (y > 282) { d.addPage(); y = 20; } d.text(l, M, y); y += 5.6; }); };
+  const limpio = (s) => s.replace(/[«»]/g, '"').replace(/[^\x20-\x7E\xA1-\xFF\n]/g, '');
+  const tit = (s) => { if (y > 262) { d.addPage(); y = 20; } d.setFont('helvetica', 'bold'); d.setFontSize(13); d.setTextColor(164, 20, 44); d.text(limpio(s), M, y); y += 2; d.setDrawColor(210, 169, 74); d.line(M, y, M + W, y); y += 6; };
+  const txt = (s) => { d.setFont('helvetica', 'normal'); d.setFontSize(11); d.setTextColor(40, 30, 25); d.splitTextToSize(limpio(s), W).forEach(l => { if (y > 282) { d.addPage(); y = 20; } d.text(l, M, y); y += 5.6; }); };
   const [a, t] = total();
-  d.setFont('helvetica', 'bold'); d.setFontSize(20); d.setTextColor(179, 18, 45); d.text('Mi ficha de Navidad', M, y); y += 8;
+  d.setFont('helvetica', 'bold'); d.setFontSize(20); d.setTextColor(164, 20, 44); d.text('Mi ficha de Navidad', M, y); y += 8;
   txt(`${S.nombre} · ${new Date().toLocaleDateString('es-ES')} · La plaza de Navidad: ${a} / ${t}`); y += 3;
   tit('El calendario navideño de España');
   txt('22 de diciembre: el sorteo de la lotería de Navidad (El Gordo) · 24: Nochebuena · 25: Navidad · 28: Santos Inocentes (día de bromas) · 31: Nochevieja · 1 de enero: Año Nuevo · 5 de enero: la cabalgata de Reyes · 6 de enero: Día de Reyes.'); y += 3;
@@ -658,17 +654,15 @@ function ficha() {
   if (S.carta) { tit('Mi carta a los Reyes Magos'); txt(S.carta); }
   d.save('ficha-navidad-' + (S.nombre || 'alumno').replace(/[^\wáéíóúñ]+/gi, '-') + '.pdf');
 }
-/* fuegos artificiales */
 function fuegos() {
   const c = $('#fuegos'), g = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight; const ps = [];
-  for (let k = 0; k < 4; k++) { const x = innerWidth * (.2 + Math.random() * .6), y = innerHeight * (.15 + Math.random() * .3), col = ['#f7d774', '#d7263d', '#2e8b62', '#fff'][k % 4]; for (let j = 0; j < 46; j++) { const a = Math.random() * 6.28, v = 2 + Math.random() * 5; ps.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, col, t: 0 }); } }
-  const a = ac(); if (a && S.son) [0, .15, .3].forEach(dt => tono(900 + Math.random() * 600, a.currentTime + dt, .25, 'triangle', .06));
-  (function f() { g.clearRect(0, 0, c.width, c.height); let viva = false; ps.forEach(p => { p.t++; if (p.t > 70) return; viva = true; p.x += p.vx; p.y += p.vy; p.vy += .08; g.globalAlpha = 1 - p.t / 70; g.fillStyle = p.col; g.beginPath(); g.arc(p.x, p.y, 3, 0, 6.28); g.fill(); }); g.globalAlpha = 1; if (viva) requestAnimationFrame(f); else g.clearRect(0, 0, c.width, c.height); })();
+  for (let k = 0; k < 4; k++) { const x = innerWidth * (.2 + Math.random() * .6), y = innerHeight * (.12 + Math.random() * .3), col = ['#a4142c', '#1d4d3a', '#d49a1e', '#a4142c'][k % 4]; for (let j = 0; j < 46; j++) { const a = Math.random() * 6.28, v = 2 + Math.random() * 5; ps.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, col, t: 0 }); } }
+  [0, .15, .3].forEach(dt => tono(900 + Math.random() * 600, ahora() + dt, .25, 'triangle', .05));
+  (function f() { g.clearRect(0, 0, c.width, c.height); let viva = false; ps.forEach(p => { p.t++; if (p.t > 70) return; viva = true; p.x += p.vx; p.y += p.vy; p.vy += .08; g.globalAlpha = 1 - p.t / 70; g.fillStyle = p.col; g.beginPath(); g.arc(p.x, p.y, 4, 0, 6.28); g.fill(); }); g.globalAlpha = 1; if (viva) requestAnimationFrame(f); else g.clearRect(0, 0, c.width, c.height); })();
 }
-/* modo profesor */
 function profe() {
-  const n = el(`<div class="sala" style="width:min(30rem,100%)"><header><span class="ico">🔑</span><h2>Modo profesor</h2><button class="cerrar">✕</button></header><div class="cuerpo"><p><input type="password" id="cod" placeholder="Código" style="border:.15rem solid var(--rojo);border-radius:2rem;padding:.4rem 1rem;width:100%"></p><div id="pp" style="display:none;margin-top:.8rem"><p class="voc">Alumno: <b>${S.nombre || '—'}</b> · puntos: ${total().join(' / ')}</p><p style="display:flex;flex-wrap:wrap;gap:.5rem"><button class="btn sec" id="p1">Abrir el café</button><button class="btn sec" id="p2">Marcar todo como hecho</button><button class="btn sec" id="p4">Pantalla final</button><button class="btn" id="p3">Borrar la partida</button></p></div></div></div>`);
-  $('.cerrar', n).onclick = cerrarVelo; $('#cod', n).oninput = (e) => { if (e.target.value === CODIGO_ADMIN) { e.target.style.display = 'none'; $('#pp', n).style.display = ''; } };
+  const n = el(`<div class="vent"><h2>Modo profesor</h2><p><input type="password" id="cod" placeholder="Código"></p><div id="pp" style="display:none"><p class="fr">Alumno: <b>${S.nombre || '—'}</b> · puntos: ${total().join(' / ')}</p><p><button class="btn sec" id="p1">Abrir el café</button><button class="btn sec" id="p2">Marcar todo como hecho</button><button class="btn sec" id="p4">Pantalla final</button><button class="btn" id="p3">Borrar la partida</button></p></div><p><button class="btn sec" id="p0">Cerrar</button></p></div>`);
+  $('#p0', n).onclick = cerrarVelo; $('#cod', n).oninput = (e) => { if (e.target.value === CODIGO_ADMIN) { e.target.style.display = 'none'; $('#pp', n).style.display = ''; } };
   $('#p1', n).onclick = () => { S.profe = 1; pintarHud(); cerrarVelo(); };
   $('#p2', n).onclick = () => { LUGARES.forEach(L => { S.hecho[L.id] = 1; S.pts[L.id] = S.pts[L.id] || [0, 0]; }); S.hecho.inocente = 1; guardar(); pintarHud(); cerrarVelo(); };
   $('#p4', n).onclick = () => final();
@@ -676,10 +670,11 @@ function profe() {
   abrirVelo(n); setTimeout(() => $('#cod', n).focus(), 50);
 }
 
-/* ====== 9. INICIO ====================================================== */
-pintarPlaza(); medir(); controles(); pintarHud(); requestAnimationFrame(bucle);
-$('#bson').onclick = () => { S.son = S.son ? 0 : 1; guardar(); pintarHud(); if (S.son) campana(294, .15); };
-$('#bayuda').onclick = () => aviso('❓', '¿Cómo se juega?', '<p>◀ ▶ o las flechas del teclado: pasear por la plaza.</p><p>Haz clic en un cartel para entrar en un lugar.</p><p>Cada lugar terminado enciende una o dos fechas del calendario.</p><p class="voc" style="margin-top:.6rem">Dans chaque exercice : 🔊 pour écouter la consigne, 🇫🇷 pour la lire en français. Tu peux fermer un lieu (✕) et y revenir plus tard.</p>');
+/* ====== 7. INICIO ====================================================== */
+pintarPlaza(); pintarHud();
+$('#bson').onclick = () => { S.son = S.son ? 0 : 1; guardar(); pintarHud(); if (S.son) campana(294, .15); else callar(); };
+$('#bayuda').onclick = () => aviso('¿Cómo se juega?', '<p>Haz clic en un lugar de la plaza para entrar.</p><p>Cada lugar terminado se ilumina y enciende una o dos fechas del calendario.</p><p class="fr">Dans chaque exercice : « Escuchar » lit la consigne, « En français » la traduit. Tu peux quitter un lieu et y revenir plus tard. Une date ne s’allume qu’en cherchant bien sur la place…</p>');
+addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); profe(); } });
 portada();
 if (location.hash === '#profe') setTimeout(profe, 300);
 </script>
