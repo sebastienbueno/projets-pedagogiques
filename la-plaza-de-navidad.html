@@ -331,6 +331,7 @@ video{width:100%;border-radius:.9rem;background:#000;display:block;box-shadow:0 
 <canvas id="fuegos"></canvas>
 
 <script src="vendor/three.min.js"></script>
+<script src="vendor/GLTFLoader.js"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script>
 /* =====================================================================
@@ -435,6 +436,13 @@ function crear3D(cv) {
   /* cada constructor devuelve la función de animación del lugar */
   Object.assign(M, { ladrillo: mat(0xb03324), ladrillo2: mat(0x8e2519), pizarra: mat(0x47506a), salmon: mat(0xd8a487), gris: mat(0x8d8fa0), pardo: mat(0x6b4a2e), paja: mat(0xd9b25c), oscuro: mat(0x1a1d30), suelo: mat(0x9a8c78), mantel: mat(0xb3182f), uva: mat(0x8fb53c), llama: mat(0xffd66b, { emissive: 0xffb020, emissiveIntensity: 2 }) });
   const figura = (g, m, x, z, e = 1, piel = M.piel) => { const k = new T.Group(); k.position.set(x, 0, z); k.scale.setScalar(e); cono(k, .3, .95, 8, m, 0, .48, 0); bola(k, .17, piel, 0, 1.06, 0); g.add(k); return k; };
+  /* Modelos 3D externos (carpeta modelos/, ver CREDITOS.txt). Si un archivo no carga, se queda el modelo dibujado a mano (prov). */
+  const cargador = T.GLTFLoader ? new T.GLTFLoader() : null, mezcl = [];
+  const cajaDe = (o) => { o.updateMatrixWorld(true); let sk = null; o.traverse(n => { if (n.isSkinnedMesh) sk = n; }); const b = new T.Box3(); if (sk) { sk.skeleton.bones.forEach(h => b.expandByPoint(h.getWorldPosition(new T.Vector3()))); b.expandByScalar(b.getSize(new T.Vector3()).y * .14); } else b.setFromObject(o); return b; };
+  const modelo = (g, url, alto, x, y, z, ry, prov, fn) => { if (!cargador || location.protocol === 'file:') return; cargador.load(url, (gl) => { const o = gl.scene;
+    o.traverse(n => { if (n.isMesh) { n.castShadow = true; n.frustumCulled = false; (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { m.metalness = 0; m.roughness = Math.max(.65, m.roughness || 0); if (m.name === 'White') m.color.set(0xf4f4f4); }); } });
+    const b = cajaDe(o), tam = b.getSize(new T.Vector3()), e = alto / tam.y, c = new T.Group(), in2 = new T.Group(); in2.add(o); in2.scale.setScalar(e); in2.position.set(-(b.min.x + tam.x / 2) * e, -b.min.y * e, -(b.min.z + tam.z / 2) * e); c.add(in2); c.position.set(x, y, z); c.rotation.y = ry; c.userData.url = url; g.add(c);
+    (prov || []).forEach(q => { q.visible = false; }); const an = gl.animations.find(a => /(^|\|)idle$/i.test(a.name)); if (an) { const mx = new T.AnimationMixer(o); const ac = mx.clipAction(an); ac.time = Math.random() * 3; ac.play(); mezcl.push(mx); } if (fn) fn(c, o); }, undefined, () => {}); };
   /* Caras pintadas: se dibujan en un lienzo y se aplican sobre una cabeza lisa. tipo: 'abiertos', 'cerrados' (parpadeo) o 'bebe' */
   const cara = (hex, tipo) => { const c = document.createElement('canvas'); c.width = 512; c.height = 256; const k = c.getContext('2d'); k.fillStyle = '#' + hex; k.fillRect(0, 0, 512, 256); k.translate(128, 124); k.scale(1.75, 1.75); k.lineCap = 'round';
     k.fillStyle = 'rgba(232,96,96,.4)'; [-1, 1].forEach(d => { k.beginPath(); k.arc(d * 30, 14, 9, 0, 6.3); k.fill(); });
@@ -471,8 +479,8 @@ function crear3D(cv) {
       for (let k = 0; k < 10; k++) caja(g, .26, .3, .1, luz, Math.sin(k * .628) * 2.9, .5, Math.cos(k * .628) * 2.9).rotation.y = k * .628;
       const br = (c, o = {}) => new T.MeshStandardMaterial(Object.assign({ color: c, roughness: .35 }, o));
       // el pavo asado, en su fuente dorada
-      cil(g, 1.3, 1.3, .08, 24, M.oro, 0, 1.09, -.35); const tor = br(0xc7772c), pv = bola(g, .78, tor, 0, 1.68, -.35); pv.scale.set(1.3, .82, 1.02); bola(g, .36, br(0xd98a3a), 0, 2.2, -.5).scale.set(1.3, .6, 1);
-      [-1, 1].forEach(d => { const m = cono(g, .27, .95, 10, tor, d * .98, 1.62, .2); m.rotation.set(1.25, 0, -d * .55); cil(g, .12, .12, .2, 8, M.blanco, d * 1.3, 1.83, .62).rotation.set(1.25, 0, -d * .55); bola(g, .08, M.blanco, d * 1.4, 1.9, .76); });
+      cil(g, 1.3, 1.3, .08, 24, M.oro, 0, 1.09, -.35); const tk = new T.Group(); g.add(tk); modelo(g, 'modelos/pavo.glb', .8, 0, 1.13, -.45, -Math.PI / 2, [tk]); const tor = br(0xc7772c), pv = bola(tk, .78, tor, 0, 1.68, -.35); pv.scale.set(1.3, .82, 1.02); bola(tk, .36, br(0xd98a3a), 0, 2.2, -.5).scale.set(1.3, .6, 1);
+      [-1, 1].forEach(d => { const m = cono(tk, .27, .95, 10, tor, d * .98, 1.62, .2); m.rotation.set(1.25, 0, -d * .55); cil(tk, .12, .12, .2, 8, M.blanco, d * 1.3, 1.83, .62).rotation.set(1.25, 0, -d * .55); bola(tk, .08, M.blanco, d * 1.4, 1.9, .76); });
       for (let k = 0; k < 10; k++) bola(g, .13, k % 2 ? br(0x2f9a4e) : br(0xd4203a), Math.sin(k * .628) * 1.16, 1.2, -.35 + Math.cos(k * .628) * 1.16);
       // los turrones (barras con almendras)
       const tu = br(0xf0dcae), al = br(0xb9823e); cil(g, .78, .78, .04, 18, M.rojo, -1.62, 1.07, .9); [[0, 0, .25], [.08, .26, -.2]].forEach(([dx, dy, ry]) => { const b = caja(g, 1.25, .25, .52, tu, -1.62 + dx, 1.22 + dy, .9); b.rotation.y = ry; [-.42, -.14, .14, .42].forEach(x => bola(b, .07, al, x, .13, (x > 0 ? .1 : -.1))); });
@@ -480,7 +488,7 @@ function crear3D(cv) {
       cil(g, .78, .78, .04, 18, M.rojo, 1.62, 1.07, .9); [[-.3, .2, 0xffffff, 0xd4203a], [.3, .15, 0xffffff, 0x2f9a4e], [0, -.3, 0xffffff, 0xe9b949]].forEach(([x, z, c1, c2], k) => { const pg = new T.Group(); pg.position.set(1.62 + x, 1.27, .9 + z); pg.rotation.y = k * 1.1; g.add(pg); const c = cil(pg, .19, .19, .3, 12, br(c1), 0, 0, 0); c.rotation.z = Math.PI / 2; [-1, 1].forEach(d => { const t2 = cono(pg, .17, .26, 8, br(c2), d * .27, 0, 0); t2.rotation.z = d * Math.PI / 2; }); caja(pg, .1, .4, .4, br(c2), 0, 0, 0); });
       // los mazapanes (figuritas doradas)
       cil(g, .7, .7, .04, 18, M.rojo, 0, 1.07, 1.8); [[-.3, .05], [0, .22], [.3, .05], [-.15, -.25], [.15, -.25]].forEach(([x, z], k) => { const m = bola(g, .17, br(0xf4d48c), x, 1.2, 1.8 + z); m.scale.set(k % 2 ? 1.25 : 1, .7, 1); bola(g, .09, br(0xc98a3a), x, 1.3, 1.8 + z).scale.y = .4; });
-      cartel(g, 'el pavo', 0, 2.95, -.35); cartel(g, 'los turrones', -1.9, 2.05, .9, .9); cartel(g, 'los polvorones', 1.9, 2.05, .9, .9); cartel(g, 'los mazapanes', 0, 1.85, 2.1, .9);
+      cartel(g, 'el pavo', 0, 2.5, -.45); cartel(g, 'los turrones', -1.9, 2.05, .9, .9); cartel(g, 'los polvorones', 1.9, 2.05, .9, .9); cartel(g, 'los mazapanes', 0, 1.5, 2.75, .9);
       const ll = [-.9, .9].map(x => { cil(g, .16, .2, .08, 10, M.oro, x * 2, 1.09, -1.5); cil(g, .08, .08, 1.1, 8, M.rojo, x * 2, 1.66, -1.5); const f = cono(g, .11, .32, 6, M.llama, x * 2, 2.36, -1.5); f.castShadow = false; return f; });
       
       [-1.75, 1.75].forEach(x => cil(g, .07, .07, 4, 6, M.oro, x, 2, -2.9)); caja(g, 3.9, .7, .1, M.rojo2, 0, 3.9, -2.9); rotulo(g, 'NOCHEBUENA', 3.7, .6, 0, 3.9, -2.84);
@@ -495,9 +503,9 @@ function crear3D(cv) {
       const nb = bola(cu, .2, M.blanco, .13, .86, 0); nb.scale.set(1.65, .85, 1.1); nb.material = new T.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: .25 }); const bh = pon(cu, new T.SphereGeometry(.22, 28, 20), new T.MeshStandardMaterial({ map: cara('f3d2b3', 'bebe'), roughness: .6 }), -.36, .97, .03); bh.rotation.x = -.55;
       const halo = pon(cu, new T.TorusGeometry(.3, .035, 6, 24), M.llama, -.36, 1.02, -.16); halo.castShadow = false; const lb = new T.PointLight(0xffe08a, 1.6, 8, 2); lb.position.set(0, 1.9, 1.6); g.add(lb);
       const animal = (c, x, tipo) => { const a = new T.Group(); a.position.set(x, .1, -.85); a.rotation.y = x < 0 ? .5 : -.5; g.add(a); const m = mat(c); caja(a, .7, .65, 1.3, m, 0, .85, 0); [[-.25, -.5], [.25, -.5], [-.25, .5], [.25, .5]].forEach(([px, pz]) => caja(a, .16, .6, .16, m, px, .3, pz)); caja(a, .42, .55, .4, m, 0, 1.3, .65); caja(a, .46, .42, .62, m, 0, 1.5, 1.02); [-1, 1].forEach(d => { bola(a, .05, M.oscuro, d * .15, 1.6, 1.3); if (tipo) { const h = cono(a, .07, .5, 5, M.crema, d * .32, 1.82, .9); h.rotation.z = -d * 1.1; } else { const o = cono(a, .09, .6, 5, m, d * .17, 2, .82); o.rotation.z = -d * .2; } }); return a; };
-      const mu = animal(0x9a9aa8, -1.9, 0), bu = animal(0x8a5a3c, 1.9, 1);
+      const mu = animal(0x9a9aa8, -1.9, 0), bu = animal(0x8a5a3c, 1.9, 1); modelo(g, 'modelos/burro.glb', 2.5, -3, .1, .1, .75, [mu]); modelo(g, 'modelos/vaca.glb', 2.3, 3, .1, .1, -.75 - Math.PI / 2, [bu]);
       const lana = new T.MeshStandardMaterial({ color: 0xffffff, roughness: 1 }), cneg = new T.MeshStandardMaterial({ color: 0x2b2430, roughness: .8 });
-      [[-2.45, 1.75, .9], [2.5, 1.8, 2.3]].forEach(([x, z, ry]) => { const o = new T.Group(); o.position.set(x, .1, z); o.rotation.y = ry; o.scale.setScalar(1.25); g.add(o);
+      [[-1.7, 2.6, .9], [1.75, 2.65, 2.3]].forEach(([x, z, ry]) => { const o = new T.Group(); o.position.set(x, .1, z); o.rotation.y = ry; o.scale.setScalar(1.25); g.add(o); modelo(g, 'modelos/oveja.glb', 1.05, x, .1, z, ry + Math.PI / 2, [o]);
         [[0, .5, 0, .3], [.22, .57, .11, .22], [-.22, .57, .09, .22], [.2, .5, -.13, .22], [-.2, .5, -.15, .22], [0, .7, 0, .22], [.36, .54, 0, .18], [-.36, .5, 0, .2]].forEach(([a, b, c, r]) => pon(o, new T.SphereGeometry(r, 12, 10), lana, a, b, c));
         [[-.2, -.12], [.2, -.12], [-.2, .12], [.2, .12]].forEach(([a, c]) => cil(o, .045, .045, .34, 6, cneg, a, .17, c)); pon(o, new T.SphereGeometry(.15, 14, 10), cneg, .54, .64, 0).scale.set(1.25, 1, .9); pon(o, new T.SphereGeometry(.1, 10, 8), lana, .45, .79, 0);
         [-1, 1].forEach(d => { pon(o, new T.SphereGeometry(.06, 8, 6), cneg, .46, .72, d * .16).scale.set(.6, .5, 1.3); pon(o, new T.SphereGeometry(.03, 8, 6), M.blanco, .65, .68, d * .08).castShadow = false; }); });
@@ -539,12 +547,12 @@ function crear3D(cv) {
       const bandera = (pg, cs, v) => { cil(pg, .05, .05, 2.9, 6, M.oscuro, -.95, -1.1, -.75); const b = new T.Group(); b.position.set(-.95, -.1, -.75); pg.add(b); cs.forEach((c, k) => { const m = br(c, { emissive: c, emissiveIntensity: .3 }); const o = v ? caja(b, .56, 1.1, .04, m, .3 + k * .56, 0, 0) : caja(b, 1.68, k === 1 ? .55 : .275, .04, m, .86, [.412, 0, -.412][k], 0); o.castShadow = false; }); return b; };
       const b1 = bandera(pe, [0xc60b1e, 0xffc400, 0xc60b1e], 0), b2 = bandera(pf, [0x0055a4, 0xffffff, 0xef4135], 1);
       // España: un gran racimo de uvas y la corona de los Reyes
-      const um = br(0xa9d93f, { roughness: .22, emissive: 0x3f6d00, emissiveIntensity: .5 }); [[-.3, 0], [0, 0], [.3, 0], [-.15, 1], [.15, 1], [0, 2]].forEach(([x, f]) => { bola(pe, .2, um, .55 + x, -1.55 - f * .34, .55).scale.y = 1.2; }); cil(pe, .03, .03, .3, 5, M.pardo, .55, -1.3, .55);
+      const um = br(0xa9d93f, { roughness: .22, emissive: 0x3f6d00, emissiveIntensity: .5 }); const uvE = [[-.3, 0], [0, 0], [.3, 0], [-.15, 1], [.15, 1], [0, 2]].map(([x, f]) => { const u = bola(pe, .2, um, .55 + x, -1.55 - f * .34, .55); u.scale.y = 1.2; return u; }); uvE.push(cil(pe, .03, .03, .3, 5, M.pardo, .55, -1.3, .55)); modelo(pe, 'modelos/uvas.glb', 1.25, .6, -2.46, .55, 0, uvE, (c, o) => o.traverse(n => { if (n.isMesh) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { if (m.name === '673AB7') { m.color.set(0x9ccc3c); m.roughness = .3; } }); }));
       const cg = new T.Group(); cg.position.set(-.45, -2.12, .7); pe.add(cg); cil(cg, .46, .38, .36, 10, M.oro, 0, 0, 0); for (let q = 0; q < 6; q++) { cono(cg, .09, .28, 4, M.oro, Math.sin(q * 1.047) * .4, .3, Math.cos(q * 1.047) * .4); bola(cg, .06, q % 2 ? br(0xd4203a) : br(0x2f9a4e), Math.sin(q * 1.047 + .52) * .44, 0, Math.cos(q * 1.047 + .52) * .44); }
       // Francia: la torre Eiffel y el tronco de Navidad («bûche»)
       const fe = br(0x3b2f3a, { metalness: .3 }), te = new T.Group(); te.position.set(.5, -2.46, .5); pf.add(te); const sf = new T.Shape();
       sf.moveTo(-.66, 0); sf.quadraticCurveTo(-.32, .5, -.23, 1); sf.lineTo(-.3, 1); sf.lineTo(-.3, 1.1); sf.lineTo(-.2, 1.1); sf.quadraticCurveTo(-.11, 1.5, -.1, 1.75); sf.lineTo(-.16, 1.75); sf.lineTo(-.16, 1.84); sf.lineTo(-.08, 1.84); sf.lineTo(-.02, 3); sf.lineTo(.02, 3); sf.lineTo(.08, 1.84); sf.lineTo(.16, 1.84); sf.lineTo(.16, 1.75); sf.lineTo(.1, 1.75); sf.quadraticCurveTo(.11, 1.5, .2, 1.1); sf.lineTo(.3, 1.1); sf.lineTo(.3, 1); sf.lineTo(.23, 1); sf.quadraticCurveTo(.32, .5, .66, 0); sf.lineTo(.42, 0); sf.quadraticCurveTo(0, 1.1, -.42, 0); sf.closePath();
-      const sg2 = new T.ExtrudeGeometry(sf, { depth: .12, bevelEnabled: false }); sg2.translate(0, 0, -.06); [0, 1].forEach(q => { pon(te, sg2, fe).rotation.y = q * Math.PI / 2; }); bola(te, .07, M.llama, 0, 3.05, 0);
+      const sg2 = new T.ExtrudeGeometry(sf, { depth: .12, bevelEnabled: false }); sg2.translate(0, 0, -.06); [0, 1].forEach(q => { pon(te, sg2, fe).rotation.y = q * Math.PI / 2; }); bola(te, .07, M.llama, 0, 3.05, 0); modelo(pf, 'modelos/torre-eiffel.glb', 3.1, .5, -2.46, .5, .4, [te]);
       const tr = new T.Group(); tr.position.set(-.6, -2.2, .95); tr.rotation.y = .3; pf.add(tr); const lg = cil(tr, .26, .26, 1, 12, br(0x5a3418), 0, 0, 0); lg.rotation.z = Math.PI / 2; [-1, 1].forEach(d => { const c = cil(tr, .22, .22, .03, 12, br(0xf3e3c3), d * .51, 0, 0); c.rotation.z = Math.PI / 2; }); bola(tr, .09, br(0xd4203a), 0, .3, 0); caja(tr, .3, .04, .16, br(0x2f9a4e), .14, .27, 0).rotation.y = .5; caja(tr, .3, .04, .16, br(0x2f9a4e), -.14, .27, 0).rotation.y = -.5;
       caja(g, 2.3, .58, .1, M.rojo2, -2.2, .32, 2.9); rotulo(g, 'ESPAÑA', 2.2, .52, -2.2, .32, 2.96); caja(g, 2.3, .58, .1, M.rojo2, 2.2, .32, 2.9); rotulo(g, 'FRANCIA', 2.2, .52, 2.2, .32, 2.96);
       return (t) => { const a = Math.sin(t * .55) * .08; viga.rotation.z = a; pe.rotation.z = pf.rotation.z = -a; b1.rotation.y = Math.sin(t * 2) * .25; b2.rotation.y = Math.sin(t * 2 + 1) * .25; es.rotation.y = t; };
@@ -629,12 +637,12 @@ function crear3D(cv) {
     muros.forEach((w, k) => { const nx = -Math.sin(k * Math.PI / 2), nz = -Math.cos(k * Math.PI / 2); w.visible = (cam.position.x * nx + cam.position.z * nz) < LADO - 2; });
     tiras.forEach((b, k) => b.material.emissiveIntensity = 1.2 + Math.sin(t * 2 + k * 1.3) * .6); bolasN.forEach((b, k) => { b.rotation.z = Math.sin(t * .7 + k) * .06; b.rotation.y = t * .3 + k; b.visible = (b.position.x * Math.sin(th) + b.position.z * Math.cos(th)) < 4; });
     islas.forEach((it, i) => { it.anim(t); it.nivel += (it.meta - it.nivel) * .04; const n = it.nivel, lleno = n > .97 ? 1 : 0; it.luz.emissiveIntensity = n * 2.4; it.foco.intensity = n * 2.6; it.bomb.forEach((b, k) => b.material.emissiveIntensity = lleno * (1.3 + Math.sin(t * 3 + k) * .5)); it.gui.forEach((b, k) => b.material.emissiveIntensity = lleno * (1.3 + Math.sin(t * 2.5 + k * 2) * .5)); });
-    punta.rotation.y = t; caras.forEach(q => { const cl = ((t + q.off) % 3.7) < .16; if (q.m.map !== (cl ? q.c : q.a)) { q.m.map = cl ? q.c : q.a; q.m.needsUpdate = true; } }); luces.forEach((b, k) => b.material.emissiveIntensity = 1.1 + Math.sin(t * 2.2 + k * 1.7) * .7); mono.rotation.z = Math.sin(t * 1.8) * .35;
+    mezcl.forEach(m => m.update(dt)); punta.rotation.y = t; caras.forEach(q => { const cl = ((t + q.off) % 3.7) < .16; if (q.m.map !== (cl ? q.c : q.a)) { q.m.map = cl ? q.c : q.a; q.m.needsUpdate = true; } }); luces.forEach((b, k) => b.material.emissiveIntensity = 1.1 + Math.sin(t * 2.2 + k * 1.7) * .7); mono.rotation.z = Math.sin(t * 1.8) * .35;
     const pos = ng.attributes.position; for (let k = 0; k < N; k++) { let y = pos.getY(k) - dt * (1.1 + (k % 5) * .25); if (y < -6) y = 24; pos.setY(k, y); } pos.needsUpdate = true;
     R.render(esc, cam);
     const w = cv.clientWidth, h = cv.clientHeight; etqs().forEach(b => { const it = islas[+b.dataset.i]; v3.set(it.g.position.x, ALTO[it.id] + .5, it.g.position.z).project(cam); b.style.transform = `translate(${(v3.x * .5 + .5) * w}px,${(-v3.y * .5 + .5) * h}px) translate(-50%,-100%)`; b.style.zIndex = Math.round((1 - v3.z) * 5000); b.style.visibility = v3.z > 1 ? 'hidden' : ''; });
   })();
-  return { enfocar, estado, vecina };
+  return { enfocar, estado, vecina, esc, cam };
 }
 function pintarPlaza() {
   const P = $('#plaza');
@@ -990,7 +998,7 @@ function reiniciar() {
   abrirVelo(n);
 }
 $('#bnuevo').onclick = reiniciar;
-$('#bayuda').onclick = () => aviso('¿Cómo se juega?', '<p>Arrastra la plaza para girarla. Haz clic en un lugar para acercarte y elegir una actividad.</p><p>Puedes hacer los lugares y las actividades en el orden que quieras.</p><p class="fr">Fais glisser la place pour la faire tourner, clique sur un lieu pour t’en approcher et choisir une activité. Dans chaque activité : « Escuchar » lit la consigne, « En français » la traduit. Une date ne s’allume qu’en cherchant bien près du sapin…</p>');
+$('#bayuda').onclick = () => aviso('¿Cómo se juega?', '<p>Arrastra la plaza para girarla. Haz clic en un lugar para acercarte y elegir una actividad.</p><p>Puedes hacer los lugares y las actividades en el orden que quieras.</p><p class="fr">Fais glisser la place pour la faire tourner, clique sur un lieu pour t’en approcher et choisir une activité. Dans chaque activité : « Escuchar » lit la consigne, « En français » la traduit. Une date ne s’allume qu’en cherchant bien près du sapin…</p><p class="fr" style="font-size:.78rem">Modelos 3D: Kenney, Quaternius, jeremy y Scott Marshall (poly.pizza). Motor: three.js.</p>');
 addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); profe(); } });
 portada();
 if (location.hash === '#profe') setTimeout(profe, 300);
