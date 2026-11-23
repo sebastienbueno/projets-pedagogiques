@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Del manantial al pueblo — socle 3D</title>
+  <meta name="description" content="Démo technique 3D : un personnage descend de la source jusqu'au village. Socle pour de futurs jeux d'espagnol.">
+  <meta name="theme-color" content="#16222e">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Three.js est fourni dans le dossier vendor/ : aucun appel à un serveur extérieur. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/build/three.module.min.js",
+      "three/addons/": "./vendor/three/addons/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-label="Scène 3D : montagne, ruisseau et village"></canvas>
+
+  <!-- Écran de chargement -->
+  <div id="chargement">
+    <div class="carte-chargement">
+      <p class="surtitre">Socle 3D · démo technique</p>
+      <h1>Del manantial al pueblo</h1>
+      <p class="sous-titre">De la source au village</p>
+      <div class="barre" role="progressbar" aria-label="Chargement" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="barre-progression"></div>
+      </div>
+      <p id="etape-chargement" aria-live="polite">Démarrage…</p>
+      <p id="erreur" role="alert" hidden></p>
+      <button id="bouton-jouer" type="button" hidden>Jouer</button>
+    </div>
+  </div>
+
+  <!-- Affichage en jeu -->
+  <pre id="compteur-fps" hidden></pre>
+  <button id="bouton-menu" type="button" aria-label="Réglages" title="Réglages (Échap)">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+  </button>
+  <div id="message" aria-live="polite"></div>
+  <p id="aide"></p>
+
+  <!-- Commandes tactiles (affichées au premier contact du doigt) -->
+  <div id="joystick" aria-hidden="true"><div id="manette"></div></div>
+  <button id="bouton-saut" class="bouton-tactile" type="button" aria-label="Sauter">
+    <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M12 4l7 8h-4.5v8h-5v-8H5z"/></svg>
+  </button>
+  <button id="bouton-course" class="bouton-tactile" type="button" aria-label="Courir">
+    <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M4 5l8 7-8 7zm8 0l8 7-8 7z"/></svg>
+  </button>
+
+  <!-- Menu de réglages -->
+  <div id="menu" hidden>
+    <div class="panneau" role="dialog" aria-label="Réglages">
+      <h2>Réglages</h2>
+      <h3>Qualité graphique</h3>
+      <div id="choix-qualite" class="segments">
+        <button type="button" data-qualite="auto">Auto</button>
+        <button type="button" data-qualite="bas">Bas</button>
+        <button type="button" data-qualite="moyen">Moyen</button>
+        <button type="button" data-qualite="eleve">Élevé</button>
+      </div>
+      <p id="etat-qualite" class="note"></p>
+      <label class="ligne"><input type="checkbox" id="case-fps"> Afficher les images par seconde <kbd>F</kbd></label>
+      <h3>Son</h3>
+      <label class="ligne"><input type="checkbox" id="case-son" checked> Son activé</label>
+      <label class="ligne">Volume <input type="range" id="volume" min="0" max="100" value="80"></label>
+      <h3>Partie</h3>
+      <div class="rangee">
+        <button type="button" id="bouton-source">Revenir à la source</button>
+        <button type="button" id="bouton-plein-ecran">Plein écran</button>
+      </div>
+      <button type="button" id="fermer-menu" class="principal">Reprendre</button>
+    </div>
+  </div>
+
+  <noscript>Cette démo a besoin de JavaScript.</noscript>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
