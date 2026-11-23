@@ -8,5 +8,6 @@ Supports interactifs d'espagnol (collège), conçus avec l'aide de l'intelligenc
 - **La plaza de Navidad** — jeu de révision « fiestas navideñas » (3e, fin de séquence, 1 h, casque) → `la-plaza-de-navidad.html` (vidéos : objet `VIDEOS` en tête du script ; mode professeur : Ctrl+Maj+A ou `#profe`, code `profe`)
 - **¿Qué están haciendo?** — scènes animées pour découvrir ESTAR + gérondif (4e) → `estar-gerundio.html`
 - **¿Humano o IA?** — séquence complète sur l'IA (4e, 6 séances) → `humano-o-ia.html` : fiches `sesion-1.html` … `sesion-6.html`, applications `plan-de-trabajo-ia.html` et `entrenamiento-examen.html`, PDF et pages dans `fichas/`, vidéos dans `videos/`
+- **Socle 3D** — démo technique (montagne, ruisseau, village) qui servira de base à de futurs jeux en 3D → `socle-3d/` (voir `socle-3d/README.md`)
 
 Site : page d'accueil `index.html` (publiée via GitHub Pages).
