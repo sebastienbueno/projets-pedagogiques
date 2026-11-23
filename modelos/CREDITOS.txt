@@ -6,3 +6,4 @@ Modèles 3D du hub de « La plaza de Navidad » (téléchargés sur poly.pizza)
 - vaca.glb : « Cow », Farm Animal Pack, Quaternius — CC0
 - uvas.glb : « Grapes », jeremy — licence à confirmer sur la page poly.pizza du modèle (CC-BY probable : attribution faite ici et dans l’aide du jeu)
 - torre-eiffel.glb : « SM - Eiffel Tower », Scott Marshall — licence à confirmer sur la page poly.pizza du modèle (CC-BY probable : attribution faite ici et dans l’aide du jeu)
+- vinilo.glb : « Vinyl record », Poly by Google — CC-BY (attribution faite ici)
