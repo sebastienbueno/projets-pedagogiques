@@ -984,74 +984,98 @@ const J3 = {
       baraja([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).forEach((d, k) => { const g = new T.Group(); K.pon(g, new T.SphereGeometry(.62, 24, 18), new T.MeshStandardMaterial({ color: 0xfff3d6, roughness: .35 })); const n = J.carta(String(d), 1.9, 'rgba(0,0,0,0)', 'rgba(0,0,0,0)'); n.position.z = .64; g.add(n); J.pieza(g, ['7', '9', '4', '3', '2'].includes(String(d)) ? String(d) : '-', -3.2 + (k % 5) * 1.6, 2.1 - Math.floor(k / 5) * 1.45, 0, 0); });
       baraja([['4.000 €', '-'], ['400.000 €', '-'], ['4.000.000 €', 'p']]).forEach(([t, c], k) => J.pieza(J.carta(t, .95, '#b8862b'), c, -3.15 + k * 3.15, -1.05, 0, 0)); } }, fin); },
   /* ---------- Cinco minutos para medianoche ---------- */
-  reloj(fin, plano) { let animar = null, final = null; juego3D({ plano, modo: 'pantalla', ancho: 34, cam: [0, 6.9, 30, 0, 6.9, 0], fov: 30,
+  reloj(fin, plano) { let animar = null, ev = {}; juego3D({ plano, modo: 'pantalla', ancho: 34, cam: [0, 6.9, 30, 0, 6.9, 0], fov: 30,
     anim: (t, dt, J) => animar && animar(t, dt, J),
-    pos: (q) => [q.x, q.y - q.dy, .6],
-    bien: (f, q) => q.t + ' ' + f.userData.txt + '.',
-    pista: () => 'No es su sitio. Lee otra vez la pregunta.',
-    alColocar: (f, q) => { f.userData.t0 = -1; f.userData.e1 = q.e; q.mk.children.forEach(m => { m.material = q.vd; }); q.av = 1; decir(f.userData.txt); },
-    alTerminar: (J, ok, tot) => final(ok, tot),
-    montar(J) { const { K, M, T, esc } = J, rnd = Math.random;
-      C.consigna('Lleva cada respuesta a su pregunta. ¡Cada acierto acerca la medianoche!', 'Amène chaque réponse à sa question. Chaque bonne réponse rapproche de minuit !');
-      C.glosa('<b>la uva</b> : le raisin · <b>las campanadas</b> : les coups de cloche · <b>la buena suerte</b> : la chance · <b>la cosecha</b> : la récolte<br>Arrastra una respuesta hasta su pregunta, o haz clic en ella y después en su sitio.');
+    pos: (q) => [q.x, q.y - .95, .6],
+    bien: (f) => ev.frase(f),
+    pista: () => { ev.mal = 1; return 'No es la respuesta. Lee otra vez la pregunta.'; },
+    alColocar: (f, q) => { ev.bien = f; },
+    alTerminar: (J, ok, tot) => { ev.fin = [ok, tot]; },
+    montar(J) { const { K, M, T, esc } = J, rnd = Math.random, TX = -9.3, PX = 7.6;
+      C.consigna('Lee la pregunta y lleva la respuesta al marco. Cada acierto adelanta el reloj un minuto.', 'Lis la question et amène la réponse dans le cadre. Chaque bonne réponse avance l’horloge d’une minute.');
+      C.glosa('<b>la uva</b> : le raisin · <b>las campanadas</b> : les coups de cloche · <b>la buena suerte</b> : la chance · <b>la cosecha</b> : la récolte<br>Arrastra una respuesta hasta el marco, o haz clic en ella y después en el marco.');
       const lienzo = (w, h, pinta) => { const c = document.createElement('canvas'); c.width = w; c.height = h; pinta(c.getContext('2d'), w, h); const x = new T.CanvasTexture(c); x.encoding = T.sRGBEncoding; return x; };
-      // cielo de Nochevieja
-      J.pon(new T.Mesh(new T.PlaneGeometry(80, 36), new T.MeshBasicMaterial({ map: lienzo(512, 256, (k, w, h) => { const g = k.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#070b26'); g.addColorStop(.5, '#2a0c2c'); g.addColorStop(1, '#7a1424'); k.fillStyle = g; k.fillRect(0, 0, w, h); }) })), 0, 6.9, -6);
-      const ne = 110, ep = new Float32Array(ne * 3); for (let i = 0; i < ne; i++) { ep[i * 3] = (rnd() - .5) * 38; ep[i * 3 + 1] = 5 + rnd() * 11; ep[i * 3 + 2] = -5; } const eg = new T.BufferGeometry(); eg.setAttribute('position', new T.BufferAttribute(ep, 3)); const estrellas = new T.Points(eg, new T.PointsMaterial({ color: 0xfff1c4, size: .16, transparent: true })); esc.add(estrellas);
-      const som = new T.MeshBasicMaterial({ color: 0x0c0513 }), ven = new T.MeshBasicMaterial({ color: 0xffc46b }); [-1, 1].forEach(d => { let x = 5.9; for (let i = 0; i < 6; i++) { const w = 1.9 + rnd() * 1.3, h = 2.3 + rnd() * 2.1; K.caja(esc, w, h + 4, .1, som, d * (x + w / 2), h / 2 - 2, -3.6); for (let a = 0; a < 3; a++) for (let b2 = 0; b2 < Math.floor(w / .75); b2++) if (rnd() < .55) K.caja(esc, .22, .32, .05, ven, d * (x + .5 + b2 * .7), h - .6 - a * .75, -3.05); x += w + .08; } });
-      // la torre del reloj
-      const luzV = new T.MeshStandardMaterial({ color: 0xffd98a, emissive: 0xffb84a, emissiveIntensity: 1.1 });
-      const lad = K.mat(0xb5463a), pie = K.mat(0xf3e2c4), piz = K.mat(0x46505f);
-      K.caja(esc, 10.6, 2.95, 1.6, lad, 0, 4.45, -1.6); K.caja(esc, 11.1, .28, 1.9, pie, 0, 6.02, -1.6); K.caja(esc, 11.1, .3, 1.9, pie, 0, 2.95, -1.6); [-4.45, 4.45].forEach(x => { K.caja(esc, .85, 1.35, .1, luzV, x, 4.3, -.76); K.cil(esc, .425, .425, .1, 20, luzV, x, 4.97, -.76).rotation.x = Math.PI / 2; K.caja(esc, .06, 1.7, .12, lad, x, 4.5, -.72); K.caja(esc, 1.15, .12, .3, pie, x, 3.62, -.7); });
-      K.caja(esc, 7.6, 6.8, 1.5, lad, 0, 9.55, -1.6); [-3.5, 3.5].forEach(x => K.caja(esc, .6, 6.8, 1.7, pie, x, 9.55, -1.6)); K.caja(esc, 8.3, .3, 1.9, pie, 0, 13.05, -1.6);
-      [-1.1, 1.1].forEach(x => K.cil(esc, .1, .12, .75, 8, pie, x, 13.55, -1.2)); K.caja(esc, 2.9, .14, 1.2, piz, 0, 13.98, -1.4); K.caja(esc, 2.2, .12, 1, piz, 0, 14.1, -1.4);
-      const camp = new T.Group(); camp.position.set(0, 13.9, -1.2); esc.add(camp); K.cono(camp, .3, .46, 12, M.oro, 0, -.27, 0); K.bola(camp, .08, M.oro, 0, -.55, 0);
-      K.cil(esc, .035, .035, .7, 6, M.oro, 0, 14.5, -1.4); const bola = K.bola(esc, .24, new T.MeshStandardMaterial({ color: 0xffd66b, emissive: 0xffb020, emissiveIntensity: .9, metalness: .5, roughness: .3 }), 0, 14.62, -1.4);
-      const CX = 0, CY = 9.8, RR = 2.7;
-      K.cil(esc, RR + .28, RR + .28, .3, 56, M.oro, CX, CY, -.8).rotation.x = Math.PI / 2;
+      const basico = (c, o) => new T.MeshBasicMaterial({ color: c, transparent: o != null, opacity: o == null ? 1 : o, depthWrite: o == null });
+      const signo = (txt, tam) => { const sp = new T.Sprite(new T.SpriteMaterial({ map: lienzo(256, 256, (k) => { k.font = 'bold 190px Georgia, serif'; k.textAlign = 'center'; k.textBaseline = 'middle'; k.lineJoin = 'round'; k.lineWidth = 8; k.strokeStyle = '#6f0d1e'; k.strokeText(txt, 128, 136); k.fillStyle = '#ffd66b'; k.fillText(txt, 128, 136); }), transparent: true, depthWrite: false })); sp.userData.ancho = sp.userData.alto = tam; sp.scale.set(tam, tam, 1); return sp; };
+      // cielo de Nochevieja y halo del reloj
+      J.pon(new T.Mesh(new T.PlaneGeometry(80, 36), new T.MeshBasicMaterial({ map: lienzo(64, 256, (k, w, h) => { const g = k.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#070b26'); g.addColorStop(.55, '#2a0c2c'); g.addColorStop(1, '#6a1222'); k.fillStyle = g; k.fillRect(0, 0, w, h); }) })), 0, 6.9, -6);
+      const ne = 70, ep = new Float32Array(ne * 3); for (let i = 0; i < ne; i++) { ep[i * 3] = (rnd() - .5) * 38; ep[i * 3 + 1] = 7 + rnd() * 9; ep[i * 3 + 2] = -5; } const eg = new T.BufferGeometry(); eg.setAttribute('position', new T.BufferAttribute(ep, 3)); const estrellas = new T.Points(eg, new T.PointsMaterial({ color: 0xfff1c4, size: .14, transparent: true })); esc.add(estrellas);
+      const haloT = lienzo(256, 256, (k) => { const g = k.createRadialGradient(128, 128, 20, 128, 128, 128); g.addColorStop(0, 'rgba(255,214,107,.75)'); g.addColorStop(1, 'rgba(255,214,107,0)'); k.fillStyle = g; k.fillRect(0, 0, 256, 256); });
+      const CX = TX, CY = 9.75, RR = 3.2, halo = J.pon(new T.Mesh(new T.PlaneGeometry(15, 15), new T.MeshBasicMaterial({ map: haloT, transparent: true, depthWrite: false })), CX, CY, -3.2);
+      // la torre: el reloj arriba, la placa de la tradición abajo
+      const lad = K.mat(0xa63d33), pie = K.mat(0xf3e2c4), piz = K.mat(0x46505f);
+      K.caja(esc, 14.6, 6.2, .5, lad, TX, 1.9, -1.3); K.caja(esc, 15.1, .3, .7, pie, TX, 5.1, -1.3);
+      K.caja(esc, 9.4, 8.5, .5, lad, TX, 9.45, -1.3); [-4.45, 4.45].forEach(x => K.caja(esc, .7, 8.5, .6, pie, TX + x, 9.45, -1.3)); K.caja(esc, 10.6, .3, .7, pie, TX, 13.75, -1.3);
+      [-.75, .75].forEach(x => K.cil(esc, .08, .1, .6, 8, pie, TX + x, 14.2, -1.4)); K.caja(esc, 2.1, .12, .5, piz, TX, 14.52, -1.4);
+      const camp = new T.Group(); camp.position.set(TX, 14.46, -1.4); esc.add(camp); K.cono(camp, .27, .4, 12, M.oro, 0, -.24, 0); K.bola(camp, .07, M.oro, 0, -.48, 0);
+      const aroM = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35, emissive: 0xffb020, emissiveIntensity: .15 }); K.cil(esc, RR + .3, RR + .3, .3, 64, aroM, CX, CY, -1).rotation.x = Math.PI / 2;
       const esf = lienzo(1024, 1024, (k) => { const g = k.createRadialGradient(512, 512, 60, 512, 512, 512); g.addColorStop(0, '#fffdf4'); g.addColorStop(1, '#f3e3bd'); k.fillStyle = g; k.beginPath(); k.arc(512, 512, 508, 0, 6.3); k.fill(); k.strokeStyle = '#6f0d1e'; k.lineWidth = 10; k.beginPath(); k.arc(512, 512, 492, 0, 6.3); k.stroke();
         for (let i = 0; i < 60; i++) { const a = i * .10472, g5 = i % 5 === 0, r1 = g5 ? 440 : 462; k.lineWidth = g5 ? 12 : 4; k.beginPath(); k.moveTo(512 + Math.sin(a) * r1, 512 - Math.cos(a) * r1); k.lineTo(512 + Math.sin(a) * 484, 512 - Math.cos(a) * 484); k.stroke(); }
-        k.fillStyle = '#b3182f'; k.beginPath(); k.moveTo(512, 512); k.arc(512, 512, 436, -Math.PI / 2 - .5236, -Math.PI / 2); k.closePath(); k.globalAlpha = .16; k.fill(); k.globalAlpha = 1;
-        k.fillStyle = '#4a0a16'; k.font = 'bold 104px Georgia, serif'; k.textAlign = 'center'; k.textBaseline = 'middle'; for (let h = 1; h <= 12; h++) k.fillText(h, 512 + Math.sin(h * .5236) * 368, 518 - Math.cos(h * .5236) * 368); });
-      J.pon(new T.Mesh(new T.CircleGeometry(RR, 56), new T.MeshBasicMaterial({ map: esf })), CX, CY, -.62);
-      const aguja = (w, l, mat, z) => { const g = new T.Group(); g.position.set(CX, CY, z); esc.add(g); K.caja(g, w, l, .06, mat, 0, l / 2 - .22, 0); return g; };
-      const hr = aguja(.26, 1.65, M.oscuro, -.52), mn = aguja(.17, 2.45, M.rojo2, -.45), sg = aguja(.05, 2.5, M.oro, -.38); K.bola(esc, .2, M.oro, CX, CY, -.34);
-      const mUva = () => new T.MeshStandardMaterial({ color: 0x4f6a22, roughness: .3, emissive: 0x9ccc3c, emissiveIntensity: 0 });
-      const uvas = []; for (let k = 1; k <= 12; k++) { const a = k * .5236, u = K.bola(esc, .2, mUva(), CX + Math.sin(a) * (RR + .28), CY + Math.cos(a) * (RR + .28), -.6); u.scale.y = 1.2; uvas.push(u); }
-      const HORA = ['Son las doce menos cinco', 'Son las doce menos cuatro', 'Son las doce menos tres', 'Son las doce menos dos', 'Son las doce menos uno', '¡Son las doce!'].map((x, i) => { const s = J.carta(x, 1.2, i === 5 ? '#1f6b4c' : '#b8862b', '#fff8ea', 760); s.visible = !i; return J.pon(s, 0, 6.5, -.3); });
-      const luz = new T.PointLight(0xffd9a0, .8, 16, 2); luz.position.set(0, 9.8, 3); esc.add(luz);
-      // guirnaldas de luces
-      const bomb = []; [-1, 1].forEach(d => { for (let i = 0; i <= 15; i++) { const u = i / 15, x = d * (4.3 + u * 13.2), y = 13.3 + u * 1.5 - Math.sin(u * Math.PI) * .75, c = [0xff5a6e, 0xffd66b, 0x5fd39a, 0xfff8ea][i % 4]; bomb.push(K.bola(esc, .13, new T.MeshBasicMaterial({ color: c }), x, y, -1)); } });
-      // las cinco preguntas
-      const oro = new T.MeshBasicMaterial({ color: 0xffd66b });
-      [['¿Quién?', 'q', -11.2, 10.85], ['¿Cuándo?', 'c', 11.2, 10.85], ['¿Qué?', 'k', -11.2, 6.75], ['¿Por qué?', 'p', 11.2, 6.75], ['¿Desde cuándo?', 'o', 0, 4.48]].forEach(([t, c, x, y], i) => { const w = i === 4 ? 6.8 : 7.4, h = i === 4 ? 2.85 : 3.6;
-        J.pon(new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ color: 0x14040a, transparent: true, opacity: .55, depthWrite: false })), x, y, -.2); const mk = J.marco(x, y, -.1, w, h); mk.children.forEach(m => { m.material = oro; m.scale.set(m.geometry.parameters.width < 1 ? 1.6 : 1, m.geometry.parameters.height < 1 ? 1.6 : 1, 1); });
-        J.pon(J.carta(t, 1.35, '#1f6b4c', '#fff8ea', 520), x, y + h / 2, .1); Object.assign(J.sitio(c, x, y, 0, 3.5, 0, i === 4 ? 1.3 : 1.8), { t, mk, e: i === 4 ? .78 : .9, dy: i === 4 ? .9 : .98, vd: new T.MeshBasicMaterial({ color: 0x5fd39a }) }); });
+        k.fillStyle = '#b3182f'; k.beginPath(); k.moveTo(512, 512); k.arc(512, 512, 436, -Math.PI / 2 - .5236, -Math.PI / 2); k.closePath(); k.globalAlpha = .18; k.fill(); k.globalAlpha = 1;
+        k.fillStyle = '#4a0a16'; k.font = 'bold 108px Georgia, serif'; k.textAlign = 'center'; k.textBaseline = 'middle'; for (let h = 1; h <= 12; h++) k.fillText(h, 512 + Math.sin(h * .5236) * 366, 518 - Math.cos(h * .5236) * 366); });
+      J.pon(new T.Mesh(new T.CircleGeometry(RR, 64), new T.MeshBasicMaterial({ map: esf })), CX, CY, -.82);
+      const aguja = (w, l, mat, z) => { const g = new T.Group(); g.position.set(CX, CY, z); esc.add(g); K.caja(g, w, l, .06, mat, 0, l / 2 - .26, 0); return g; };
+      const hr = aguja(.3, 1.95, M.oscuro, -.72), mn = aguja(.2, 2.9, M.rojo2, -.65), sg = aguja(.06, 2.95, M.oro, -.58); K.bola(esc, .24, M.oro, CX, CY, -.54);
+      const uvas = []; for (let k = 1; k <= 12; k++) { const a = k * .5236, u = K.bola(esc, .23, new T.MeshStandardMaterial({ color: 0x4f6a22, roughness: .3, emissive: 0x9ccc3c, emissiveIntensity: 0 }), CX + Math.sin(a) * (RR + .3), CY + Math.cos(a) * (RR + .3), -.8); u.scale.y = 1.2; uvas.push(u); }
+      const HORA = ['Son las doce menos cinco', 'Son las doce menos cuatro', 'Son las doce menos tres', 'Son las doce menos dos', 'Son las doce menos uno', '¡Son las doce!'].map((x, i) => { const s = J.carta(x, 1.35, i === 5 ? '#1f6b4c' : '#b8862b', '#fff8ea', 760); s.visible = !i; return J.pon(s, TX, 5.72, -.3); });
+      const luz = new T.PointLight(0xffd9a0, .7, 18, 2); luz.position.set(TX, 9.8, 4); esc.add(luz);
+      // la placa: las cinco preguntas, que se completan una a una
+      const P = [['¿Quién?', 'q'], ['¿Cuándo?', 'c'], ['¿Qué hacen?', 'k'], ['¿Por qué?', 'p'], ['¿Desde cuándo?', 'o']];
+      const R = { q: 'los españoles', c: 'el 31 de diciembre, a medianoche', k: 'comer 12 uvas al son de las campanadas', p: 'para tener buena suerte', o: '1909: una buena cosecha de uvas' };
+      J.pon(new T.Mesh(new T.PlaneGeometry(13.6, 5), basico(0x14040a, .62)), TX, 2.02, -.9); const oro = basico(0xffd66b); J.marco(TX, 2.02, -.85, 13.6, 5).children.forEach(m => { m.material = oro; });
+      const LIN = P.map(([p, c], i) => { const y = 3.98 - i * .98, a = J.carta(p + ' …', 1.6, '#8a6a3a', '#e9dcc6', 1500), b = J.carta(p + ' ' + R[c], 1.6, '#1f6b4c', '#fff8ea', 1500); a.material.opacity = .6; b.visible = false; [a, b].forEach(s => J.pon(s, TX - 6.5 + s.userData.ancho / 2, y, -.6)); return { a, b, y }; });
+      // la pregunta del momento y su marco
+      const PREG = P.map(([p], i) => { const s = J.carta(p, 2.1, '#1f6b4c', '#fff8ea', 700); s.visible = !i; return J.pon(s, PX, 13.25, .2); });
+      const QY = 10, QW = 9.2, QH = 4.1, fondo = J.pon(new T.Mesh(new T.PlaneGeometry(QW, QH), basico(0x14040a, .55)), PX, QY, -.3), brillo = J.pon(new T.Mesh(new T.PlaneGeometry(QW + 1.6, QH + 1.6), new T.MeshBasicMaterial({ map: haloT, transparent: true, depthWrite: false })), PX, QY, -.5);
+      const mq = basico(0xffd66b), mk = J.marco(PX, QY, -.2, QW, QH); mk.children.forEach(m => { m.material = mq; m.scale.set(m.geometry.parameters.width < 1 ? 2 : 1, m.geometry.parameters.height < 1 ? 2 : 1, 1); });
+      const duda = J.pon(signo('?', 2.6), PX, QY, -.1); duda.material.opacity = .8;
+      const sitio = J.sitio(P[0][1], PX, QY, 0, QW / 2 + .4, 0, QH / 2 + .3);
       // las respuestas: un objeto animado y su texto
       const br = (c, e) => new T.MeshStandardMaterial({ color: c, roughness: .4, emissive: e || 0, emissiveIntensity: e ? .35 : 0 });
-      const R = [['los españoles', 'q', g => { [[-.42, M.rojo, 0x5d3718], [.42, M.verde, null]].forEach(([x, m, b]) => { const p = K.persona(g, m, M.piel, b, 0); p.k.scale.setScalar(.72); p.k.position.x = x; p.bd.rotation.z = 2.4; }); K.cil(g, .03, .03, 1.7, 5, M.madera, 1.05, .85, 0); [[1.52, 0xc8102e, .15], [1.34, 0xffc400, .22], [1.16, 0xc8102e, .15]].forEach(([y, c, h]) => K.caja(g, .78, h, .04, br(c), 1.46, y, 0)); }],
-        ['el 31 de diciembre, a medianoche', 'c', g => { K.caja(g, 1.3, 1.4, .14, br(0xfffaf0), -.25, .75, 0); K.caja(g, 1.3, .4, .16, br(0xc8102e), -.25, 1.3, 0); [-.6, .1].forEach(x => K.cil(g, .05, .05, .26, 6, M.oscuro, x, 1.52, .04)); const n = J.carta('31', 1.25, 'rgba(0,0,0,0)', 'rgba(0,0,0,0)'); n.position.set(-.25, .58, .2); g.add(n); K.bola(g, .3, br(0xfff1c4, 0xffe08a), .85, 1.4, 0); K.bola(g, .27, new T.MeshBasicMaterial({ color: 0x1a0b2a }), .98, 1.5, .1); }],
-        ['comer 12 uvas al son de las campanadas', 'k', g => { const um = br(0xa9d93f, 0x3f6d00), pv = [[-.2, 0], [.2, 0], [0, .3], [0, -.3]].map(([x, y]) => K.bola(g, .22, um, x - .3, .75 + y, 0)); K.modelo(g, 'modelos/uvas.glb', 1.4, -.3, .05, 0, 0, pv, (c, o3) => o3.traverse(n => { if (n.isMesh) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { if (m.name === '673AB7') m.color.set(0x9ccc3c); }); })); const b = new T.Group(); b.position.set(.85, 1.5, 0); b.rotation.z = -.3; g.add(b); K.cono(b, .36, .6, 12, M.oro, 0, -.35, 0); K.bola(b, .1, M.oro, 0, -.7, 0); K.bola(b, .07, M.oro, 0, -.03, 0); }],
-        ['para tener buena suerte', 'p', g => { const v = br(0x2f9a4e, 0x1f6b4c); K.cil(g, .05, .05, .8, 6, v, .12, .38, 0).rotation.z = -.3; [[-.3, 0], [.3, 0], [0, .3], [0, -.3]].forEach(([x, y]) => K.bola(g, .32, v, x, 1.08 + y, 0).scale.z = .3); K.bola(g, .1, M.oro, 0, 1.08, .1); [[.85, 1.5], [-.8, .5]].forEach(([x, y]) => K.pon(g, new T.OctahedronGeometry(.16), M.llama, x, y, 0)); }],
-        ['1909: una buena cosecha de uvas', 'o', g => { const md = K.mat(0x8a5a2c), um = br(0xa9d93f, 0x3f6d00); K.caja(g, 1.7, .7, .9, md, 0, .38, 0); [.2, .56].forEach(y => K.caja(g, 1.78, .1, .96, K.mat(0x5a3418), 0, y, 0)); [[-.55, .9], [-.2, .98], [.15, .9], [.5, .98], [-.36, 1.2], [0, 1.26], [.34, 1.2], [-.05, 1.5]].forEach(([x, y], i) => K.bola(g, .23, um, x, y, (i % 2) * .16 - .08)); K.caja(g, .5, .05, .34, br(0x2f9a4e), .62, 1.42, 0).rotation.z = .5; }]];
-      const resp = []; baraja(R).forEach(([t, c, hacer], k) => { const g = new T.Group(), m = new T.Group(), ca = J.carta(t, 1.5, '#b3182f', '#fff8ea', 480); g.add(ca); m.position.y = ca.userData.alto / 2 + .1; g.add(m); hacer(m); const f = J.pieza(g, c, -12.8 + k * 6.4, .55, .6, 0); Object.assign(f.userData, { txt: t, m, k, g, e1: 1, y0: m.position.y }); resp.push(f); });
-      // chispas y fuegos dentro de la escena
-      const chis = [], estalla = (x, y, z, col, n, f) => { const pos = new Float32Array(n * 3), dir = []; for (let i = 0; i < n; i++) { const a = rnd() * 6.28, r = (.5 + rnd()) * f; dir.push([Math.cos(a) * r, Math.sin(a) * r]); } const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(pos, 3)); const p = new T.Points(g, new T.PointsMaterial({ color: col, size: .3, transparent: true, depthWrite: false })); p.position.set(x, y, z); p.frustumCulled = false; esc.add(p); chis.push({ p, dir, pos, e: 0 }); };
-      let min = 0, am = 0, f0 = 0, dadas = 0, feliz = null, ok0 = 0, tot0 = 0, golpe = 0, hecho = 0;
-      final = (ok, tot) => { f0 = -1; ok0 = ok; tot0 = tot; };
-      animar = (t, dt) => { const n = J.sitios.filter(q => q.av).length;
-        if (n !== min) { min = n; campana(294, .16); golpe = t; HORA.forEach((s, i) => { s.visible = i === Math.min(min, f0 ? 4 : 5); }); }
-        am += (min - am) * .07; mn.rotation.z = -(55 + am) / 60 * 6.2832; hr.rotation.z = -(11 + (55 + am) / 60) / 12 * 6.2832; sg.rotation.z = hecho ? 0 : -Math.floor(t) / 60 * 6.2832;
-        bola.position.y += (14.62 - min * .09 - bola.position.y) * .1; camp.rotation.z = Math.sin((t - golpe) * 9) * Math.max(0, .7 - (t - golpe) * .5) + Math.sin(t * 1.4) * .05;
-        estrellas.material.opacity = .7 + Math.sin(t * 2) * .3; bomb.forEach((b, i) => b.scale.setScalar(1 + (Math.sin(t * 3 + i * 1.7) > .2 ? .5 : 0)));
-        if (f0 === -1) f0 = t + 1.3;
-        if (f0 > 0 && !hecho) { const k = Math.floor((t - f0) / .62); while (dadas <= k && dadas < 12) { const u = uvas[dadas]; u.material.color.set(0xa9d93f); u.material.emissiveIntensity = .9; u.userData.t0 = t; campana(196, .2); golpe = t; estalla(u.position.x, u.position.y, 0, 0xffe08a, 14, 1.1); dadas++; if (dadas === 1) HORA.forEach((s, i) => { s.visible = i === 5; }); }
-          if (dadas === 12 && t - f0 > 12 * .62 + .3) { hecho = 1; fuegos(); feliz = J.carta('¡Feliz Año Nuevo!', 2.3, '#b8862b', '#fff8ea', 900); feliz.userData.t0 = t; J.pon(feliz, 0, 9.8, 2); [[-11, 11, 0xff5a6e], [11, 10.5, 0x5fd39a], [-6, 13, 0xffd66b], [6, 13.2, 0xfff8ea], [-12, 5.5, 0xffd66b], [12, 6, 0xff5a6e], [0, 13.6, 0x5fd39a]].forEach(([x, y, c], i) => setTimeout(() => estalla(x, y, 1, c, 70, 3.4), i * 260)); resp.forEach((f, i) => { f.userData.t0 = t + i * .12; f.userData.pend = 0; }); J.terminar(ok0, tot0, '¡Son las doce! ¡Feliz Año Nuevo!'); } }
+      const OBJ = { q: g => { [[-.42, M.rojo, 0x5d3718], [.42, M.verde, null]].forEach(([x, m, b]) => { const p = K.persona(g, m, M.piel, b, 0); p.k.scale.setScalar(.8); p.k.position.x = x; }); },
+        c: g => { K.caja(g, 1.4, 1.5, .14, br(0xfffaf0), 0, .8, 0); K.caja(g, 1.4, .42, .16, br(0xc8102e), 0, 1.4, 0); [-.38, .38].forEach(x => K.cil(g, .05, .05, .26, 6, M.oscuro, x, 1.63, .04)); const n = J.carta('31', 1.4, 'rgba(0,0,0,0)', 'rgba(0,0,0,0)'); n.position.set(0, .62, .2); g.add(n); },
+        k: g => { const um = br(0xa9d93f, 0x3f6d00), pv = [[-.2, 0], [.2, 0], [0, .3], [0, -.3]].map(([x, y]) => K.bola(g, .24, um, x, .8 + y, 0)); K.modelo(g, 'modelos/uvas.glb', 1.6, 0, .05, 0, 0, pv, (c, o3) => o3.traverse(n => { if (n.isMesh) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { if (m.name === '673AB7') m.color.set(0x9ccc3c); }); })); },
+        p: g => { const v = br(0x2f9a4e, 0x1f6b4c); K.cil(g, .05, .05, .8, 6, v, .12, .4, 0).rotation.z = -.3; [[-.32, 0], [.32, 0], [0, .32], [0, -.32]].forEach(([x, y]) => K.bola(g, .34, v, x, 1.15 + y, 0).scale.z = .3); K.bola(g, .1, M.oro, 0, 1.15, .1); },
+        o: g => { const md = K.mat(0x8a5a2c), um = br(0xa9d93f, 0x3f6d00); K.caja(g, 1.7, .7, .9, md, 0, .38, 0); [.2, .56].forEach(y => K.caja(g, 1.78, .1, .96, K.mat(0x5a3418), 0, y, 0)); [[-.55, .9], [-.2, .98], [.15, .9], [.5, .98], [-.36, 1.2], [0, 1.26], [.34, 1.2], [-.05, 1.5]].forEach(([x, y], i) => K.bola(g, .23, um, x, y, (i % 2) * .16 - .08)); } };
+      const resp = []; baraja(P.map(p => p[1])).forEach((c, k) => { const g = new T.Group(), m = new T.Group(), ca = J.carta(R[c], 1.5, '#b3182f', '#fff8ea', 480); g.add(ca); m.position.y = ca.userData.alto / 2 + .1; g.add(m); OBJ[c](m); const f = J.pieza(g, c, k < 3 ? PX - 6 + k * 6 : PX - 3 + (k - 3) * 6, k < 3 ? 4.45 : .5, .6, 0); Object.assign(f.userData, { m, k, g, e1: 1, y0: m.position.y }); resp.push(f); });
+      // efectos: chispas, ondas, muelles
+      const chis = [], ondas = [];
+      const estalla = (x, y, z, col, n, f, dur = 1.3) => { const pos = new Float32Array(n * 3), dir = []; for (let i = 0; i < n; i++) { const a = rnd() * 6.28, r = (.35 + rnd() * .9) * f; dir.push([Math.cos(a) * r, Math.sin(a) * r]); } const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(pos, 3)); const p = new T.Points(g, new T.PointsMaterial({ color: col, size: .3, transparent: true, depthWrite: false })); p.position.set(x, y, z); p.frustumCulled = false; esc.add(p); chis.push({ p, dir, pos, e: 0, dur }); };
+      const onda = (x, y, z, r, col, dur = .9) => { const m = new T.Mesh(new T.RingGeometry(.9, 1, 64), basico(col, 1)); m.position.set(x, y, z); esc.add(m); ondas.push({ m, r, e: 0, dur }); };
+      const pop = (p) => p >= 1 ? 1 : 1 + Math.sin(p * Math.PI) * .28 * (1 - p) * 2 - Math.pow(1 - p, 3);   // entrada con rebote
+      let qi = 0, min = 0, am = 0, vm = 0, golpe = -9, tPreg = 0, tMal = -9, tBien = 0, pz = null, fase = 0, f0 = 0, dadas = 0, feliz = null, hecho = 0, sgA = 0;
+      ev.frase = (f) => P[qi][0] + ' ' + R[f.userData.clave] + '.';
+      animar = (t, dt) => {
+        if (ev.mal) { ev.mal = 0; tMal = t; }
+        if (ev.bien) { pz = ev.bien; ev.bien = null; tBien = t; fase = 1; pz.userData.t0 = t; min++; golpe = t; campana(294, .16); decir(P[qi][0] + ' ' + R[pz.userData.clave]); HORA.forEach((s, i) => { s.visible = i === Math.min(min, 4); }); HORA[Math.min(min, 4)].userData.t0 = t; onda(CX, CY, -.5, RR + 1.6, 0xffd66b); estalla(PX, QY, 1, 0xffe08a, 40, 3); onda(PX, QY, .4, 5.5, 0x5fd39a, .7); mq.color.set(0x5fd39a); duda.visible = false; }
+        // 1 celebra en el marco · 2 vuela a la placa · 3 pregunta siguiente
+        if (fase === 1 && t - tBien > 1.9) { fase = 2; const L = LIN[qi]; pz.userData.dest.set(TX, L.y, .6); pz.userData.e1 = .12; }
+        if (fase === 2 && t - tBien > 2.45) { fase = 0; const L = LIN[qi]; pz.visible = false; L.a.visible = false; L.b.visible = true; L.b.userData.t0 = t; estalla(TX, L.y, .2, 0x5fd39a, 22, 2.4, .8); PREG[qi].visible = false; qi++;
+          if (qi < 5) { sitio.clave = P[qi][1]; sitio.lleno = false; sitio.n = 0; PREG[qi].visible = true; tPreg = t; mq.color.set(0xffd66b); duda.visible = true; clic(qi); } else { fondo.visible = brillo.visible = mk.visible = false; f0 = t + .5; } }
+        // el reloj
+        vm += (min - am) * .09; vm *= .8; am += vm; mn.rotation.z = -(55 + am) / 60 * 6.2832; hr.rotation.z = -(11 + (55 + am) / 60) / 12 * 6.2832;
+        const s0 = Math.floor(t), fs = t - Math.floor(t); sgA = qi > 4 ? 0 : -(s0 + (fs < .18 ? Math.sin(fs / .18 * Math.PI) * .25 : 0)) / 60 * 6.2832; sg.rotation.z = sgA;
+        const dg = t - golpe; camp.rotation.z = Math.sin(dg * 10) * Math.max(0, .75 - dg * .6) + Math.sin(t * 1.4) * .04; aroM.emissiveIntensity = .15 + Math.max(0, 1 - dg) * .9; halo.scale.setScalar(1 + Math.sin(t * 1.6) * .04 + Math.max(0, 1 - dg) * .25); halo.material.opacity = .55 + Math.max(0, 1 - dg) * .45;
+        estrellas.material.opacity = .7 + Math.sin(t * 2) * .3;
+        HORA.forEach(s => { if (s.visible) { const e = pop(Math.min(1, (t - (s.userData.t0 || -9)) / .5)); s.scale.set(s.userData.ancho * e, s.userData.alto * e, 1); } });
+        LIN.forEach(L => { if (L.b.visible) { const e = pop(Math.min(1, (t - L.b.userData.t0) / .5)); L.b.scale.set(L.b.userData.ancho * e, L.b.userData.alto * e, 1); } });
+        // la pregunta y su marco
+        const dm = t - tMal, tiembla = dm < .5 ? Math.sin(dm * 40) * .22 * (1 - dm * 2) : 0; if (fase === 0 && qi < 5) mq.color.set(dm < .5 ? 0xff5a6e : 0xffd66b);
+        PREG.forEach(s => { if (s.visible) { const e = pop(Math.min(1, (t - tPreg) / .55)); s.scale.set(s.userData.ancho * e, s.userData.alto * e, 1); s.position.x = PX + tiembla; } });
+        mk.position.x = PX + tiembla; brillo.material.opacity = fase === 0 ? .35 + Math.sin(t * 3) * .25 : .8; duda.scale.setScalar(duda.userData.alto * (1 + Math.sin(t * 3) * .06)); duda.scale.x = duda.userData.ancho * (1 + Math.sin(t * 3) * .06);
+        // las respuestas
+        resp.forEach(f => { if (!f.visible) return; const u = f.userData, m = u.m; u.g.scale.setScalar(u.g.scale.x + (u.e1 - u.g.scale.x) * .18); const p = u.t0 ? (t - u.t0) / 1.2 : -1, on = p > 0 && p < 1, sa = on ? Math.sin(p * Math.PI) : 0;
+          m.position.y = u.y0 + sa * .8 + (u.fijo ? 0 : Math.abs(Math.sin(t * 2 + u.k * 1.3)) * .12); m.rotation.y = (on ? p * 6.2832 * 2 : 0) + (u.fijo ? 0 : Math.sin(t * 1.1 + u.k) * .3); m.scale.setScalar(1.12 * (1 + sa * .3)); });
+        // las doce campanadas
+        if (ev.fin && f0 && t > f0 && !hecho) { const k = Math.floor((t - f0) / .62); if (!dadas && k >= 0) { HORA.forEach((s, i) => { s.visible = i === 5; }); HORA[5].userData.t0 = t; }
+          while (dadas <= k && dadas < 12) { const u = uvas[dadas]; u.material.color.set(0xa9d93f); u.material.emissiveIntensity = .9; u.userData.t0 = t; campana(196, .2); golpe = t; estalla(u.position.x, u.position.y, 0, 0xffe08a, 16, 1.3, .8); onda(u.position.x, u.position.y, -.3, 1.1, 0xd9f7a0, .5); dadas++; ondas.filter(o => o.num).forEach(o => { esc.remove(o.m); ondas.splice(ondas.indexOf(o), 1); }); const n = signo(String(dadas), 5); J.pon(n, PX, 8.6, .3); ondas.push({ m: n, num: 1, e: 0, dur: .58 }); }
+          if (dadas === 12 && t - f0 > 12 * .62 + .35) { hecho = 1; fuegos(); feliz = J.carta('¡Feliz Año Nuevo!', 3, '#b8862b', '#fff8ea', 900); feliz.userData.t0 = t; J.pon(feliz, PX, 9.6, 2); onda(CX, CY, -.5, RR + 3, 0xffd66b, 1.2);
+            [[PX - 6, 12, 0xff5a6e], [PX + 6, 12.4, 0x5fd39a], [PX, 13.4, 0xffd66b], [PX - 4, 5, 0xfff8ea], [PX + 5, 4.6, 0xffd66b], [PX + 7.5, 8, 0xff5a6e], [PX - 7, 8.4, 0x5fd39a], [PX, 3.6, 0xff5a6e]].forEach(([x, y, c], i) => setTimeout(() => { estalla(x, y, 1, c, 80, 4.2, 1.6); onda(x, y, .9, 2.2, c, .6); }, i * 280));
+            J.terminar(ev.fin[0], ev.fin[1], '¡Son las doce! ¡Feliz Año Nuevo!'); } }
         uvas.forEach(u => { const p = u.userData.t0 ? (t - u.userData.t0) / .5 : 2, e = 1 + (p < 1 ? Math.sin(p * Math.PI) * .9 : 0); u.scale.set(e, 1.2 * e, e); });
-        if (feliz) { const p = Math.min(1, (t - feliz.userData.t0) / .6), e = (1 - Math.pow(1 - p, 3)) * (1 + Math.sin(t * 3) * .03); feliz.scale.set(feliz.userData.ancho * e, feliz.userData.alto * e, 1); }
-        resp.forEach(f => { const u = f.userData, m = u.m; u.g.scale.setScalar(u.g.scale.x + (u.e1 - u.g.scale.x) * .15); if (u.t0 === -1) { u.t0 = t + .2; u.pend = 1; } const p = u.t0 ? (t - u.t0) / 1.1 : -1, on = p > 0 && p < 1, sa = on ? Math.sin(p * Math.PI) : 0; if (p > 0 && u.pend) { u.pend = 0; estalla(u.dest.x, u.dest.y + 1, 1, 0xffe08a, 34, 2); }
-          m.position.y = u.y0 + sa * .7 + (u.fijo ? 0 : Math.abs(Math.sin(t * 2.2 + u.k * 1.3)) * .16); m.rotation.y = (on ? p * 6.2832 : 0) + Math.sin(t * 1.1 + u.k) * (u.fijo ? .12 : .35); m.scale.setScalar(1.12 * (1 + sa * .25)); });
-        for (let i = chis.length - 1; i >= 0; i--) { const c = chis[i]; c.e += dt / 1.3; const e = Math.min(1, c.e), s = 1 - Math.pow(1 - e, 2), a = c.p.geometry.attributes.position; c.dir.forEach((d, j) => { c.pos[j * 3] = d[0] * s; c.pos[j * 3 + 1] = d[1] * s - e * e * .9; }); a.needsUpdate = true; c.p.material.opacity = 1 - e * e; if (e >= 1) { esc.remove(c.p); chis.splice(i, 1); } } }; } }, fin); },
+        if (feliz) { const e = pop(Math.min(1, (t - feliz.userData.t0) / .7)) * (1 + Math.sin(t * 3) * .03); feliz.scale.set(feliz.userData.ancho * e, feliz.userData.alto * e, 1); }
+        for (let i = chis.length - 1; i >= 0; i--) { const c = chis[i]; c.e += dt / c.dur; const e = Math.min(1, c.e), s = 1 - Math.pow(1 - e, 3), a = c.p.geometry.attributes.position; c.dir.forEach((d, j) => { c.pos[j * 3] = d[0] * s; c.pos[j * 3 + 1] = d[1] * s - e * e * 1.1; }); a.needsUpdate = true; c.p.material.opacity = 1 - e * e; c.p.material.size = .34 * (1 - e * .5); if (e >= 1) { esc.remove(c.p); chis.splice(i, 1); } }
+        for (let i = ondas.length - 1; i >= 0; i--) { const o = ondas[i]; o.e += dt / o.dur; const e = Math.min(1, o.e); if (o.num) { const z = .7 + Math.min(1, e * 4) * .3 + e * .25; o.m.scale.set(o.m.userData.ancho * z, o.m.userData.alto * z, 1); o.m.material.opacity = 1 - Math.pow(e, 4); } else { o.m.scale.setScalar(.3 + (1 - Math.pow(1 - e, 2)) * o.r); o.m.material.opacity = 1 - e; } if (e >= 1) { esc.remove(o.m); ondas.splice(i, 1); } } }; } }, fin); },
   /* ---------- El desfile de los Reyes ---------- */
   desfile(fin, plano) { let reyes = []; juego3D({ plano, modo: 'pantalla', cam: [0, 4.1, 17, 0, 4.1, 0], fov: 40, final: 'Melchor, Gaspar y Baltasar desfilan por las calles.',
     anim: (t) => reyes.forEach((r, i) => { r.bd.rotation.z = 2.5 + Math.sin(t * 4 + i * 2) * .45; r.k.rotation.y = Math.sin(t * 1.2 + i * 1.7) * .25; }),
