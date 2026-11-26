@@ -1058,7 +1058,7 @@ const J3 = {
         if (feliz) { const e = pop(Math.min(1, (t - feliz.userData.t0) / .7)) * (1 + Math.sin(t * 3) * .03); feliz.scale.set(feliz.userData.ancho * e, feliz.userData.alto * e, 1); }
         for (let i = chis.length - 1; i >= 0; i--) { const c = chis[i]; c.e += dt / c.dur; const e = Math.min(1, c.e), s = 1 - Math.pow(1 - e, 3), a = c.p.geometry.attributes.position; c.dir.forEach((d, j) => { c.pos[j * 3] = d[0] * s; c.pos[j * 3 + 1] = d[1] * s - e * e * 1.1; }); a.needsUpdate = true; c.p.material.opacity = 1 - e * e; if (e >= 1) { esc.remove(c.p); chis.splice(i, 1); } }
         for (let i = ondas.length - 1; i >= 0; i--) { const o = ondas[i]; o.e += dt / o.dur; const e = Math.min(1, o.e); if (o.num) { const z = (.7 + Math.min(1, e * 4) * .3 + e * .25) * o.m.userData.ancho; o.m.scale.set(z, z, 1); o.m.material.opacity = 1 - Math.pow(e, 4); } else { o.m.scale.setScalar(.3 + (1 - Math.pow(1 - e, 2)) * o.r); o.m.material.opacity = 1 - e; } if (e >= 1) { esc.remove(o.m); ondas.splice(i, 1); } } }; } }, fin); },
-  /* ---------- Los Reyes Magos: 1) quién es quién · 2) de dónde vienen ---------- */
+  /* ---------- Los Reyes Magos: quién es quién y de dónde vienen ---------- */
   reyesKit(J) { const { K, M, T, esc } = J, rnd = Math.random;
     const lienzo = (w, h, pinta) => { const c = document.createElement('canvas'); c.width = w; c.height = h; pinta(c.getContext('2d'), w, h); const x = new T.CanvasTexture(c); x.encoding = T.sRGBEncoding; return x; };
     const basico = (c, o) => new T.MeshBasicMaterial({ color: c, transparent: o != null, opacity: o == null ? 1 : o, depthWrite: o == null });
@@ -1074,77 +1074,39 @@ const J3 = {
       for (let i = ondas.length - 1; i >= 0; i--) { const o = ondas[i]; o.e += dt / o.dur; const e = Math.min(1, o.e); o.m.scale.setScalar(.3 + (1 - Math.pow(1 - e, 2)) * o.r); o.m.material.opacity = 1 - e; if (e >= 1) { esc.remove(o.m); ondas.splice(i, 1); } } };
     const pop = (p) => p >= 1 ? 1 : 1 + Math.sin(p * Math.PI) * .56 * (1 - p) - Math.pow(1 - p, 3);
     const fiesta = (pts) => pts.forEach(([x, y, c], i) => setTimeout(() => { estalla(x, y, 1.2, c, 80, 4.2, 1.6); onda(x, y, 1, 2.2, c, .6); }, i * 260));
-    const DATOS = [['m', 'Melchor', 'Europa', M.rojo, M.piel, 0xffffff], ['g', 'Gaspar', 'Asia', M.verde, M.piel, 0x8a5a2c], ['b', 'Baltasar', 'África', M.violeta, M.piel2, 0x17100b]];
+    const DATOS = [['m', 'Melchor', 'Europa', M.rojo, M.piel, 0xffffff, 'blanca'], ['g', 'Gaspar', 'Asia', M.verde, M.piel, 0x8a5a2c, 'castaña'], ['b', 'Baltasar', 'África', M.violeta, M.piel2, 0x17100b, 'negra']];
     const rey = (g, d, e) => { const r = K.persona(g, d[3], d[4], d[5], 1); r.k.scale.setScalar(e); return r; };
     return { lienzo, basico, signo, haloT, estalla, onda, efectos, pop, fiesta, DATOS, rey }; },
   reyes(fin, plano) { let animar = null, ev = {}; juego3D({ plano, modo: 'pantalla', ancho: 34, cam: [0, 6.9, 30, 0, 6.9, 0], fov: 30,
     anim: (t, dt, J) => animar && animar(t, dt, J),
-    pos: (q) => [q.x, q.y, .6],
-    bien: (f) => 'Se llama ' + f.userData.txt + '.',
-    pista: (f, q) => { q.mal = 1; return 'No es ' + f.userData.txt + '. Mira su barba y su capa.'; },
+    pos: (q) => [q.x, q.y, 0],
+    bien: (f, q) => q.r0.nombre + ' viene de ' + q.r0.cont + '.',
+    pista: (f, q) => { q.mal = 1; return 'No es ' + q.r0.nombre + '. Lee el texto y mira la barba.'; },
     alColocar: (f, q) => { ev.bien = [f, q]; },
     alTerminar: (J, ok, tot) => { ev.fin = [ok, tot]; },
-    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), YS = 3.75, SW = 7, SH = 2;
-      C.consigna('¿Quién es quién? Pon su nombre a cada Rey Mago.', 'Qui est qui ? Donne son nom à chaque Roi mage.');
-      C.glosa('<ul><li><b>Melchor</b> tiene la barba blanca y lleva una capa roja.</li><li><b>Gaspar</b> tiene la barba castaña y lleva una capa verde.</li><li><b>Baltasar</b> tiene la barba negra y lleva una capa violeta.</li></ul><b>la barba</b> : la barbe · <b>la capa</b> : la cape · <b>lleva</b> : il porte<br>Arrastra un nombre hasta su rey, o haz clic en el nombre y después en el marco.');
-      const REYES = baraja(U.DATOS).map((d, i) => { const x = -10.6 + i * 10.6, g = new T.Group(); g.position.set(x, 0, -1); esc.add(g); const r = { c: d[0], x, g, nombre: d[1], t0: -9, ok: 0 };
-        r.halo = K.pon(g, new T.PlaneGeometry(13, 13), new T.MeshBasicMaterial({ map: U.haloT, transparent: true, opacity: .25, depthWrite: false }), 0, 9, -2);
-        K.cil(g, 2.6, 2.9, .5, 40, M.pardo, 0, 5.05, 0); K.cil(g, 2.7, 2.7, .12, 40, M.oro, 0, 5.34, 0); K.cil(g, 2.2, 2.2, .1, 40, d[3], 0, 5.42, 0);
-        r.per = U.rey(g, d, 3.25); r.per.k.position.set(0, 5.45, 0);
+    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), YS = 3.15, SW = 8.2, SH = 2.5, YP = 5.9;
+      C.consigna('Lee cada texto y llévalo a su Rey Mago.', 'Lis chaque texte et amène-le à son Roi mage.');
+      C.glosa('<b>la barba</b> : la barbe · <b>blanca</b> : blanche · <b>castaña</b> : châtain · <b>negra</b> : noire · <b>viene de</b> : il vient de<br>Arrastra un texto hasta su rey, o haz clic en el texto y después en el marco.');
+      const ficha = (l1, l2, e) => { const c = document.createElement('canvas'), k = c.getContext('2d'), F = 'bold 44px Georgia, serif'; k.font = F; const an = Math.ceil(Math.max(k.measureText(l1).width, k.measureText(l2).width)) + 64, al = 150; c.width = an; c.height = al; k.fillStyle = '#fff8ea'; k.strokeStyle = '#b3182f'; k.lineWidth = 7; k.beginPath(); if (k.roundRect) k.roundRect(4, 4, an - 8, al - 8, 20); else k.rect(4, 4, an - 8, al - 8); k.fill(); k.stroke(); k.textAlign = 'center'; k.textBaseline = 'middle'; k.font = F; k.fillStyle = '#3a1410'; k.fillText(l1, an / 2, 48); k.fillStyle = '#b3182f'; k.fillText(l2, an / 2, 104); const x = new T.CanvasTexture(c); x.encoding = T.sRGBEncoding; const sp = new T.Sprite(new T.SpriteMaterial({ map: x })); sp.userData.ancho = an / 150 * e; sp.userData.alto = al / 150 * e; sp.scale.set(sp.userData.ancho, sp.userData.alto, 1); return sp; };
+      const REYES = baraja(U.DATOS).map((d, i) => { const x = -10.6 + i * 10.6, g = new T.Group(); g.position.set(x, 0, -1); esc.add(g); const r = { c: d[0], x, g, nombre: d[1], cont: d[2], barba: d[6], t0: -9, ok: 0 };
+        r.halo = K.pon(g, new T.PlaneGeometry(13, 13), new T.MeshBasicMaterial({ map: U.haloT, transparent: true, opacity: .25, depthWrite: false }), 0, 9.6, -2);
+        K.cil(g, 2.6, 2.9, 1.3, 40, M.pardo, 0, YP - .65, 0); K.cil(g, 2.7, 2.7, .12, 40, M.oro, 0, YP + .04, 0); K.cil(g, 2.2, 2.2, .1, 40, d[3], 0, YP + .12, 0); J.pon(J.carta(d[1], 2, '#b8862b', '#fff8ea'), x * .93, YP - .62, 2.2);
+        r.per = U.rey(g, d, 2.95); r.per.k.position.set(0, YP + .15, 0);
         J.pon(new T.Mesh(new T.PlaneGeometry(SW, SH), U.basico(0x14040a, .55)), x, YS, -.3); r.mq = U.basico(0xffd66b); r.mk = J.marco(x, YS, -.2, SW, SH); r.mk.children.forEach(m => { m.material = r.mq; m.scale.set(m.geometry.parameters.width < 1 ? 1.8 : 1, m.geometry.parameters.height < 1 ? 1.8 : 1, 1); });
         r.duda = J.pon(U.signo('?', 1.6), x, YS, -.1); r.duda.material.opacity = .55; J.sitio(d[0], x, YS, 0, SW / 2, 0, SH / 2 + .3).r0 = r; return r; });
-      const piezas = []; baraja(U.DATOS).forEach((d, k) => { const ca = J.carta(d[1], 2.3, '#b8862b', '#fff8ea'), f = J.pieza(ca, d[0], -10.6 + k * 10.6, .75, .6, 0); f.userData.txt = d[1]; f.userData.k = k; piezas.push(f); });
+      const piezas = []; baraja(U.DATOS).forEach((d, k) => { const ca = ficha('Tiene la barba ' + d[6] + '.', 'Viene de ' + d[2] + '.', 1.6), f = J.pieza(ca, d[0], -10.6 + k * 10.6, .35, .6, 0); f.userData.txt = d[1]; f.userData.k = k; piezas.push(f); });
       let f0 = 0, hecho = 0, cartel = null;
       animar = (t, dt) => { U.efectos(t, dt);
-        if (ev.bien) { const [f, q] = ev.bien, r = q.r0; ev.bien = null; r.ok = 1; r.t0 = t; f.userData.t0 = t; r.mq.color.set(0x5fd39a); r.duda.visible = false; campana(294, .16); decir('Se llama ' + r.nombre + '.'); U.estalla(r.x, YS, 1, 0xffe08a, 40, 3); U.onda(r.x, YS, .4, 4.4, 0x5fd39a, .7); U.onda(r.x, 9.4, -.5, 6, 0xffd66b, 1); }
+        if (ev.bien) { const [f, q] = ev.bien, r = q.r0; ev.bien = null; r.ok = 1; r.t0 = t; f.userData.t0 = t; r.mq.color.set(0x5fd39a); r.duda.visible = false; campana(294, .16); decir(r.nombre + ' tiene la barba ' + r.barba + '. Viene de ' + r.cont + '.'); U.estalla(r.x, YS, 1, 0xffe08a, 40, 3); U.onda(r.x, YS, .4, 4.4, 0x5fd39a, .7); U.onda(r.x, 9.6, -.5, 6, 0xffd66b, 1); }
         const fin2 = f0 && t > f0;
         REYES.forEach((r, i) => { const d = t - r.t0, salto = d < .9 ? Math.sin(d / .9 * Math.PI) : 0, p = r.per, bote = fin2 ? Math.abs(Math.sin(t * 4 + i * 1.2)) * .5 : 0;
-          p.k.position.y = 5.45 + salto * 1.2 + bote + Math.abs(Math.sin(t * 2.2 + i)) * .05; p.k.rotation.y = Math.sin(t * 1.1 + i * 1.7) * .22 + (d < .9 ? d / .9 * 6.2832 : 0);
+          p.k.position.y = YP + .15 + salto * 1.2 + bote + Math.abs(Math.sin(t * 2.2 + i)) * .05; p.k.rotation.y = Math.sin(t * 1.1 + i * 1.7) * .22 + (d < .9 ? d / .9 * 6.2832 : 0);
           p.bd.rotation.z = r.ok ? 2.5 + Math.sin(t * 6 + i * 2) * .45 : .25; p.bi.rotation.z = fin2 ? -2.5 - Math.sin(t * 6 + i) * .45 : -.25;
           r.halo.material.opacity += ((r.ok ? .75 + Math.sin(t * 3 + i) * .1 : .25) - r.halo.material.opacity) * .08;
           const q = J.sitios[i]; if (q.mal) { q.mal = 0; r.tMal = t; } const dm = t - (r.tMal || -9); if (!r.ok) { r.mq.color.set(dm < .5 ? 0xff5a6e : 0xffd66b); r.mk.position.x = r.x + (dm < .5 ? Math.sin(dm * 40) * .22 * (1 - dm * 2) : 0); const z = 1.6 * (1 + Math.sin(t * 3 + i) * .07); r.duda.scale.set(z, z, 1); if (dm < .5) p.k.rotation.y = Math.sin(dm * 25) * .5 * (1 - dm * 2); } });
         piezas.forEach(f => { const u = f.userData, ca = f.children[0], p = u.t0 ? (t - u.t0) / .6 : 2, e = (p < 1 ? 1 + Math.sin(p * Math.PI) * .3 : 1) * (u.fijo ? 1 : 1 + Math.sin(t * 2.5 + u.k * 2) * .025); ca.scale.set(ca.userData.ancho * e, ca.userData.alto * e, 1); });
         if (ev.fin && !f0) f0 = t + 1.4;
-        if (fin2 && !hecho) { hecho = 1; fuegos(); cartel = J.carta('¡Los tres Reyes Magos!', 2.6, '#b8862b', '#fff8ea', 1100); cartel.userData.t0 = t; J.pon(cartel, 0, .9, 2); U.fiesta([[-13, 12, 0xff5a6e], [13, 12.4, 0x5fd39a], [-5.3, 13.2, 0xffd66b], [5.3, 13.4, 0xfff8ea], [-15, 5, 0xffd66b], [15, 5.4, 0xff5a6e]]); J.terminar(ev.fin[0], ev.fin[1], 'Melchor, Gaspar y Baltasar son los tres Reyes Magos.'); }
-        if (cartel) { const e = U.pop(Math.min(1, (t - cartel.userData.t0) / .7)) * (1 + Math.sin(t * 3) * .03); cartel.scale.set(cartel.userData.ancho * e, cartel.userData.alto * e, 1); } }; } }, fin); },
-  desfile(fin, plano) { let animar = null, ev = {}; juego3D({ plano, modo: 'pantalla', ancho: 34, cam: [0, 6.9, 30, 0, 6.9, 0], fov: 30,
-    anim: (t, dt, J) => animar && animar(t, dt, J),
-    pos: (q) => [q.x, q.y - .2, .8],
-    bien: (f, q) => f.userData.txt + ' viene de ' + q.cont + '.',
-    pista: (f, q) => { q.mal = 1; return f.userData.txt + ' no viene de ' + q.cont + '. Prueba otro continente.'; },
-    alColocar: (f, q) => { ev.bien = [f, q]; },
-    alTerminar: (J, ok, tot) => { ev.fin = [ok, tot]; },
-    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), MX = 4.6, MY = 6.9, G = .118, LO = 65, LA = 19, X = (lo) => MX + (lo - LO) * G, Y = (la) => MY + (la - LA) * G;
-      C.consigna('¿De dónde vienen? Lleva cada Rey Mago a su continente: seguirá la estrella hasta Belén.', 'D’où viennent-ils ? Amène chaque Roi mage sur son continent : il suivra l’étoile jusqu’à Bethléem.');
-      C.glosa('<b>viene de</b> : il vient de · <b>la estrella</b> : l’étoile · <b>Belén</b> : Bethléem<br>Arrastra un rey hasta un continente, o haz clic en el rey y después en el continente.');
-      // el mapa
-      const TIERRA = { europa: ['#4f9d6e', [[-9, 37], [-9, 43], [-2, 43.5], [-4, 48], [2, 51], [8, 54], [8, 57], [5, 59], [6, 62], [14, 68], [25, 71], [42, 67], [60, 68], [60, 52], [48, 46], [40, 47], [37, 45], [30, 46], [28, 41], [23, 37], [20, 40], [18, 42], [15, 38], [12, 42], [8, 44], [3, 43], [0, 39], [-2, 37]]], africa: ['#d9774a', [[-17, 21], [-13, 28], [-6, 35], [10, 37], [11, 33], [20, 32], [32, 31], [35, 24], [43, 12], [51, 12], [42, -1], [40, -15], [35, -24], [27, -34], [18, -34], [12, -18], [13, -6], [9, 4], [-5, 5], [-13, 8], [-17, 15]]], asia: ['#e2b04a', [[60, 68], [75, 72], [105, 77], [140, 73], [170, 68], [160, 60], [143, 53], [135, 45], [128, 38], [122, 30], [110, 20], [108, 11], [103, 2], [99, 8], [94, 17], [90, 22], [80, 10], [77, 8], [72, 21], [66, 25], [57, 26], [52, 24], [56, 18], [45, 13], [43, 13], [35, 28], [36, 36], [28, 41], [30, 46], [37, 45], [40, 47], [48, 46], [60, 52]]] };
-      const L0 = -22, L1 = 152, B0 = -38, B1 = 79, PX = 10, mw = (L1 - L0) * PX, mh = (B1 - B0) * PX;
-      const mapa = U.lienzo(mw, mh, (k, w, h) => { const g = k.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#2b6fb3'); g.addColorStop(1, '#1d4f8f'); k.fillStyle = g; k.fillRect(0, 0, w, h); k.strokeStyle = 'rgba(255,255,255,.08)'; k.lineWidth = 2; for (let lo = -20; lo < 152; lo += 20) { k.beginPath(); k.moveTo((lo - L0) * PX, 0); k.lineTo((lo - L0) * PX, h); k.stroke(); } for (let la = -20; la < 79; la += 20) { k.beginPath(); k.moveTo(0, (B1 - la) * PX); k.lineTo(w, (B1 - la) * PX); k.stroke(); }
-        [TIERRA.asia, TIERRA.africa, TIERRA.europa].forEach(([col, pts]) => { k.beginPath(); pts.forEach(([lo, la], i) => { const x = (lo - L0) * PX, y = (B1 - la) * PX; if (i) k.lineTo(x, y); else k.moveTo(x, y); }); k.closePath(); k.lineJoin = 'round'; k.lineWidth = 22; k.strokeStyle = col; k.stroke(); k.fillStyle = col; k.fill(); k.lineWidth = 5; k.strokeStyle = 'rgba(255,248,234,.75)'; k.stroke(); });
-        k.textAlign = 'center'; k.textBaseline = 'middle'; k.font = 'bold 92px Georgia, serif'; k.lineJoin = 'round'; [['EUROPA', 28, 62], ['ASIA', 105, 62], ['ÁFRICA', 18, -17]].forEach(([tx, lo, la]) => { const x = (lo - L0) * PX, y = (B1 - la) * PX; k.lineWidth = 14; k.strokeStyle = '#3a1410'; k.strokeText(tx, x, y); k.fillStyle = '#fff8ea'; k.fillText(tx, x, y); }); });
-      const cx = X((L0 + L1) / 2), cy = Y((B0 + B1) / 2), W = (L1 - L0) * G, H = (B1 - B0) * G;
-      K.caja(esc, W + .7, H + .7, .3, M.oro, cx, cy, -1.4); K.caja(esc, W + .3, H + .3, .34, K.mat(0x5a3418), cx, cy, -1.4); J.pon(new T.Mesh(new T.PlaneGeometry(W, H), new T.MeshBasicMaterial({ map: mapa })), cx, cy, -1.2);
-      // Belén y su estrella
-      const BX = X(35.2), BY = Y(31.7), est = new T.Group(); est.position.set(BX, BY + .1, -.4); esc.add(est); const eh = K.pon(est, new T.PlaneGeometry(4.5, 4.5), new T.MeshBasicMaterial({ map: U.haloT, transparent: true, opacity: .8, depthWrite: false }), 0, 0, -.3); const e1 = K.pon(est, new T.OctahedronGeometry(.42), M.llama, 0, 0, 0), e2 = K.pon(est, new T.OctahedronGeometry(.42), M.llama, 0, 0, 0); e2.rotation.set(.8, .8, 0);
-      J.pon(J.carta('Belén', 1.3, '#b8862b', '#fff8ea'), BX + .1, BY + 1.05, -.3);
-      // los tres continentes: un punto de salida y un camino hasta Belén
-      const SITIOS = [['m', 'Europa', 12, 50, [-1.15, .25]], ['g', 'Asia', 100, 44, [1.2, .15]], ['b', 'África', 19, 3, [.1, -1.45]]].map(([c, cont, lo, la, lleg], i) => { const x = X(lo), y = Y(la), q = J.sitio(c, x, y + .6, 0, 1.9, 0, 1.9); q.cont = cont; q.sx = x; q.sy = y;
-        q.mq = U.basico(0xffd66b); q.an = J.anillo(x, y, -.9, 1.25, 0); q.an.material = q.mq; q.duda = J.pon(U.signo('?', 1.5), x, y, -.8); q.duda.material.opacity = .9; q.fin = [BX + lleg[0] * 1.9, BY + lleg[1] * 1.6];
-        const mx = (x + q.fin[0]) / 2 + (i === 1 ? 0 : (i ? .9 : -.9)), my = (y + q.fin[1]) / 2 + (i === 1 ? -1.1 : 0); q.cur = (u) => [(1 - u) * (1 - u) * x + 2 * u * (1 - u) * mx + u * u * q.fin[0], (1 - u) * (1 - u) * y + 2 * u * (1 - u) * my + u * u * q.fin[1]];
-        q.pts = [...Array(i === 1 ? 16 : 8)].map((_, k, a) => { const [px, py] = q.cur((k + 1) / (a.length + 1)); return K.bola(esc, .11, U.basico(0xfff8ea, .55), px, py, -.9); }); return q; });
-      // los tres reyes, con su nombre
-      const piezas = []; baraja(U.DATOS).forEach((d, k) => { const g = new T.Group(), m = new T.Group(), ca = J.carta(d[1], 1.7, '#b8862b', '#fff8ea'); g.add(ca); m.position.y = ca.userData.alto / 2 + .05; g.add(m); const r = U.rey(m, d, 1.5); const f = J.pieza(g, d[0], -12.4, .4 + k * 4.75, .8, 1.4, 4.4); Object.assign(f.userData, { txt: d[1], m, k, g, r, e1: 1, y0: m.position.y }); piezas.push(f); });
-      let f0 = 0, hecho = 0, cartel = null, lleg = 0;
-      animar = (t, dt) => { U.efectos(t, dt);
-        if (ev.bien) { const [f, q] = ev.bien; ev.bien = null; q.ok = 1; q.mq.color.set(0x5fd39a); q.duda.visible = false; Object.assign(f.userData, { t0: t, e1: .78, q }); clic(4); decir(f.userData.txt + ' viene de ' + q.cont + '.'); U.estalla(q.sx, q.sy, 1.2, 0xffe08a, 40, 2.8); U.onda(q.sx, q.sy, .2, 3.6, 0x5fd39a, .8); }
-        e1.rotation.y = t * 1.4; e2.rotation.y = -t * 1.1; const lat = 1 + lleg * .22 + Math.sin(t * 3) * .08; est.scale.setScalar(lat); eh.material.opacity = .6 + Math.sin(t * 3) * .2;
-        SITIOS.forEach((q, i) => { if (q.mal) { q.mal = 0; q.tMal = t; } const dm = t - (q.tMal || -9); if (!q.ok) { q.mq.color.set(dm < .5 ? 0xff5a6e : 0xffd66b); q.an.scale.setScalar(1 + Math.sin(t * 3 + i * 2) * .1); q.an.position.x = q.sx + (dm < .5 ? Math.sin(dm * 40) * .2 * (1 - dm * 2) : 0); const z = 1.5 * (1 + Math.sin(t * 3 + i * 2) * .08); q.duda.scale.set(z, z, 1); } else q.an.scale.setScalar(q.an.scale.x + (.01 - q.an.scale.x) * .06); });
-        piezas.forEach(f => { const u = f.userData, m = u.m, r = u.r; u.g.scale.setScalar(u.g.scale.x + (u.e1 - u.g.scale.x) * .15); r.bd.rotation.z = 2.5 + Math.sin(t * 4 + u.k * 2) * .45; let bote = u.fijo ? 0 : Math.abs(Math.sin(t * 2 + u.k * 1.3)) * .1, gira = Math.sin(t * 1.1 + u.k) * .25;
-          if (u.q) { const d = t - u.t0; if (d < 1) { bote = Math.sin(d * Math.PI) * .9; gira = d * 6.2832; } else { const p = Math.min(1, (d - 1) / (u.q.pts.length > 10 ? 4.2 : 2.6)), s = p * p * (3 - 2 * p), [x, y] = u.q.cur(s); u.dest.set(x, y - .2, .8); f.position.set(x, y - .2, .8); bote = p < 1 ? Math.abs(Math.sin(d * 9)) * .3 : Math.abs(Math.sin(t * 2 + u.k)) * .08; u.q.pts.forEach((b, k, a) => { if (s > (k + 1) / (a.length + 1)) { b.material.color.set(0xffd66b); b.material.opacity = 1; b.scale.setScalar(1.5); } }); u.e1 = .78 - s * .08; if (p >= 1 && !u.llego) { u.llego = 1; lleg++; campana(294 + lleg * 40, .16); U.estalla(x, y + .6, 1.2, 0xffe08a, 30, 2.2); U.onda(BX, BY, .2, 2.6, 0xffd66b, .8); } } }
-          m.position.y = u.y0 + bote; m.rotation.y = gira; });
-        if (ev.fin && lleg === 3 && !f0) f0 = t + .7;
-        if (f0 && t > f0 && !hecho) { hecho = 1; fuegos(); campana(196, .25); cartel = J.carta('¡Los Reyes llegan a Belén!', 2.4, '#b8862b', '#fff8ea', 1100); cartel.userData.t0 = t; J.pon(cartel, -11.2, 6.9, 2); U.fiesta([[-12, 11.5, 0xff5a6e], [-12, 2.6, 0x5fd39a], [BX, BY + 3.4, 0xffd66b], [10, 12, 0xfff8ea], [12, 3, 0xffd66b], [2, 2.4, 0xff5a6e]]); J.terminar(ev.fin[0], ev.fin[1], 'Melchor viene de Europa, Gaspar de Asia y Baltasar de África.'); }
+        if (fin2 && !hecho) { hecho = 1; fuegos(); cartel = J.carta('¡Los tres Reyes Magos!', 2.6, '#b8862b', '#fff8ea', 1100); cartel.userData.t0 = t; J.pon(cartel, 0, .6, 2); U.fiesta([[-13, 12, 0xff5a6e], [13, 12.4, 0x5fd39a], [-5.3, 13.2, 0xffd66b], [5.3, 13.4, 0xfff8ea], [-15, 5, 0xffd66b], [15, 5.4, 0xff5a6e]]); J.terminar(ev.fin[0], ev.fin[1], 'Melchor viene de Europa, Gaspar de Asia y Baltasar de África.'); }
         if (cartel) { const e = U.pop(Math.min(1, (t - cartel.userData.t0) / .7)) * (1 + Math.sin(t * 3) * .03); cartel.scale.set(cartel.userData.ancho * e, cartel.userData.alto * e, 1); } }; } }, fin); },
   /* ---------- La balanza España · Francia, y después los conectores ---------- */
   balanza(fin, plano, despues) { juego3D({ plano, modo: 'pantalla', cam: [0, 4.3, 17, 0, 4.3, 0], fov: 40, escFijo: .85,
@@ -1278,16 +1240,11 @@ const EST = {
   reyes: { t: 'La cabalgata de Reyes', f: '5 y 6 de enero', pasos: [
     ...(VIDEOS.cabalgata ? [{ n: 'El vídeo', f(fin) { C.consigna('Mira el vídeo de la cabalgata. Después, contesta.', 'Regarde la vidéo du défilé, puis réponds.'); C.tabla.innerHTML = `<div class="duo">${videoHTML(VIDEOS.cabalgata)}<div id="qq"></div></div>`; opciones($('#qq'), PREGUNTAS_CABALGATA, (a, t) => seguir(fin, a, t)); } }] : []),
     { n: 'Los Reyes', f(fin) {
-      C.consigna('¿Quién es quién? Arrastra cada nombre hasta la carroza de su rey.', 'Qui est qui ? Fais glisser chaque nom sur le char de son roi.');
-      C.glosa('<ul><li><b>Melchor</b> tiene la barba blanca y lleva una capa roja.</li><li><b>Gaspar</b> tiene la barba castaña y lleva una capa verde.</li><li><b>Baltasar</b> tiene la barba negra y lleva una capa violeta.</li></ul><b>la carroza</b> : le char · <b>la barba</b> : la barbe · <b>lleva</b> : il porte<br>Pasa el ratón por la calle para parar la cabalgata.');
-      const R = baraja([['melchor', '#e9c7a6', '#ffffff', '#a4142c'], ['gaspar', '#e2b48c', '#8a5a2c', '#1d4d3a'], ['baltasar', '#5e3a22', '#17100b', '#5b3a8c']]);
-      C.tabla.innerHTML = `<div class="calle">${R.map((r, k) => `<div class="carroza dest" data-a="${r[0]}" style="animation-delay:${-k * 8.7}s">${reyFig(r[1], r[2], r[3])}<div class="caja" style="min-width:8rem"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML([['Melchor', 'melchor'], ['Gaspar', 'gaspar'], ['Baltasar', 'baltasar']])}</div>`;
-      arrastre({ total: 3, ok(f, d) { $('.caja', d).append(f); }, pista: () => 'No es este rey. Lee otra vez las pistas.', fin: (a, t) => seguir(fin, a, t, 'Melchor, Gaspar y Baltasar son los tres Reyes Magos.') }); } },
-    { n: 'El viaje', f(fin) {
-      C.consigna('¿De dónde vienen? Arrastra cada Rey Mago hasta su continente.', 'D’où viennent-ils ? Fais glisser chaque Roi mage vers son continent.');
-      C.glosa('<b>viene de</b> : il vient de · <b>Belén</b> : Bethléem');
-      C.tabla.innerHTML = `<div class="bandeja">${['Europa', 'Asia', 'África'].map((c, k) => `<div class="q" style="position:static;margin:1rem"><span class="rot">Viene de ${c}</span><div class="caja dest" data-a="${'mgb'[k]}" style="min-width:10rem"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML([['Melchor', 'm'], ['Gaspar', 'g'], ['Baltasar', 'b']])}</div>`;
-      arrastre({ total: 3, pista: () => 'No viene de este continente.', fin: (a, t) => seguir(fin, a, t, 'Melchor viene de Europa, Gaspar de Asia y Baltasar de África.') }); } },
+      C.consigna('Pasa la cabalgata. Lee cada texto y arrástralo hasta la carroza de su rey.', 'Le défilé passe. Lis chaque texte et fais-le glisser sur le char de son roi.');
+      C.glosa('<b>la barba</b> : la barbe · <b>blanca</b> : blanche · <b>castaña</b> : châtain · <b>negra</b> : noire · <b>viene de</b> : il vient de<br>Pasa el ratón por la calle para parar la cabalgata.');
+      const R = baraja([['melchor', '#e9c7a6', '#ffffff', '#a4142c', 'Melchor'], ['gaspar', '#e2b48c', '#8a5a2c', '#1d4d3a', 'Gaspar'], ['baltasar', '#5e3a22', '#17100b', '#5b3a8c', 'Baltasar']]);
+      C.tabla.innerHTML = `<div class="calle">${R.map((r, k) => `<div class="carroza dest" data-a="${r[0]}" style="animation-delay:${-k * 8.7}s">${reyFig(r[1], r[2], r[3])}<b style="color:#fff8ea">${r[4]}</b><div class="caja" style="min-width:8rem"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML([['Tiene la barba blanca. Viene de Europa.', 'melchor'], ['Tiene la barba castaña. Viene de Asia.', 'gaspar'], ['Tiene la barba negra. Viene de África.', 'baltasar']])}</div>`;
+      arrastre({ total: 3, ok(f, d) { $('.caja', d).append(f); }, pista: () => 'No es este rey. Lee otra vez el texto.', fin: (a, t) => seguir(fin, a, t, 'Melchor viene de Europa, Gaspar de Asia y Baltasar de África.') }); } },
   ] },
   /* ---------- final ---------- */
   cafe: { t: 'España y Francia', f: 'Comparar · ¿son tan diferentes las fiestas?', pasos: [
@@ -1318,7 +1275,7 @@ const EST = {
 const COMPARAR = EST.cafe.pasos.splice(2, 1)[0]; EST.cena.pasos.splice(1, 1);
 EST.cena.pasos[1].n = 'Soler y gustar'; EST.cafe.pasos[1].n = 'La balanza'; EST.reloj.pasos[0].n = 'Medianoche'; 
 const en3D = (id, k, juego) => { const st = EST[id].pasos[k], plano = st.f.bind(st); st.f = (fin) => (H3 && H3.kit) ? juego(fin, plano) : plano(fin); };
-en3D('loteria', 0, J3.sorteo); en3D('loteria', 1, J3.vinetas); en3D('cena', 0, J3.mesa); en3D('cena', 1, J3.gramatica); en3D('belen', 0, J3.belen); en3D('belen', 1, J3.puzle); en3D('belen', 2, J3.villancicos); en3D('reloj', 0, J3.reloj); en3D('reyes', EST.reyes.pasos.length - 2, J3.reyes); en3D('reyes', EST.reyes.pasos.length - 1, J3.desfile);
+en3D('loteria', 0, J3.sorteo); en3D('loteria', 1, J3.vinetas); en3D('cena', 0, J3.mesa); en3D('cena', 1, J3.gramatica); en3D('belen', 0, J3.belen); en3D('belen', 1, J3.puzle); en3D('belen', 2, J3.villancicos); en3D('reloj', 0, J3.reloj); en3D('reyes', EST.reyes.pasos.length - 1, J3.reyes);
 { const st = EST.cafe.pasos[1], venn = st.f.bind(st), conectores = (fin) => COMPARAR.f(fin), todo2D = (fin) => venn((a, t) => conectores((a2, t2) => fin(a + a2, t + t2))); st.f = (fin) => (H3 && H3.kit) ? J3.balanza(fin, todo2D, conectores) : todo2D(fin); }
 /* ====== 6. VENTANAS, FINAL, FICHA PDF ================================== */
 function abrirVelo(n) { const v = $('#velo'); v.innerHTML = ''; v.append(n); v.classList.add('on'); }
