@@ -7,7 +7,7 @@ Deux étapes par mini-jeu :
 
 | Mini-jeu | Validé | Détails terminés |
 |---|:-:|:-:|
-| El sorteo de la lotería | ☐ | ☐ |
+| El sorteo de la lotería | ☑ | ☐ |
 | La cena de Nochebuena | ☐ | ☐ |
 | El belén y los villancicos | ☑ | ☐ |
 | El reloj de la plaza | ☑ | ☐ |
