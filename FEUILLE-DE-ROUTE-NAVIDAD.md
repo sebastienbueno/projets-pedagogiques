@@ -10,6 +10,6 @@ Deux étapes par mini-jeu :
 | El sorteo de la lotería | ☐ | ☐ |
 | La cena de Nochebuena | ☐ | ☐ |
 | El belén y los villancicos | ☑ | ☐ |
-| El reloj de la plaza | ☐ | ☐ |
+| El reloj de la plaza | ☑ | ☐ |
 | La cabalgata de Reyes | ☐ | ☐ |
 | España y Francia | ☐ | ☐ |
