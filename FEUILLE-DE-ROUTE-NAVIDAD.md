@@ -11,5 +11,5 @@ Deux étapes par mini-jeu :
 | La cena de Nochebuena | ☐ | ☐ |
 | El belén y los villancicos | ☑ | ☐ |
 | El reloj de la plaza | ☑ | ☐ |
-| La cabalgata de Reyes | ☐ | ☐ |
+| La cabalgata de Reyes | ☑ | ☐ |
 | España y Francia | ☐ | ☐ |
