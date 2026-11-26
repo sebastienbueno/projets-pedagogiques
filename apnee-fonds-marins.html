@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L'apnée : voir les fonds marins pour les protéger</title>
+<style>
+  :root {
+    --blanc: #ffffff;
+    --texte-doux: #e4f3fb;
+    --accent: #ffd166;
+    --vivant: #5fe0a0;
+    --abime: #ffb38a;
+    --nuit: #031a2e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    color: var(--blanc);
+  }
+
+  /* Scène fixe 1920×1080, mise à l'échelle par le script pour remplir l'écran */
+  #scene {
+    position: absolute; left: 50%; top: 50%;
+    width: 1920px; height: 1080px;
+    transform-origin: 0 0;
+    overflow: hidden;
+    background: var(--nuit);
+  }
+  #scene > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* ---------- Texte ---------- */
+  .texte {
+    position: absolute; left: 96px; top: 56px; width: 1200px;
+    text-align: left;
+  }
+  .surtitre {
+    font-size: 30px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent);
+    text-shadow: 0 2px 10px rgba(2, 20, 40, .7);
+  }
+  h1 {
+    margin-top: 12px; white-space: nowrap;
+    font-size: 88px; line-height: 1.08; font-weight: 800; letter-spacing: -0.01em;
+    text-shadow: 0 4px 24px rgba(2, 20, 40, .65);
+  }
+  .accroche {
+    margin-top: 22px; max-width: 1080px;
+    font-size: 36px; line-height: 1.38; font-weight: 500;
+    color: var(--blanc);
+    text-shadow: 0 2px 14px rgba(2, 20, 40, .75);
+  }
+  .idees {
+    list-style: none; margin-top: 26px;
+    display: grid; gap: 14px;
+  }
+  .idees li {
+    display: grid; grid-template-columns: 54px 1fr; align-items: center; column-gap: 22px; white-space: nowrap;
+    font-size: 34px; line-height: 1.3; color: var(--texte-doux);
+    text-shadow: 0 2px 12px rgba(2, 20, 40, .8);
+  }
+  .idees .num {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 30px; font-weight: 800; color: #04263f; background: var(--accent);
+    text-shadow: none;
+  }
+  .idees strong { color: var(--blanc); font-weight: 800; }
+
+  .question {
+    margin-top: 30px; width: 1180px;
+    padding: 18px 30px 20px 34px;
+    background: rgba(2, 18, 34, .78);
+    border-left: 10px solid var(--accent);
+    border-radius: 6px 22px 22px 6px;
+  }
+  .question .etiquette {
+    font-size: 24px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .question p { margin-top: 4px; white-space: nowrap; font-size: 41px; line-height: 1.25; font-weight: 800; }
+
+  .legende {
+    position: absolute; bottom: 26px;
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 24px 11px 18px; border-radius: 999px;
+    background: rgba(2, 16, 30, .82);
+    font-size: 28px; font-weight: 700; letter-spacing: 0.02em;
+  }
+  .legende i { width: 18px; height: 18px; border-radius: 50%; display: block; }
+  .legende.vivant { left: 96px; }
+  .legende.vivant i { background: var(--vivant); }
+  .legende.abime { right: 96px; }
+  .legende.abime i { background: var(--abime); }
+
+  /* ---------- Animations (lentes) ---------- */
+  .rayon { animation: rayon 12s ease-in-out infinite alternate; }
+  .rayon:nth-child(2) { animation-duration: 16s; animation-delay: -5s; }
+  .rayon:nth-child(3) { animation-duration: 14s; animation-delay: -9s; }
+  .rayon:nth-child(4) { animation-duration: 18s; animation-delay: -3s; }
+  .rayon:nth-child(5) { animation-duration: 15s; animation-delay: -11s; }
+  @keyframes rayon { from { opacity: .45; } to { opacity: 1; } }
+
+  .vague { animation: vague 26s linear infinite; }
+  .vague.b { animation-duration: 38s; animation-direction: reverse; }
+  @keyframes vague { to { transform: translateX(-320px); } }
+
+  .plongeur { animation: plongeur 10s ease-in-out infinite alternate; }
+  @keyframes plongeur { from { transform: translate(8px, -12px); } to { transform: translate(-8px, 14px); } }
+
+  .bulle { animation: bulle linear infinite; }
+  @keyframes bulle {
+    0%   { transform: translateY(0); opacity: 0; }
+    12%  { opacity: .75; }
+    80%  { opacity: .5; }
+    100% { transform: translateY(-620px); opacity: 0; }
+  }
+
+  .brin { transform-box: fill-box; transform-origin: 50% 100%; animation: brin 7s ease-in-out infinite alternate; }
+  @keyframes brin { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+
+  .banc { animation: nage 70s linear infinite; }
+  .banc.b { animation-duration: 95s; animation-delay: -40s; }
+  .banc.c { animation-name: nage-retour; animation-duration: 85s; animation-delay: -20s; }
+  @keyframes nage {
+    0%   { transform: translateX(-160px); opacity: 0; }
+    8%   { opacity: 1; }
+    86%  { opacity: 1; }
+    100% { transform: translateX(800px); opacity: 0; }
+  }
+  @keyframes nage-retour {
+    0%   { transform: translateX(800px); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateX(-160px); opacity: 0; }
+  }
+
+  .sac { animation: sac 14s ease-in-out infinite alternate; }
+  @keyframes sac { from { transform: translate(-14px, 8px) rotate(-4deg); } to { transform: translate(16px, -10px) rotate(5deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rayon, .vague, .plongeur, .bulle, .brin, .banc, .sac { animation: none; }
+    .bulle { opacity: .5; }
+  }
+</style>
+</head>
+<body>
+<div id="scene">
+
+  <svg viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="eau" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3fa9d6"/>
+        <stop offset=".07" stop-color="#1b7fb2"/>
+        <stop offset=".25" stop-color="#0c5788"/>
+        <stop offset=".55" stop-color="#073a62"/>
+        <stop offset="1" stop-color="#042744"/>
+      </linearGradient>
+      <radialGradient id="soleil" cx="1380" cy="-60" r="760" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".85"/>
+        <stop offset=".25" stop-color="#bfeaff" stop-opacity=".45"/>
+        <stop offset="1" stop-color="#7fd3ee" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="rayon" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".2"/>
+        <stop offset=".8" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="fond" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#2f8f93"/>
+        <stop offset=".44" stop-color="#2b8188"/>
+        <stop offset=".58" stop-color="#5d646c"/>
+        <stop offset="1" stop-color="#666b72"/>
+      </linearGradient>
+      <linearGradient id="fondAvant" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#226f77"/>
+        <stop offset=".44" stop-color="#1f646d"/>
+        <stop offset=".58" stop-color="#474d55"/>
+        <stop offset="1" stop-color="#4d5259"/>
+      </linearGradient>
+      <linearGradient id="ombreFond" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#031a2e" stop-opacity="0"/>
+        <stop offset="1" stop-color="#031a2e" stop-opacity=".55"/>
+      </linearGradient>
+      <pattern id="filet" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <path d="M0,0H16M0,0V16" stroke="#c3ccd4" stroke-width="2" fill="none" opacity=".75"/>
+      </pattern>
+
+      <!-- Poisson (tête à droite) -->
+      <symbol id="poisson" viewBox="-18 -16 78 32" overflow="visible">
+        <path d="M4,0 L-15,-12 L-10,0 L-15,12 Z"/>
+        <path d="M0,0 C12,-15 40,-15 58,0 C40,15 12,15 0,0 Z"/>
+        <circle cx="45" cy="-3" r="2.6" fill="#04263f"/>
+      </symbol>
+    </defs>
+
+    <!-- Eau -->
+    <rect width="1920" height="1080" fill="url(#eau)"/>
+    <rect width="1920" height="1080" fill="url(#soleil)"/>
+
+    <!-- Rayons de lumière -->
+    <g>
+      <polygon class="rayon" points="1010,0 1120,0 900,1080 700,1080" fill="url(#rayon)"/>
+      <polygon class="rayon" points="1230,0 1300,0 1190,1080 1060,1080" fill="url(#rayon)"/>
+      <polygon class="rayon" points="1400,0 1540,0 1560,1080 1360,1080" fill="url(#rayon)"/>
+      <polygon class="rayon" points="1640,0 1720,0 1860,1080 1720,1080" fill="url(#rayon)"/>
+      <polygon class="rayon" points="620,0 700,0 420,1080 300,1080" fill="url(#rayon)"/>
+    </g>
+
+    <!-- Surface vue d'en dessous -->
+    <g fill="none" stroke-linecap="round">
+      <path class="vague" stroke="#e9f9ff" stroke-opacity=".7" stroke-width="5"
+            d="M-320,20 q80,-16 160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0"/>
+      <path class="vague b" stroke="#ffffff" stroke-opacity=".35" stroke-width="4"
+            d="M-320,40 q80,14 160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0 t160,0"/>
+    </g>
+
+    <!-- Bulles (générées par le script) -->
+    <g id="bulles" fill="rgba(255,255,255,.12)" stroke="#e9f9ff" stroke-width="2"></g>
+
+    <!-- Apnéiste en descente -->
+    <g transform="translate(1590 470)">
+      <g class="plongeur">
+        <g transform="rotate(106)" style="filter: drop-shadow(0 0 8px rgba(170,228,255,.6));">
+          <g fill="#031526">
+            <!-- palmes longues -->
+            <path d="M-190,-18 C-250,-38 -320,-50 -384,-38 C-368,-26 -364,-14 -372,-3 C-310,-3 -250,-4 -190,-3 Z"/>
+            <path d="M-190,5 C-250,7 -310,8 -370,12 C-360,22 -362,36 -378,48 C-320,52 -250,36 -190,19 Z"/>
+            <!-- jambes -->
+            <path d="M-18,-28 C-90,-27 -140,-23 -196,-19 L-196,20 C-140,25 -90,28 -18,28 Z"/>
+            <!-- buste -->
+            <path d="M112,-22 C70,-38 12,-36 -24,-28 L-24,28 C12,36 70,36 112,24 Z"/>
+            <!-- tête -->
+            <circle cx="130" cy="-4" r="25"/>
+            <!-- bras tendu vers le fond -->
+            <path d="M84,12 C150,26 205,28 262,22 C268,28 268,36 262,40 C200,48 140,46 78,34 Z"/>
+          </g>
+          <!-- masque -->
+          <path d="M143,-22 C154,-16 158,-6 156,6 L146,4 C147,-4 144,-12 137,-17 Z" fill="#9fdcf5"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- ================= FOND MARIN ================= -->
+    <!-- Sol (arrière) -->
+    <path fill="url(#fond)" d="M0,962 C150,938 300,972 480,952 S800,944 1000,962 C1150,982 1300,958 1500,972 S1800,950 1920,962 L1920,1080 L0,1080 Z"/>
+
+    <!-- Rochers côté vivant -->
+    <g>
+      <path fill="#12485a" d="M40,975 C40,915 90,880 150,890 C190,860 250,885 262,930 C290,945 292,975 280,990 L50,990 Z"/>
+      <path fill="#1b6074" d="M70,960 C76,920 110,900 150,905 C130,925 110,945 100,975 Z" opacity=".7"/>
+      <path fill="#12485a" d="M690,975 C690,925 730,895 780,905 C815,885 860,910 866,945 C885,958 884,980 876,990 L696,990 Z"/>
+      <path fill="#1b6074" d="M712,962 C718,930 745,914 778,918 C760,934 745,950 738,976 Z" opacity=".7"/>
+      <!-- coraux / éponges -->
+      <g fill="#ff8f66">
+        <circle cx="96" cy="900" r="17"/><circle cx="120" cy="884" r="13"/><circle cx="76" cy="884" r="11"/>
+        <circle cx="832" cy="902" r="14"/><circle cx="852" cy="890" r="10"/>
+      </g>
+      <g fill="#f47ca0">
+        <circle cx="228" cy="884" r="15"/><circle cx="248" cy="900" r="11"/>
+        <circle cx="742" cy="902" r="12"/>
+      </g>
+      <g fill="#ffd166">
+        <circle cx="186" cy="872" r="10"/><circle cx="792" cy="896" r="9"/>
+      </g>
+      <!-- étoile de mer -->
+      <polygon fill="#ff7b54" transform="translate(668 962) scale(1.1)"
+               points="0,-22 6,-7 21,-7 9,3 13,18 0,9 -13,18 -9,3 -21,-7 -6,-7"/>
+    </g>
+
+    <!-- Herbier (généré par le script) -->
+    <g id="herbier"></g>
+
+    <!-- Poissons : seulement côté vivant -->
+    <g>
+      <g class="banc">
+        <use href="#poisson" x="60"  y="846" width="62" height="26" fill="#ffb347"/>
+        <use href="#poisson" x="0"   y="868" width="54" height="22" fill="#ffc46b"/>
+        <use href="#poisson" x="96"  y="884" width="58" height="24" fill="#ffb347"/>
+        <use href="#poisson" x="24"  y="902" width="50" height="21" fill="#ffd38a"/>
+        <use href="#poisson" x="140" y="858" width="50" height="21" fill="#ffc46b"/>
+      </g>
+      <g class="banc b">
+        <use href="#poisson" x="0"  y="926" width="88" height="36" fill="#a8e6ff"/>
+        <use href="#poisson" x="120" y="940" width="60" height="25" fill="#c9f1ff"/>
+      </g>
+      <g class="banc c">
+        <g transform="translate(140 0) scale(-1 1)">
+          <use href="#poisson" x="0" y="892" width="96" height="40" fill="#ffe08a"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Côté abîmé : roche nue, restes d'herbier, déchets -->
+    <g>
+      <path fill="#3a4047" d="M1640,985 C1640,935 1680,905 1730,915 C1770,895 1820,920 1826,955 C1845,966 1846,985 1838,995 L1646,995 Z"/>
+      <path fill="#4a5058" d="M1662,972 C1668,940 1695,924 1728,928 C1710,944 1695,960 1688,984 Z" opacity=".7"/>
+      <!-- filet abandonné sur la roche -->
+      <path fill="url(#filet)" stroke="#c3ccd4" stroke-opacity=".6" stroke-width="2"
+            d="M1650,960 C1690,900 1790,896 1836,948 C1850,985 1880,1000 1900,1004 L1610,1004 C1630,996 1640,980 1650,960 Z"/>
+
+      <!-- restes d'herbier -->
+      <g stroke="#7d7566" stroke-width="7" stroke-linecap="round" fill="none">
+        <path d="M1060,985 q-4,-22 4,-40"/><path d="M1082,985 q6,-16 0,-30"/>
+        <path d="M1110,988 q-6,-18 2,-34"/><path d="M1430,990 q4,-18 -2,-32"/>
+        <path d="M1452,990 q-4,-14 4,-26"/>
+      </g>
+
+      <!-- pneu à moitié enfoui -->
+      <path d="M1218,1004 A62,62 0 0 1 1342,1004" fill="none" stroke="#1d2126" stroke-width="30"/>
+      <path d="M1218,1004 A62,62 0 0 1 1342,1004" fill="none" stroke="#5a626b" stroke-width="3" stroke-dasharray="10 12" transform="translate(0 -9)"/>
+
+      <!-- bouteille en plastique -->
+      <g transform="translate(1500 968) rotate(-14)">
+        <rect x="0" y="-15" width="78" height="30" rx="11" fill="#d9f1f8" fill-opacity=".55" stroke="#f1fbff" stroke-width="2.5"/>
+        <rect x="76" y="-7" width="18" height="14" rx="3" fill="#d9f1f8" fill-opacity=".55" stroke="#f1fbff" stroke-width="2.5"/>
+        <rect x="93" y="-8" width="9" height="16" rx="2" fill="#ffb38a"/>
+        <rect x="26" y="-15" width="20" height="30" fill="#ffffff" fill-opacity=".35"/>
+      </g>
+
+      <!-- canette -->
+      <g transform="translate(1130 972) rotate(18)">
+        <rect x="0" y="-13" width="46" height="26" rx="4" fill="#c5cbd3"/>
+        <rect x="12" y="-13" width="20" height="26" fill="#c8746b"/>
+      </g>
+
+      <!-- sac plastique à la dérive -->
+      <g transform="translate(1680 812)">
+        <g class="sac" fill="#f1fbff" fill-opacity=".5" stroke="#ffffff" stroke-opacity=".8" stroke-width="2.5">
+          <path d="M-30,-6 C-34,-34 30,-36 30,-6 C36,18 26,44 14,56 C6,46 -4,60 -12,50 C-22,58 -36,26 -30,-6 Z"/>
+          <path fill="none" d="M-18,-26 C-22,-50 -4,-52 -6,-30 M8,-30 C6,-52 24,-50 18,-26"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Sol (avant-plan) : enracine rochers, herbes et déchets -->
+    <path fill="url(#fondAvant)" d="M0,992 C160,978 320,1004 500,990 S820,982 1000,996 C1160,1010 1320,990 1500,1002 S1800,984 1920,994 L1920,1080 L0,1080 Z"/>
+    <rect y="940" width="1920" height="140" fill="url(#ombreFond)"/>
+  </svg>
+
+  <!-- ================= TEXTE ================= -->
+  <main class="texte">
+    <p class="surtitre">L'apnée · retour sur l'intervention</p>
+    <h1>Descendre pour voir.<br>Voir pour protéger.</h1>
+    <p class="accroche">L'apnée n'est pas seulement un sport : c'est aussi une façon d'aller voir de près comment vont les fonds marins.</p>
+    <ol class="idees">
+      <li><span class="num">1</span><span><strong>Descendre en silence.</strong> Sans bouteille, sur un seul souffle.</span></li>
+      <li><span class="num">2</span><span><strong>Voir de près.</strong> Un fond plein de vie… ou un fond abîmé.</span></li>
+      <li><span class="num">3</span><span><strong>Raconter.</strong> On ne protège que ce que l'on connaît.</span></li>
+    </ol>
+    <div class="question">
+      <span class="etiquette">À discuter</span>
+      <p>Peut-on protéger un endroit que l'on n'a jamais vu ?</p>
+    </div>
+  </main>
+
+  <div class="legende vivant"><i></i>Fond vivant</div>
+  <div class="legende abime"><i></i>Fond abîmé</div>
+</div>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  // Hasard reproductible : le dessin est identique à chaque ouverture
+  var graine = 7;
+  function alea() { graine = (graine * 16807) % 2147483647; return (graine - 1) / 2147483646; }
+  function entre(a, b) { return a + alea() * (b - a); }
+
+  // Mise à l'échelle 16:9 dans la fenêtre
+  var scene = document.getElementById('scene');
+  function ajuster() {
+    var e = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    scene.style.transform = 'scale(' + e + ') translate(-50%, -50%)';
+  }
+  window.addEventListener('resize', ajuster);
+  ajuster();
+
+  // Touche F ou double-clic : plein écran
+  function pleinEcran() {
+    if (document.fullscreenElement) { document.exitFullscreen(); }
+    else if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen(); }
+  }
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'f' || ev.key === 'F') pleinEcran(); });
+  document.addEventListener('dblclick', pleinEcran);
+
+  // Herbier : touffes denses à gauche, de plus en plus rares vers le centre
+  var herbier = document.getElementById('herbier');
+  var verts = ['#58d894', '#3cc07f', '#2aa56c', '#7be3ab'];
+  var touffes = [[20, 60, 5], [290, 660, 46], [880, 960, 7], [975, 1010, 2]];
+  touffes.forEach(function (t) {
+    for (var i = 0; i < t[2]; i++) {
+      var x = entre(t[0], t[1]), h = entre(70, 150), l = entre(9, 15), c = entre(-22, 22);
+      var p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', 'M' + (x - l / 2) + ',1000 Q' + (x + c) + ',' + (1000 - h * 0.55) + ' ' + (x + c * 1.4) + ',' + (1000 - h) +
+        ' Q' + (x + c + l) + ',' + (1000 - h * 0.5) + ' ' + (x + l / 2) + ',1000 Z');
+      p.setAttribute('fill', verts[Math.floor(alea() * verts.length)]);
+      p.setAttribute('class', 'brin');
+      p.style.animationDuration = entre(6, 10).toFixed(1) + 's';
+      p.style.animationDelay = (-entre(0, 10)).toFixed(1) + 's';
+      herbier.appendChild(p);
+    }
+  });
+
+  // Bulles : à droite seulement, pour ne pas passer derrière le texte
+  var bulles = document.getElementById('bulles');
+  for (var i = 0; i < 24; i++) {
+    var pres = i < 9; // quelques-unes près de l'apnéiste
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', pres ? entre(1500, 1680) : entre(1320, 1890));
+    c.setAttribute('cy', pres ? entre(620, 800) : entre(700, 960));
+    c.setAttribute('r', entre(3, 11).toFixed(1));
+    c.setAttribute('class', 'bulle');
+    c.style.animationDuration = entre(16, 30).toFixed(1) + 's';
+    c.style.animationDelay = (-entre(0, 30)).toFixed(1) + 's';
+    bulles.appendChild(c);
+  }
+})();
+</script>
+</body>
+</html>
