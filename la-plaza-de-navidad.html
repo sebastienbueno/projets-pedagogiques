@@ -263,9 +263,9 @@ video{width:100%;border-radius:.9rem;background:#000;display:block;box-shadow:0 
 .pide li{padding:.25rem .8rem;border-radius:2rem;background:#f3e2c4;color:#7a5a2a;font-size:.88rem;font-weight:700;transition:background .3s}
 .pide li::before{content:'○ '}
 .pide li.si{background:#2f8f68;color:#fff;animation:pop .35s}.pide li.si::before{content:'✓ '}
-.noche.redac{align-items:stretch;gap:2rem;padding:1.5rem 2.2rem}
+.noche.redac{align-items:stretch;gap:1.8rem;padding:1rem 1.8rem}.redac .recuerda{width:18rem}.redac .rc{padding:.55rem .9rem}
 .redac .recuerda{justify-content:center}
-.rcol{width:46rem;display:flex;flex-direction:column;gap:.9rem;justify-content:center}
+.rcol{width:min(54rem,62vw);display:flex;flex-direction:column;gap:.9rem;justify-content:center}
 .etapas{list-style:none;display:flex;gap:.6rem;padding:0;margin:0;counter-reset:none}
 .etapas li{flex:1;display:flex;align-items:center;gap:.55rem;padding:.4rem .8rem;border-radius:2rem;background:rgba(255,248,234,.08);border:.12rem solid rgba(233,185,73,.35);font-weight:700;font-size:.92rem;color:rgba(255,248,234,.6);transition:all .3s}
 .etapas li b{width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;background:rgba(255,248,234,.15);font-size:.85rem;flex:none}
@@ -277,7 +277,12 @@ video{width:100%;border-radius:.9rem;background:#000;display:block;box-shadow:0 
 .tarea .ins mark{background:#ffe7a3;color:#7a1020;border-radius:.3rem;padding:0 .3rem}
 .tarea .tfr{font-family:inherit;font-size:.9rem;font-weight:400;font-style:italic;color:#8a6a3a;margin:0 0 .8rem;display:block}
 .tarea .chips{margin-bottom:.5rem}
-.tarea textarea{width:100%;box-sizing:border-box;height:4.6rem;border:.12rem solid #e2cf9f;border-radius:.6rem;padding:.4rem .7rem;background:repeating-linear-gradient(#fff 0 2.05rem,#eadfc4 2.05rem 2.1rem);line-height:2.1rem;font-family:Georgia,serif;font-size:1.15rem;resize:none;outline:none;color:var(--tinta)}
+.tarea textarea{width:100%;box-sizing:border-box;height:5.4rem;border:.12rem solid #e2cf9f;border-radius:.6rem;padding:.4rem .7rem;background:repeating-linear-gradient(#fff 0 2.05rem,#eadfc4 2.05rem 2.1rem);line-height:2.1rem;font-family:Georgia,serif;font-size:1.15rem;resize:none;outline:none;color:var(--tinta)}
+.etapas li.abre{cursor:pointer}.etapas li.abre:not(.on):hover{border-color:var(--oro)}
+.tarea .pista2{font-size:.84rem;color:#8a6a3a;font-style:italic}
+.mitexto #mt{max-height:5.4rem;overflow:auto}.mitexto.lista #mt{max-height:none}.mitexto p{font-size:.98rem}.rcol{gap:.7rem}.qcard.tarea{padding:.9rem 1.4rem}
+.mitexto p.edita span{opacity:.8}
+.mitexto .pide{margin:.5rem 0 0}.mitexto .pide li{font-size:.8rem}
 .tarea textarea:focus{border-color:var(--oro)}
 .tarea .bajo{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:.55rem}
 .tarea .pide{margin:0}
@@ -1464,34 +1469,43 @@ const EST = {
       C.tabla.innerHTML = `<div class="noche col"><h3 class="tit"><i class="fl e"></i>Compara España y Francia<i class="fl f"></i></h3><div class="frases"><p>En España, el Día de Reyes es ${h('más')} importante que en Francia.</p><p>En Francia, la cabalgata de Reyes es ${h('menos')} famosa que en España.</p><p>Los niños españoles suelen recibir regalos el 6 de enero, ${h('mientras que')} los niños franceses los reciben el 25 de diciembre.</p><p>En Francia, solo solemos comer roscón de Reyes. ${h('En cambio')}, en España, los Reyes Magos desfilan por las calles.</p><p>En Nochevieja, los españoles suelen comer doce uvas, ${h('mientras que')} los franceses no comemos uvas.</p></div><div class="bandeja">${fichasHTML([['más', 'más'], ['menos', 'menos'], ['mientras que', 'mientras que'], ['mientras que', 'mientras que'], ['En cambio', 'En cambio']])}</div></div>`;
       arrastre({ total: 5, fin: (a, t) => seguir(fin, a, t) }); } },
     { n: 'Tu comparación', f(fin) {
-      C.consigna('Ahora tú: escribe tu comparación en tres frases, una a una.', 'À toi : écris ta comparaison en trois phrases, une par une. Ce texte t’aidera pour ton oral.');
-      C.glosa('<b>más… que</b> : plus… que · <b>menos… que</b> : moins… que<br><b>soler</b> : avoir l’habitude de (suelen = ils ont l’habitude de)<br><b>mientras que</b> : tandis que · <b>en cambio</b> : en revanche');
-      const MIN = 10, palabras = (s) => (s.match(/[\wáéíóúñü]+/gi) || []).length, norm = (s) => s.toLowerCase().replace(/[^a-záéíóúñü]/g, '');
+      C.consigna('Ahora tú: escribe tu comparación en tres pasos, con tus palabras.', 'À toi : écris ta comparaison en trois étapes. Écris avec tes mots : tu peux écrire une ou plusieurs phrases à chaque étape. Ce texte t’aidera pour ton oral.');
+      C.glosa('<b>más… que</b> : plus… que · <b>menos… que</b> : moins… que<br><b>soler</b> : avoir l’habitude de (suelen = ils ont l’habitude de)<br><b>mientras que</b> : tandis que · <b>en cambio</b> : en revanche<br>Puedes volver a un paso: haz clic en su número.');
+      const MIN = 5, TOTAL = 30, palabras = (s) => (s.match(/[\wáéíóúñü]+/gi) || []).length;
       const P = [
-        { k: 'más … que', es: 'Compara una fiesta en los dos países con <mark>más … que</mark> o <mark>menos … que</mark>.', fr: 'Compare une fête dans les deux pays avec « plus … que » ou « moins … que ».', ej: 'En España, la cabalgata de Reyes es más famosa que en Francia.', re: /\b(m[aá]s|menos)\b.*\bque\b/i, cl: 'más / menos … que', ay: ['En España,', 'en Francia', 'es más', 'es menos', 'importante que', 'famosa que', 'popular que'] },
-        { k: 'soler', es: 'Explica una costumbre con el verbo <mark>soler</mark>: ¿qué suelen hacer los españoles o los franceses?', fr: 'Explique une habitude avec le verbe « soler » : qu’ont l’habitude de faire les Espagnols ou les Français ?', ej: 'En Nochevieja, los españoles suelen comer doce uvas a medianoche.', re: /\b(suel|sol[eé])/i, cl: 'el verbo soler', ay: ['Los españoles suelen', 'Los franceses suelen', 'En Francia, solemos', 'comer', 'cenar en familia', 'recibir regalos'] },
-        { k: 'mientras que', es: 'Escribe una diferencia entre los dos países con <mark>mientras que</mark> o <mark>en cambio</mark>.', fr: 'Écris une différence entre les deux pays avec « mientras que » (tandis que) ou « en cambio » (en revanche).', ej: 'En España, los niños reciben los regalos el 6 de enero, mientras que en Francia los reciben el 25 de diciembre.', re: /mientras que|en cambio/i, cl: 'mientras que / en cambio', ay: ['En España,', 'mientras que en Francia', 'En cambio,', 'los niños reciben los regalos', 'el 6 de enero', 'el 25 de diciembre'] }];
-      C.tabla.innerHTML = `<div class="noche redac"><div class="recuerda"><h4>Recuerda</h4><div class="rc"><b><i class="fl e"></i>Solo en España</b><span>las doce uvas · la cabalgata de Reyes · el Gordo · los regalos del 6 de enero</span></div><div class="rc"><b><i class="fl e"></i><i class="fl f"></i>En los dos países</b><span>la cena en familia el 24 · el árbol de Navidad · el roscón de Reyes</span></div><div class="rc"><b><i class="fl f"></i>Solo en Francia</b><span>la «bûche» de postre · los regalos del 25 de diciembre</span></div></div><div class="rcol"><ol class="etapas">${P.map((p, i) => `<li><b>${i + 1}</b>${p.k}</li>`).join('')}</ol><div id="tarea"></div><div class="mitexto"><h5>Mi texto</h5><div id="mt"><span class="vacio">Tus frases aparecen aquí, una a una.</span></div></div></div></div>`;
-      const frases = [], et = $$('.etapas li', C.tabla), mt = $('#mt');
-      const guarda = () => { S.comp = frases.join(' '); guardar(); };
-      const paso = (i) => { const p = P[i]; et.forEach((x, j) => { x.className = j < i ? 'ya' : j === i ? 'on' : ''; });
-        const c = el(`<div class="qcard tarea"><div class="qn">Frase ${i + 1} de ${P.length}</div><p class="ins">${p.es}</p><p class="tfr">${p.fr}</p><div class="chips">${p.ay.map(a => `<button data-t="${a}">${a}</button>`).join('')}${'áéíóúñ'.split('').map(x => `<button class="ac" data-t="${x}">${x}</button>`).join('')}</div><textarea rows="2" spellcheck="false" placeholder="Escribe tu frase aquí…"></textarea><div class="bajo"><ul class="pide"><li>${p.cl}</li><li>${MIN} palabras</li></ul><button class="ej">💡 Ver un ejemplo</button></div><p class="ejt" hidden><b>Ejemplo:</b> ${p.ej}</p></div>`);
-        const ta = $('textarea', c), li = $$('.pide li', c);
-        const marca = () => { li[0].classList.toggle('si', p.re.test(ta.value)); li[1].classList.toggle('si', palabras(ta.value) >= MIN); li[1].textContent = `${Math.min(palabras(ta.value), MIN)} / ${MIN} palabras`; };
-        ta.oninput = marca; $('.ej', c).onclick = () => { $('.ejt', c).hidden = !$('.ejt', c).hidden; };
-        $$('.chips button', c).forEach(b => b.onclick = () => { const t = b.dataset.t, a = ta.selectionStart; ta.setRangeText(b.classList.contains('ac') ? t : (a && !/\s$/.test(ta.value.slice(0, a)) ? ' ' : '') + t, a, ta.selectionEnd, 'end'); ta.focus(); marca(); });
-        $('#tarea').innerHTML = ''; $('#tarea').append(c); marca(); setTimeout(() => ta.focus(), 60); C.msg('Haz clic en una ayuda para empezar tu frase.', '');
-        C.boton(i < P.length - 1 ? 'Validar la frase' : 'Validar y terminar', () => { const v = ta.value.trim().replace(/\s+/g, ' ');
-          const no = (m) => { c.classList.remove('no'); void c.offsetWidth; c.classList.add('no'); mal(); C.msg(m, 'mal'); };
-          if (!p.re.test(v)) return no('Falta: ' + p.cl + '.');
-          if (palabras(v) < MIN) return no(`Escribe un poco más: mínimo ${MIN} palabras.`);
-          if (norm(v) === norm(p.ej)) return no('Escribe tu propia frase: cambia el ejemplo.');
-          const fr = /[.!?…]$/.test(v) ? v : v + '.'; frases.push(fr); guarda(); bien(); clic(i);
-          if (i === 0) mt.innerHTML = ''; mt.append(el(`<p class="nueva"><b>${i + 1}</b>${fr.replace(/</g, '&lt;')}</p>`));
-          c.classList.add('fuera'); C.boton('', null);
-          if (i < P.length - 1) { C.msg('¡Muy bien! Frase siguiente.', 'bien'); setTimeout(() => paso(i + 1), 450); }
-          else { et.forEach(x => { x.className = 'ya'; }); setTimeout(() => { $('#tarea').innerHTML = `<div class="qcard tarea fin"><div class="qn">¡Texto terminado!</div><p class="ins">Tu comparación está guardada en tu ficha. ¡Léela en voz alta!</p></div>`; $('.mitexto', C.tabla).classList.add('lista'); }, 380); C.msg('¡Texto guardado en tu ficha!', 'bien'); setTimeout(() => fin(1, 1), 2600); } }); };
-      paso(0); } }
+        { k: 'Lo que se parece', es: '¿Qué hacemos igual en España y en Francia?', fr: 'Qu’est-ce qu’on fait pareil en Espagne et en France ?', ej: 'En los dos países, solemos cenar en familia el 24 de diciembre.', ay: ['En España y en Francia,', 'En los dos países,', 'Como en España, en Francia', 'también', 'solemos', 'suelen', 'cenar en familia', 'decorar el árbol', 'comer el roscón'] },
+        { k: 'Lo que es diferente', es: '¿Qué es diferente? Compara las fiestas de los dos países.', fr: 'Qu’est-ce qui est différent ? Compare les fêtes des deux pays.', ej: 'En España, los niños reciben los regalos el 6 de enero, mientras que en Francia los reciben el 25 de diciembre.', ay: ['En España,', 'mientras que en Francia', 'En cambio,', 'más … que', 'menos … que', 'Los españoles suelen', 'los franceses', 'el 6 de enero', 'el 25 de diciembre'] },
+        { k: 'Tu opinión', es: '¿Y tú? ¿Qué tradición prefieres? ¿Por qué?', fr: 'Et toi ? Quelle tradition préfères-tu ? Pourquoi ?', ej: 'Me encanta la cabalgata de Reyes porque es más divertida que una fiesta normal.', ay: ['Me gusta más', 'Me encanta', 'Prefiero', 'porque', 'es más divertido que', 'me parece', 'Me gustaría'] }];
+      const META = [[/\b(m[aá]s|menos)\b|mientras que|en cambio/i, 'una palabra para comparar'], [/\b(suel|sol[eé])/i, 'el verbo «soler»']];
+      C.tabla.innerHTML = `<div class="noche redac"><div class="recuerda"><h4>Recuerda</h4><div class="rc"><b><i class="fl e"></i>Solo en España</b><span>las doce uvas · la cabalgata de Reyes · el Gordo · los regalos del 6 de enero</span></div><div class="rc"><b><i class="fl e"></i><i class="fl f"></i>En los dos países</b><span>la cena en familia el 24 · el árbol de Navidad · el roscón de Reyes</span></div><div class="rc"><b><i class="fl f"></i>Solo en Francia</b><span>la «bûche» de postre · los regalos del 25 de diciembre</span></div></div><div class="rcol"><ol class="etapas">${P.map((p, i) => `<li data-i="${i}"><b>${i + 1}</b>${p.k}</li>`).join('')}</ol><div id="tarea"></div><div class="mitexto"><h5>Mi texto</h5><div id="mt"></div><ul class="pide">${META.map(x => `<li>${x[1]}</li>`).join('')}<li>${TOTAL} palabras</li></ul></div></div></div>`;
+      const txt = (S.compPasos && S.compPasos.length === 3) ? S.compPasos.slice() : ['', '', ''], hecho = txt.map(x => palabras(x) >= MIN), et = $$('.etapas li', C.tabla), mt = $('#mt'), gl = $$('.mitexto .pide li', C.tabla);
+      let act = 0, fuera = false;
+      const limpio = (s) => { s = s.trim().replace(/\s+/g, ' '); return s && !/[.!?…]$/.test(s) ? s + '.' : s; };
+      const todo = () => txt.map(limpio).filter(Boolean).join(' ');
+      const guarda = () => { S.compPasos = txt.slice(); S.comp = todo(); guardar(); };
+      const pinta = () => { et.forEach((x, j) => { x.className = (j === act ? 'on' : '') + (hecho[j] && j !== act ? ' ya' : '') + (hecho[j] || j <= act ? ' abre' : ''); });
+        mt.innerHTML = txt.some(x => x.trim()) ? txt.map((x, j) => x.trim() ? `<p class="${j === act ? 'edita' : ''}"><b>${j + 1}</b><span>${limpio(x).replace(/</g, '&lt;')}</span></p>` : '').join('') : '<span class="vacio">Tu texto aparece aquí mientras escribes.</span>';
+        const t = todo(); META.forEach(([re], k) => gl[k].classList.toggle('si', re.test(t))); gl[2].classList.toggle('si', palabras(t) >= TOTAL); gl[2].textContent = `${Math.min(palabras(t), TOTAL)} / ${TOTAL} palabras`; };
+      const paso = (i) => { act = i; const p = P[i], ultimo = i === P.length - 1;
+        const c = el(`<div class="qcard tarea"><div class="qn">Paso ${i + 1} de ${P.length} · ${p.k}</div><p class="ins">${p.es}</p><p class="tfr">${p.fr}</p><div class="chips">${p.ay.map(a => `<button data-t="${a}">${a}</button>`).join('')}${'áéíóúñ'.split('').map(x => `<button class="ac" data-t="${x}">${x}</button>`).join('')}</div><textarea spellcheck="false" placeholder="Escribe aquí con tus palabras: una o varias frases…"></textarea><div class="bajo"><span class="pista2">Una o varias frases. Las palabras de arriba son ayudas: úsalas si quieres.</span><button class="ej">💡 Una idea</button></div><p class="ejt" hidden><b>Por ejemplo:</b> ${p.ej}</p></div>`);
+        const ta = $('textarea', c); ta.value = txt[i];
+        ta.oninput = () => { txt[i] = ta.value; hecho[i] = hecho[i] && palabras(ta.value) >= MIN; guarda(); pinta(); };
+        $('.ej', c).onclick = () => { $('.ejt', c).hidden = !$('.ejt', c).hidden; };
+        $$('.chips button', c).forEach(b => b.onclick = () => { const [t, t2] = b.dataset.t.split(' … '), a = ta.selectionStart, ins = b.classList.contains('ac') ? t : (a && !/\s$/.test(ta.value.slice(0, a)) ? ' ' : '') + t + (t2 ? ' ' : ''); ta.setRangeText(ins + (t2 ? ' ' + t2 : ''), a, ta.selectionEnd, 'end'); if (t2) ta.selectionStart = ta.selectionEnd = a + ins.length; ta.focus(); ta.oninput(); });
+        $('#tarea').innerHTML = ''; $('#tarea').append(c); pinta(); setTimeout(() => ta.focus(), 60); C.msg(i ? 'Sigue escribiendo con tus palabras.' : 'Escribe con tus palabras. Las ayudas son opcionales.', '');
+        C.boton(ultimo ? 'Terminar' : 'Paso siguiente', () => { const no = (m) => { c.classList.remove('no'); void c.offsetWidth; c.classList.add('no'); mal(); C.msg(m, 'mal'); };
+          if (palabras(ta.value) < MIN) return no(`Escribe un poco más en este paso (mínimo ${MIN} palabras).`);
+          hecho[i] = true; guarda(); clic(i);
+          if (!ultimo) { bien(); c.classList.add('fuera'); const sig = [hecho.findIndex((h, j) => !h && j > i), hecho.findIndex(h => !h), P.length - 1].find(x => x >= 0); setTimeout(() => paso(sig), 330); return; }
+          const pend = hecho.findIndex(h => !h); if (pend >= 0) return no(`Falta el paso ${pend + 1}: haz clic en su número.`);
+          const t = todo(), falta = META.filter(([re]) => !re.test(t)).map(x => x[1]);
+          if (palabras(t) < TOTAL) return no(`Tu texto tiene ${palabras(t)} palabras: añade algo en un paso (mínimo ${TOTAL}).`);
+          if (falta.length) return no('En tu texto falta: ' + falta.join(' · ') + '. Puedes volver a un paso.');
+          fuera = true; bien(); act = -1; et.forEach(x => { x.className = 'ya'; }); pinta(); c.classList.add('fuera'); C.boton('', null);
+          setTimeout(() => { $('#tarea').innerHTML = `<div class="qcard tarea fin"><div class="qn">¡Texto terminado!</div><p class="ins">Tu comparación está guardada en tu ficha. ¡Léela en voz alta!</p></div>`; $('.mitexto', C.tabla).classList.add('lista'); }, 330);
+          C.msg('¡Texto guardado en tu ficha!', 'bien'); setTimeout(() => fin(1, 1), 2600); }); };
+      et.forEach((x, j) => x.onclick = () => { if (fuera || j === act || !(hecho[j] || hecho.slice(0, j).every(Boolean))) return; paso(j); });
+      paso(Math.max(0, hecho.findIndex(h => !h))); } }
   ] }
 };
 
