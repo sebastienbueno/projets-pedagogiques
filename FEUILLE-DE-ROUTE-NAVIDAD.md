@@ -12,4 +12,4 @@ Deux étapes par mini-jeu :
 | El belén y los villancicos | ☑ | ☐ |
 | El reloj de la plaza | ☑ | ☐ |
 | La cabalgata de Reyes | ☑ | ☐ |
-| España y Francia | ☐ | ☐ |
+| España y Francia | ☑ | ☐ |
