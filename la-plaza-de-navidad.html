@@ -218,6 +218,51 @@ video{width:100%;border-radius:.9rem;background:#000;display:block;box-shadow:0 
 #lluvia .car.ko{background:var(--grojo);color:#fff;animation-play-state:paused;opacity:0;transition:opacity .8s}
 .marc{display:flex;gap:3rem;font-size:1.1rem;font-weight:700}
 .marc b{color:var(--rojo);font-family:Georgia,serif;font-size:1.5rem}
+.noche{position:absolute;inset:0;border-radius:1.4rem;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:2.4rem;padding:1.6rem 2.4rem;color:var(--crema);background:radial-gradient(circle at 8% 14%,#fff8 .08rem,transparent .14rem),radial-gradient(circle at 23% 6%,#fff6 .06rem,transparent .12rem),radial-gradient(circle at 41% 19%,#fff8 .07rem,transparent .13rem),radial-gradient(circle at 62% 9%,#fff7 .08rem,transparent .14rem),radial-gradient(circle at 78% 22%,#fff6 .06rem,transparent .12rem),radial-gradient(circle at 92% 8%,#fff8 .08rem,transparent .14rem),radial-gradient(circle at 15% 38%,#fff5 .06rem,transparent .12rem),radial-gradient(circle at 86% 41%,#fff5 .06rem,transparent .12rem),radial-gradient(ellipse at 50% 125%,#8a1a2a,#2a0c2c 55%,#070b26)}
+.noche.col{flex-direction:column;gap:1.1rem}
+.noche .tit{font-family:Georgia,serif;font-size:1.6rem;color:var(--oro);margin:0;display:flex;align-items:center;gap:.7rem}
+.fl{display:inline-block;width:1.9rem;height:1.25rem;border-radius:.15rem;box-shadow:0 0 0 .08rem rgba(0,0,0,.25);vertical-align:middle;margin-right:.35rem}
+.fl.e{background:linear-gradient(#c60b1e 25%,#ffc400 25% 75%,#c60b1e 75%)}
+.fl.f{background:linear-gradient(90deg,#0055a4 33.3%,#fff 33.3% 66.6%,#ef4135 66.6%)}
+.vcol{width:42%;display:flex;flex-direction:column;gap:.7rem}
+.vcol .pie{font-size:.95rem;opacity:.8;text-align:center;margin:0}
+.qcol{flex:1;max-width:38rem;display:flex;flex-direction:column;gap:1rem}
+.puntos{display:flex;gap:.5rem}
+.puntos i{flex:1;height:.45rem;border-radius:1rem;background:rgba(255,248,234,.18);transition:background .4s}
+.puntos i.ya{background:var(--oro)}.puntos i.on{background:#5fd39a}
+.qcard{background:var(--crema);color:#3a1410;border-radius:1.1rem;padding:1.3rem 1.6rem;box-shadow:0 1rem 2.4rem rgba(0,0,0,.45),inset 0 0 0 .18rem var(--oro);animation:entra .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes entra{from{opacity:0;transform:translateY(1.2rem) scale(.94)}}
+.qcard.no{animation:no .35s}
+.qcard.fuera{animation:sale .33s forwards}@keyframes sale{to{opacity:0;transform:translateX(-2rem)}}
+.qcard .qn{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#b8862b;margin-bottom:.5rem}
+.qcard p{font-family:Georgia,serif;font-size:1.45rem;font-weight:700;margin:0 0 1.1rem;display:flex;align-items:center;gap:.7rem}
+.qcard .ico{font-size:1.7rem;line-height:1}
+.oye{margin-left:auto;border:0;background:#f3e2c4;border-radius:50%;width:2.4rem;height:2.4rem;cursor:pointer;font-size:1.05rem;flex:none}
+.oye:hover{background:var(--oro)}
+.ops{display:flex;flex-direction:column;gap:.6rem}
+.op2{text-align:left;font:700 1.1rem Atkinson,sans-serif;padding:.75rem 1.1rem;border-radius:.8rem;border:.12rem solid #d9c49a;background:linear-gradient(#fff,#f5ead3);color:#3a1410;cursor:pointer;box-shadow:0 .2rem 0 #c9b07a;transition:transform .15s,opacity .3s}
+.op2:hover{transform:translateX(.3rem);border-color:var(--oro)}
+.op2.ok{background:linear-gradient(#5fd39a,#2f8f68);color:#fff;border-color:#1f6b4c;box-shadow:0 .2rem 0 #1b5a41;animation:pop .4s}
+.op2.ko{opacity:.4;text-decoration:line-through;cursor:default;animation:no .35s}
+.op2.apaga{opacity:.35;cursor:default}
+.qcard.recap ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.65rem}
+.qcard.recap li{display:flex;gap:.7rem;align-items:center;font-size:1.08rem;font-weight:700}
+.qcard.recap li b{display:block;color:#8a6a3a;font-size:.86rem;font-weight:700}
+.noche .frases{max-width:58rem;width:100%;line-height:2.1}
+.noche .frases p{background:var(--crema);color:#3a1410;border-radius:.9rem;padding:.45rem 1.2rem .45rem 1.4rem;margin:.55rem 0;box-shadow:inset .4rem 0 0 var(--oro),0 .5rem 1.2rem rgba(0,0,0,.35);transition:box-shadow .4s,transform .4s}
+.noche .frases p:has(.fija){box-shadow:inset .4rem 0 0 #5fd39a,0 .5rem 1.2rem rgba(0,0,0,.35);transform:translateX(.4rem)}
+.noche .frases .dest{background:#f3e2c4;border-radius:.4rem}
+.noche .bandeja{max-width:58rem}
+.recuerda{width:19rem;display:flex;flex-direction:column;gap:.75rem;flex:none}
+.recuerda h4{font-family:Georgia,serif;font-size:1.35rem;color:var(--oro);margin:0}
+.rc{background:rgba(255,248,234,.08);border:.12rem solid rgba(233,185,73,.45);border-radius:1rem;padding:.7rem 1rem;display:flex;flex-direction:column;gap:.3rem}
+.rc b{font-size:.98rem;color:var(--oro2)}
+.rc span{font-size:.92rem;line-height:1.45;opacity:.92}
+.noche .hoja{width:42rem;color:var(--tinta);box-shadow:0 1rem 2.4rem rgba(0,0,0,.5),inset 0 0 0 .18rem var(--oro)}
+.pide{list-style:none;display:flex;gap:.6rem;flex-wrap:wrap;padding:0;margin:.7rem 0 0}
+.pide li{padding:.25rem .8rem;border-radius:2rem;background:#f3e2c4;color:#7a5a2a;font-size:.88rem;font-weight:700;transition:background .3s}
+.pide li::before{content:'○ '}
+.pide li.si{background:#2f8f68;color:#fff;animation:pop .35s}.pide li.si::before{content:'✓ '}
 .hoja{width:44rem;background:#fff;border-radius:.8rem;padding:1.2rem 1.6rem;box-shadow:0 .9rem 2rem rgba(60,30,10,.3);transition:all .9s}
 .hoja.va{transform:translate(30rem,-30rem) rotate(25deg) scale(.1);opacity:0}
 .hoja textarea{width:100%;height:12.5rem;border:0;background:repeating-linear-gradient(transparent 0 1.95rem,#d9cdb2 1.95rem 2rem);line-height:2rem;font-family:Georgia,serif;font-size:1.15rem;resize:none;outline:none;user-select:text;color:var(--tinta)}
@@ -747,12 +792,14 @@ function opciones(cont, pregs, fin) {    // preguntas de elección; fin(aciertos
 }
 function videoHTML(src) { return `<video src="${src}" controls controlslist="nofullscreen nodownload noplaybackrate" disablepictureinpicture preload="metadata" onerror="this.outerHTML='<p>El vídeo no está disponible. Pregunta a tu profesor.</p>'"></video>`; }
 function escribir(d, fin) {
-  C.tabla.innerHTML = `<div class="hoja"><div class="chips">${d.ayudas.map(a => `<button data-t="${a}">${a}</button>`).join('')}${'áéíóúñ¿¡'.split('').map(c => `<button class="ac" data-t="${c}">${c}</button>`).join('')}</div><textarea spellcheck="false"></textarea><div class="cuenta"><span id="np">0</span> palabras · mínimo ${d.min}</div></div>`;
+  const hoja = `<div class="hoja"><div class="chips">${d.ayudas.map(a => `<button data-t="${a}">${a}</button>`).join('')}${'áéíóúñ¿¡'.split('').map(c => `<button class="ac" data-t="${c}">${c}</button>`).join('')}</div><textarea spellcheck="false"></textarea><div class="cuenta"><span id="np">0</span> palabras · mínimo ${d.min}</div>${d.noche ? `<ul class="pide">${(d.pide || []).map(x => x[1]).concat(d.min + ' palabras').map(x => `<li>${x}</li>`).join('')}</ul>` : ''}</div>`;
+  C.tabla.innerHTML = d.noche ? `<div class="noche">${d.recuerda || ''}${hoja}</div>` : hoja;
   const ta = $('textarea', C.tabla); ta.value = S[d.clave] || d.inicio || '';
   const cuenta = () => { const k = (ta.value.match(/[\wáéíóúñü]+/gi) || []).length; $('#np').textContent = k; return k; };
-  ta.oninput = () => { cuenta(); S[d.clave] = ta.value; guardar(); };
+  const marca = () => { if (!d.noche) return; const li = $$('.pide li', C.tabla), pide = d.pide || []; pide.forEach(([re], k) => li[k].classList.toggle('si', re.test(ta.value))); li[pide.length].classList.toggle('si', cuenta() >= d.min); };
+  ta.oninput = () => { cuenta(); marca(); S[d.clave] = ta.value; guardar(); };
   $$('.chips button', C.tabla).forEach(b => b.onclick = () => { const t = b.dataset.t.replace(/…/g, ''), a = ta.selectionStart; ta.setRangeText(b.classList.contains('ac') ? t : (a && !/\s$/.test(ta.value.slice(0, a)) ? ' ' : '') + t, a, ta.selectionEnd, 'end'); ta.focus(); ta.oninput(); });
-  cuenta(); C.msg('Haz clic en una ayuda para empezar una frase.', '');
+  cuenta(); marca(); C.msg('Haz clic en una ayuda para empezar una frase.', '');
   C.boton(d.boton, () => { const falta = (d.pide || []).filter(([re]) => !re.test(ta.value)).map(x => x[1]);
     if (cuenta() < d.min) return C.msg(`Escribe un poco más: mínimo ${d.min} palabras.`, 'mal');
     if (falta.length) return C.msg('Falta: ' + falta.join(' · '), 'mal');
@@ -1170,17 +1217,58 @@ const J3 = {
         if (fin2 && !hecho) { hecho = 1; fuegos(); campana(196, .25); cartel = J.carta('¡Feliz día de Reyes!', 2.6, '#b8862b', '#fff8ea', 1100); cartel.userData.t0 = t; J.pon(cartel, 0, 2.2, 10); U.fiesta([[-12, 10, 0xff5a6e], [12, 10.4, 0x5fd39a], [0, 11.5, 0xffd66b], [-6, 9, 0xfff8ea], [6, 9.2, 0xffd66b]]); J.terminar(ev.fin[0], ev.fin[1], 'La noche del 5 de enero, Melchor, Gaspar y Baltasar desfilan, reparten caramelos y traen regalos.'); }
         if (cartel) { const e = U.pop(Math.min(1, (t - cartel.userData.t0) / .7)) * (1 + Math.sin(t * 3) * .03); cartel.scale.set(cartel.userData.ancho * e, cartel.userData.alto * e, 1); } }; } }, fin); },
   /* ---------- La balanza España · Francia, y después los conectores ---------- */
-  balanza(fin, plano, despues) { juego3D({ plano, modo: 'pantalla', cam: [0, 4.3, 17, 0, 4.3, 0], fov: 40, escFijo: .85,
-    pos: (q, n) => [q.x, q.y0 + n * .9, .4], pista: (f, q) => q.clave === 'd' ? 'Esta tradición no existe en los dos países.' : 'No es de este país. Prueba otra vez.',
-    alTerminar: (J, ok, tot) => { C.msg('¡Muy bien! Ahora, compara.', 'bien'); C.boton('Continuar', () => { J.cerrar(); despues((a, t) => fin(ok + a, tot + t)); }); },
-    montar(J) { const { K, M, T, esc } = J, br = (c) => new T.MeshStandardMaterial({ color: c, roughness: .4, emissive: c, emissiveIntensity: .25 });
-      C.consigna('¿España, Francia o los dos países? Pon cada tradición en su plato de la balanza, o en el centro si existe en los dos.', 'Espagne, France ou les deux pays ? Pose chaque tradition sur son plateau de la balance, ou au centre si elle existe dans les deux.');
-      C.glosa('<b>el roscón de Reyes</b> : la galette des Rois<br>El centro es para los dos países.');
-      K.cil(esc, .16, .22, 6.3, 10, M.oro, 0, 6.15, -.9); K.caja(esc, 12.6, .2, .2, M.oro, 0, 9.3, -.6); K.pon(esc, new T.OctahedronGeometry(.4), M.llama, 0, 9.9, -.6);
-      [[-5.9, 'e', 'España', [0xc60b1e, 0xffc400, 0xc60b1e], 0], [5.9, 'f', 'Francia', [0x0055a4, 0xffffff, 0xef4135], 1]].forEach(([x, c, n, cs, v]) => { [-1, 1].forEach(d => { const h = K.cil(esc, .03, .03, 6.7, 4, M.oro, x + d * 1.25, 6.1, -.6); h.rotation.z = d * .29; }); K.cil(esc, 2.3, 1.9, .3, 32, M.crema, x, 2.8, -.6); K.pon(esc, new T.TorusGeometry(2.3, .08, 6, 36), M.oro, x, 2.95, -.6).rotation.x = Math.PI / 2;
-        const b = new T.Group(); b.position.set(x - .77, 9.95, -.6); b.scale.setScalar(.7); esc.add(b); cs.forEach((col, k) => v ? K.caja(b, .74, 1.4, .05, br(col), .37 + k * .74, 0, 0) : K.caja(b, 2.2, k === 1 ? .7 : .35, .05, br(col), 1.1, [.525, 0, -.525][k], 0)); J.pon(J.carta(n, 1, '#1f6b4c'), x, 2.1, .4); const q = J.sitio(c, x, 5, 0, 2.5, 1, 2.6); q.y0 = 3.5; });
-      K.cil(esc, 1.6, 1.8, .5, 24, M.rojo2, 0, 2.75, -.3); K.cil(esc, 1.7, 1.7, .08, 24, M.oro, 0, 3.02, -.3); J.pon(J.carta('Los dos', 1, '#1f6b4c'), 0, 2.1, .4); const qd = J.sitio('d', 0, 4.6, 0, 1.8, 1, 2.2); qd.y0 = 3.5;
-      baraja([['las doce uvas de Nochevieja', 'e'], ['la cabalgata de Reyes', 'e'], ['El Gordo del 22 de diciembre', 'e'], ['los regalos del 6 de enero', 'e'], ['la cena en familia el 24', 'd'], ['el árbol de Navidad', 'd'], ['el roscón de Reyes', 'd'], ['la «bûche» de postre', 'f']]).forEach(([t, c], k) => J.pieza(J.carta(t, .95, '#b3182f', '#fff8ea', 400), c, -6.3 + (k % 4) * 4.2, k < 4 ? .2 : -1.05, 1.2, 0)); } }, fin); }
+  balanza(fin, plano, despues) { let animar = null; const ev = { q: [] }; juego3D({ plano, modo: 'pantalla', ancho: 35, cam: [0, 6.9, 30, 0, 6.9, 0], fov: 30,
+    anim: (t, dt, J) => animar && animar(t, dt, J),
+    pos: (q) => [q.x, q.y, .5],
+    bien: (f, q) => q.frase + f.userData.txt + '.',
+    pista: (f, q) => { q.mal = 1; return q.clave === 'd' ? 'No: esta tradición no existe en los dos países.' : 'No es de este país. Prueba otro plato.'; },
+    alColocar: (f, q) => { ev.q.push([f, q]); },
+    alTerminar: (J, ok, tot) => { ev.fin = [ok, tot]; },
+    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), br = (c, e) => new T.MeshStandardMaterial({ color: c, roughness: .45, emissive: e || 0, emissiveIntensity: e ? .5 : 0 }), PY = 12.6, L = 8.2, CU = 3.4, CY = 8.1;
+      C.consigna('¿España, Francia o los dos? Lleva cada tradición a su plato de la balanza.', 'Espagne, France ou les deux ? Amène chaque tradition sur son plateau de la balance.');
+      C.glosa('<b>el roscón de Reyes</b> : la galette des Rois · <b>la «bûche»</b> : la bûche de Noël<br>El plato del centro es para <b>los dos países</b>.<br>Arrastra la tradición hasta un plato, o haz clic en ella y después en el plato.');
+      const rot = (fl, txt, e = 1.25) => { const c = document.createElement('canvas'), k = c.getContext('2d'); k.font = 'bold 50px Georgia, serif'; const fw = fl.length * 84, an = Math.ceil(fw + k.measureText(txt).width + 60), al = 96; c.width = an; c.height = al; k.fillStyle = '#fff8ea'; k.strokeStyle = '#b8862b'; k.lineWidth = 6; k.beginPath(); if (k.roundRect) k.roundRect(3, 3, an - 6, al - 6, 20); else k.rect(3, 3, an - 6, al - 6); k.fill(); k.stroke();
+        fl.forEach((pa, i) => { const x = 22 + i * 84, y = 22, w = 72, h = 52; if (pa === 'e') { k.fillStyle = '#c60b1e'; k.fillRect(x, y, w, h); k.fillStyle = '#ffc400'; k.fillRect(x, y + h / 4, w, h / 2); } else ['#0055a4', '#ffffff', '#ef4135'].forEach((col, j) => { k.fillStyle = col; k.fillRect(x + j * w / 3, y, w / 3, h); }); k.strokeStyle = 'rgba(0,0,0,.3)'; k.lineWidth = 2; k.strokeRect(x, y, w, h); });
+        k.font = 'bold 50px Georgia, serif'; k.fillStyle = '#3a1410'; k.textAlign = 'left'; k.textBaseline = 'middle'; k.fillText(txt, 22 + fw + 8, al / 2 + 2); const x = new T.CanvasTexture(c); x.encoding = T.sRGBEncoding; const sp = new T.Sprite(new T.SpriteMaterial({ map: x })); sp.userData.ancho = an / 150 * e; sp.userData.alto = al / 150 * e; sp.scale.set(sp.userData.ancho, sp.userData.alto, 1); return sp; };
+      // la balanza: pie, columna, brazo y dos platos colgados
+      const oroV = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35, emissive: 0xffb020, emissiveIntensity: .12 });
+      K.cil(esc, 1.5, 1.8, .4, 40, br(0x5a3418), 0, 3.5, -1.2); K.cil(esc, 1.6, 1.6, .08, 40, oroV, 0, 3.74, -1.2); K.cil(esc, .24, .3, PY - 3.7, 16, oroV, 0, (PY + 3.7) / 2, -1.2); const est = K.pon(esc, new T.OctahedronGeometry(.42), M.llama, 0, PY + .8, -1.2);
+      const viga = new T.Group(); viga.position.set(0, PY, -1.2); esc.add(viga); K.caja(viga, 2 * L + .4, .28, .28, oroV, 0, 0, 0); [-L, L].forEach(x => K.bola(viga, .26, oroV, x, 0, 0)); K.bola(viga, .38, oroV, 0, 0, .1);
+      const PL = [['e', -1, ['e'], 'España', 'En España: ', 4], ['f', 1, ['f'], 'Francia', 'En Francia: ', 1]].map(([c, sgn, fl, txt, fr, max]) => { const g = new T.Group(); esc.add(g); [-1, 1].forEach(d => { K.cil(g, .025, .025, Math.hypot(CU, 1.9), 4, oroV, d * .95, -CU / 2, 0).rotation.z = d * Math.atan2(1.9, CU); }); const rim = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35 }); K.cil(g, 2.45, 2.05, .26, 40, br(0xfff3d6), 0, -CU, 0); K.pon(g, new T.TorusGeometry(2.45, .09, 8, 48), rim, 0, -CU + .14, 0).rotation.x = Math.PI / 2;
+        const et = J.pon(rot(fl, txt), 0, 0, .4); return Object.assign(J.sitio(c, 0, 0, 0, 2.8, 1, 2), { sgn, g, rim, et, frase: fr, chips: [], max }); });
+      const CT = (() => { K.cil(esc, 2.05, 1.7, .26, 40, br(0xfff3d6), 0, CY, -.6); const rim = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35 }); K.pon(esc, new T.TorusGeometry(2.05, .08, 8, 48), rim, 0, CY + .14, -.6).rotation.x = Math.PI / 2; const et = J.pon(rot(['e', 'f'], 'Los dos'), 0, CY - 1, .4); return Object.assign(J.sitio('d', 0, CY + .9, 0, 2.4, 1, 1.6), { rim, et, frase: 'En España y en Francia: ', chips: [], max: 3 }); })();
+      const SIT = PL.concat(CT);
+      // el escenario: una sola tradición cada vez
+      K.cil(esc, 2.6, 2.9, .45, 40, br(0x5a3418), 0, .05, -.6); K.cil(esc, 2.7, 2.7, .08, 40, oroV, 0, .3, -.6); const foco = J.pon(new T.Mesh(new T.PlaneGeometry(10, 10), new T.MeshBasicMaterial({ map: U.haloT, transparent: true, opacity: .4, depthWrite: false })), 0, 2.2, -2.5);
+      const O = { gordo: g => { K.cil(g, .9, 1.1, .3, 20, br(0xa4142c), 0, .15, 0); K.cil(g, .08, .08, .9, 8, M.oro, 0, .75, 0); const j = K.pon(g, new T.IcosahedronGeometry(1.15, 1), new T.MeshBasicMaterial({ color: 0xf2c75c, wireframe: true }), 0, 2.3, 0); const bs = [...Array(7)].map((_, k) => K.bola(g, .2, br(0xfff3d6), 0, 2.3, 0)); return (t) => { j.rotation.x = t * .9; j.rotation.z = t * .5; bs.forEach((b, k) => b.position.set(Math.sin(t * 2.3 + k * 2) * .6, 2.3 + Math.cos(t * 3.1 + k * 1.3) * .6, Math.sin(t * 1.7 + k) * .5)); }; },
+        cena: g => { K.cil(g, 1.5, 1.5, .9, 28, br(0xa4142c), 0, .45, 0); K.cil(g, 1.6, 1.6, .08, 28, br(0xfff8ea), 0, .94, 0); K.cil(g, .8, .7, .1, 24, br(0xffffff), 0, 1.04, 0); const b = K.bola(g, .48, br(0xc7772c), 0, 1.5, 0); b.scale.set(1.3, .8, 1); K.modelo(g, 'modelos/pavo.glb', .95, 0, 1.08, 0, -Math.PI / 2, [b], (c, o3) => o3.traverse(n => n.layers.set(g.userData.capa || 0))); const ll = [-1.15, 1.15].map(x => { K.cil(g, .08, .08, .8, 8, br(0xfff8ea), x, 1.4, 0); return K.cono(g, .12, .34, 8, br(0xffd66b, 0xffa020), x, 1.98, 0); }); return (t) => ll.forEach((f, k) => f.scale.set(1 + Math.sin(t * 9 + k * 2) * .15, 1 + Math.sin(t * 7 + k) * .25, 1)); },
+        arbol: g => { K.cil(g, .22, .26, .6, 8, br(0x6b4526), 0, .3, 0); [[1.3, 1.3, .6], [1.05, 1.2, 1.5], [.75, 1.1, 2.35]].forEach(([r, h, y]) => K.cono(g, r, h, 14, br(0x1f6b4c), 0, y + h / 2 - .2, 0)); const st = K.pon(g, new T.OctahedronGeometry(.34), M.llama, 0, 3.55, 0); const lu = [[.8, .9, .6, 0xff5a6e], [-.7, 1.2, .7, 0xffd66b], [.3, 1.7, .8, 0x6aa8ff], [-.5, 2.1, .55, 0xff5a6e], [.45, 2.5, .45, 0xffd66b], [-.2, 2.9, .35, 0x6aa8ff], [0, 1.1, 1.05, 0xfff8ea]].map(([x, y, z, c]) => K.bola(g, .13, br(c, c), x, y, z)); return (t) => { st.rotation.y = t * 2; lu.forEach((b, k) => { b.material.emissiveIntensity = Math.sin(t * 4 + k * 1.9) > 0 ? 1.2 : .15; }); }; },
+        uvas: g => { K.cil(g, .7, .9, .25, 20, br(0xa4142c), 0, .12, 0); K.cil(g, .08, .08, .7, 8, M.oro, 0, .6, 0); K.cil(g, 1.25, 1.25, .2, 36, M.oro, -.2, 2.2, 0).rotation.x = Math.PI / 2; K.cil(g, 1.1, 1.1, .22, 36, br(0xfffaf0), -.2, 2.2, 0).rotation.x = Math.PI / 2; for (let h = 0; h < 12; h++) K.bola(g, .06, M.oscuro, -.2 + Math.sin(h * .5236) * .92, 2.2 + Math.cos(h * .5236) * .92, .13); K.caja(g, .12, .6, .05, M.oscuro, -.2, 2.5, .15); const mn = new T.Group(); mn.position.set(-.2, 2.2, .18); g.add(mn); K.caja(mn, .08, .9, .04, M.rojo2, 0, .45, 0); const um = br(0xa9d93f, 0x3f6d00), pv = [[0, 0], [.22, .2], [-.22, .2], [0, .4]].map(([x, y]) => K.bola(g, .2, um, x + 1.25, .5 + y, .3)); K.modelo(g, 'modelos/uvas.glb', 1.3, 1.25, .05, .3, 0, pv, (c, o3) => o3.traverse(n => { n.layers.set(g.userData.capa || 0); if (n.isMesh) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { if (m.name === '673AB7') m.color.set(0x9ccc3c); }); })); return (t) => { mn.rotation.z = Math.sin(t * 6) * .06; }; },
+        cab: g => { K.caja(g, 3.4, .55, 1.6, br(0xa4142c), 0, .75, 0); K.caja(g, 3.55, .12, 1.7, M.oro, 0, 1.08, 0); [-1, 1].forEach(d => { K.cil(g, .4, .4, .18, 16, M.oscuro, d * 1.15, .4, .85).rotation.x = Math.PI / 2; K.cil(g, .13, .13, .22, 8, M.oro, d * 1.15, .4, .88).rotation.x = Math.PI / 2; }); const rs = U.DATOS.map((d, i) => { const r = U.rey(g, d, .9); r.k.position.set(-1.1 + i * 1.1, 1.15, 0); return r; }); return (t) => rs.forEach((r, i) => { r.bd.rotation.z = 2.5 + Math.sin(t * 5 + i * 2) * .5; r.k.position.y = 1.15 + Math.abs(Math.sin(t * 3 + i * 1.3)) * .1; }); },
+        regalos: g => { const paq = (w, h, col, cin, x, y, z, ry) => { const p = new T.Group(); p.position.set(x, y, z); p.rotation.y = ry; g.add(p); K.caja(p, w, h, w, br(col), 0, h / 2, 0); K.caja(p, w + .08, h + .08, w * .2, br(cin), 0, h / 2, 0); K.caja(p, w * .2, h + .08, w + .08, br(cin), 0, h / 2, 0); [-1, 1].forEach(d => K.bola(p, w * .16, br(cin), d * w * .14, h + w * .1, 0).scale.set(1.3, .8, .7)); return p; }; const ps = [paq(1.5, 1.2, 0xb3182f, 0xffd66b, -.55, 0, 0, .2), paq(1.15, 1, 0x1f6b4c, 0xfff8ea, .95, 0, .2, -.3), paq(.95, .8, 0xe9b949, 0xb3182f, -.35, 1.24, 0, .5)]; return (t) => ps.forEach((p, k) => { p.scale.y = 1 + Math.max(0, Math.sin(t * 4 + k * 2)) * .1; }); },
+        roscon: g => { const p = new T.Group(); p.position.y = .5; p.rotation.x = .2; g.add(p); K.cil(p, 1.5, 1.4, .12, 32, br(0xfffaf0), 0, 0, 0); K.pon(p, new T.TorusGeometry(1.5, .05, 6, 40), M.oro, 0, .07, 0).rotation.x = Math.PI / 2; const r = K.pon(p, new T.TorusGeometry(.88, .4, 16, 36), br(0xc98a3a), 0, .42, 0); r.rotation.x = Math.PI / 2; for (let i = 0; i < 10; i++) { const a = i * .628, c = [0xd4203a, 0x2f9a4e, 0xf08a2c][i % 3]; K.caja(p, .3, .14, .2, br(c, c), Math.cos(a) * .88, .84, Math.sin(a) * .88).rotation.y = -a; K.bola(p, .07, br(0xffffff), Math.cos(a + .3) * .88, .84, Math.sin(a + .3) * .88); } const co = new T.Group(); co.position.y = 1.3; p.add(co); K.cil(co, .32, .28, .3, 10, M.oro, 0, 0, 0); for (let q = 0; q < 6; q++) K.cono(co, .07, .22, 4, M.oro, Math.sin(q * 1.047) * .28, .25, Math.cos(q * 1.047) * .28); return (t) => { p.rotation.y = t * .6; co.position.y = 1.3 + Math.abs(Math.sin(t * 2.5)) * .2; }; },
+        buche: g => { K.cil(g, 1.9, 1.7, .1, 32, br(0xfffaf0), 0, .05, 0); const b = new T.Group(); b.position.y = .75; b.rotation.y = .5; g.add(b); K.cil(b, .62, .62, 2.6, 24, br(0x5a2e16), 0, 0, 0).rotation.z = Math.PI / 2; for (let i = 0; i < 7; i++) K.caja(b, 2.5, .05, .05, br(0x3d1d0c), 0, Math.cos(i * .9) * .63, Math.sin(i * .9) * .63); [-1, 1].forEach(d => { K.cil(b, .6, .6, .04, 24, br(0xd9a86a), d * 1.33, 0, 0).rotation.z = Math.PI / 2; K.pon(b, new T.TorusGeometry(.35, .03, 6, 20), br(0x7a4a2a), d * 1.36, 0, 0).rotation.y = Math.PI / 2; }); const ho = new T.Group(); ho.position.set(.2, .7, 0); b.add(ho); [-1, 1].forEach(d => { K.caja(ho, .42, .04, .2, br(0x2f9a4e), d * .22, 0, 0).rotation.y = d * .5; }); [0, 1, 2].forEach(k => K.bola(ho, .08, br(0xd4203a, 0xd4203a), -.06 + k * .06, .06, (k - 1) * .07)); return (t) => { ho.rotation.y = t * 1.5; }; } };
+      const TR = [['las doce uvas de Nochevieja', 'e', O.uvas], ['la cabalgata de Reyes', 'e', O.cab], ['el Gordo del 22 de diciembre', 'e', O.gordo], ['los regalos del 6 de enero', 'e', O.regalos], ['la cena en familia el 24', 'd', O.cena], ['el árbol de Navidad', 'd', O.arbol], ['el roscón de Reyes', 'd', O.roscon], ['la «bûche» de postre', 'f', O.buche]];
+      const piezas = [], TIT = [], CNT = TR.map((x, i) => { const c = J.pon(J.carta((i + 1) + ' / 8', 1.1, '#b8862b', '#fff8ea'), 5, .8, 0); c.visible = !i; return c; });
+      baraja(TR).forEach(([txt, c, hacer], k) => { const g = new T.Group(), m = new T.Group(); g.add(m); m.userData.capa = k ? 1 : 0; m.scale.setScalar(.82); const an = hacer(m); const f = J.pieza(g, c, 0, .35, .5, 2, 4); Object.assign(f.userData, { txt, m, an, g, e1: 1, k }); if (k) { f.visible = false; f.traverse(o => o.layers.set(1)); } piezas.push(f); const ti = J.pon(J.carta(txt, 1.3, '#b3182f', '#fff8ea', 900), 0, -.15, 1.6); ti.visible = !k; TIT.push(ti); });
+      let act = 0, tEnt = 0, tSig = 0, ang = 0, va = 0, tFin = 0, hecho = 0, cartel = null;
+      const pan = (q) => q.g ? [q.sgn * L * Math.cos(ang), PY + q.sgn * L * Math.sin(ang) - CU] : [0, CY];
+      animar = (t, dt) => { U.efectos(t, dt);
+        while (ev.q.length) { const [f, q] = ev.q.shift(), u = f.userData; Object.assign(u, { q, n: q.chips.length, e1: .42, t0: t }); const ch = J.pon(J.carta(u.txt, 1, '#1f6b4c', '#fff8ea', 330), 0, 0, .45); ch.userData.t0 = t; q.chips.push(ch); q.ok = t; clic(q.chips.length); decir(q.frase + u.txt + '.'); va += q.clave === 'e' ? .018 : q.clave === 'f' ? -.018 : 0; const [px, py] = pan(q); U.estalla(px, py + 1, .3, 0xffe08a, 30, 2.4); U.onda(px, py + .6, .3, 3.2, 0x5fd39a, .7); TIT.forEach(x => { x.visible = false; }); CNT.forEach(x => { x.visible = false; }); tSig = t + 1.05; }
+        if (tSig && t > tSig) { tSig = 0; const k = piezas.findIndex(f => !f.userData.fijo); if (k >= 0) { const f = piezas[k]; act = k; f.visible = true; f.userData.m.userData.capa = 0; f.traverse(o => o.layers.set(0)); TIT[k].visible = true; CNT[piezas.filter(x => x.userData.fijo).length].visible = true; tEnt = t; } }
+        // el brazo se inclina hacia el país con más tradiciones
+        const obj = Math.max(-.14, Math.min(.14, (PL[0].chips.length - PL[1].chips.length) * .035)); va += (obj - ang) * .05; va *= .88; ang = Math.max(-.2, Math.min(.2, ang + va)); viga.rotation.z = ang; est.rotation.y = t * 1.5;
+        SIT.forEach((q, i) => { const [px, py] = pan(q); if (q.g) { q.g.position.set(px, py + CU, -1.2); q.g.rotation.z = -va * 4; } q.x = px; q.y = py + .9;
+          if (q.mal) { q.mal = 0; q.tMal = t; } const dm = t - (q.tMal || -9), sh = dm < .5 ? Math.sin(dm * 40) * .2 * (1 - dm * 2) : 0; q.rim.color.set(dm < .5 ? 0xff5a6e : q.ok && t - q.ok < 1.2 ? 0x5fd39a : 0xe9b949);
+          q.et.position.set(px + sh, py - .95, .4); q.chips.forEach((c, k) => { c.position.set(px, py - 1.95 - k * .98, .45); const d = t - c.userData.t0, e = d < .5 ? U.pop(d / .5) : 1; c.scale.set(c.userData.ancho * e, c.userData.alto * e, 1); }); });
+        piezas.forEach((f, k) => { const u = f.userData, m = u.m; if (!f.visible) return; if (u.an) u.an(t);
+          if (u.fijo && u.q) { const q = u.q, [px, py] = pan(q); u.dest.set(px + (u.n - (q.max - 1) / 2) * 1.02, py + .14, q.g ? -1.2 : -.6); }
+          const ent = k === act && !u.fijo ? U.pop(Math.min(1, (t - tEnt) / .5)) : 1; u.g.scale.setScalar(u.fijo ? u.g.scale.x + (u.e1 - u.g.scale.x) * .15 : ent); const d = u.t0 ? t - u.t0 : 9, sa = d < .8 ? Math.sin(d / .8 * Math.PI) : 0; m.position.y = sa * 1.2 + (u.fijo ? 0 : Math.abs(Math.sin(t * 2.2)) * .1); m.rotation.y = (d < .8 ? d / .8 * 6.2832 : 0) + Math.sin(t * 1.1 + k) * (u.fijo ? .15 : .35); });
+        { const ti = TIT[act]; if (ti && ti.visible) { const e = U.pop(Math.min(1, (t - tEnt) / .5)); ti.scale.set(ti.userData.ancho * e, ti.userData.alto * e, 1); } }
+        foco.material.opacity = hecho ? 0 : .35 + Math.sin(t * 2) * .07;
+        if (ev.fin && !tFin) tFin = t + 1.6;
+        if (tFin && t > tFin && !hecho) { hecho = 1; fuegos(); campana(196, .25); cartel = J.carta('¡La balanza está completa!', 2.2, '#b8862b', '#fff8ea', 1100); cartel.userData.t0 = t; J.pon(cartel, 0, 1.4, 2); U.fiesta([[-12, 13, 0xff5a6e], [12, 13.2, 0x5fd39a], [0, 14.4, 0xffd66b], [-6, 2.6, 0xfff8ea], [6, 2.4, 0xffd66b]]); C.msg('¡Muy bien! Ahora, compara.', 'bien'); C.boton('Continuar', () => { J.cerrar(); C.boton('', null); despues((a, t2) => fin(ev.fin[0] + a, ev.fin[1] + t2)); }); }
+        if (cartel) { const e = U.pop(Math.min(1, (t - cartel.userData.t0) / .7)) * (1 + Math.sin(t * 3) * .03); cartel.scale.set(cartel.userData.ancho * e, cartel.userData.alto * e, 1); } }; } }, fin); }
 };
 
 /* ====== 5. LOS SEIS LUGARES ============================================ */
@@ -1309,10 +1397,21 @@ const EST = {
   /* ---------- final ---------- */
   cafe: { t: 'España y Francia', f: 'Comparar · ¿son tan diferentes las fiestas?', pasos: [
     { n: 'El vídeo', f(fin) {
-      C.consigna('Una profesora española explica la Navidad en España. Mira el vídeo y contesta.', 'Une professeure espagnole explique Noël en Espagne. Regarde la vidéo et réponds.');
-      C.glosa('<b>traer</b> : apporter · <b>el árbol</b> : le sapin · <b>el calcetín</b> : la chaussette · <b>las chucherías</b> : les friandises');
-      C.tabla.innerHTML = `<div class="duo">${videoHTML(VIDEOS.tradiciones)}<div id="qq"></div></div>`;
-      opciones($('#qq'), [{ p: '¿Cuándo suele venir Papá Noel?', o: ['El 24 de diciembre por la noche', 'El 31 de diciembre', 'El 5 de enero por la noche'], c: 0 }, { p: '¿Dónde aparecen los regalos?', o: ['Debajo del árbol', 'En la plaza', 'En el belén'], c: 0 }, { p: '¿Qué día vienen los Reyes Magos?', o: ['El 6 de enero', 'El 25 de diciembre', 'El 22 de diciembre'], c: 0 }, { p: '¿Qué les suele gustar a los niños?', o: ['Los caramelos y las chucherías', 'Las uvas', 'El pavo'], c: 0 }], (a, t) => { $$('video').forEach(v => v.pause()); seguir(fin, a, t); }); } },
+      C.consigna('Mira el vídeo. Después, contesta a las preguntas, una a una.', 'Regarde la vidéo. Ensuite, réponds aux questions, une par une.');
+      C.glosa('<b>traer</b> : apporter · <b>el árbol</b> : le sapin · <b>el calcetín</b> : la chaussette · <b>las chucherías</b> : les friandises<br>Puedes mirar el vídeo otra vez cuando quieras. El botón 🔊 lee la pregunta.');
+      const P = [{ i: '🎅', p: '¿Cuándo suele venir Papá Noel?', o: ['El 24 de diciembre por la noche', 'El 31 de diciembre', 'El 5 de enero por la noche'] }, { i: '🎄', p: '¿Dónde aparecen los regalos?', o: ['Debajo del árbol', 'En la plaza', 'En el belén'] }, { i: '👑', p: '¿Qué día vienen los Reyes Magos?', o: ['El 6 de enero', 'El 25 de diciembre', 'El 22 de diciembre'] }, { i: '🍬', p: '¿Qué les suele gustar a los niños?', o: ['Los caramelos y las chucherías', 'Las uvas', 'El pavo'] }];
+      C.tabla.innerHTML = `<div class="noche"><div class="vcol">${videoHTML(VIDEOS.tradiciones)}<p class="pie">Una profesora española explica la Navidad en España.</p></div><div class="qcol"><div class="puntos">${P.map(() => '<i></i>').join('')}</div><div id="qc"></div></div></div>`;
+      let i = 0, ok = 0; const caja = $('#qc'), pts = $$('.puntos i', C.tabla);
+      const resumen = () => { $$('video').forEach(v => v.pause()); caja.innerHTML = ''; caja.append(el(`<div class="qcard recap"><div class="qn">¡Muy bien! Recuerda</div><ul>${P.map(q => `<li><span class="ico">${q.i}</span><span><b>${q.p}</b>${q.o[0]}.</span></li>`).join('')}</ul></div>`)); seguir(fin, ok, P.length); };
+      const muestra = () => { const q = P[i]; pts[i].classList.add('ya'); let fallo = false, listo = false;
+        const c = el(`<div class="qcard"><div class="qn">Pregunta ${i + 1} de ${P.length}</div><p><span class="ico">${q.i}</span>${q.p}<button class="oye" title="Escuchar">🔊</button></p><div class="ops"></div></div>`);
+        $('.oye', c).onclick = () => decir(q.p);
+        baraja(q.o.map((t, j) => ({ t, j }))).forEach(o => { const b = el(`<button class="op2">${o.t}</button>`); b.onclick = () => { if (listo || b.classList.contains('ko')) return;
+          if (o.j === 0) { listo = true; b.classList.add('ok'); $$('.op2', c).forEach(x => x !== b && x.classList.add('apaga')); if (!fallo) ok++; pts[i].classList.add('on'); clic(i); decir(o.t); C.msg('¡Sí! ' + o.t + '.', 'bien'); setTimeout(() => { c.classList.add('fuera'); setTimeout(() => { i++; if (i < P.length) muestra(); else resumen(); }, 330); }, 1300); }
+          else { fallo = true; b.classList.add('ko'); c.classList.remove('no'); void c.offsetWidth; c.classList.add('no'); mal(); C.msg('No es eso. Mira otra vez el vídeo.', 'mal'); } };
+          $('.ops', c).append(b); });
+        caja.innerHTML = ''; caja.append(c); };
+      muestra(); } },
     { n: '¿España o Francia?', f(fin) {
       C.consigna('¿España, Francia o los dos países? Arrastra cada tradición a su zona del diagrama.', 'Espagne, France ou les deux pays ? Fais glisser chaque tradition dans sa zone du diagramme.');
       C.glosa('<b>el roscón de Reyes</b> : la galette des Rois<br>La zona central es para los dos países.');
@@ -1322,12 +1421,12 @@ const EST = {
       C.consigna('Compara las fiestas: arrastra la palabra correcta a cada frase.', 'Compare les fêtes : fais glisser le bon mot dans chaque phrase.');
       C.glosa('<b>más… que</b> : plus… que · <b>menos… que</b> : moins… que · <b>mientras que</b> : tandis que · <b>en cambio</b> : en revanche');
       const h = (w) => `<span class="dest" data-a="${w}"></span>`;
-      C.tabla.innerHTML = `<div class="frases"><p>En España, el Día de Reyes es ${h('más')} importante que en Francia.</p><p>En Francia, la cabalgata de Reyes es ${h('menos')} famosa que en España.</p><p>Los niños españoles suelen recibir regalos el 6 de enero, ${h('mientras que')} los niños franceses los reciben el 25 de diciembre.</p><p>En Francia, solo solemos comer roscón de Reyes. ${h('En cambio')}, en España, los Reyes Magos desfilan por las calles.</p><p>En Nochevieja, los españoles suelen comer doce uvas, ${h('mientras que')} los franceses no comemos uvas.</p></div><div class="bandeja">${fichasHTML([['más', 'más'], ['menos', 'menos'], ['mientras que', 'mientras que'], ['mientras que', 'mientras que'], ['En cambio', 'En cambio']])}</div>`;
+      C.tabla.innerHTML = `<div class="noche col"><h3 class="tit"><i class="fl e"></i>Compara España y Francia<i class="fl f"></i></h3><div class="frases"><p>En España, el Día de Reyes es ${h('más')} importante que en Francia.</p><p>En Francia, la cabalgata de Reyes es ${h('menos')} famosa que en España.</p><p>Los niños españoles suelen recibir regalos el 6 de enero, ${h('mientras que')} los niños franceses los reciben el 25 de diciembre.</p><p>En Francia, solo solemos comer roscón de Reyes. ${h('En cambio')}, en España, los Reyes Magos desfilan por las calles.</p><p>En Nochevieja, los españoles suelen comer doce uvas, ${h('mientras que')} los franceses no comemos uvas.</p></div><div class="bandeja">${fichasHTML([['más', 'más'], ['menos', 'menos'], ['mientras que', 'mientras que'], ['mientras que', 'mientras que'], ['En cambio', 'En cambio']])}</div></div>`;
       arrastre({ total: 5, fin: (a, t) => seguir(fin, a, t) }); } },
     { n: 'Tu comparación', f(fin) {
       C.consigna('Ahora tú: escribe tres frases para comparar las fiestas de fin de año en España y en Francia.', 'À toi : écris trois phrases pour comparer les fêtes de fin d’année en Espagne et en France. Ce texte t’aidera pour ton oral.');
       C.glosa('Usa una palabra para comparar y el verbo <b>soler</b>.');
-      escribir({ clave: 'comp', min: 30, ayudas: ['En España…', 'mientras que en Francia…', 'más … que', 'menos … que', 'En cambio,', 'Los españoles suelen…', 'A los franceses les gusta…', 'Nos encanta…'], pide: [[/m[aá]s|menos|mientras que|en cambio/i, 'una palabra para comparar'], [/suel|sol[eé]/i, 'el verbo «soler»']], boton: 'Terminar', adios: '¡Texto guardado en tu ficha!' }, fin); } }
+      escribir({ clave: 'comp', min: 30, noche: true, recuerda: `<div class="recuerda"><h4>Recuerda</h4><div class="rc"><b><i class="fl e"></i>Solo en España</b><span>las doce uvas · la cabalgata de Reyes · el Gordo · los regalos del 6 de enero</span></div><div class="rc"><b><i class="fl e"></i><i class="fl f"></i>En los dos países</b><span>la cena en familia el 24 · el árbol de Navidad · el roscón de Reyes</span></div><div class="rc"><b><i class="fl f"></i>Solo en Francia</b><span>la «bûche» de postre · los regalos del 25 de diciembre</span></div></div>`, ayudas: ['En España…', 'mientras que en Francia…', 'más … que', 'menos … que', 'En cambio,', 'Los españoles suelen…', 'A los franceses les gusta…', 'Nos encanta…'], pide: [[/m[aá]s|menos|mientras que|en cambio/i, 'una palabra para comparar'], [/suel|sol[eé]/i, 'el verbo «soler»']], boton: 'Terminar', adios: '¡Texto guardado en tu ficha!' }, fin); } }
   ] }
 };
 
