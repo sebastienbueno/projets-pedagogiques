@@ -304,13 +304,31 @@ video{width:100%;border-radius:.9rem;background:#000;display:block;box-shadow:0 
 .noche .frases .dest.lleno{border-bottom-color:#2f8f68;background:#dff1e6}
 .noche .frases .dest .ficha{padding:.2rem .8rem;box-shadow:0 .12rem 0 #0f3526}
 .noche .bandeja{background:rgba(255,248,234,.07);border:.12rem dashed rgba(233,185,73,.5);border-radius:1rem;padding:.8rem 1.4rem;min-width:30rem}
-.fr3{position:absolute;left:4%;right:4%;top:1rem;text-align:center;pointer-events:none;color:#fff8ea;text-shadow:0 .15rem .5rem #000}
-.fr3 small{display:block;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--oro);margin-bottom:.3rem}
-.fr3 p{margin:0;font-family:Georgia,serif;font-size:1.85rem;font-weight:700;line-height:1.4}
-.fr3 em{font-size:1.1rem;font-weight:400;opacity:.8}
-.slot{display:inline-block;min-width:2.6rem;padding:0 .25rem;border-bottom:.2rem solid #ffd66b;color:#ffd66b;transition:color .25s,border-color .25s}
-.slot.ok{color:#7ff0b4;border-color:#5fd39a}.slot.mal{color:#ff8a9a;border-color:#ff5a6e;animation:no .35s}
-.verbo{display:inline-flex;gap:.12rem}
+.b3{position:absolute;left:1rem;top:1rem;max-width:25rem;background:rgba(24,6,12,.82);border:.1rem solid rgba(233,185,73,.7);border-radius:.9rem;padding:.6rem 1rem .7rem;color:var(--crema);pointer-events:none;box-shadow:0 .6rem 1.4rem rgba(0,0,0,.4);display:flex;flex-direction:column;gap:.25rem}
+.b3 small{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--oro)}
+.b3 b{font-family:Georgia,serif;font-size:1.2rem;line-height:1.25}
+.b3 span{font-size:.92rem;line-height:1.4;opacity:.95}.b3 span i{display:inline-block;margin-top:.15rem;color:var(--oro2);font-style:normal;font-weight:700}
+.b3 .tres{display:flex;gap:.35rem;flex-wrap:wrap;margin:.2rem 0}.b3 .tres em{font-style:normal;font-size:.82rem;font-weight:700;padding:.12rem .6rem;border-radius:2rem;border:.1rem dashed rgba(233,185,73,.7)}.b3 .tres em.si{background:#2f8f68;border:0}
+.fr3{position:absolute;left:0;right:0;top:.9rem;text-align:center;pointer-events:none}
+.frc{display:inline-block;background:rgba(255,248,234,.97);color:#3a1410;border-radius:1rem;padding:.5rem 1.8rem .65rem;box-shadow:0 .8rem 2rem rgba(0,0,0,.45),inset 0 0 0 .16rem var(--oro);max-width:70%}
+.frc small{display:block;font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#b8862b}
+.frc p{margin:.1rem 0 0;font-family:Georgia,serif;font-size:1.75rem;font-weight:700;line-height:1.35}
+.frc em{font-size:1.05rem;font-weight:400;color:#8a6a3a}
+.suj{min-height:1.3rem;font-size:.98rem;color:#1f6b4c}.suj b{display:inline-block;background:#dff1e6;border-radius:2rem;padding:0 .8rem;animation:pop .35s}
+.pasos3{list-style:none;display:flex;gap:.45rem;justify-content:center;margin:.35rem 0 0;padding:0}
+.pasos3 li{font-size:.78rem;font-weight:700;padding:.15rem .75rem;border-radius:2rem;background:#f1e3c6;color:#9a7a4a;transition:all .3s}.pasos3 li.on{background:var(--oro);color:#3a1410;box-shadow:0 0 .8rem rgba(233,185,73,.6)}.pasos3 li.ya{background:#2f8f68;color:#fff}
+.slot{display:inline-block;min-width:2.6rem;padding:0 .25rem;border-bottom:.2rem solid #e9b949;color:#8f1526;transition:color .25s,border-color .25s}
+.slot.ok{color:#1f6b4c;border-color:#2f8f68}.slot.mal{color:#c0392b;border-color:#d4364a;animation:no .35s}
+.vb{display:inline-flex;gap:.12rem}
+.pts3{display:flex;gap:.35rem;justify-content:center;margin:.4rem 0 .1rem}.pts3 i{width:.7rem;height:.7rem;border-radius:50%;background:#e8d8b4}.pts3 i.si{background:#2f8f68}.pts3 i.med{background:#e9b949}
+.ayu3{position:absolute;right:1rem;top:1rem;background:rgba(24,6,12,.85);color:var(--crema);border:.1rem solid var(--oro);border-radius:2rem;padding:.4rem 1rem;font-weight:700;font-size:.9rem;cursor:pointer}
+.ayu3:hover{background:#3a1410}
+.memo3{position:absolute;right:1rem;top:3.6rem;width:15rem;background:rgba(255,248,234,.98);color:#3a1410;border-radius:1rem;padding:.7rem 1rem;box-shadow:0 .8rem 2rem rgba(0,0,0,.5),inset 0 0 0 .14rem var(--oro);font-size:.9rem;animation:entra .35s}
+.memo3 h5{margin:0 0 .4rem;color:#8f1526;letter-spacing:.08em;font-size:.85rem}
+.memo3 table{border-collapse:collapse;width:100%;border-radius:.5rem}.memo3 td{padding:.1rem .35rem}.memo3 td:first-child{color:#8a6a3a}
+.memo3 .ue{color:#b3182f}.memo3 .o{color:#1f6b4c}
+.memo3 p{margin:.45rem 0 0;font-size:.82rem;line-height:1.4;border-radius:.5rem;padding:.15rem .3rem}
+.memo3 .pista{background:#fff1b8;box-shadow:0 0 0 .14rem #e9b949;animation:pop .4s}
 .menu2{display:flex;gap:1.6rem;justify-content:center;margin-bottom:1.4rem}.menu2 .col{display:flex;flex-direction:column;align-items:center;gap:.5rem}.menu2 b{font-family:Georgia,serif;font-size:1.2rem;color:var(--rojo2)}.menu2 .caja{min-width:14rem;min-height:6rem}
 .conj2{text-align:center}.conj2 small{font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#b8862b}.conj2 p{font-family:Georgia,serif;font-size:1.6rem}.conj2 .slot{color:var(--rojo2);border-color:var(--rojo)}.fila2{display:flex;gap:.5rem;justify-content:center;margin:.6rem 0}
 .hoja{width:44rem;background:#fff;border-radius:.8rem;padding:1.2rem 1.6rem;box-shadow:0 .9rem 2rem rgba(60,30,10,.3);transition:all .9s}
@@ -968,6 +986,11 @@ const J3 = {
       mazapanes: g => { fuente(g, 1.15); const m = br(0xf3d28e, 0, .55), to = br(0xc98a3a, 0, .5); [[-.5, -.25], [.45, -.3], [0, .3], [-.65, .45], [.7, .4]].forEach(([x, z], k) => { if (k % 2) { const t = K.pon(g, new T.TorusGeometry(.18, .09, 8, 16, Math.PI * 1.3), m, x, .24, z); t.rotation.set(Math.PI / 2, 0, k); } else { const b = K.bola(g, .2, m, x, .27, z); b.scale.set(1.25, .7, 1); K.bola(g, .12, to, x, .36, z).scale.set(1.3, .35, 1); } }); },
       uvas: g => { fuente(g, .95); K.cil(g, .55, .3, .5, 24, br(0xdff3ff, 0, .1), 0, .35, 0).material.transparent = true; const u = br(0x9ccc3c, 0x1f3d00, .35); for (let k = 0; k < 12; k++) { const a = k * 1.9, r = k < 8 ? .3 : .12; K.bola(g, .13, u, Math.cos(a) * r, .55 + (k < 8 ? 0 : .2), Math.sin(a) * r); } const ag = new T.Group(); ag.position.set(.95, .2, -.2); g.add(ag); K.cil(ag, .4, .4, .08, 24, br(0xfffaf0), 0, .5, 0).rotation.x = Math.PI / 2; const mn = new T.Group(); mn.position.set(0, .5, .06); ag.add(mn); K.caja(mn, .05, .32, .02, M.rojo2, 0, .16, 0); K.cil(ag, .05, .05, .5, 6, M.oro, 0, .2, 0); return (t) => { mn.rotation.z = -t * 2; }; },
       roscon: g => { const p = new T.Group(); p.position.y = .1; g.add(p); fuente(p, 1.3); const r = K.pon(p, new T.TorusGeometry(.8, .36, 16, 36), br(0xc98a3a, 0, .5), 0, .42, 0); r.rotation.x = Math.PI / 2; for (let i = 0; i < 9; i++) { const a = i * .698, c = [0xd4203a, 0x2f9a4e, 0xf08a2c][i % 3]; K.caja(p, .28, .12, .18, br(c, c), Math.cos(a) * .8, .8, Math.sin(a) * .8).rotation.y = -a; } const co = new T.Group(); co.position.y = 1.15; p.add(co); K.cil(co, .28, .24, .26, 10, M.oro, 0, 0, 0); for (let q = 0; q < 6; q++) K.cono(co, .06, .2, 4, M.oro, Math.sin(q * 1.047) * .25, .22, Math.cos(q * 1.047) * .25); return (t) => { co.position.y = 1.15 + Math.abs(Math.sin(t * 2.5)) * .12; }; },
+      decimo: g => { const c = document.createElement('canvas'); c.width = 380; c.height = 210; const k = c.getContext('2d'); k.fillStyle = '#f6e7c1'; k.fillRect(0, 0, 380, 210); k.strokeStyle = '#8a5a2c'; k.lineWidth = 7; k.strokeRect(6, 6, 368, 198); k.textAlign = 'center'; k.fillStyle = '#8f1526'; k.font = 'bold 30px Georgia, serif'; k.fillText('LOTERÍA NACIONAL', 190, 52); k.fillStyle = '#3a1410'; k.font = 'bold 70px Georgia, serif'; k.fillText('79432', 190, 132); k.font = 'bold 26px Georgia, serif'; k.fillText('22 de diciembre', 190, 182); const tx = new T.CanvasTexture(c); tx.encoding = T.sRGBEncoding;
+        K.caja(g, 1.7, .1, .7, br(0x8a5a2c, 0, .7), 0, .05, 0); K.caja(g, .1, .9, .1, br(0x6b4526, 0, .7), 0, .5, -.25).rotation.x = -.25; const p = new T.Mesh(new T.PlaneGeometry(2, 1.1), new T.MeshStandardMaterial({ map: tx, roughness: .8, side: T.DoubleSide })); p.position.set(0, .75, 0); p.rotation.x = -.28; g.add(p); return (t) => { p.rotation.z = Math.sin(t * 1.4) * .04; }; },
+      caramelos: g => { fuente(g, 1.05); K.cil(g, .85, .6, .4, 24, br(0xd9eef7, 0, .2), 0, .3, 0); const cols = [0xd4203a, 0x2f9a4e, 0xe9b949, 0x3f6fb5, 0xff7ab0]; for (let k = 0; k < 10; k++) { const a = k * 2.3, r = k < 7 ? .5 : .18, c = new T.Group(); c.position.set(Math.cos(a) * r, .58 + (k < 7 ? 0 : .16), Math.sin(a) * r); c.rotation.y = a; g.add(c); const m = br(cols[k % 5], 0, .25); K.bola(c, .12, m, 0, 0, 0).scale.set(1.3, 1, 1); [-1, 1].forEach(d => { K.cono(c, .08, .14, 6, m, d * .2, 0, 0).rotation.z = d * Math.PI / 2; }); } },
+      carta: g => { const c = document.createElement('canvas'); c.width = 300; c.height = 380; const k = c.getContext('2d'); k.fillStyle = '#fffdf5'; k.fillRect(0, 0, 300, 380); k.textAlign = 'center'; k.fillStyle = '#8f1526'; k.font = 'bold 32px Georgia, serif'; k.fillText('Queridos', 150, 62); k.fillText('Reyes Magos:', 150, 104); k.strokeStyle = '#c9b894'; k.lineWidth = 3; for (let i = 0; i < 6; i++) { k.beginPath(); k.moveTo(40, 160 + i * 34); k.lineTo(260, 160 + i * 34); k.stroke(); } k.fillStyle = '#e9b949'; k.beginPath(); k.moveTo(120, 30); k.lineTo(130, 12); k.lineTo(150, 26); k.lineTo(170, 12); k.lineTo(180, 30); k.fill(); const tx = new T.CanvasTexture(c); tx.encoding = T.sRGBEncoding;
+        K.caja(g, 1.9, .06, 1.25, br(0xe2c98f, 0, .75), .1, .03, .1); K.cil(g, .14, .14, .05, 16, br(0xb3182f, 0, .4), .5, .08, .35); const p = new T.Mesh(new T.PlaneGeometry(1.15, 1.45), new T.MeshStandardMaterial({ map: tx, roughness: .85, side: T.DoubleSide })); p.position.set(-.1, .78, -.1); p.rotation.set(-.22, .15, .05); g.add(p); return (t) => { p.rotation.z = .05 + Math.sin(t * 1.3) * .04; }; },
       buche: g => { fuente(g, 1.25); const b = new T.Group(); b.position.y = .62; b.rotation.y = .4; g.add(b); K.cil(b, .5, .5, 2.1, 24, br(0x5a2e16, 0, .7), 0, 0, 0).rotation.z = Math.PI / 2; for (let i = 0; i < 6; i++) K.caja(b, 2, .045, .045, br(0x3d1d0c), 0, Math.cos(i * 1.05) * .51, Math.sin(i * 1.05) * .51); [-1, 1].forEach(d => { K.cil(b, .48, .48, .04, 24, br(0xd9a86a), d * 1.07, 0, 0).rotation.z = Math.PI / 2; }); const ho = new T.Group(); ho.position.set(.2, .55, 0); b.add(ho); [-1, 1].forEach(d => { K.caja(ho, .36, .04, .18, br(0x2f9a4e), d * .2, 0, 0).rotation.y = d * .5; }); [0, 1, 2].forEach(k => K.bola(ho, .07, br(0xd4203a, 0xd4203a), -.06 + k * .06, .05, (k - 1) * .06)); return (t) => { ho.rotation.y = t * 1.2; }; } }; },
   /* La escena común: fondo de noche, mesa larga con mantel y velas */
   salon(J, U, TX, TY, ancho, fondo = 4.4) { const { K, M, T } = J, br = (c, e, r = .5) => new T.MeshStandardMaterial({ color: c, roughness: r, emissive: e || 0, emissiveIntensity: e ? .5 : 0 });
@@ -975,39 +998,64 @@ const J3 = {
     K.caja(J.esc, ancho, .2, fondo, br(0x5a3418, 0, .7), TX, TY - .12, -.4); const ma = new T.MeshStandardMaterial({ color: 0x5e0814, roughness: .9 }); K.caja(J.esc, ancho + .2, .05, fondo + .2, ma, TX, TY + .01, -.4); K.caja(J.esc, ancho + .2, 1.5, .05, ma, TX, TY - .74, fondo / 2 - .28); K.caja(J.esc, ancho + .22, .09, .07, M.oro, TX, TY - .2, fondo / 2 - .25); K.caja(J.esc, ancho - .6, .03, 1.5, br(0xfff3d6, 0, .6), TX, TY + .045, -.4);
     [-1, 1].forEach(d => K.caja(J.esc, .35, TY - 1.5, .35, br(0x4a2a14, 0, .7), TX + d * (ancho / 2 - .4), (TY - 1.5) / 2, -.4 - fondo / 2 + .4)); },
   vela(J, x, y, z, e = 1) { const { K, M, T } = J, g = new T.Group(); g.position.set(x, y, z); g.scale.setScalar(e); J.esc.add(g); K.cil(g, .28, .32, .08, 16, M.oro, 0, .04, 0); K.cil(g, .1, .1, .7, 12, new T.MeshStandardMaterial({ color: 0xfff8ea, roughness: .6 }), 0, .43, 0); const f = K.cono(g, .07, .22, 8, M.llama, 0, .9, 0); return { g, f }; },
-  /* ---------- 1. El menú de Nochebuena: primero el orden, después los platos ---------- */
+  /* El comedor de Nochebuena: pared con papel pintado, zócalo de madera, parqué y guirnalda de luces */
+  comedor(J, U, yG = 10.2) { const { K, M, T } = J, esc = J.esc, lz = U.lienzo; U.fondo.visible = false; U.estrellas.visible = false;
+    const papel = lz(128, 128, (k, w, h) => { k.fillStyle = '#4f0c18'; k.fillRect(0, 0, w, h); k.fillStyle = 'rgba(255,214,107,.10)'; [[32, 32], [96, 96]].forEach(([x, y]) => { k.beginPath(); k.moveTo(x, y - 20); k.quadraticCurveTo(x + 14, y, x, y + 20); k.quadraticCurveTo(x - 14, y, x, y - 20); k.fill(); }); k.fillStyle = 'rgba(255,214,107,.05)'; k.fillRect(62, 0, 4, h); });
+    papel.wrapS = papel.wrapT = T.RepeatWrapping; papel.repeat.set(22, 9);
+    J.pon(new T.Mesh(new T.PlaneGeometry(70, 28), new T.MeshStandardMaterial({ map: papel, roughness: .95 })), 0, 12, -6);
+    J.pon(new T.Mesh(new T.PlaneGeometry(70, 2.4), new T.MeshStandardMaterial({ color: 0x3a1f12, roughness: .8 })), 0, 1.2, -5.97); J.pon(new T.Mesh(new T.PlaneGeometry(70, .14), M.oro), 0, 2.4, -5.95);
+    const tabla = lz(256, 256, (k, w, h) => { for (let i = 0; i < 8; i++) { k.fillStyle = i % 2 ? '#4a2a18' : '#563220'; k.fillRect(0, i * 32, w, 32); k.fillStyle = 'rgba(0,0,0,.28)'; k.fillRect(0, i * 32, w, 2); k.fillRect((i * 97 + 40) % w, i * 32, 3, 32); } }); tabla.wrapS = tabla.wrapT = T.RepeatWrapping; tabla.repeat.set(12, 4);
+    const suelo = new T.Mesh(new T.PlaneGeometry(70, 24), new T.MeshStandardMaterial({ map: tabla, roughness: .8 })); suelo.rotation.x = -Math.PI / 2; suelo.position.set(0, -.02, 6); suelo.receiveShadow = true; esc.add(suelo);
+    const luces = [], cols = [0xff5a6e, 0xffd66b, 0x5fd39a, 0x6aa8ff], hoja = new T.MeshStandardMaterial({ color: 0x1f5a3a, roughness: .8 });
+    [[-21, -7], [-7, 7], [7, 21]].forEach(([a, b]) => { const n = 14; for (let i = 0; i <= n; i++) { const x = a + (b - a) * i / n, y = yG - Math.sin(i / n * Math.PI) * 1.1; K.bola(esc, .22, hoja, x, y + .12, -5.8).scale.set(1.3, .8, .6); if (i % 2) luces.push(K.bola(esc, .12, new T.MeshStandardMaterial({ color: cols[(i >> 1) % 4], emissive: cols[(i >> 1) % 4], emissiveIntensity: .8 }), x, y - .12, -5.65)); } });
+    return (t) => luces.forEach((l, i) => { l.material.emissiveIntensity = .3 + Math.max(0, Math.sin(t * 2.2 + i * 1.3)) * .9; }); },
+  /* ---------- 1. El menú de Nochebuena: primero el orden (la carta en la pared), después los platos ---------- */
   menu(fin, plano) { let animar = null; const ev = { q: [] }, cap = (s) => s[0].toUpperCase() + s.slice(1);
-    juego3D({ plano, modo: 'pantalla', ancho: 26, cam: [0, 8.6, 26, 0, 4, 0], fov: 24,
+    juego3D({ plano, modo: 'pantalla', ancho: 26, cam: [0, 8.6, 26, 0, 4.4, 0], fov: 24,
+    html: '<div class="b3"><small id="b3a"></small><b id="b3b"></b><span id="b3c"></span></div>',
     anim: (t, dt, J) => animar && animar(t, dt, J),
-    pos: (q, n, f) => f.userData.carta ? [q.x, q.y + 1.45, -1.3] : [q.x, q.y, .5],
+    pos: (q) => [q.x, q.y, q.z + .3],
     bien: (f, q) => f.userData.carta ? `${q.num0}. ${cap(f.userData.txt)}` : `${cap(f.userData.txt)}: ${q.nombre}.`,
-    pista: (f, q) => { q.mal = 1; return f.userData.carta ? 'No: piensa en el orden de la cena, del principio al final.' : `No: ${f.userData.txt} no ${f.userData.pl ? 'son' : 'es'} ${q.nom2}.`; },
+    pista: (f, q) => { q.mal = 1; if (f.userData.carta) return q.nom2 ? 'No: las tarjetas van en la carta del menú, en la pared.' : 'No: piensa en el orden de la cena, del principio al final.'; return q.nom2 ? `No: ${f.userData.txt} no ${f.userData.pl ? 'son' : 'es'} ${q.nom2}.` : 'No: los platos van en las fuentes de la mesa: 1, 2 o 3.'; },
     alColocar: (f, q) => { ev.q.push([f, q]); },
     alTerminar: (J, ok, tot) => { ev.fin = [ok, tot]; },
-    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), P = J3.platos(J), oroV = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35, emissive: 0xffb020, emissiveIntensity: .12 }), br = (c) => new T.MeshStandardMaterial({ color: c, roughness: .45 }), TX = 3.3, TY = 2.5, SX = -9.7, SY = 2.8, E1 = .6;
-      C.consigna('Primero, el orden: ¿qué se come primero en la cena de Nochebuena? Lleva cada parte del menú a su número.', 'D’abord, l’ordre : qu’est-ce qu’on mange en premier au réveillon ? Amène chaque partie du menu à son numéro.');
-      C.glosa('<b>los entrantes</b> : les entrées · <b>el plato principal</b> : le plat principal · <b>el postre</b> : le dessert<br><b>el cochinillo asado</b> : le cochon de lait rôti · <b>los langostinos</b> : les crevettes<br>Arrastra, o haz clic en la pieza y después en su sitio.');
+    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), P = J3.platos(J), luz = J3.comedor(J, U, 10.6), oroV = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35, emissive: 0xffb020, emissiveIntensity: .12 }), br = (c) => new T.MeshStandardMaterial({ color: c, roughness: .45 }), TX = 3.3, TY = 2.5, SX = -9.7, SY = 2.8, E1 = .6;
+      C.consigna('La cena de Nochebuena en dos pasos: primero, el orden del menú; después, los platos.', 'Le réveillon en deux étapes : d’abord, l’ordre du menu ; ensuite, les plats.');
+      C.glosa('<b>los entrantes</b> : les entrées · <b>el plato principal</b> : le plat principal · <b>el postre</b> : le dessert<br><b>el cochinillo asado</b> : le cochon de lait rôti · <b>los langostinos</b> : les crevettes · <b>el turrón</b> : le touron<br>Arrastra, o haz clic en la pieza y después en su sitio.');
+      const banner = (a, b, c) => { $('#b3a').textContent = a; $('#b3b').textContent = b; $('#b3c').innerHTML = c; };
       J3.salon(J, U, TX, TY, 17.4);
-      const PARTES = [['e', 'los entrantes', 'un entrante'], ['p', 'el plato principal', 'el plato principal'], ['d', 'el postre', 'un postre']];
+      // la carta del menú, colgada en la pared: tres líneas que se rellenan
+      const pz = document.createElement('canvas'); pz.width = 1000; pz.height = 460; const pk = pz.getContext('2d'), ptx = new T.CanvasTexture(pz); ptx.encoding = T.sRGBEncoding; const vals = [null, null, null];
+      const dibuja = (ok = -1, malo = -1) => { const k = pk; k.fillStyle = '#fff6e2'; k.fillRect(0, 0, 1000, 460); k.strokeStyle = '#b8862b'; k.lineWidth = 14; k.strokeRect(10, 10, 980, 440); k.lineWidth = 3; k.strokeRect(32, 32, 936, 396); k.textAlign = 'center'; k.textBaseline = 'middle'; k.fillStyle = '#8f1526'; k.font = 'bold 56px Georgia, serif'; k.fillText('Menú de Nochebuena', 500, 92);
+        [178, 280, 382].forEach((y, i) => { k.fillStyle = i === malo ? '#d4364a' : i === ok || vals[i] ? '#2f8f68' : '#b8862b'; k.beginPath(); k.arc(165, y, 36, 0, 6.3); k.fill(); k.fillStyle = '#fff'; k.font = 'bold 42px Georgia, serif'; k.textAlign = 'center'; k.fillText(String(i + 1), 165, y + 2);
+          if (vals[i]) { k.fillStyle = '#1f4a36'; k.font = 'bold 52px Georgia, serif'; k.textAlign = 'left'; k.fillText(vals[i], 230, y + 3); } else { k.strokeStyle = '#c9b07a'; k.setLineDash([8, 12]); k.lineWidth = 4; k.beginPath(); k.moveTo(230, y + 24); k.lineTo(860, y + 24); k.stroke(); k.setLineDash([]); } });
+        ptx.needsUpdate = true; };
+      dibuja(); K.caja(esc, 10.5, 5.05, .14, new T.MeshStandardMaterial({ color: 0x5a3418, roughness: .6 }), TX, 7.15, -5.93); const carta = J.pon(new T.Mesh(new T.PlaneGeometry(10, 4.6), new T.MeshBasicMaterial({ map: ptx })), TX, 7.15, -5.84);
+      const LIN = [7.65, 6.63, 5.61], PARTES = [['e', 'los entrantes', 'un entrante'], ['p', 'el plato principal', 'el plato principal'], ['d', 'el postre', 'un postre']];
+      const LINEAS = PARTES.map(([c], i) => Object.assign(J.sitio(c.toUpperCase(), TX + .4, LIN[i], -5.6, 3.9, 0, .5), { linea: i, num0: i + 1 }));
       const SIT = PARTES.map(([c, nombre, nom2], i) => { const x = TX + (i - 1) * 5.6, rim = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35 }); K.cil(esc, 2.3, 2.05, .12, 40, new T.MeshStandardMaterial({ color: 0xfffaf0, roughness: .3 }), x, TY + .1, -.3); K.pon(esc, new T.TorusGeometry(2.3, .07, 8, 48), rim, x, TY + .17, -.3).rotation.x = Math.PI / 2;
-        const num = J.pon(U.signo(String(i + 1), 1.3), x, TY + 4.3, -1.3); const hueco = J.pon(J.carta('¿…?', .85, '#b8862b', '#fff3d6'), x, TY + 3.2, -1.3); hueco.material.opacity = .75;
-        return Object.assign(J.sitio(c, x, TY + .5, 0, 2.5, 1, 1.9), { rim, badge: num, hueco, nombre, nom2, num0: i + 1, n2: 0 }); });
+        const badge = J.pon(U.signo(String(i + 1), 1.1), x, TY - .5, 2.4); const rotulo = J.pon(J.carta(nombre, .78, '#1f6b4c', '#fff8ea', 420), x + .45, TY - .55, 2.35); rotulo.visible = false;
+        return Object.assign(J.sitio(c, x, TY + .5, 0, 2.5, 1, 1.9), { rim, badge, rotulo, nombre, nom2, num0: i + 1, n2: 0 }); });
       const velas = [TX - 8.3, TX - 2.8, TX + 2.8, TX + 8.3].map(x => J3.vela(J, x, TY + .05, -1.7, 1));
       // el pedestal: una pieza cada vez
-      K.cil(esc, 2.05, 2.25, SY - .3, 40, new T.MeshStandardMaterial({ color: 0x5a3418, roughness: .45 }), SX, (SY + .3) / 2, -.6); K.cil(esc, 2.6, 2.7, .3, 40, br(0x4a2a14), SX, .15, -.6); K.cil(esc, 2.65, 2.65, .06, 40, oroV, SX, .32, -.6); K.cil(esc, 2.3, 2.3, .12, 40, oroV, SX, SY, -.6); const foco = J.pon(new T.Mesh(new T.PlaneGeometry(7.5, 7.5), new T.MeshBasicMaterial({ map: U.haloT, transparent: true, opacity: .35, depthWrite: false })), SX, SY + 1.7, -2.6);
-      const CARTAS = baraja(PARTES.map(([c, nombre]) => [nombre, c])), PLATOS = baraja([['el jamón', 'e', P.jamon], ['los langostinos', 'e', P.langostinos, 1], ['el pavo', 'p', P.pavo], ['el cochinillo asado', 'p', P.cochinillo], ['los turrones', 'd', P.turrones, 1], ['los polvorones', 'd', P.polvorones, 1], ['los mazapanes', 'd', P.mazapanes, 1]]);
-      const piezas = [], TIT = [], CNT = [];
-      CARTAS.forEach(([txt, c], k) => { const g = new T.Group(), m = new T.Group(); g.add(m); m.userData.capa = k ? 1 : 0; const ct = J.carta(txt, 1.1, '#1f6b4c', '#fff8ea', 480); ct.position.y = 1.2; m.add(ct); const f = J.pieza(g, c, SX, SY + .1, .5, 1.9, 2.2); Object.assign(f.userData, { txt, m, g, e1: 1, carta: 1 }); if (k) { f.visible = false; f.traverse(o => o.layers.set(1)); } piezas.push(f); TIT.push(null); CNT.push(J.pon(J.carta(`El orden · ${k + 1} de 3`, 1, '#b8862b', '#fff8ea'), SX, SY + 4.5, 0)); });
-      PLATOS.forEach(([txt, c, hacer, pl]) => { const g = new T.Group(), m = new T.Group(); g.add(m); m.userData.capa = 1; m.scale.setScalar(.95); const an = hacer(m); const f = J.pieza(g, c, SX, SY + .08, .5, 2, 3); Object.assign(f.userData, { txt, m, an, g, e1: 1, pl }); f.visible = false; f.traverse(o => o.layers.set(1)); piezas.push(f); const ti = J.pon(J.carta(txt, 1.05, '#b3182f', '#fff8ea', 480), SX, SY - 1.5, 3); ti.visible = false; TIT.push(ti); CNT.push(J.pon(J.carta(`Los platos · ${piezas.length - 3} de 7`, 1, '#b8862b', '#fff8ea'), SX, SY + 4.5, 0)); });
-      CNT.forEach((x, i) => { x.visible = !i; });
+      K.cil(esc, 2.05, 2.25, SY - .3, 40, new T.MeshStandardMaterial({ color: 0x5a3418, roughness: .45 }), SX, (SY + .3) / 2, -.6); K.cil(esc, 2.6, 2.7, .3, 40, br(0x4a2a14), SX, .15, -.6); K.cil(esc, 2.65, 2.65, .06, 40, oroV, SX, .32, -.6); K.cil(esc, 2.3, 2.3, .12, 40, oroV, SX, SY, -.6); const foco = J.pon(new T.Mesh(new T.PlaneGeometry(7, 7), new T.MeshBasicMaterial({ map: U.haloT, transparent: true, opacity: .35, depthWrite: false })), SX, SY + 1.7, -2.6);
+      const CARTAS = baraja(PARTES.map(([c, nombre]) => [nombre, c.toUpperCase()])), PLATOS = baraja([['el jamón', 'e', P.jamon], ['los langostinos', 'e', P.langostinos, 1], ['el pavo', 'p', P.pavo], ['el cochinillo asado', 'p', P.cochinillo], ['los turrones', 'd', P.turrones, 1], ['los polvorones', 'd', P.polvorones, 1], ['los mazapanes', 'd', P.mazapanes, 1]]);
+      const piezas = [], TIT = [];
+      CARTAS.forEach(([txt, c], k) => { const g = new T.Group(), m = new T.Group(); g.add(m); m.userData.capa = k ? 1 : 0; const ct = J.carta(txt, 1.15, '#1f6b4c', '#fff8ea', 480); ct.position.y = 1.1; m.add(ct); const f = J.pieza(g, c, SX, SY + .1, .5, 1.9, 2.2); Object.assign(f.userData, { txt, m, g, e1: 1, carta: 1 }); if (k) { f.visible = false; f.traverse(o => o.layers.set(1)); } piezas.push(f); TIT.push(null); });
+      PLATOS.forEach(([txt, c, hacer, pl]) => { const g = new T.Group(), m = new T.Group(); g.add(m); m.userData.capa = 1; m.scale.setScalar(.95); const an = hacer(m); const f = J.pieza(g, c, SX, SY + .08, .5, 2, 3); Object.assign(f.userData, { txt, m, an, g, e1: 1, pl }); f.visible = false; f.traverse(o => o.layers.set(1)); piezas.push(f); const ti = J.pon(J.carta(txt, 1.1, '#b3182f', '#fff8ea', 480), SX, SY - 1.5, 3); ti.visible = false; TIT.push(ti); });
       const HUECO = { e: [[-1.05, .1], [1.05, -.1]], p: [[-1.1, .1], [1.1, -.1]], d: [[-1.35, .35], [0, -.45], [1.35, .35]] };
-      let act = 0, tEnt = 0, tSig = 0, tFin = 0, hecho = 0, cartel = null, fase = 1;
-      animar = (t, dt) => { U.efectos(t, dt);
-        while (ev.q.length) { const [f, q] = ev.q.shift(), u = f.userData; u.q = q; u.t0 = t; q.ok = t; if (u.carta) { q.hueco.visible = false; u.e1 = .92; q.tNum = t; decir(`${q.num0}. ${u.txt}`); } else { u.n = q.n2++; u.e1 = E1; decir(`${cap(u.txt)}: ${q.nombre}.`); }
-          U.estalla(q.x, q.y + (u.carta ? 3 : 1), .4, 0xffe08a, 16, 1.5, 1); if (!u.carta) U.onda(q.x, q.y + .2, .3, 1.8, 0x5fd39a, .6); TIT.forEach(x => { if (x) x.visible = false; }); CNT.forEach(x => { x.visible = false; }); tSig = t + .9; }
-        if (tSig && t > tSig) { tSig = 0; const k = piezas.findIndex(f => !f.userData.fijo); if (k >= 0) { if (k >= 3 && fase === 1) { fase = 2; C.consigna('Ahora, los platos: ¿qué es cada plato? Llévalo a su parte del menú.', 'Maintenant, les plats : qu’est-ce que c’est ? Amène chaque plat dans sa partie du menu.'); C.msg('¡El orden es correcto! Ahora, los platos.', 'bien'); }
-          const f = piezas[k]; act = k; f.visible = true; f.userData.m.userData.capa = 0; f.traverse(o => o.layers.set(0)); if (TIT[k]) TIT[k].visible = true; CNT[k].visible = true; tEnt = t; } }
-        SIT.forEach(q => { if (q.mal) { q.mal = 0; q.tMal = t; } const dm = t - (q.tMal || -9), sh = dm < .5 ? Math.sin(dm * 40) * .15 * (1 - dm * 2) : 0; q.rim.color.set(dm < .5 ? 0xff5a6e : q.ok && t - q.ok < 1 ? 0x5fd39a : 0xe9b949); q.hueco.position.x = q.x + sh; const dn = t - (q.tNum || -9), en = dn < .6 ? U.pop(dn / .6) : 1; q.badge.scale.setScalar(1.3 * (dn < .6 ? .7 + .3 * en : 1)); });
+      const textoPaso = (k) => k < 3 ? banner('Paso 1 de 2 · El orden', '¿Qué se come primero, después y al final?', `Lleva la tarjeta del pedestal a su línea de la carta.<br><i>Tarjeta ${k + 1} de 3</i>`) : banner('Paso 2 de 2 · Los platos', '¿Es un entrante, el plato principal o un postre?', `Lleva el plato a su fuente: 1, 2 o 3.<br><i>Plato ${k - 2} de 7</i>`);
+      textoPaso(0);
+      let act = 0, tEnt = 0, tSig = 0, tFin = 0, hecho = 0, cartel = null, fase = 1, tMalL = -9, malL = -1, tOkL = -9;
+      animar = (t, dt) => { U.efectos(t, dt); luz(t);
+        while (ev.q.length) { const [f, q] = ev.q.shift(), u = f.userData; u.q = q; u.t0 = t; q.ok = t; if (u.carta) { u.e1 = .8; decir(`${q.num0}. ${u.txt}`); } else { u.n = q.n2++; u.e1 = E1; decir(`${cap(u.txt)}: ${q.nombre}.`); U.onda(q.x, q.y + .2, .3, 1.8, 0x5fd39a, .6); }
+          U.estalla(q.x, q.y + (u.carta ? 0 : 1), u.carta ? -5.2 : .4, 0xffe08a, 16, 1.5, 1); TIT.forEach(x => { if (x) x.visible = false; }); tSig = t + 1.1; }
+        // la tarjeta llega a la carta: se escribe en su línea y la fuente recibe su nombre
+        piezas.forEach(f => { const u = f.userData; if (u.carta && u.fijo && !u.oculto && f.position.distanceTo(u.dest) < .35) { u.oculto = 1; f.visible = false; f.traverse(o => o.layers.set(1)); const i = u.q.linea; vals[i] = cap(u.txt); tOkL = t; dibuja(i); SIT[i].rotulo.visible = true; SIT[i].rotulo.userData.t0 = t; } });
+        LINEAS.forEach(q => { if (q.mal) { q.mal = 0; malL = q.linea; tMalL = t; dibuja(-1, malL); } }); if (malL >= 0 && t - tMalL > .6) { malL = -1; dibuja(); } carta.position.x = TX + (t - tMalL < .5 ? Math.sin((t - tMalL) * 40) * .08 : 0);
+        if (tSig && t > tSig) { tSig = 0; const k = piezas.findIndex(f => !f.userData.fijo); if (k >= 0) { if (k >= 3 && fase === 1) { fase = 2; C.msg('¡El menú está en orden! Ahora, los platos.', 'bien'); campana(262, .14); }
+          const f = piezas[k]; act = k; f.visible = true; f.userData.m.userData.capa = 0; f.traverse(o => o.layers.set(0)); if (TIT[k]) TIT[k].visible = true; textoPaso(k); tEnt = t; } }
+        SIT.forEach(q => { if (q.mal) { q.mal = 0; q.tMal = t; } const dm = t - (q.tMal || -9), sh = dm < .5 ? Math.sin(dm * 40) * .15 * (1 - dm * 2) : 0; q.rim.color.set(dm < .5 ? 0xff5a6e : q.ok && t - q.ok < 1 ? 0x5fd39a : 0xe9b949); q.badge.position.x = q.x + sh + (q.rotulo.visible ? .45 - q.rotulo.userData.ancho / 2 - .5 : 0); if (q.rotulo.visible) { const d = t - q.rotulo.userData.t0, e = d < .5 ? U.pop(d / .5) : 1; q.rotulo.scale.set(q.rotulo.userData.ancho * e, q.rotulo.userData.alto * e, 1); } });
         piezas.forEach((f, k) => { const u = f.userData, m = u.m; if (!f.visible) return; if (u.an) u.an(t);
           if (u.fijo && u.q && !u.carta) { const q = u.q, h = HUECO[q.clave][u.n] || [0, 0]; u.dest.set(q.x + h[0], TY + .2, -.3 + h[1]); }
           const ent = k === act && !u.fijo ? U.pop(Math.min(1, (t - tEnt) / .45)) : 1; u.g.scale.setScalar(u.fijo ? u.g.scale.x + (u.e1 - u.g.scale.x) * .15 : ent); const d = u.t0 ? t - u.t0 : 9, sa = d < .7 ? Math.sin(d / .7 * Math.PI) : 0; m.position.y = sa * (u.carta ? .2 : .45) + (u.fijo ? 0 : Math.abs(Math.sin(t * 2.2)) * .08); if (!u.carta) m.rotation.y = (d < .7 ? d / .7 * 6.2832 : 0) + Math.sin(t * 1.1 + k) * (u.fijo ? .1 : .3); });
@@ -1015,84 +1063,68 @@ const J3 = {
         velas.forEach((v, k) => { const s = hecho ? 1.6 : 1; v.f.scale.set(s * (1 + Math.sin(t * 9 + k * 2) * .12), s * (1 + Math.sin(t * 7 + k) * .2), s); });
         foco.material.opacity = hecho ? .15 : .3 + Math.sin(t * 2) * .06;
         if (ev.fin && !tFin) tFin = t + 1.2;
-        if (tFin && t > tFin && !hecho) { hecho = 1; campana(196, .25); cartel = J.carta('¡El menú está listo!', 1.25, '#b8862b', '#fff8ea', 420); cartel.userData.t0 = t; J.pon(cartel, SX, SY + 2.2, 3); SIT.forEach((q, i) => setTimeout(() => U.estalla(q.x, TY + 2, .6, [0xffd66b, 0x5fd39a, 0xff5a6e][i], 24, 2, 1.2), i * 220)); J.terminar(ev.fin[0], ev.fin[1], '¡El menú de Nochebuena está listo!'); }
+        if (tFin && t > tFin && !hecho) { hecho = 1; campana(196, .25); banner('¡Terminado!', 'El menú de Nochebuena está listo.', 'Entrantes, plato principal y postre: ¡a la mesa!'); cartel = J.carta('¡El menú está listo!', 1.25, '#b8862b', '#fff8ea', 420); cartel.userData.t0 = t; J.pon(cartel, SX, SY + 2.2, 3); SIT.forEach((q, i) => setTimeout(() => U.estalla(q.x, TY + 2, .6, [0xffd66b, 0x5fd39a, 0xff5a6e][i], 24, 2, 1.2), i * 220)); J.terminar(ev.fin[0], ev.fin[1], '¡El menú de Nochebuena está listo!'); }
         if (cartel) { const e = U.pop(Math.min(1, (t - cartel.userData.t0) / .6)) * (1 + Math.sin(t * 3) * .02); cartel.scale.set(cartel.userData.ancho * e, cartel.userData.alto * e, 1); } }; } }, fin); },
-  /* ---------- 2. Los intrusos: ¿qué no es de Nochebuena? ---------- */
-  intrusos(fin, plano) { let animar = null; const ev = { q: [] }, cap = (s) => s[0].toUpperCase() + s.slice(1); let errores = 0;
-    juego3D({ plano, modo: 'pantalla', ancho: 27, cam: [0, 8.4, 26, 0, 3.9, 0], fov: 24,
+  /* ---------- 2. Los intrusos: en la mesa hay cosas de OTRAS fiestas; cada una vuelve a su fiesta ---------- */
+  intrusos(fin, plano) { let animar = null; const ev = { q: [] }, cap = (s) => s[0].toUpperCase() + s.slice(1); let errNB = 0, pinta = () => {};
+    juego3D({ plano, modo: 'pantalla', ancho: 24, cam: [0, 10.6, 25, 0, 2.3, 1.2], fov: 26,
+    html: '<div class="b3"><small>Los intrusos</small><b>¿Qué no es de la cena de Nochebuena?</b><span id="b3c"></span></div>',
     anim: (t, dt, J) => animar && animar(t, dt, J),
-    pos: (q) => [q.x, q.y, .5],
+    pos: (q) => [q.x, q.y, q.z],
     bien: (f) => `${cap(f.userData.txt)}: ${f.userData.razon}`,
-    pista: (f, q) => { q.mal = 1; errores++; return `¡No! ${cap(f.userData.txt)} ${f.userData.pl ? 'son' : 'es'} de Nochebuena: ${f.userData.pl ? 'se quedan' : 'se queda'} en la mesa.`; },
+    pista: (f, q) => { q.mal = 1; const u = f.userData; if (u.clave === '-') { errNB++; pinta(); return `¡No! ${cap(u.txt)} ${u.pl ? 'son' : 'es'} de Nochebuena: ${u.pl ? 'se quedan' : 'se queda'} en la mesa.`; } return `No: ${u.txt} no ${u.pl ? 'son' : 'es'} de esta fiesta. Piensa en la fecha.`; },
     alColocar: (f, q) => { ev.q.push([f, q]); },
-    alTerminar: (J, ok, tot) => { ev.fin = 1; },
-    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), P = J3.platos(J), TX = -2.7, TY = 2.4, BX = 9.9, E = .72;
-      C.consigna('¿Qué no es de Nochebuena? Encuentra los tres intrusos y llévalos a la caja.', 'Qu’est-ce qui n’est pas du réveillon de Noël ? Trouve les trois intrus et mets-les dans la caisse.');
-      C.glosa('<b>un intruso</b> : un intrus · <b>la caja</b> : la caisse<br>Piensa en las otras fiestas: Nochevieja, el Día de Reyes… ¡y Francia!<br>Atención: cada error cuenta.');
-      J3.salon(J, U, TX, TY, 19.8, 3.6);
-      const velas = [-8.8, -4.4, 0, 4.4, 8.8].map(x => J3.vela(J, TX + x, TY + .05, -1.85, .85));
-      // la caja de los intrusos
-      const madera = new T.MeshStandardMaterial({ color: 0x9a6a3c, roughness: .8 }), rim = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35 }); K.caja(esc, 3.6, 1.5, 2.4, madera, BX, .75, 0); [-.45, .05, .55].forEach(y => K.caja(esc, 3.66, .1, 2.46, new T.MeshStandardMaterial({ color: 0x6b4526, roughness: .8 }), BX, y + .5, 0)); K.caja(esc, 3.3, .06, 2.1, new T.MeshStandardMaterial({ color: 0x3a2010, roughness: .9 }), BX, 1.47, 0); K.caja(esc, 3.72, .08, 2.52, rim, BX, 1.52, 0);
-      const letrero = J.pon(J.carta('No es de Nochebuena', 1.1, '#b3182f', '#fff8ea', 300), BX, 7.6, 0);
-      const caja = Object.assign(J.sitio('x', BX, 2.3, 0, 2.5, 1, 2.2), { n2: 0 });
-      const ITEMS = baraja([['el jamón', '-', P.jamon], ['los langostinos', '-', P.langostinos, 1], ['el pavo', '-', P.pavo], ['el cochinillo asado', '-', P.cochinillo], ['los turrones', '-', P.turrones, 1], ['los mazapanes', '-', P.mazapanes, 1],
-        ['las doce uvas', 'x', P.uvas, 1, 'son de Nochevieja, el 31 de diciembre.', 'Nochevieja (31/12)'], ['el roscón de Reyes', 'x', P.roscon, 0, 'es del Día de Reyes, el 6 de enero.', 'Día de Reyes (6/1)'], ['la «bûche»', 'x', P.buche, 0, 'es un postre francés.', 'un postre francés']]);
-      const piezas = ITEMS.map(([txt, c, hacer, pl, razon, corto], k) => { const x = TX + (k - 4) * 2.2, g = new T.Group(), m = new T.Group(); g.add(m); m.userData.capa = 0; m.scale.setScalar(E); const an = hacer(m); const f = J.pieza(g, c, x, TY + .07, -.4, 1.1, 2.2); const et = J.pon(J.carta(txt, .72, '#7a5a2a', '#fff8ea', 260), x, TY - .6, 2.1); Object.assign(f.userData, { txt, m, an, g, pl, razon, corto, et, k }); return f; });
-      let tFin = 0, hecho = 0, cartel = null; const notas = [];
-      animar = (t, dt) => { U.efectos(t, dt);
-        while (ev.q.length) { const [f, q] = ev.q.shift(), u = f.userData; u.n = q.n2++; u.t0 = t; q.ok = t; decir(`${cap(u.txt)} ${u.razon}`); C.msg(`${cap(u.txt)} ${u.razon}`, 'bien'); u.et.visible = false; U.estalla(BX, 2.6, .4, 0xffe08a, 16, 1.5, 1); const no = J.carta(`${u.txt}: ${u.corto}`, .72, '#1f6b4c', '#fff8ea', 420); no.userData.t0 = t; J.pon(no, BX, 6.3 - notas.length * 1.05, 0); notas.push(no); }
-        if (caja.mal) { caja.mal = 0; caja.tMal = t; } const dm = t - (caja.tMal || -9); rim.color.set(dm < .5 ? 0xff5a6e : caja.ok && t - caja.ok < 1 ? 0x5fd39a : 0xe9b949); letrero.position.x = BX + (dm < .5 ? Math.sin(dm * 40) * .15 * (1 - dm * 2) : 0);
-        piezas.forEach((f) => { const u = f.userData, m = u.m; if (u.an) u.an(t); if (u.fijo) u.dest.set(BX + (u.n - 1) * 1.05, 1.6, -.1 + (u.n % 2) * .3); u.g.scale.setScalar(u.fijo ? u.g.scale.x + (.7 - u.g.scale.x) * .15 : 1); const d = u.t0 ? t - u.t0 : 9, sa = d < .7 ? Math.sin(d / .7 * Math.PI) : 0; m.position.y = sa * .3; m.rotation.y = (d < .7 ? d / .7 * 6.2832 : 0) + Math.sin(t * 1.1 + u.k) * .12; });
-        notas.forEach(n => { const d = t - n.userData.t0, e = d < .5 ? U.pop(d / .5) : 1; n.scale.set(n.userData.ancho * e, n.userData.alto * e, 1); });
+    alTerminar: (J, ok, tot) => { ev.fin = [ok, tot]; },
+    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), P = J3.platos(J), luz = J3.comedor(J, U, 9.8), TX = 0, TY = 2.4, E = .56;
+      C.consigna('En la mesa de Nochebuena hay intrusos: cosas de otras fiestas. Lleva cada intruso a su fiesta.', 'Sur la table du réveillon, il y a des intrus : des choses d’autres fêtes. Amène chaque intrus dans sa fête.');
+      C.glosa('<b>un intruso</b> : un intrus · <b>el décimo</b> : le billet de loterie · <b>los caramelos</b> : les bonbons<br>Lo que es de Nochebuena se queda en la mesa. Atención: cada error cuenta.');
+      J3.salon(J, U, TX, TY, 21.6, 3.4);
+      const velas = [-7.7, 0, 7.7].map(x => J3.vela(J, TX + x, TY + .05, -1.75, .85));
+      // las cuatro fiestas: cajas en el suelo, delante de la mesa
+      const FIESTAS = [['g', '22 dic. · El Gordo', 0x8f1526], ['v', '31 dic. · Nochevieja', 0x1f4a7a], ['r', '5 y 6 ene. · Los Reyes', 0x6a45a8], ['f', 'Francia', 0x0055a4]];
+      const CAJ = FIESTAS.map(([c, txt, col], i) => { const x = (i - 1.5) * 5.4, rim = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35 }); const cm = new T.MeshStandardMaterial({ color: col, roughness: .6 }); K.caja(esc, 4.2, .12, 2, cm, x, .06, 4.8); [[0, -.95, 4.2, .1], [0, .95, 4.2, .1]].forEach(([dx, dz, w, d]) => K.caja(esc, w, .9, d, cm, x + dx, .45, 4.8 + dz)); [-2.05, 2.05].forEach(dx => K.caja(esc, .1, .9, 2, cm, x + dx, .45, 4.8)); K.caja(esc, 4, .04, 1.8, new T.MeshStandardMaterial({ color: 0x2a1410, roughness: .9 }), x, .14, 4.8); [[0, -1, 4.3, .12], [0, 1, 4.3, .12]].forEach(([dx, dz, w, d]) => K.caja(esc, w, .08, d, rim, x + dx, .93, 4.8 + dz)); [-2.1, 2.1].forEach(dx => K.caja(esc, .12, .08, 2.1, rim, x + dx, .93, 4.8));
+        const et = J.pon(J.carta(txt, .85, '#3a1410', '#fff8ea', 420), x, .55, 6.05); return Object.assign(J.sitio(c, x, 1.4, 4.8, 2.2, 1, 1.3), { rim, et, n2: 0, x0: x }); });
+      const NB = baraja([['el jamón', P.jamon], ['los langostinos', P.langostinos, 1], ['el pavo', P.pavo], ['el cochinillo asado', P.cochinillo], ['los turrones', P.turrones, 1], ['los polvorones', P.polvorones, 1], ['los mazapanes', P.mazapanes, 1]]).slice(0, 6).map(([txt, h, pl]) => [txt, '-', h, pl]);
+      const INT = [['las doce uvas', 'v', P.uvas, 1, 'Nochevieja, el 31 de diciembre.'], ['el décimo de lotería', 'g', P.decimo, 0, 'el sorteo del Gordo, el 22 de diciembre.'], ['el roscón de Reyes', 'r', P.roscon, 0, 'el Día de Reyes, el 6 de enero.'], ['los caramelos', 'r', P.caramelos, 1, 'la cabalgata de Reyes, el 5 de enero.'], ['la carta a los Reyes Magos', 'r', P.carta, 0, 'los niños la escriben antes del 6 de enero.'], ['la «bûche»', 'f', P.buche, 0, 'un postre francés.']];
+      const ITEMS = baraja(NB.concat(INT)), halla = [];
+      pinta = () => { $('#b3c').innerHTML = `Lleva cada intruso a la caja de su fiesta.<br><i>Intrusos: ${halla.length} / ${INT.length} · Errores: ${errNB}</i>`; };
+      const piezas = ITEMS.map(([txt, c, hacer, pl, razon], k) => { const x = TX + (k - 5.5) * 1.78, g = new T.Group(), m = new T.Group(); g.add(m); m.userData.capa = 0; m.scale.setScalar(E); const an = hacer(m); const f = J.pieza(g, c, x, TY + .07, -.5, .85, 1.8); const et = J.pon(J.carta(txt, .6, '#7a5a2a', '#fff8ea', 230), x, TY - .62, 1.95); Object.assign(f.userData, { txt, m, an, g, pl, razon, et, k }); return f; });
+      pinta();
+      const HUECO = [[-1.1, 0], [1.1, 0], [0, .45]];
+      let tFin = 0, hecho = 0, cartel = null;
+      animar = (t, dt) => { U.efectos(t, dt); luz(t);
+        while (ev.q.length) { const [f, q] = ev.q.shift(), u = f.userData; u.n = q.n2++; u.t0 = t; q.ok = t; decir(`${cap(u.txt)}: ${u.razon}`); u.et.visible = false; halla.push(u.txt); pinta(); U.estalla(q.x, 1.8, 4.8, 0xffe08a, 16, 1.4, 1); }
+        CAJ.forEach(q => { if (q.mal) { q.mal = 0; q.tMal = t; } const dm = t - (q.tMal || -9); q.rim.color.set(dm < .5 ? 0xff5a6e : q.ok && t - q.ok < 1 ? 0x5fd39a : 0xe9b949); q.et.position.x = q.x0 + (dm < .5 ? Math.sin(dm * 40) * .12 * (1 - dm * 2) : 0); });
+        piezas.forEach((f) => { const u = f.userData, m = u.m; if (u.an) u.an(t); if (u.fijo && u.q) { const h = HUECO[u.n] || [0, 0]; u.dest.set(u.q.x + h[0], .2, 4.6 + h[1]); } u.g.scale.setScalar(u.fijo ? u.g.scale.x + (.9 - u.g.scale.x) * .15 : 1); const d = u.t0 ? t - u.t0 : 9, sa = d < .7 ? Math.sin(d / .7 * Math.PI) : 0; m.position.y = sa * .3; m.rotation.y = (d < .7 ? d / .7 * 6.2832 : 0) + Math.sin(t * 1.1 + u.k) * .1; });
         velas.forEach((v, k) => { const s = hecho ? 1.6 : 1; v.f.scale.set(s * (1 + Math.sin(t * 9 + k * 2) * .12), s * (1 + Math.sin(t * 7 + k) * .2), s); });
         if (ev.fin && !tFin) tFin = t + 1.4;
-        if (tFin && t > tFin && !hecho) { hecho = 1; campana(196, .25); cartel = J.carta('¡La mesa de Nochebuena está lista!', 1.2, '#b8862b', '#fff8ea', 760); cartel.userData.t0 = t; J.pon(cartel, TX, 6.6, 1); [-6, 0, 6].forEach((x, i) => setTimeout(() => U.estalla(TX + x, TY + 2.4, .6, [0xffd66b, 0x5fd39a, 0xff5a6e][i], 24, 2, 1.2), i * 220)); const ok = Math.max(0, 3 - errores); J.terminar(ok, 3, errores ? `Mesa lista · ${errores} ${errores > 1 ? 'errores' : 'error'}.` : '¡Perfecto: sin errores!'); }
+        if (tFin && t > tFin && !hecho) { hecho = 1; campana(196, .25); cartel = J.carta('¡La mesa de Nochebuena está lista!', 1.1, '#b8862b', '#fff8ea', 760); cartel.userData.t0 = t; J.pon(cartel, TX, 5.4, 0); const ok = Math.max(0, ev.fin[0] - errNB); J.terminar(ok, INT.length, errNB ? `Mesa lista · ${errNB} ${errNB > 1 ? 'errores' : 'error'} con los platos de Nochebuena.` : '¡Mesa lista!'); }
         if (cartel) { const e = U.pop(Math.min(1, (t - cartel.userData.t0) / .6)) * (1 + Math.sin(t * 3) * .02); cartel.scale.set(cartel.userData.ancho * e, cartel.userData.alto * e, 1); } }; } }, fin); },
-  /* ---------- 3. Soler, gustar y encantar: la familia a la mesa ----------
-     Cada frase habla de una persona de la mesa. El alumno construye el verbo con DOS piezas:
-     soler → raíz (sol- / suel-) + terminación; gustar/encantar → pronombre + forma del verbo (12 combinaciones). */
-  conjuga(fin, plano) { let anim = null; juego3D({ plano, modo: 'pantalla', ancho: 21, cam: [0, 7.2, 24, 0, 2.9, 0], fov: 24, anim: (t, dt) => anim && anim(t, dt),
-    html: '<div id="fr3" class="fr3"><small id="ct3"></small><p id="fs3"></p></div>',
-    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), P = J3.platos(J), TY = 2.3;
-      C.consigna('Construye el verbo con dos piezas y comprueba. Mira bien quién es el sujeto.', 'Construis le verbe avec deux pièces et vérifie. Regarde bien qui est le sujet.');
-      C.glosa('<b>soler</b> : suelo, sueles, suele, solemos, soléis, suelen<br><b>gustar / encantar</b> : me, te, le, nos, os, les + gusta (singular) / gustan (plural)<br>Haz clic en una pieza de cada bandeja y después en «Comprobar».');
-      J3.salon(J, U, 0, TY, 19, 3.4);
-      // la familia, detrás de la mesa
-      const pelo = (k, col, moño) => { const m = new T.MeshStandardMaterial({ color: col, roughness: .9 }); K.pon(k, new T.SphereGeometry(.33, 18, 14), m, 0, 1.67, -.07).scale.set(1.02, .96, .92); if (moño) K.bola(k, .16, m, 0, 1.78, -.3); };
-      const GENTE = { yo: [-7.2, M.azul, M.piel, 0x5d3718], tu: [-4.3, M.verde2, M.piel2, 0x17100b], abuela: [-1.4, M.violeta, M.piel, 0xdedede, 1], tio: [1.6, M.rojo, M.piel, 0x3a2a1a, 0, 1], tia: [4.3, new T.MeshStandardMaterial({ color: 0xe08a2c, roughness: .6 }), M.piel, 0x8a4a1c, 1], primo: [7.2, M.pardo, M.piel2, 0x2a1a10] };
-      const pers = {}; Object.entries(GENTE).forEach(([id, [x, capa, piel, pc, moño, barba]]) => { const g = new T.Group(); g.position.set(x, .9, -1.9); esc.add(g); const r = K.persona(g, capa, piel, barba ? 0x3a2a1a : null, 0); r.k.scale.setScalar(1.45); pelo(r.k, pc, moño); const halo = J.pon(new T.Mesh(new T.PlaneGeometry(4, 4), new T.MeshBasicMaterial({ map: U.haloT, transparent: true, opacity: 0, depthWrite: false })), x, 3.4, -2.6); pers[id] = { g, r, halo, x, sel: 0, t0: -9 }; });
-      [['yo', -7.2], ['tú', -4.3], ['mi abuela', -1.4], ['mis tíos', 2.95], ['mi primo', 7.2]].forEach(([t, x]) => J.pon(J.carta(t, .9, '#7a5a2a', '#fff8ea'), x, 4.55, -1.9));
-      // platos en la mesa y diez velas: una se enciende con cada frase correcta
-      [[-5.8, P.turrones], [0, P.pavo], [5.8, P.polvorones]].forEach(([x, h]) => { const g = new T.Group(); g.position.set(x, TY + .06, -.6); g.scale.setScalar(.5); esc.add(g); h(g); });
-      const velas = [...Array(10)].map((_, k) => { const v = J3.vela(J, -8.1 + k * 1.8, TY + .05, .95, .5); v.f.visible = false; return v; });
-      // las dos bandejas de piezas, delante
-      const bandeja = (x, w) => { K.caja(esc, w, .16, 1.5, new T.MeshStandardMaterial({ color: 0x5a3418, roughness: .6 }), x, -.35, 4.2); K.caja(esc, w + .1, .06, 1.6, new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35 }), x, -.25, 4.2); };
-      bandeja(-4.6, 6.6); bandeja(4.6, 6.6);
-      const titulos = { s: [J.pon(J.carta('1 · La raíz', .9, '#b8862b', '#fff8ea'), -4.6, 1.45, 4.2), J.pon(J.carta('2 · La terminación', .9, '#b8862b', '#fff8ea'), 4.6, 1.45, 4.2)], g: [J.pon(J.carta('1 · El pronombre', .9, '#b8862b', '#fff8ea'), -4.6, 1.45, 4.2), J.pon(J.carta('2 · El verbo', .9, '#b8862b', '#fff8ea'), 4.6, 1.45, 4.2)] };
-      const ver = (o, si) => { o.visible = si; o.traverse(n => n.layers.set(si ? 0 : 1)); };
-      const ficha = (txt, x, lado, val) => { const g = new T.Group(); g.position.set(x, .45, 4.2); esc.add(g); const c = J.carta(txt, 1, '#1f6b4c', '#fff8ea', 200); g.add(c); const h = new T.Mesh(new T.BoxGeometry(c.userData.ancho + .1, c.userData.alto + .2, .2), new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })); g.add(h); g.userData = { c, lado, val, sel: 0, t0: -9 }; J.clic(g, () => elegir(g)); return g; };
-      const fila = (arr, lado) => arr.map((t, i) => ficha(t, (lado ? 4.6 : -4.6) + (i - (arr.length - 1) / 2) * (arr.length > 2 ? 1.12 : 2), lado, t.replace(/-/g, '')));
-      const FI = { s: [fila(['sol-', 'suel-'], 0), fila(['-o', '-es', '-e', '-emos', '-éis', '-en'], 1)], g: [fila(['me', 'te', 'le', 'nos', 'os', 'les'], 0)], gustar: fila(['gusta', 'gustan'], 1), encantar: fila(['encanta', 'encantan'], 1) };
-      const todas = [...FI.s[0], ...FI.s[1], ...FI.g[0], ...FI.gustar, ...FI.encantar]; todas.forEach(o => ver(o, false)); Object.values(titulos).flat().forEach(o => ver(o, false));
-      const F = baraja(FRASES_CENA.filter(f => f.t === 's')).concat(baraja(FRASES_CENA.filter(f => f.t === 'g')).slice(0, 4)); const cola = baraja(F), tot = cola.length;
-      let act = null, sel = [null, null], ok = 0, hechas = 0, fallo = false, listo = false;
-      const pinta = (estado) => { const a = act, s0 = sel[0] ? sel[0].userData.val : '', s1 = sel[1] ? sel[1].userData.val : ''; const sl = (v, k) => `<span class="slot ${estado ? estado[k] : ''}">${v || '&nbsp;'}</span>`;
-        $('#fs3').innerHTML = a.f.replace('___', a.t === 's' ? `<span class="verbo">${sl(s0, 0)}${sl(s1, 1)}</span>` : `${sl(s0, 0)} ${sl(s1, 1)}`) + (a.t === 'g' ? ` <em>(${a.v})</em>` : ''); };
-      const elegir = (g) => { if (!act || listo) return; const u = g.userData; if (sel[u.lado]) sel[u.lado].userData.sel = 0; sel[u.lado] = g; u.sel = 1; u.t0 = clock(); clic(u.lado); pinta(); };
-      let tA = 0; const clock = () => tA;
-      const sig = () => { todas.forEach(o => { o.userData.sel = 0; ver(o, false); }); Object.values(titulos).flat().forEach(o => ver(o, false)); Object.values(pers).forEach(p => { p.sel = 0; });
-        if (!cola.length) { $('#fs3').textContent = ''; $('#ct3').textContent = ''; C.boton('', null); return J.terminar(ok, tot, `${ok} / ${tot} a la primera.`); }
-        act = cola.shift(); sel = [null, null]; fallo = false; listo = false; $('#ct3').textContent = `Frase ${hechas + 1} de ${tot}`; titulos[act.t].forEach(o => ver(o, true)); (act.t === 's' ? FI.s.flat() : FI.g[0].concat(FI[act.v])).forEach(o => ver(o, true)); act.p.forEach(id => { pers[id].sel = 1; }); pinta(); C.msg('Elige una pieza en cada bandeja.', '');
-        C.boton('Comprobar', comprobar); };
-      const comprobar = () => { if (!act || listo) return; if (!sel[0] || !sel[1]) return C.msg('Elige una pieza en cada bandeja.', 'mal'); const a = act, b0 = sel[0].userData.val === a.r[0], b1 = sel[1].userData.val === a.r[1];
-        if (b0 && b1) { listo = true; if (!fallo) ok++; hechas++; pinta(['ok', 'ok']); bien(); const fr = a.f.replace('___', a.t === 's' ? a.r[0] + a.r[1] : a.r[0] + ' ' + a.r[1]); decir(fr); C.msg('¡Muy bien! ' + fr, 'bien'); C.boton('', null); a.p.forEach(id => { pers[id].t0 = tA; U.estalla(pers[id].x, 4, -1.5, 0xffe08a, 14, 1.4, 1); }); velas[hechas - 1].f.visible = true; U.estalla(-8.1 + (hechas - 1) * 1.8, TY + 1.4, 1, 0xffd66b, 10, .9, .8); setTimeout(sig, 1900); return; }
-        fallo = true; mal(); pinta([b0 ? 'ok' : 'mal', b1 ? 'ok' : 'mal']); if (!b0) { sel[0].userData.sel = 0; sel[0].userData.tMal = tA; sel[0] = null; } if (!b1) { sel[1].userData.sel = 0; sel[1].userData.tMal = tA; sel[1] = null; }
-        C.msg(a.t === 's' ? (!b0 ? 'Mira la raíz: ¿«o» o «ue»? Pista: nosotros y vosotros no cambian.' : 'Mira la terminación: ¿quién es el sujeto?') : (!b0 ? 'Mira el pronombre: ¿a quién le gusta?' : '¿Singular o plural? Mira lo que va después del verbo.'), 'mal'); setTimeout(() => { if (act === a && !listo) pinta(); }, 1400); };
-      anim = (t, dt) => { tA = t; U.efectos(t, dt);
-        Object.values(pers).forEach((p, i) => { const d = t - p.t0, sa = d < .8 ? Math.sin(d / .8 * Math.PI) : 0; p.g.position.y = .9 + sa * .5; p.halo.material.opacity += ((p.sel ? .55 : 0) - p.halo.material.opacity) * .1; p.r.bd.rotation.z = d < 1.2 ? 2.6 : p.sel ? .6 + Math.sin(t * 4 + i) * .4 : .25; p.r.bi.rotation.z = d < 1.2 ? -2.6 : -.25; p.r.k.rotation.y = Math.sin(t * .7 + i) * .15; });
-        todas.forEach(g => { if (!g.visible) return; const u = g.userData, dm = t - (u.tMal || -9), sh = dm < .5 ? Math.sin(dm * 40) * .12 * (1 - dm * 2) : 0; g.position.y += ((u.sel ? .85 : .45) - g.position.y) * .2; g.position.x += sh * .3; const e = u.sel ? 1.12 : 1; u.c.scale.set(u.c.userData.ancho * e, u.c.userData.alto * e, 1); u.c.material.color.set(u.sel ? 0xffe9a6 : dm < .5 ? 0xffb0b8 : 0xffffff); });
-        velas.forEach((v, k) => { if (v.f.visible) v.f.scale.set(1 + Math.sin(t * 9 + k * 2) * .12, 1 + Math.sin(t * 7 + k) * .2, 1); }); };
-      C.tabla.__gr = { elegir: (lado, val) => { const g = todas.find(o => o.visible && o.userData.lado === lado && o.userData.val === val); if (g) elegir(g); }, sol: () => act && act.r, comprobar, donde: (lado, val) => { const g = todas.find(o => o.visible && o.userData.lado === lado && o.userData.val === val); return g && [g.position.x, g.position.y, g.position.z]; } };
+  /* ---------- 3. Soler, gustar y encantar: cuatro platos, una sola forma correcta ----------
+     La frase arriba; en la mesa, cuatro platos con una forma del verbo cada uno. Un clic en el plato correcto. */
+  conjuga(fin, plano) { let anim = null; juego3D({ plano, modo: 'pantalla', ancho: 17.5, cam: [0, 7.6, 18.5, 0, 2.8, 0], fov: 28, anim: (t, dt) => anim && anim(t, dt),
+    html: '<div class="fr3"><div class="frc"><small id="ct3"></small><p id="fs3"></p><div class="pts3" id="pt3"></div></div></div>',
+    montar(J) { const { K, M, T, esc } = J, U = J3.reyesKit(J), P = J3.platos(J), luz = J3.comedor(J, U, 9), TY = 2.3;
+      C.consigna('Lee la frase y haz clic en el plato con la forma correcta del verbo.', 'Lis la phrase et clique sur l’assiette avec la bonne forme du verbe.');
+      C.glosa('<b>soler</b> : suelo, sueles, suele, solemos, soléis, suelen<br><b>gustar / encantar</b> : me, te, le, nos, os, les + gusta (singular) / gustan (plural)<br>Mira bien el sujeto: ¿quién?');
+      J3.salon(J, U, 0, TY, 15.5, 3.6);
+      [[0, P.pavo, .5], [-4.6, P.turrones, .42], [4.6, P.polvorones, .42]].forEach(([x, h, e]) => { const g = new T.Group(); g.position.set(x, TY + .06, -1.45); g.scale.setScalar(e); esc.add(g); h(g); });
+      const velas = [-6.9, 6.9].map(x => J3.vela(J, x, TY + .05, -1.2, .85));
+      const platos = [-5.4, -1.8, 1.8, 5.4].map((x, i) => { const g = new T.Group(); g.position.set(x, TY + .08, .55); esc.add(g); const rim = new T.MeshStandardMaterial({ color: 0xe9b949, metalness: .5, roughness: .35 }); K.cil(g, 1.45, 1.25, .1, 36, new T.MeshStandardMaterial({ color: 0xfffaf0, roughness: .3 }), 0, .05, 0); K.pon(g, new T.TorusGeometry(1.45, .06, 8, 40), rim, 0, .11, 0).rotation.x = Math.PI / 2; const hit = new T.Mesh(new T.CylinderGeometry(1.5, 1.5, 2.6, 16), new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })); hit.position.y = 1.2; g.add(hit); J.clic(g, () => elegir(i)); return { g, rim, x, carta: null, val: '', off: 0, tMal: -9, tOk: -9 }; });
+      const cola = baraja(baraja(FRASES_CENA.filter(f => f.t === 's')).concat(baraja(FRASES_CENA.filter(f => f.t === 'g')).slice(0, 4))), tot = cola.length; let act = null, ok = 0, hechas = 0, fallo = false, listo = false, tA = 0, tNew = 0;
+      $('#pt3').innerHTML = cola.map(() => '<i></i>').join('');
+      const pinta = (v, cls) => { $('#fs3').innerHTML = act.f.replace('___', `<span class="slot ${cls || ''}">${v || '&nbsp;'}</span>`); };
+      const sig = () => { if (!cola.length) { $('#fs3').textContent = '¡Muy bien! La cena puede empezar.'; $('#ct3').textContent = 'Terminado'; platos.forEach(p => { if (p.carta) p.carta.visible = false; }); return J.terminar(ok, tot, `${ok} / ${tot} a la primera.`); }
+        act = cola.shift(); fallo = false; listo = false; $('#ct3').textContent = `Frase ${hechas + 1} de ${tot}`; pinta(); const ops = baraja([act.ok, ...act.o]);
+        platos.forEach((p, i) => { if (p.carta) esc.remove(p.carta); p.val = ops[i]; p.off = 0; p.tOk = -9; p.carta = J.pon(J.carta(ops[i], 1.2, '#1f6b4c', '#fff8ea', 320), p.x, TY + 1.3, .65); p.carta.material.transparent = true; }); tNew = tA; C.msg('Haz clic en el plato con la forma correcta.', ''); };
+      const pista = (a, v) => { if (a.t === 's') { const r = (x) => x.startsWith('suel') ? 'suel' : 'sol'; if (r(v) !== r(a.ok)) return a.ok.startsWith('suel') ? `Pista: ${a.e}. Aquí la raíz cambia: «suel-».` : `Pista: ${a.e}. Con nosotros y vosotros, la raíz no cambia: «sol-».`; return `Pista: ${a.e}. Mira la terminación.`; }
+        return v.split(' ')[0] !== a.ok.split(' ')[0] ? `Pista: ${a.e}. Mira el pronombre.` : '¿Singular o plural? Mira lo que va después del verbo.'; };
+      const elegir = (i) => { if (!act || listo) return; const p = platos[i]; if (p.off) return;
+        if (p.val === act.ok) { listo = true; if (!fallo) ok++; $$('#pt3 i')[hechas].className = fallo ? 'med' : 'si'; hechas++; p.tOk = tA; pinta(act.ok, 'ok'); bien(); const fr = act.f.replace('___', act.ok); decir(fr); C.msg('¡Muy bien! ' + fr, 'bien'); U.estalla(p.x, TY + 1.6, 1, 0xffe08a, 14, 1.2, .9); setTimeout(sig, 1700); }
+        else { fallo = true; p.off = 1; p.tMal = tA; mal(); pinta(p.val, 'mal'); C.msg(pista(act, p.val), 'mal'); setTimeout(() => { if (!listo && act) pinta(); }, 1300); } };
+      anim = (t, dt) => { tA = t; U.efectos(t, dt); luz(t); velas.forEach((v, k) => v.f.scale.set(1 + Math.sin(t * 9 + k * 2) * .12, 1 + Math.sin(t * 7 + k) * .2, 1));
+        platos.forEach(p => { const dm = t - p.tMal, dk = t - p.tOk, sh = dm < .5 ? Math.sin(dm * 40) * .12 * (1 - dm * 2) : 0; p.rim.color.set(dm < .6 ? 0xff5a6e : dk < 1.7 ? 0x5fd39a : 0xe9b949); if (!p.carta) return; const de = t - tNew, e = (de < .45 ? U.pop(de / .45) : 1) * (dk < 1.7 ? 1.12 : 1); p.carta.scale.set(p.carta.userData.ancho * e, p.carta.userData.alto * e, 1); p.carta.position.set(p.x + sh, TY + 1.3 + (dk < 1.7 ? Math.min(1, dk / .4) * .3 : 0), .65); p.carta.material.opacity = p.off ? .35 : 1; }); };
+      C.tabla.__gr = { sol: () => act && act.ok, ops: () => platos.map(p => p.val), elegir, donde: (i) => [platos[i].x, TY + 1.3, .65] };
       sig(); } }, fin); },
   /* ---------- El belén: cada figura en su sitio ---------- */
   belen(fin, plano) { let animar = null, fiesta = null; juego3D({ plano, ancho: 29.5, cam: [0, 11.6, 20.6, 0, .4, 2.9], fov: 36, anim: (t, dt) => animar && animar(t, dt),
@@ -1451,21 +1483,21 @@ const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', '
 const CAMPANA = '<svg viewBox="0 0 60 70"><path d="M30 6a5 5 0 0 1 5 5c11 4 14 14 14 26 0 8 3 12 7 16H4c4-4 7-8 7-16 0-12 3-22 14-26a5 5 0 0 1 5-5z"/><circle cx="30" cy="60" r="6"/></svg>';
 function reyFig(piel, pelo, capa) { return `<svg viewBox="0 0 150 190"><circle cx="75" cy="52" r="15" fill="${piel}"/><path d="M60 52q15 40 30 0q-5 9-15 9t-15-9z" fill="${pelo}" stroke="#17362a" stroke-width="1.5"/><path d="M59 44l-3-20 9 9 10-15 10 15 9-9-3 20z" fill="url(#gOro)"/><path d="M47 150l10-76q18-12 36 0l10 76z" fill="${capa}"/><path d="M68 76h14v74h-14z" fill="url(#gOro)" opacity=".9"/><path d="M14 150h122l-8 22h-106z" fill="url(#gRojo)"/><circle cx="42" cy="176" r="10" fill="#2a2f45" stroke="url(#gOro)" stroke-width="3"/><circle cx="108" cy="176" r="10" fill="#2a2f45" stroke="url(#gOro)" stroke-width="3"/>${[24, 44, 64, 86, 106, 126].map((x, i) => `<circle cx="${x}" cy="160" r="4" fill="${i % 2 ? '#ffd66b' : '#fff8ea'}"/>`).join('')}</svg>`; }
 const ESFERA = (extra) => `<circle cx="50" cy="50" r="45" fill="#fffaf0" stroke="url(#gOro)" stroke-width="6"/>${[...Array(12)].map((_, k) => `<path d="M50 10v7" stroke="#1d4d3a" stroke-width="3" transform="rotate(${k * 30} 50 50)"/>`).join('')}<path d="M50 50V26M50 50V17" stroke="#a4142c" stroke-width="4" stroke-linecap="round"/>${extra}`;
-/* Frases de la cena: soler (raíz + terminación) y gustar / encantar (pronombre + forma). p = personas de la mesa */
+/* Frases de la cena: la forma correcta (ok), tres formas parecidas (o) y una pista sobre el sujeto (e) */
 const FRASES_CENA = [
-  { t: 's', f: 'Yo ___ poner la mesa con mi madre.', r: ['suel', 'o'], p: ['yo'] },
-  { t: 's', f: '¿Tú ___ cantar villancicos?', r: ['suel', 'es'], p: ['tu'] },
-  { t: 's', f: 'Mi abuela ___ preparar el pavo.', r: ['suel', 'e'], p: ['abuela'] },
-  { t: 's', f: 'Nosotros ___ cenar a las diez.', r: ['sol', 'emos'], p: ['yo', 'abuela', 'tio', 'tia', 'primo'] },
-  { t: 's', f: '¿Vosotros ___ comer turrón?', r: ['sol', 'éis'], p: ['tu', 'primo'] },
-  { t: 's', f: 'Mis tíos ___ traer los polvorones.', r: ['suel', 'en'], p: ['tio', 'tia'] },
-  { t: 'g', v: 'gustar', f: 'A mi abuela ___ los mazapanes.', r: ['le', 'gustan'], p: ['abuela'] },
-  { t: 'g', v: 'encantar', f: 'A nosotros ___ cenar en familia.', r: ['nos', 'encanta'], p: ['yo', 'abuela', 'tio', 'tia', 'primo'] },
-  { t: 'g', v: 'gustar', f: '¿A ti ___ el turrón?', r: ['te', 'gusta'], p: ['tu'] },
-  { t: 'g', v: 'encantar', f: 'A mis tíos ___ las recetas navideñas.', r: ['les', 'encantan'], p: ['tio', 'tia'] },
-  { t: 'g', v: 'encantar', f: 'A mí ___ la Nochebuena.', r: ['me', 'encanta'], p: ['yo'] },
-  { t: 'g', v: 'gustar', f: 'A mi primo ___ los langostinos.', r: ['le', 'gustan'], p: ['primo'] },
-  { t: 'g', v: 'gustar', f: '¿A vosotros ___ los villancicos?', r: ['os', 'gustan'], p: ['tu', 'primo'] }];
+  { t: 's', f: 'Yo ___ poner la mesa con mi madre.', ok: 'suelo', o: ['sueles', 'suele', 'solemos'], e: 'el sujeto es «yo»' },
+  { t: 's', f: '¿Tú ___ cantar villancicos?', ok: 'sueles', o: ['suele', 'soles', 'suelen'], e: 'el sujeto es «tú»' },
+  { t: 's', f: 'Mi abuela ___ preparar el pavo.', ok: 'suele', o: ['suelen', 'sole', 'suelo'], e: '«mi abuela» = ella' },
+  { t: 's', f: 'Nosotros ___ cenar a las diez.', ok: 'solemos', o: ['suelemos', 'soléis', 'suelen'], e: 'el sujeto es «nosotros»' },
+  { t: 's', f: '¿Vosotros ___ comer turrón?', ok: 'soléis', o: ['sueléis', 'solemos', 'suelen'], e: 'el sujeto es «vosotros»' },
+  { t: 's', f: 'Mis tíos ___ traer los polvorones.', ok: 'suelen', o: ['solen', 'suele', 'soléis'], e: '«mis tíos» = ellos' },
+  { t: 'g', f: 'A mi abuela ___ los mazapanes.', ok: 'le gustan', o: ['le gusta', 'les gustan', 'me gustan'], e: '«a mi abuela» = a ella' },
+  { t: 'g', f: 'A nosotros ___ cenar en familia.', ok: 'nos encanta', o: ['nos encantan', 'os encanta', 'les encanta'], e: 'mira «a nosotros»' },
+  { t: 'g', f: '¿A ti ___ el turrón?', ok: 'te gusta', o: ['te gustan', 'le gusta', 'me gusta'], e: 'mira «a ti»' },
+  { t: 'g', f: 'A mis tíos ___ las recetas navideñas.', ok: 'les encantan', o: ['les encanta', 'le encantan', 'nos encantan'], e: '«a mis tíos» = a ellos' },
+  { t: 'g', f: 'A mí ___ la Nochebuena.', ok: 'me encanta', o: ['me encantan', 'te encanta', 'le encanta'], e: 'mira «a mí»' },
+  { t: 'g', f: 'A mi primo ___ los langostinos.', ok: 'le gustan', o: ['le gusta', 'les gustan', 'te gustan'], e: '«a mi primo» = a él' },
+  { t: 'g', f: '¿A vosotros ___ los villancicos?', ok: 'os gustan', o: ['os gusta', 'nos gustan', 'les gustan'], e: 'mira «a vosotros»' }];
 const EST = {
   /* ---------- 22 de diciembre ---------- */
   loteria: { t: 'El sorteo de la lotería', f: '22 de diciembre', pasos: [
@@ -1513,23 +1545,18 @@ const EST = {
       C.tabla.innerHTML = `<div class="menu2">${[1, 2, 3].map(n => `<div class="col"><b>${n}</b><div class="caja dest" data-a="${'epd'[n - 1]}"></div></div>`).join('')}</div><div class="bandeja">${fichasHTML(partes.map(([c, n]) => [n, c]))}</div>`;
       arrastre({ total: 3, pista: () => 'Piensa en el orden de la cena, del principio al final.', fin: (a, t) => { C.msg('¡El orden es correcto! Ahora, los platos.', 'bien'); setTimeout(() => platos(a, t), 900); } }); } },
     { n: 'Los intrusos', f(fin) {
-      C.consigna('¿Qué no es de Nochebuena? Encuentra los tres intrusos y llévalos a la caja.', 'Qu’est-ce qui n’est pas du réveillon de Noël ? Trouve les trois intrus et mets-les dans la caisse.');
-      C.glosa('<b>un intruso</b> : un intrus · <b>la caja</b> : la caisse<br>Piensa en las otras fiestas: Nochevieja, el Día de Reyes… ¡y Francia!<br>Atención: cada error cuenta.');
-      C.tabla.innerHTML = `<div class="bandeja">${fichasHTML([['el jamón', '-'], ['los langostinos', '-'], ['el pavo', '-'], ['el cochinillo asado', '-'], ['los turrones', '-'], ['los mazapanes', '-'], ['las doce uvas', 'x'], ['el roscón de Reyes', 'x'], ['la «bûche»', 'x']])}</div><div class="caja dest fuera" data-a="x" data-multi="1">No es de Nochebuena</div>`;
-      let err = 0; arrastre({ total: 3, pista: (f) => { err++; return f.dataset.c === '-' ? '¡No! Este plato es de Nochebuena: se queda en la mesa.' : null; }, fin: () => seguir(fin, Math.max(0, 3 - err), 3, '¡La mesa está lista!') }); } },
+      C.consigna('En la mesa de Nochebuena hay intrusos: cosas de otras fiestas. Lleva cada intruso a su fiesta.', 'Sur la table du réveillon, il y a des intrus : des choses d’autres fêtes. Amène chaque intrus dans sa fête.');
+      C.glosa('<b>un intruso</b> : un intrus · <b>el décimo</b> : le billet de loterie · <b>los caramelos</b> : les bonbons<br>Lo que es de Nochebuena se queda en la mesa. Atención: cada error cuenta.');
+      C.tabla.innerHTML = `<div class="bandeja">${fichasHTML([['el jamón', '-'], ['los langostinos', '-'], ['el pavo', '-'], ['el cochinillo asado', '-'], ['los turrones', '-'], ['los polvorones', '-'], ['las doce uvas', 'v'], ['el décimo de lotería', 'g'], ['el roscón de Reyes', 'r'], ['los caramelos', 'r'], ['la carta a los Reyes Magos', 'r'], ['la «bûche»', 'f']])}</div><div class="menu2">${[['g', '22 dic. · El Gordo'], ['v', '31 dic. · Nochevieja'], ['r', '5 y 6 ene. · Los Reyes'], ['f', 'Francia']].map(([c, n]) => `<div class="col"><b>${n}</b><div class="caja dest" data-a="${c}" data-multi="1"></div></div>`).join('')}</div>`;
+      let err = 0; arrastre({ total: 6, pista: (f) => { if (f.dataset.c === '-') { err++; return '¡No! Este plato es de Nochebuena: se queda en la mesa.'; } return 'No es de esta fiesta. Piensa en la fecha.'; }, fin: (a) => seguir(fin, Math.max(0, a - err), 6, '¡La mesa está lista!') }); } },
     { n: 'Soler y gustar', f(fin) {
-      C.consigna('Construye el verbo con dos piezas y comprueba. Mira bien quién es el sujeto.', 'Construis le verbe avec deux pièces et vérifie. Regarde bien qui est le sujet.');
+      C.consigna('Lee la frase y elige la forma correcta del verbo.', 'Lis la phrase et choisis la bonne forme du verbe.');
       C.glosa('<b>soler</b> : suelo, sueles, suele, solemos, soléis, suelen<br><b>gustar / encantar</b> : me, te, le, nos, os, les + gusta (singular) / gustan (plural)');
       const cola = baraja(baraja(FRASES_CENA.filter(f => f.t === 's')).concat(baraja(FRASES_CENA.filter(f => f.t === 'g')).slice(0, 4))), tot = cola.length; let ok = 0, n = 0;
-      C.tabla.innerHTML = `<div class="conj2"><small id="c2n"></small><p id="c2f"></p><div class="fila2" id="c2a"></div><div class="fila2" id="c2b"></div></div>`;
-      const sig = () => { if (!cola.length) return seguir(fin, ok, tot, `${ok} / ${tot} a la primera.`); const a = cola.shift(), sel = ['', '']; let fallo = false; n++; $('#c2n').textContent = `Frase ${n} de ${tot}`;
-        const opA = a.t === 's' ? ['sol', 'suel'] : ['me', 'te', 'le', 'nos', 'os', 'les'], opB = a.t === 's' ? ['o', 'es', 'e', 'emos', 'éis', 'en'] : (a.v === 'gustar' ? ['gusta', 'gustan'] : ['encanta', 'encantan']);
-        const pinta = () => { $('#c2f').innerHTML = a.f.replace('___', `<span class="slot">${sel[0] || '&nbsp;'}</span>${a.t === 's' ? '' : ' '}<span class="slot">${sel[1] || '&nbsp;'}</span>`) + (a.t === 'g' ? ` <em>(${a.v})</em>` : ''); };
-        [[opA, '#c2a', 0], [opB, '#c2b', 1]].forEach(([ops, id, k]) => { $(id).innerHTML = ops.map(o => `<button class="op">${a.t === 's' ? (k ? '-' + o : o + '-') : o}</button>`).join(''); $$(id + ' .op').forEach((b, i) => b.onclick = () => { sel[k] = ops[i]; $$(id + ' .op').forEach(x => x.classList.toggle('sel', x === b)); pinta(); }); });
-        pinta(); C.msg('Elige una pieza en cada fila.', '');
-        C.boton('Comprobar', () => { if (!sel[0] || !sel[1]) return C.msg('Elige una pieza en cada fila.', 'mal');
-          if (sel[0] === a.r[0] && sel[1] === a.r[1]) { if (!fallo) ok++; bien(); C.msg('¡Muy bien!', 'bien'); C.boton('', null); setTimeout(sig, 1200); }
-          else { fallo = true; mal(); C.msg(sel[0] !== a.r[0] ? (a.t === 's' ? 'Mira la raíz: ¿«o» o «ue»?' : 'Mira el pronombre: ¿a quién?') : (a.t === 's' ? 'Mira la terminación: ¿quién es el sujeto?' : '¿Singular o plural?'), 'mal'); } }); };
+      C.tabla.innerHTML = `<div class="conj2"><small id="c2n"></small><p id="c2f"></p><div class="fila2" id="c2a"></div></div>`;
+      const sig = () => { if (!cola.length) return seguir(fin, ok, tot, `${ok} / ${tot} a la primera.`); const a = cola.shift(); let fallo = false, listo = false; n++; $('#c2n').textContent = `Frase ${n} de ${tot}`; $('#c2f').innerHTML = a.f.replace('___', '<span class="slot">&nbsp;</span>');
+        $('#c2a').innerHTML = baraja([a.ok, ...a.o]).map(o => `<button class="op">${o}</button>`).join(''); C.msg('Elige la forma correcta.', '');
+        $$('#c2a .op').forEach(b => b.onclick = () => { if (listo || b.classList.contains('ko')) return; if (b.textContent === a.ok) { listo = true; if (!fallo) ok++; b.classList.add('ok'); $('#c2f').innerHTML = a.f.replace('___', `<span class="slot">${a.ok}</span>`); bien(); C.msg('¡Muy bien!', 'bien'); setTimeout(sig, 1200); } else { fallo = true; b.classList.add('ko'); mal(); C.msg('Pista: ' + a.e + '.', 'mal'); } }); };
       sig(); } }
   ] },
   /* ---------- Navidad ---------- */
